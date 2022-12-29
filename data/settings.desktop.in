@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Fusebox
+Comment=Change system and user settings
+Exec=co.tauos.Fusebox %u
+Icon=co.tauos.Fusebox
+Terminal=false
+StartupNotify=true
+Categories=GNOME;GTK;System;
+Keywords=Center;Control;Panel;Preferences;System;
+MimeType=x-scheme-handler/settings;

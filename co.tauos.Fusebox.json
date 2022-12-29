@@ -1,0 +1,42 @@
+{
+    "app-id": "co.tauos.Fusebox",
+    "runtime" : "co.tauos.Platform",
+    "runtime-version" : "daily",
+    "sdk" : "co.tauos.Sdk",
+    "command": "co.tauos.Fusebox",
+    "desktop-file-name-suffix" : " (Development)",
+    "finish-args": [
+        "--device=dri",
+        "--share=ipc",
+        "--socket=fallback-x11",
+        "--socket=wayland"
+    ],
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig",
+        "/man",
+        "/share/doc",
+        "/share/gtk-doc",
+        "/share/man",
+        "/share/pkgconfig",
+        "/share/vala",
+        "*.la",
+        "*.a"
+    ],
+    "modules": [
+        {
+            "name" : "fusebox",
+            "builddir" : true,
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dexample=true"
+            ],
+            "sources" : [
+                {
+                    "type" : "dir",
+                    "path" : "."
+                }
+            ]
+        }
+    ]
+}
