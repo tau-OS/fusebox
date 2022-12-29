@@ -184,15 +184,20 @@ namespace Fusebox {
             };
             label.add_css_class ("view-title");
 
-            var sbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+            var ssbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
                 hexpand = false,
                 margin_start = 18,
                 margin_end = 18
             };
+            ssbox.append (label);
+            ssbox.append (search_box);
+            ssbox.append (search_stack);
+
+            var sbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+                hexpand = false
+            };
             sbox.append (headerbar);
-            sbox.append (label);
-            sbox.append (search_box);
-            sbox.append (search_stack);
+            sbox.append (ssbox);
 
             var sheaderbar = new He.AppBar () {
                 show_buttons = true,
