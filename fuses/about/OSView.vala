@@ -99,7 +99,7 @@ public class About.OSView : Gtk.Box {
                 halign = Gtk.Align.START
             };
             subtitle_label.add_css_class ("view-subtitle");
-            var text_label = new Gtk.Label ("When you rename your computer, it'll reflect on how it is seen by other devices. For example, via bluetooth and secure shells. Due to limitations, you may not use spaces or special symbols.") {
+            var text_label = new Gtk.Label ("When you rename your computer, it'll reflect on how it is seen by other devices. For example, via bluetooth and secure shells.") {
                 halign = Gtk.Align.START,
                 wrap = true,
                 wrap_mode = Pango.WrapMode.WORD
@@ -228,6 +228,7 @@ public class About.OSView : Gtk.Box {
         }
         if (system_interface.static_hostname != null) {
             try {
+                sname.canon ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", ' ');
                 var dbsi = new DBusProxy.for_bus_sync (
                                                         BusType.SYSTEM,
                                                         DBusProxyFlags.NONE,
@@ -239,7 +240,7 @@ public class About.OSView : Gtk.Box {
                                                       );
                 dbsi.call_sync (            
                                 "SetStaticHostname",
-                                new Variant ("(sb)", sname, false),
+                                new Variant ("(sb)", sname.replace (" ","-").ascii_down (), false),
                                 DBusCallFlags.NONE,
                                 -1,
                                 null
