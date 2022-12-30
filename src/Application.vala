@@ -119,7 +119,6 @@ namespace Fusebox {
 
             search_box = new Gtk.SearchEntry () {
                 placeholder_text = _("Search Settings"),
-                sensitive = false,
                 visible = false,
                 halign = Gtk.Align.START
             };
