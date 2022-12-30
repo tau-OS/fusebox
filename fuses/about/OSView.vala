@@ -64,7 +64,7 @@ public class About.OSView : Gtk.Box {
         var hostname_action_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
         hostname_action_box.append (hostname_title);
         hostname_action_box.append (hostname_button);
-        var hostname_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        var hostname_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         hostname_box.append (hostname_image);
         hostname_box.append (hostname_action_box);
         hostname_box.append (hostname_subtitle);
@@ -99,7 +99,7 @@ public class About.OSView : Gtk.Box {
                 halign = Gtk.Align.START
             };
             subtitle_label.add_css_class ("view-subtitle");
-            var text_label = new Gtk.Label ("When you rename your computer, it'll reflect on how it is seen by other devices. For example, via bluetooth and secure shells.") {
+            var text_label = new Gtk.Label ("When you rename your computer, it'll reflect on how it is seen by other devices. For example, via bluetooth and secure shells. Due to limitations, you may not use spaces or special symbols.") {
                 halign = Gtk.Align.START,
                 wrap = true,
                 wrap_mode = Pango.WrapMode.WORD
@@ -131,7 +131,9 @@ public class About.OSView : Gtk.Box {
 
             var cancel_button = new He.TextButton ("Cancel");
 
-            var action_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+            var action_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6) {
+                homogeneous = true
+            };
             action_box.append (cancel_button);
             action_box.append (rename_button);
 
