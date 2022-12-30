@@ -15,8 +15,9 @@ public class About.OSView : Gtk.Box {
         var os_pretty_name = "%s".printf (
             Environment.get_os_info (GLib.OsInfoKey.NAME)
         );
-        var os_sub_name = "<b>%s</b>".printf (
-            Environment.get_os_info (GLib.OsInfoKey.VERSION) ?? ""
+        var os_sub_name = "<b>%s %s</b>".printf (
+            Environment.get_os_info (GLib.OsInfoKey.VERSION_ID) ?? "",
+            Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME) ?? ""
         );
         var os_title = new Gtk.Label (os_pretty_name) {
             ellipsize = Pango.EllipsizeMode.END,
@@ -24,7 +25,7 @@ public class About.OSView : Gtk.Box {
             xalign = 0
         };
         os_title.get_style_context ().add_class ("view-title");
-        var os_subtitle = new Gtk.Label (os_sub_name) {
+        var os_subtitle = new Gtk.Label (os_sub_name.replace ("(","“").replace(")","”")) {
             ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             use_markup = true,
