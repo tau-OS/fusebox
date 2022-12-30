@@ -12,6 +12,7 @@
         "--socket=wayland",
         "--filesystem=host",
         "--system-talk-name=org.freedesktop.UDisks2",
+        "--system-talk-name=org.freedesktop.hostname1",
         "--talk-name=org.freedesktop.Flatpak"
     ],
     "cleanup": [

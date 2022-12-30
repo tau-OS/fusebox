@@ -155,10 +155,13 @@ namespace Fusebox {
             };
             album.append (category_view);
 
-            var empty_page = new He.EmptyPage ();
-            empty_page.title = "Select A Preference";
-            empty_page.description = "Start by selecting a preference from the sidebar";
-            empty_page.icon = "applications-system-symbolic";
+            var empty_page = new He.EmptyPage () {
+                margin_start = 18,
+                margin_end = 18,
+                title = "Select A Preference",
+                description = "Start by selecting a preference from the sidebar",
+                icon = "applications-system-symbolic"
+            };
             empty_page.action_button.visible = false;
 
             halbum = new Bis.Album () {
@@ -210,10 +213,7 @@ namespace Fusebox {
 
             var sep = new Gtk.Separator (Gtk.Orientation.VERTICAL);
 
-            var main_box = new Bis.Album () {
-                can_navigate_back = true,
-                can_navigate_forward = true
-            };
+            var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             main_box.append (sbox);
             main_box.append (sep);
             main_box.append (box);
