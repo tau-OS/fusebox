@@ -13,6 +13,8 @@ add_project_arguments([
     ],
     language: 'c'
 )
+vapi_dir = join_paths(meson.current_source_dir(), 'vapi')
+add_project_arguments(['--vapidir', vapi_dir], language: 'vala')
 
 conf_data = configuration_data()
 conf_data.set_quoted('LOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
@@ -45,4 +47,10 @@ if get_option('example')
     subdir('sample')
 endif
 
+subdir('fuses')
 
+gnome.post_install(
+  glib_compile_schemas: true,
+  gtk_update_icon_cache: true,
+  update_desktop_database: true,
+)

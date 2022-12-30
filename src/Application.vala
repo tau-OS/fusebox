@@ -286,8 +286,6 @@ namespace Fusebox {
 
             if (Fusebox.FusesManager.get_default ().has_fuses () == false) {
                 category_view.show_alert (_("No Settings Found"), _("Install some and re-launch Fusebox."), "dialog-warning");
-            } else {
-                search_box.sensitive = true;
             }
         }
 
@@ -303,8 +301,6 @@ namespace Fusebox {
                 }
 
                 fuse_widgets[halbum.visible_child].shown ();
-                search_box.sensitive = false;
-
                 search_box.text = "";
             }
         }

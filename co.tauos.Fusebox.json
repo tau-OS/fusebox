@@ -9,7 +9,10 @@
         "--device=dri",
         "--share=ipc",
         "--socket=fallback-x11",
-        "--socket=wayland"
+        "--socket=wayland",
+        "--filesystem=host",
+        "--system-talk-name=org.freedesktop.UDisks2",
+        "--talk-name=org.freedesktop.Flatpak"
     ],
     "cleanup": [
         "/include",
@@ -25,11 +28,21 @@
     ],
     "modules": [
         {
+			"name": "libgtop",
+			"sources": [
+				{
+					"type": "archive",
+					"url": "https://download.gnome.org/sources/libgtop/2.40/libgtop-2.40.0.tar.xz",
+					"sha256": "78f3274c0c79c434c03655c1b35edf7b95ec0421430897fb1345a98a265ed2d4"
+				}
+			]
+		},
+        {
             "name" : "fusebox",
             "builddir" : true,
             "buildsystem" : "meson",
             "config-opts" : [
-                "-Dexample=true"
+                "-Dexample=false"
             ],
             "sources" : [
                 {
