@@ -51,7 +51,7 @@ public class About.OSView : Gtk.Box {
         hostname_subtitle.get_style_context ().add_class ("cb-subtitle");
         var hostname_image = new Gtk.Image () {
             halign = Gtk.Align.START,
-            icon_name = "video-display-symbolic"
+            icon_name = system_interface.icon_name + "-symbolic"
         };
         hostname_image.add_css_class ("rounded-icon");
         var hostname_button = new Gtk.Button () {
