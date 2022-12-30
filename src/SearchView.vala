@@ -25,6 +25,7 @@ public class Fusebox.SearchView : Gtk.Box {
             description = _("Try changing search terms."),
             icon = "edit-find-symbolic"
         };
+        alert_view.action_button.visible = false;
 
         unowned FuseboxApp app = (FuseboxApp) GLib.Application.get_default ();
 
@@ -148,6 +149,8 @@ public class Fusebox.SearchView : Gtk.Box {
             box.append (label);
 
             child = box;
+            add_css_class ("fuse-block");
+            margin_bottom = 6;
         }
     }
 }
