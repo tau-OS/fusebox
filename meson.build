@@ -30,7 +30,7 @@ fuses_dir = get_option('prefix') / get_option('libdir') / 'fusebox-1'
 i18n = import('i18n')
 pkg = import('pkgconfig')
 
-glib_dep = dependency('glib-2.0', version: '>=2.32')
+glib_dep = dependency('glib-2.0', version: '>=2.74')
 gio_dep = dependency('gio-2.0')
 gio_unix_dep = dependency('gio-unix-2.0')
 gmodule_dep = dependency('gmodule-2.0')

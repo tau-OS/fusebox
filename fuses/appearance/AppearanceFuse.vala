@@ -26,7 +26,7 @@ public class Appearance.Fuse : Fusebox.Fuse {
             var appearance_view = new AppearanceView ();
 
             main_grid = new Gtk.Grid () {
-                row_spacing = 12
+                row_spacing = 6
             };
             main_grid.attach (appearance_view, 0, 0);
         }

@@ -11,8 +11,10 @@
         "--socket=fallback-x11",
         "--socket=wayland",
         "--filesystem=host",
+        "--filesystem=xdg-run/dconf",
         "--system-talk-name=org.freedesktop.UDisks2",
         "--system-talk-name=org.freedesktop.hostname1",
+        "--talk-name=ca.desrt.dconf",
         "--talk-name=org.freedesktop.Flatpak",
         "--talk-name=org.gnome.SessionManager"
     ],

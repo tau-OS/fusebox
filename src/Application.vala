@@ -154,10 +154,7 @@ namespace Fusebox {
                 menu_popover.popdown ();
             });
             var menu_popover_grid = new Gtk.Grid () {
-                margin_top = 3,
-                margin_bottom = 3,
-                orientation = Gtk.Orientation.VERTICAL,
-                width_request = 200
+                orientation = Gtk.Orientation.VERTICAL
             };
             menu_popover_grid.attach (about_menu_item, 0, 0, 1, 1);
             menu_popover.child = menu_popover_grid;
@@ -259,8 +256,8 @@ namespace Fusebox {
             };
             add_window (main_window);
             main_window.present ();
-            main_window.set_size_request (800, 600);
-            main_window.default_height = 600;
+            main_window.set_size_request (360, 360);
+            main_window.default_height = 620;
             main_window.default_width = 800;
             // Actions
             actions = new SimpleActionGroup ();

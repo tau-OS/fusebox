@@ -185,7 +185,7 @@ public class About.OSView : Gtk.Box {
             use_markup = true,
             xalign = 0
         };
-        get_graphics_info.begin ();
+        get_graphics_info ();
         gpu_subtitle.get_style_context ().add_class ("cb-subtitle");
         var gpu_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         gpu_box.append (gpu_title);
@@ -208,7 +208,8 @@ public class About.OSView : Gtk.Box {
 
         var stor_host_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             margin_bottom = 6,
-            vexpand = false
+            vexpand = false,
+            homogeneous = true
         };
         stor_host_box.append (hostname_box);
         stor_host_box.append (storage_box);
@@ -229,11 +230,15 @@ public class About.OSView : Gtk.Box {
         };
         scroller.set_child (info_box);
 
-        orientation = Gtk.Orientation.VERTICAL;
-        spacing = 6;
-        append (view_label);
-        append (scroller);
-        append (bug_button);
+        var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        mbox.append (view_label);
+        mbox.append (scroller);
+        mbox.append (bug_button);
+
+        var clamp = new Bis.Latch ();
+        clamp.set_child (mbox);
+
+        append (clamp);
 
         hostname_button.clicked.connect (() => {
             var rename_button = new He.FillButton (_("Rename")) {
@@ -376,7 +381,7 @@ public class About.OSView : Gtk.Box {
         }
         if (system_interface.static_hostname != null) {
             try {
-                sname.canon ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", ' ');
+                sname.canon ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'", ' ');
                 var dbsi = new DBusProxy.for_bus_sync (
                                                         BusType.SYSTEM,
                                                         DBusProxyFlags.NONE,
@@ -388,7 +393,7 @@ public class About.OSView : Gtk.Box {
                                                       );
                 dbsi.call_sync (            
                                 "SetStaticHostname",
-                                new Variant ("(sb)", sname.replace (" ","-").ascii_down (), false),
+                                new Variant ("(sb)", sname.replace (" ","-").replace("'","").ascii_down (), false),
                                 DBusCallFlags.NONE,
                                 -1,
                                 null
@@ -526,7 +531,7 @@ public class About.OSView : Gtk.Box {
 
         return GLib.format_size (mem_total, GLib.FormatSizeFlags.DEFAULT);
     }
-    private async void get_graphics_info () {
+    private void get_graphics_info () {
         try {
             var dbsi = new DBusProxy.for_bus_sync (
                 BusType.SESSION,
@@ -538,9 +543,7 @@ public class About.OSView : Gtk.Box {
                 null
             );
 
-            var vr = dbsi.get_cached_property ("Renderer");
-            var renderer = vr.get_string ();
-            gpu_subtitle.label = clean_name(renderer);
+            gpu_subtitle.label = dbsi.get_cached_property ("Renderer").get_string ();
         } catch (Error e) {
             debug (e.message);
             var renderer = (_("Unknown Graphics"));
@@ -569,11 +572,14 @@ public class About.OSView : Gtk.Box {
     private string? get_storage_info () {
         double storage_capacity = 0.0;
         double used = 0.0;
+        string storage_capacity_unit = "";
+        string used_unit = "";
         try {
             udisk.GetManagedObjects(out objects);
 		    foreach (var o in objects.get_keys()) {
                 var block = storage_dbus_connection.get_proxy_sync<Block>("org.freedesktop.UDisks2", o);
                 storage_capacity += double.parse (GLib.format_size (block.Size));
+                storage_capacity_unit = GLib.format_size (uint64.parse(storage_capacity.to_string ()), GLib.FormatSizeFlags.IEC_UNITS);
             }
         } catch (Error e) {
             critical (e.message);
@@ -583,17 +589,19 @@ public class About.OSView : Gtk.Box {
         try {
             var info = file_root.query_filesystem_info (GLib.FileAttribute.FILESYSTEM_USED);
             used = (double.parse(GLib.format_size (info.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_USED))));
+            used_unit = GLib.format_size (uint64.parse(used.to_string ()), GLib.FormatSizeFlags.IEC_UNITS);
         } catch (Error e) {
             critical (e.message);
         }
 
-        return "%0.0f GB / %0.0f GB".printf(used, storage_capacity);
+        return "%s / %s".printf(used_unit, storage_capacity_unit);
     }
     private async void get_storage_frac () {
         var file_root = GLib.File.new_for_path ("/");
         try {
             var info = yield file_root.query_filesystem_info_async (GLib.FileAttribute.FILESYSTEM_USED);
-            storage_gauge.set_fraction (double.parse(GLib.format_size (info.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_USED))) / 1024);
+            var used = (double.parse(GLib.format_size (info.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_USED))));
+            storage_gauge.set_fraction (used / 1024);
         } catch (Error e) {
             critical (e.message);
         }

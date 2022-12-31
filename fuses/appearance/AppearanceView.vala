@@ -12,6 +12,27 @@ public class AppearanceView : Gtk.Box {
     private PrefersAccentColorButton pink;
     private PrefersAccentColorButton mono;
     private PrefersAccentColorButton multi;
+    private Gtk.ToggleButton prefer_default_radio;
+    private Gtk.ToggleButton prefer_dark_radio;
+
+    private enum ColorScheme {
+        NO_PREFERENCE,
+        PREFER_DARK,
+        PREFER_LIGHT;
+
+        public int to_int () {
+            switch (this) {
+                case NO_PREFERENCE:
+                    return 0;
+                case PREFER_DARK:
+                    return 1;
+                case PREFER_LIGHT:
+                    return 2;
+            }
+
+            return 0;
+        }
+    }
 
     private enum AccentColor {
         MULTI,
@@ -81,14 +102,15 @@ public class AppearanceView : Gtk.Box {
     }
 
     static construct {
-        tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
+        //tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
         interface_settings = new GLib.Settings ("org.gnome.desktop.interface");
-        theme_settings = new GLib.Settings ("org.gnome.shell.extensions.user-theme");
+        //theme_settings = new GLib.Settings ("org.gnome.shell.extensions.user-theme");
     }
 
     construct {
         var main_label = new Gtk.Label (_("Appearance")) {
-            halign = Gtk.Align.START
+            halign = Gtk.Align.START,
+            margin_bottom = 6
         };
         main_label.add_css_class ("view-title");
 
@@ -108,9 +130,9 @@ public class AppearanceView : Gtk.Box {
             row_spacing = 6
         };
         prefer_default_grid.attach (prefer_default_card, 0, 0);
-        prefer_default_grid.attach (new Gtk.Label (_("Default")), 0, 1);
+        prefer_default_grid.attach (new Gtk.Label (_("Light")), 0, 1);
 
-        var prefer_default_radio = new Gtk.ToggleButton ();
+        prefer_default_radio = new Gtk.ToggleButton ();
         prefer_default_radio.add_css_class ("image-button");
         prefer_default_radio.child = (prefer_default_grid);
 
@@ -132,7 +154,7 @@ public class AppearanceView : Gtk.Box {
         prefer_dark_grid.attach (prefer_dark_card, 0, 0);
         prefer_dark_grid.attach (new Gtk.Label (_("Dark")), 0, 1);
 
-        var prefer_dark_radio = new Gtk.ToggleButton () {
+        prefer_dark_radio = new Gtk.ToggleButton () {
             group = prefer_default_radio,
             hexpand = true
         };
@@ -161,8 +183,7 @@ public class AppearanceView : Gtk.Box {
         prefer_main_box.append (prefer_style_box);
 
         var grid = new Gtk.Grid () {
-            column_spacing = 6,
-            row_spacing = 12,
+            row_spacing = 6,
             margin_start = 18,
             margin_end = 18,
             margin_bottom = 18
@@ -170,18 +191,6 @@ public class AppearanceView : Gtk.Box {
 
         grid.attach (main_label, 0, 0);
         grid.attach (prefer_main_box, 0, 1);
-
-        prefer_default_radio.toggled.connect (() => {
-            set_color_scheme (He.Desktop.ColorScheme.NO_PREFERENCE);
-            interface_settings.set_string ("gtk-theme", "Adwaita");
-            theme_settings.set_string ("name", "Helium");
-        });
-
-        prefer_dark_radio.toggled.connect (() => {
-            set_color_scheme (He.Desktop.ColorScheme.DARK);
-            interface_settings.set_string ("gtk-theme", "Adwaita-dark");
-            theme_settings.set_string ("name", "Helium-dark");
-        });
 
         var accent_label = new Gtk.Label (_("Accent Color")) {
             halign = Gtk.Align.START
@@ -245,20 +254,52 @@ public class AppearanceView : Gtk.Box {
 
         append (clamp);
   
-        accent_refresh ();
+        //  accent_refresh ();
+        //  tau_appearance_settings.notify["changed::accent-color"].connect (() => {
+        //      accent_refresh ();
+        //  });
 
-        tau_appearance_settings.notify["changed::accent-color"].connect (() => {
-            accent_refresh ();
+        prefer_default_radio.toggled.connect (() => {
+            set_color_scheme (ColorScheme.PREFER_LIGHT);
+        });
+        prefer_dark_radio.toggled.connect (() => {
+            set_color_scheme (ColorScheme.PREFER_DARK);
+        });
+
+        color_scheme_refresh ();
+        interface_settings.notify["changed::color-scheme"].connect (() => {
+            color_scheme_refresh ();
         });
     }
 
-    private void set_color_scheme (He.Desktop.ColorScheme color_scheme) {
-        var scheme = interface_settings.get_enum ("color-scheme");
+    private void set_color_scheme (ColorScheme color_scheme) {
+        if (color_scheme == ColorScheme.NO_PREFERENCE) {
+            interface_settings.set_string ("gtk-theme", "Adwaita");
+            //theme_settings.set_string ("name", "Helium");
+        } else if (color_scheme == ColorScheme.PREFER_LIGHT) {
+            interface_settings.set_string ("gtk-theme", "Adwaita");
+            //theme_settings.set_string ("name", "Helium");
+        } else if (color_scheme == ColorScheme.PREFER_DARK) {
+            interface_settings.set_string ("gtk-theme", "Adwaita-dark");
+            //theme_settings.set_string ("name", "Helium-dark");
+        }
 
-        if (color_scheme == scheme)
-            return;
+        interface_settings.set_enum ("color-scheme", color_scheme.to_int ());
+    }
 
-        interface_settings.set_enum ("color-scheme", color_scheme);
+    private void color_scheme_refresh () {
+        int value = interface_settings.get_enum ("color-scheme");
+
+        if (value == ColorScheme.NO_PREFERENCE) {
+            prefer_default_radio.set_active (true);
+            prefer_dark_radio.set_active (false);
+        } else if (value == ColorScheme.PREFER_LIGHT) {
+            prefer_default_radio.set_active (true);
+            prefer_dark_radio.set_active (false);
+        } else if (value == ColorScheme.PREFER_DARK) {
+            prefer_default_radio.set_active (false);
+            prefer_dark_radio.set_active (true);
+        }
     }
 
     private void accent_refresh () {
