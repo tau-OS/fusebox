@@ -9,8 +9,8 @@ fusebox_files = files(
 
 fusebox_deps = [
     libfusebox_dep,
-    helium_dep,
-    dependency('libbismuth-1', fallback: [ 'libbismuth', 'bismuth_dep' ], version: '>=1.0.0'),
+    dependency('libhelium-1', fallback: [ 'libhelium', 'helium_dep' ]),
+    dependency('libbismuth-1', fallback: [ 'libbismuth', 'bismuth_dep' ]),
     m_dep
 ]
 

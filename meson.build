@@ -36,7 +36,7 @@ gio_unix_dep = dependency('gio-unix-2.0')
 gmodule_dep = dependency('gmodule-2.0')
 gtk_dep = dependency('gtk4', version: '>=3.10')
 gee_dep = dependency('gee-0.8')
-helium_dep = dependency('libhelium-1')
+helium_dep = meson.get_compiler('c').find_library('libhelium', required: false)
 bismuth_dep = meson.get_compiler('c').find_library('libbismuth', required: false)
 m_dep = meson.get_compiler('c').find_library('m', required : false)
 

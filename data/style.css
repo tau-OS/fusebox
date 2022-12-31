@@ -30,3 +30,45 @@ entry.search {
 button.flat label {
     font-weight: 500;
 }
+
+
+.meson-red radio {
+    background: #e25480;
+  }
+  .lepton-orange radio {
+    background: #f99e5c;
+  }
+  .electron-yellow radio {
+    background: #febc16;
+  }
+  .muon-green radio {
+    background: #72da82;
+  }
+  .baryon-mint radio {
+    background: #85d1bf;
+  }
+  .proton-blue radio {
+    background: #58a8fa;
+  }
+  .tau-purple radio {
+    background: #a57bcd;
+  }
+  .fermion-pink radio {
+    background: #cb76b8;
+  }
+  .graviton-dark radio {
+    background: #333333;
+  }
+  .multi-color radio {
+    background: linear-gradient(
+          90deg,
+          #e25480 0%,
+          #f99e5c 13%,
+          #febc16 26%,
+          #72da82 39%,
+          #85d1bf 52%,
+          #58a8fa 65%,
+          #a57bcd 78%,
+          #cb76b8 91%
+      );
+  }
