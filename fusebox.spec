@@ -4,15 +4,18 @@
 %define gsettings_desktop_schemas_version 42.0
 %define gtk4_version 4.6.2
 %define libhelium_version 1.0
+%define libbismuth_version 1.0
 %global debug_package %{nil}
 
-Summary:        Change system and user settings
 Name:           fusebox
 Version:        0.1.0
 Release:        1
+Summary:        Change system and user settings.
+
 License:        GPLv3+ and CC-BY-SA
-URL:            https://tauos.co
+URL:            https://github.com/tau-OS/fusebox
 Source0:        https://github.com/tau-OS/fusebox/archive/refs/heads/main.zip
+
 BuildRequires:  gcc
 BuildRequires:  gettext
 BuildRequires:  meson
@@ -27,9 +30,8 @@ BuildRequires:  pkgconfig(gudev-1.0)
 BuildRequires:  libhelium-devel
 BuildRequires:  pkgconfig(libgtop-2.0)
 BuildRequires:  pkgconfig(x11)
- 
-# Versioned library deps
 Requires: libhelium%{?_isa} >= %{libhelium_version}
+Requires: libbismuth%{?_isa} >= %{libbismuth_version}
 Requires: glib2%{?_isa} >= %{glib2_version}
 Requires: gnome-desktop4%{?_isa} >= %{gnome_desktop_version}
 Requires: gnome-settings-daemon%{?_isa} >= %{gsd_version}
@@ -43,20 +45,14 @@ allows to configure keyboard and mouse properties, sound setup, desktop theme
 and background, user interface properties, screen resolution, and other settings.
  
 %prep
-%autosetup -n fusebox -Sgit
-git init
-git remote add origin https://github.com/tau-OS/fusebox
-# git fetch origin
-git pull -v origin main --force --rebase
+%autosetup -n fusebox
 
 %build
-%meson -Dsample=false
+%meson
 %meson_build
 
 %install
 %meson_install
-%license COPYING
-%doc README.md
 
 %changelog
 * Sat Dec 30 2022 Lains <lainsce@airmail.cc> - 0.1.0-1
