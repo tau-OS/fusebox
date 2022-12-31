@@ -8,8 +8,8 @@
 
 Summary:        Change system and user settings
 Name:           fusebox
-Version:        1.1
-Release:        56
+Version:        0.1.0
+Release:        1
 License:        GPLv2+ and CC-BY-SA
 URL:            https://tauos.co
 Source0:        https://github.com/tau-OS/fusebox/archive/refs/heads/main.zip
