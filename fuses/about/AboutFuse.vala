@@ -22,10 +22,7 @@ public class About.Fuse : Fusebox.Fuse {
             var os_view = new OSView ();
 
             main_grid = new Gtk.Grid () {
-                row_spacing = 12,
-                margin_bottom = 12,
-                margin_start = 18,
-                margin_end = 18
+                row_spacing = 12
             };
             main_grid.attach (os_view, 0, 0);
         }

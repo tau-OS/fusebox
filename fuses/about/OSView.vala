@@ -20,6 +20,7 @@ interface Block : GLib.Object {
 public class About.OSView : Gtk.Box {
     private SystemInterface system_interface;
     private Gtk.Label hostname_subtitle;
+    private Gtk.Label gpu_subtitle;
     private Gtk.ProgressBar storage_gauge;
     private UDisk2 udisk;
     private GLib.HashTable<ObjectPath, GLib.HashTable<string, GLib.HashTable<string, Variant>>> objects;
@@ -179,32 +180,66 @@ public class About.OSView : Gtk.Box {
         cpu_box.append (cpu_subtitle);
         cpu_box.add_css_class ("mini-content-block");
 
+        var gpu_title = new Gtk.Label (_("Graphics")) {
+            ellipsize = Pango.EllipsizeMode.END,
+            selectable = true,
+            xalign = 0
+        };
+        gpu_title.get_style_context ().add_class ("cb-title");
+        gpu_subtitle = new Gtk.Label ("") {
+            ellipsize = Pango.EllipsizeMode.END,
+            selectable = true,
+            use_markup = true,
+            xalign = 0
+        };
+        get_graphics_info.begin ();
+        gpu_subtitle.get_style_context ().add_class ("cb-subtitle");
+        var gpu_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        gpu_box.append (gpu_title);
+        gpu_box.append (gpu_subtitle);
+        gpu_box.add_css_class ("mini-content-block");
+
         var bug_button = new He.PillButton (_("Report A Problem…")) {
             hexpand = true,
+            margin_bottom = 12,
             halign = Gtk.Align.CENTER
         };
 
         var view_label = new Gtk.Label ("About") {
             halign = Gtk.Align.START,
-            margin_bottom = 6
+            margin_bottom = 6,
+            margin_start = 18,
+            margin_end = 18
         };
         view_label.add_css_class ("view-title");
 
-        var stor_host_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6) {
+        var stor_host_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             margin_bottom = 6,
             vexpand = false
         };
         stor_host_box.append (hostname_box);
         stor_host_box.append (storage_box);
 
+        var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
+            margin_start = 18,
+            margin_end = 18
+        };
+        info_box.append (os_box);
+        info_box.append (stor_host_box);
+        info_box.append (model_box);
+        info_box.append (cpu_box);
+        info_box.append (gpu_box);
+        info_box.append (ram_box);
+
+        var scroller = new Gtk.ScrolledWindow () {
+            vexpand = true
+        };
+        scroller.set_child (info_box);
+
         orientation = Gtk.Orientation.VERTICAL;
         spacing = 6;
         append (view_label);
-        append (os_box);
-        append (stor_host_box);
-        append (model_box);
-        append (cpu_box);
-        append (ram_box);
+        append (scroller);
         append (bug_button);
 
         hostname_button.clicked.connect (() => {
@@ -497,6 +532,27 @@ public class About.OSView : Gtk.Box {
         }
 
         return GLib.format_size (mem_total, GLib.FormatSizeFlags.DEFAULT);
+    }
+    private async void get_graphics_info () {
+        try {
+            var dbsi = new DBusProxy.for_bus_sync (
+                BusType.SESSION,
+                DBusProxyFlags.NONE,
+                null,
+                "org.gnome.SessionManager",
+                "/org/gnome/SessionManager",
+                "org.gnome.SessionManager",
+                null
+            );
+
+            var vr = dbsi.get_cached_property ("Renderer");
+            var renderer = vr.get_string ();
+            gpu_subtitle.label = clean_name(renderer);
+        } catch (Error e) {
+            debug (e.message);
+            var renderer = (_("Unknown Graphics"));
+            gpu_subtitle.label = renderer;
+        }
     }
 
     private string? get_model_info () {
