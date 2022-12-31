@@ -81,9 +81,9 @@ public class AppearanceView : Gtk.Box {
     }
 
     static construct {
-        //tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
+        tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
         interface_settings = new GLib.Settings ("org.gnome.desktop.interface");
-        //theme_settings = new GLib.Settings ("org.gnome.shell.extensions.user-theme");
+        theme_settings = new GLib.Settings ("org.gnome.shell.extensions.user-theme");
     }
 
     construct {
