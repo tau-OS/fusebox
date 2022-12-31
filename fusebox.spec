@@ -54,6 +54,13 @@ and background, user interface properties, screen resolution, and other settings
 %install
 %meson_install
 
+%files
+%{_bindir}/co.tauos.Fusebox
+%{_datadir}/applications/co.tauos.Fusebox.desktop
+%{_datadir}/glib-2.0/schemas/co.tauos.Fusebox.gschema.xml
+%{_datadir}/icons/hicolor/scalable/apps/co.tauos.Fusebox.svg
+%{_datadir}/appdata/co.tauos.Fusebox.appdata.xml
+
 %changelog
 * Sat Dec 30 2022 Lains <lainsce@airmail.cc> - 0.1.0-1
 - Initial Release
