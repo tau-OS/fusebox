@@ -38,9 +38,8 @@ Requires: accountsservice
  
 %description
 This package contains the settings application for the tauOS desktop, which
-allows to configure accessibility options, desktop fonts, keyboard and mouse
-properties, sound setup, desktop theme and background, user interface
-properties, screen resolution, and other settings.
+allows to configure keyboard and mouse properties, sound setup, desktop theme
+and background, user interface properties, screen resolution, and other settings.
  
 %prep
 %autosetup -n fusebox -Sgit
