@@ -67,13 +67,11 @@ public class About.OSView : Gtk.Box {
         os_box.add_css_class ("main-content-block");
 
         var hostname_title = new Gtk.Label (_("Device Name")) {
-            ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             xalign = 0
         };
         hostname_title.get_style_context ().add_class ("cb-title");
         hostname_subtitle = new Gtk.Label (get_host_name ()) {
-            ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             use_markup = true,
             xalign = 0
@@ -106,7 +104,6 @@ public class About.OSView : Gtk.Box {
         };
         get_storage_frac.begin ();
         var storage_title = new Gtk.Label (_("Storage")) {
-            ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             margin_bottom = 6,
             xalign = 0
@@ -127,7 +124,6 @@ public class About.OSView : Gtk.Box {
         storage_box.add_css_class ("mini-content-block");
 
         var model_title = new Gtk.Label (_("Model")) {
-            ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             xalign = 0
         };
@@ -145,7 +141,6 @@ public class About.OSView : Gtk.Box {
         model_box.add_css_class ("mini-content-block");
 
         var ram_title = new Gtk.Label (_("RAM")) {
-            ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             xalign = 0
         };
@@ -163,7 +158,6 @@ public class About.OSView : Gtk.Box {
         ram_box.add_css_class ("mini-content-block");
 
         var cpu_title = new Gtk.Label (_("Processor")) {
-            ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             xalign = 0
         };
@@ -181,7 +175,6 @@ public class About.OSView : Gtk.Box {
         cpu_box.add_css_class ("mini-content-block");
 
         var gpu_title = new Gtk.Label (_("Graphics")) {
-            ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             xalign = 0
         };

@@ -26,3 +26,7 @@ entry.search {
     border-radius: 999px;
     padding: 11px;
 }
+
+button.flat label {
+    font-weight: 500;
+}

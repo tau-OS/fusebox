@@ -24,13 +24,21 @@ namespace Fusebox {
         private Bis.Album album;
         private Bis.Album halbum;
         private He.AppBar headerbar;
-        private He.Window main_window;
+        private He.ApplicationWindow main_window;
         private Fusebox.CategoryView category_view;
 
         private static bool opened_directly = false;
         private static string? link = null;
         private static string? open_window = null;
         private static string? fuse_to_open = null;
+
+        public const string ACTION_PREFIX = "win.";
+        public const string ACTION_ABOUT = "about";
+        public SimpleActionGroup actions;
+        public static Gee.MultiMap<string, string> action_accelerators = new Gee.HashMultiMap<string, string> ();
+        private const GLib.ActionEntry[] ACTION_ENTRIES = {
+            {ACTION_ABOUT, action_about },
+        };
 
         public FuseboxApp () {
             Object (application_id: "co.tauos.Fusebox");
@@ -135,8 +143,29 @@ namespace Fusebox {
             var search_button = new Gtk.ToggleButton ();
             search_button.icon_name = "system-search-symbolic";
 
-            var menu_button = new Gtk.MenuButton ();
-            menu_button.icon_name = "open-menu-symbolic";
+            var menu_popover = new Gtk.Popover () {
+                autohide = true
+            };
+            var about_menu_item = create_button_menu_item (
+                                                           _("About…"),
+                                                           "win.about"
+                                                          );
+            about_menu_item.clicked.connect (() => {
+                menu_popover.popdown ();
+            });
+            var menu_popover_grid = new Gtk.Grid () {
+                margin_top = 3,
+                margin_bottom = 3,
+                orientation = Gtk.Orientation.VERTICAL,
+                width_request = 200
+            };
+            menu_popover_grid.attach (about_menu_item, 0, 0, 1, 1);
+            menu_popover.child = menu_popover_grid;
+
+            var menu_button = new Gtk.MenuButton () {
+                popover = menu_popover,
+                icon_name = "open-menu-symbolic"
+            };
 
             headerbar.append (menu_button);
             headerbar.append (search_button);
@@ -222,7 +251,7 @@ namespace Fusebox {
                 child = main_box
             };
 
-            main_window = new He.Window () {
+            main_window = new He.ApplicationWindow (this) {
                 application = this,
                 child = window_handle,
                 icon_name = application_id,
@@ -230,9 +259,13 @@ namespace Fusebox {
             };
             add_window (main_window);
             main_window.present ();
-            main_window.set_size_request (360, 360);
-            main_window.default_height = 500;
-            main_window.default_width = 700;
+            main_window.set_size_request (800, 600);
+            main_window.default_height = 600;
+            main_window.default_width = 800;
+            // Actions
+            actions = new SimpleActionGroup ();
+            actions.add_action_entries (ACTION_ENTRIES, this);
+            main_window.insert_action_group ("win", actions);
 
             search_box.search_changed.connect (() => {
                 if (search_box.text.length > 0) {
@@ -286,6 +319,41 @@ namespace Fusebox {
             if (Fusebox.FusesManager.get_default ().has_fuses () == false) {
                 category_view.show_alert (_("No Settings Found"), _("Install some and re-launch Fusebox."), "dialog-warning");
             }
+        }
+
+        public void action_about () {
+            // TRANSLATORS: 'Name <email@domain.com>' or 'Name https://website.example'
+            string translators = (_(""));
+
+            var about = new He.AboutWindow (
+                this.get_active_window (),
+                "Fusebox",
+                "co.tauos.Fusebox",
+                "0.1.0",
+                "co.tauos.Fusebox",
+                "https://github.com/tau-os/fusebox/tree/main/po",
+                "https://github.com/tau-os/fusebox/issues/new",
+                "https://github.com/tau-os/fusebox",
+                {translators},
+                {"The tauOS team"},
+                2023, // Year of first publication.
+                He.AboutWindow.Licenses.GPLv3,
+                He.Colors.DARK
+            );
+            about.present ();
+        }
+
+        private Gtk.Button create_button_menu_item (string label, string? action_name) {
+            var labelb = new Gtk.Label (label) {
+                xalign = 0
+            };
+            var button = new Gtk.Button () {
+                child = labelb,
+                hexpand = true
+            };
+            button.set_action_name (action_name);
+            button.add_css_class ("flat");
+            return button;
         }
 
         private void update_navigation () {
