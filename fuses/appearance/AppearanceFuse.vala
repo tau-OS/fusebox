@@ -19,11 +19,13 @@ public class Appearance.Fuse : Fusebox.Fuse {
         );
 
         Bis.init ();
+
+        typeof (WallpaperGrid).ensure ();
     }
 
     public override Gtk.Widget get_widget () {
         if (main_grid == null) {
-            var appearance_view = new AppearanceView ();
+            var appearance_view = new AppearanceView (this);
 
             main_grid = new Gtk.Grid () {
                 row_spacing = 6

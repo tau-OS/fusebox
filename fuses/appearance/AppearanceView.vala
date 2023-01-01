@@ -15,6 +15,8 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton prefer_default_radio;
     private Gtk.ToggleButton prefer_dark_radio;
 
+    public Fusebox.Fuse fuse { get; construct set; }
+
     private enum ColorScheme {
         NO_PREFERENCE,
         PREFER_DARK,
@@ -99,6 +101,10 @@ public class AppearanceView : Gtk.Box {
 
             return 0;
         }
+    }
+
+    public AppearanceView (Fusebox.Fuse _fuse) {
+        Object (fuse: _fuse);
     }
 
     static construct {
@@ -231,7 +237,8 @@ public class AppearanceView : Gtk.Box {
             row_spacing = 12,
             column_spacing = 12,
             hexpand = true,
-            row_homogeneous = true
+            row_homogeneous = true,
+            margin_bottom = 6
         };
         accent_grid.column_spacing = 6;
         accent_grid.attach (accent_label, 0, 0, 9);
@@ -248,6 +255,8 @@ public class AppearanceView : Gtk.Box {
         accent_grid.add_css_class ("mini-content-block");
 
         grid.attach (accent_grid, 0, 2);
+
+        grid.attach (new Appearance.WallpaperGrid (_fuse), 0, 3);
 
         var clamp = new Bis.Latch ();
         clamp.set_child (grid);
