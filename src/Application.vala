@@ -147,7 +147,7 @@ namespace Fusebox {
                 autohide = true
             };
             var about_menu_item = create_button_menu_item (
-                                                           _("About…"),
+                                                           _("About Fusebox…"),
                                                            "win.about"
                                                           );
             about_menu_item.clicked.connect (() => {
