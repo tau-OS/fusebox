@@ -42,6 +42,8 @@ jobs:
           name: ${{ matrix.pkg }}
           mockConfig: tau-1-${{ matrix.arch }}
           andaRepo: https://github.com/terrapkg/subatomic-repos/raw/main/terra37.repo
+          # Add some Flatpak stuff too if you want, remove below if you do
+          extraArgs: -p rpm
 
       - name: Upload to subatomic
         run: |
