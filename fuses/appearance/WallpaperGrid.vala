@@ -14,13 +14,6 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 */
-
-[DBus (name = "org.freedesktop.DisplayManager.AccountsService")]
-interface Appearance.AccountsServiceUser : Object {
-    [DBus (name = "BackgroundFile")]
-    public abstract string background_file { owned get; set; }
-}
-
 public class Appearance.WallpaperGrid : Gtk.Grid {
     public enum ColumnType {
         ICON,
@@ -40,11 +33,11 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     
     public Fusebox.Fuse fuse { get; construct set; }
     private GLib.Settings settings;
-    private AccountsServiceUser? accountsservice = null;
     
     private Gtk.ScrolledWindow wallpaper_scrolled_window;
     private Gtk.FlowBox wallpaper_view;
     private He.OverlayButton view_overlay;
+    private He.DisclosureButton wallpaper_removal_button;
     
     private Appearance.WallpaperContainer active_wallpaper = null;
     private Appearance.WallpaperContainer wallpaper_for_removal = null;
@@ -62,28 +55,21 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     construct {
             settings = new GLib.Settings ("org.gnome.desktop.background");
             
-            try {
-                int uid = (int)Posix.getuid ();
-                accountsservice = Bus.get_proxy_sync (BusType.SYSTEM,
-                    "org.freedesktop.Accounts",
-                    "/org/freedesktop/Accounts/User%i".printf (uid));
-            } catch (Error e) {
-                warning (e.message);
-            }
-            
             wallpaper_view = new Gtk.FlowBox () {
                 activate_on_single_click = true,
-                homogeneous = true,
                 row_spacing = 12,
+                column_spacing = 12,
                 valign = Gtk.Align.START,
-                selection_mode = Gtk.SelectionMode.SINGLE
+                selection_mode = Gtk.SelectionMode.SINGLE,
+                max_children_per_line = 4
             };
             wallpaper_view.child_activated.connect (update_checked_wallpaper);
             wallpaper_view.set_sort_func (wallpapers_sort_function);
             
             wallpaper_scrolled_window = new Gtk.ScrolledWindow () {
                 hexpand = true,
-                vexpand = true
+                vexpand = true,
+                hscrollbar_policy = Gtk.PolicyType.NEVER
             };
             wallpaper_scrolled_window.set_child (wallpaper_view);
             
@@ -91,13 +77,37 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                 halign = Gtk.Align.START
             };
             wallpaper_label.add_css_class ("cb-title");
+
+            wallpaper_removal_button = new He.DisclosureButton ("") {
+                hexpand = true,
+                halign = Gtk.Align.START,
+                icon = "user-trash-symbolic",
+                visible = false
+            };
+            wallpaper_removal_button.clicked.connect (() => {
+                var wallpaper = (Appearance.WallpaperContainer) wallpaper_view.get_selected_children ().data;
+                if (wallpaper != null)
+                    wallpaper_for_removal = wallpaper;
+                    wallpaper_view.remove (wallpaper_for_removal);
+                    var wallpaper_file = File.new_for_uri (wallpaper_for_removal.uri);
+                    wallpaper_file.trash_async.begin ();
+                    wallpaper_for_removal = null;
+                    wallpaper_removal_button.visible = false;
+            });
+
+            var wallpaper_title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
+                spacing = 12,
+                hexpand = true
+            };
+            wallpaper_title_box.append (wallpaper_label);
+            wallpaper_title_box.append (wallpaper_removal_button);
             
             var wallpaper_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
                 spacing = 12,
                 hexpand = true
             };
             wallpaper_main_box.add_css_class ("mini-content-block");
-            wallpaper_main_box.append (wallpaper_label);
+            wallpaper_main_box.append (wallpaper_title_box);
             wallpaper_main_box.append (wallpaper_scrolled_window);
             
             view_overlay = new He.OverlayButton ("", null, null);
@@ -110,13 +120,10 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             view_overlay.clicked.connect (show_wallpaper_chooser);
         }
 
-        private void update_accountsservice () {
-            var file = File.new_for_uri (current_wallpaper_path);
-            string uri = file.get_uri ();
-            string path = file.get_path ();
-    
-            settings.set_string ("picture-uri", uri);
-            accountsservice.background_file = path;
+        private async void update_wallpaper (string uri) {
+            var file = File.new_for_uri (uri);
+            string furi = file.get_uri ();
+            settings.set_string ("picture-uri", furi);
         }
         
         private void show_wallpaper_chooser () {
@@ -192,8 +199,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             
             active_wallpaper = children;
             children.checked = true;
+            wallpaper_removal_button.visible = true;
             current_wallpaper_path = children.uri;
-            update_accountsservice ();
+            update_wallpaper.begin (current_wallpaper_path);
         }
         
         public async void update_wallpaper_folder () {
@@ -299,16 +307,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
         
         private void add_wallpaper_from_file (GLib.File file) {
-            if (wallpaper_for_removal != null) {
-                return;
-            }
-            
             var wallpaper = new Appearance.WallpaperContainer (file.get_uri ());
             wallpaper_view.append (wallpaper);
-            
-            wallpaper.trash.connect (() => {
-                mark_for_removal (wallpaper);
-            });
             
             if (current_wallpaper_path.has_suffix (file.get_uri ()) && settings.get_string ("picture-options") != "none") {
                 this.wallpaper_view.select_child (wallpaper);
@@ -317,12 +317,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             }
             
             wallpaper_view.invalidate_sort ();
-        }
-        
-        public void cancel_thumbnail_generation () {
-            if (last_cancellable != null) {
-                last_cancellable.cancel ();
-            }
         }
         
         private int wallpapers_sort_function (Gtk.FlowBoxChild _child1, Gtk.FlowBoxChild _child2) {
@@ -365,28 +359,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                 return 1;
             }
         }
-        
-        private void mark_for_removal (WallpaperContainer wallpaper) {
-            wallpaper_view.remove (wallpaper);
-            wallpaper_for_removal = wallpaper;
-        }
-
-        private void confirm_removal () {
-            var wallpaper_file = File.new_for_uri (wallpaper_for_removal.uri);
-            wallpaper_file.trash_async.begin ();
-            wallpaper_for_removal.destroy ();
-            wallpaper_for_removal = null;
-        }
-    
-        private void undo_removal () {
-            wallpaper_view.append (wallpaper_for_removal);
-            wallpaper_for_removal = null;
-        }
     }
     
     public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
-        public signal void trash ();
-        
         private const int THUMB_WIDTH = 100;
         private const int THUMB_HEIGHT = 100;
         
@@ -432,8 +407,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
         
         construct {
-            height_request = THUMB_HEIGHT;
-            width_request = THUMB_WIDTH;
+            height_request = THUMB_HEIGHT + 6;
+            width_request = THUMB_WIDTH + 6;
             
             image = new Gtk.Image () {
                 halign = Gtk.Align.CENTER,
@@ -445,7 +420,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                 halign = Gtk.Align.START,
                 valign = Gtk.Align.START,
                 can_focus = false,
-                sensitive = false,
                 icon_name = "emblem-ok-symbolic"
             };
             check.add_css_class ("circular");
@@ -467,6 +441,10 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                 checked = true;
             });
             
+            make_thumb.begin ();
+        }
+
+        public async void make_thumb () {
             try {
                 var file = File.new_for_uri (uri);
                 var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());

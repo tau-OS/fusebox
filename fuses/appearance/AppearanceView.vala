@@ -12,6 +12,7 @@ public class AppearanceView : Gtk.Box {
     private PrefersAccentColorButton pink;
     private PrefersAccentColorButton mono;
     private PrefersAccentColorButton multi;
+    private Gtk.ToggleButton prefer_light_radio;
     private Gtk.ToggleButton prefer_default_radio;
     private Gtk.ToggleButton prefer_dark_radio;
 
@@ -108,9 +109,9 @@ public class AppearanceView : Gtk.Box {
     }
 
     static construct {
-        //tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
+        tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
         interface_settings = new GLib.Settings ("org.gnome.desktop.interface");
-        //theme_settings = new GLib.Settings ("org.gnome.shell.extensions.user-theme");
+        theme_settings = new GLib.Settings ("org.gnome.shell.extensions.user-theme");
     }
 
     construct {
@@ -120,7 +121,7 @@ public class AppearanceView : Gtk.Box {
         };
         main_label.add_css_class ("view-title");
 
-        var prefer_default_image = new Gtk.Image.from_icon_name ("weather-clear-symbolic") {
+        var prefer_default_image = new Gtk.Image.from_icon_name ("dark-mode-symbolic") {
             pixel_size = 32
         };
 
@@ -136,11 +137,40 @@ public class AppearanceView : Gtk.Box {
             row_spacing = 6
         };
         prefer_default_grid.attach (prefer_default_card, 0, 0);
-        prefer_default_grid.attach (new Gtk.Label (_("Light")), 0, 1);
+        prefer_default_grid.attach (new Gtk.Label (_("Auto")), 0, 1);
 
-        prefer_default_radio = new Gtk.ToggleButton ();
+        prefer_default_radio = new Gtk.ToggleButton () {
+            hexpand = true,
+            tooltip_text = _("Apps will choose their own color scheme.")
+        };
         prefer_default_radio.add_css_class ("image-button");
         prefer_default_radio.child = (prefer_default_grid);
+
+        var prefer_light_image = new Gtk.Image.from_icon_name ("weather-clear-symbolic") {
+            pixel_size = 32
+        };
+
+        var prefer_light_card = new Gtk.Grid () {
+            margin_top = 6,
+            margin_bottom = 6,
+            margin_end = 6,
+            margin_start = 6
+        };
+        prefer_light_card.attach (prefer_light_image, 0, 0);
+
+        var prefer_light_grid = new Gtk.Grid () {
+            row_spacing = 6
+        };
+        prefer_light_grid.attach (prefer_light_card, 0, 0);
+        prefer_light_grid.attach (new Gtk.Label (_("Light")), 0, 1);
+
+        prefer_light_radio = new Gtk.ToggleButton () {
+            group = prefer_default_radio,
+            tooltip_text = _("Apps will all be light-colored."),
+            hexpand = true
+        };
+        prefer_light_radio.add_css_class ("image-button");
+        prefer_light_radio.child = (prefer_light_grid);
 
         var prefer_dark_image = new Gtk.Image.from_icon_name ("weather-clear-night-symbolic") {
             pixel_size = 32
@@ -162,6 +192,7 @@ public class AppearanceView : Gtk.Box {
 
         prefer_dark_radio = new Gtk.ToggleButton () {
             group = prefer_default_radio,
+            tooltip_text = _("Apps will all be dark-colored."),
             hexpand = true
         };
         prefer_dark_radio.add_css_class ("image-button");
@@ -173,6 +204,7 @@ public class AppearanceView : Gtk.Box {
             homogeneous = true
         };
         prefer_style_box.append (prefer_default_radio);
+        prefer_style_box.append (prefer_light_radio);
         prefer_style_box.append (prefer_dark_radio);
 
         var prefer_label = new Gtk.Label (_("Color Scheme")) {
@@ -256,7 +288,7 @@ public class AppearanceView : Gtk.Box {
 
         grid.attach (accent_grid, 0, 2);
 
-        var wallpaper_view = new Appearance.WallpaperGrid (_fuse);
+        var wallpaper_view = new Appearance.WallpaperGrid (fuse);
         grid.attach (wallpaper_view, 0, 3);
         wallpaper_view.update_wallpaper_folder.begin ();
 
@@ -271,6 +303,9 @@ public class AppearanceView : Gtk.Box {
         });
 
         prefer_default_radio.toggled.connect (() => {
+            set_color_scheme (ColorScheme.NO_PREFERENCE);
+        });
+        prefer_light_radio.toggled.connect (() => {
             set_color_scheme (ColorScheme.PREFER_LIGHT);
         });
         prefer_dark_radio.toggled.connect (() => {
@@ -286,13 +321,13 @@ public class AppearanceView : Gtk.Box {
     private void set_color_scheme (ColorScheme color_scheme) {
         if (color_scheme == ColorScheme.NO_PREFERENCE) {
             interface_settings.set_string ("gtk-theme", "Adwaita");
-            //theme_settings.set_string ("name", "Helium");
+            theme_settings.set_string ("name", "Helium");
         } else if (color_scheme == ColorScheme.PREFER_LIGHT) {
             interface_settings.set_string ("gtk-theme", "Adwaita");
-            //theme_settings.set_string ("name", "Helium");
+            theme_settings.set_string ("name", "Helium");
         } else if (color_scheme == ColorScheme.PREFER_DARK) {
             interface_settings.set_string ("gtk-theme", "Adwaita-dark");
-            //theme_settings.set_string ("name", "Helium-dark");
+            theme_settings.set_string ("name", "Helium-dark");
         }
 
         interface_settings.set_enum ("color-scheme", color_scheme.to_int ());
@@ -303,12 +338,15 @@ public class AppearanceView : Gtk.Box {
 
         if (value == ColorScheme.NO_PREFERENCE) {
             prefer_default_radio.set_active (true);
+            prefer_light_radio.set_active (false);
             prefer_dark_radio.set_active (false);
         } else if (value == ColorScheme.PREFER_LIGHT) {
-            prefer_default_radio.set_active (true);
+            prefer_default_radio.set_active (false);
+            prefer_light_radio.set_active (true);
             prefer_dark_radio.set_active (false);
         } else if (value == ColorScheme.PREFER_DARK) {
             prefer_default_radio.set_active (false);
+            prefer_light_radio.set_active (false);
             prefer_dark_radio.set_active (true);
         }
     }

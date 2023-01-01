@@ -13,14 +13,9 @@
         "--filesystem=host",
         "--filesystem=home",
         "--filesystem=xdg-run/dconf",
-        "--filesystem=xdg-data/backgrounds",
-        "--system-talk-name=org.freedesktop.UDisks2",
-        "--system-talk-name=org.freedesktop.hostname1",
-        "--system-talk-name=org.freedesktop.Accounts",
-        "--system-talk-name=org.freedesktop.DisplayManager.AccountsService",
-        "--talk-name=ca.desrt.dconf",
-        "--talk-name=org.freedesktop.Flatpak",
-        "--talk-name=org.gnome.SessionManager"
+        "--filesystem=xdg-data",
+        "--socket=system-bus",
+        "--socket=session-bus"
     ],
     "cleanup": [
         "/include",
