@@ -1,6 +1,7 @@
 public class Appearance.Fuse : Fusebox.Fuse {
     private const string ACCENTS = "accents";
     private const string WALLPAPER = "wallpaper";
+    private const string DOCK = "dock";
     private Gtk.Grid main_grid;
 
     public Fuse () {
@@ -8,6 +9,7 @@ public class Appearance.Fuse : Fusebox.Fuse {
         settings.set ("appearance", null);
         settings.set ("appearance/accents", ACCENTS);
         settings.set ("appearance/wallpaper", WALLPAPER);
+        settings.set ("appearance/dock", DOCK);
 
         Object (
             category: Category.PERSONAL,

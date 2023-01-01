@@ -256,17 +256,19 @@ public class AppearanceView : Gtk.Box {
 
         grid.attach (accent_grid, 0, 2);
 
-        grid.attach (new Appearance.WallpaperGrid (_fuse), 0, 3);
+        var wallpaper_view = new Appearance.WallpaperGrid (_fuse);
+        grid.attach (wallpaper_view, 0, 3);
+        wallpaper_view.update_wallpaper_folder.begin ();
 
         var clamp = new Bis.Latch ();
         clamp.set_child (grid);
 
         append (clamp);
   
-        //  accent_refresh ();
-        //  tau_appearance_settings.notify["changed::accent-color"].connect (() => {
-        //      accent_refresh ();
-        //  });
+        accent_refresh ();
+        tau_appearance_settings.notify["changed::accent-color"].connect (() => {
+            accent_refresh ();
+        });
 
         prefer_default_radio.toggled.connect (() => {
             set_color_scheme (ColorScheme.PREFER_LIGHT);

@@ -17,7 +17,7 @@
         "--system-talk-name=org.freedesktop.UDisks2",
         "--system-talk-name=org.freedesktop.hostname1",
         "--system-talk-name=org.freedesktop.Accounts",
-        "--talk-name=org.freedesktop.thumbnails.Thumbnailer1",
+        "--system-talk-name=org.freedesktop.DisplayManager.AccountsService",
         "--talk-name=ca.desrt.dconf",
         "--talk-name=org.freedesktop.Flatpak",
         "--talk-name=org.gnome.SessionManager"

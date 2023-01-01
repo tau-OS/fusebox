@@ -257,7 +257,7 @@ namespace Fusebox {
             add_window (main_window);
             main_window.present ();
             main_window.set_size_request (360, 360);
-            main_window.default_height = 620;
+            main_window.default_height = 800;
             main_window.default_width = 800;
             // Actions
             actions = new SimpleActionGroup ();
