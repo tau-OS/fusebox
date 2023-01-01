@@ -8,6 +8,7 @@ shared_module('fuse-about',
     dependencies: [
         dependency('libgtop-2.0'),
         dependency('gudev-1.0'),
+        dependency('udisks2'),
         meson.get_compiler('vala').find_library('posix'),
         libfusebox_dep,
         dependency('libhelium-1', fallback: [ 'libhelium', 'helium_dep' ]),

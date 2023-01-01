@@ -6,41 +6,24 @@ public interface SystemInterface : Object {
     public abstract string pretty_hostname { owned get; set; }
     public abstract string static_hostname { owned get; set; }
 }
-[DBus(name = "org.freedesktop.DBus.ObjectManager")]
-interface UDisk2 : GLib.Object {
-	public signal void InterfacesAdded(ObjectPath object_path, GLib.HashTable<string, GLib.HashTable<string, Variant>> interfaces_and_properties);
-	public signal void InterfacesRemoved(ObjectPath object_path, string[] interfaces);
-	public abstract void GetManagedObjects(out GLib.HashTable<ObjectPath, GLib.HashTable<string, GLib.HashTable<string, Variant>>> path) throws GLib.IOError, GLib.DBusError;
-}
-[DBus(timeout = 1000000, name = "org.freedesktop.UDisks2.Block")]
-interface Block : GLib.Object {
-	public abstract uint64 Size { owned get; }
+[DBus (name = "org.gnome.SessionManager")]
+public interface SessionManager : Object {
+    [DBus (name = "Renderer")]
+    public abstract string renderer { owned get;}
 }
 
 public class About.OSView : Gtk.Box {
     private SystemInterface system_interface;
     private Gtk.Label hostname_subtitle;
     private Gtk.Label gpu_subtitle;
+    private Gtk.Label storage_subtitle;
     private Gtk.ProgressBar storage_gauge;
-    private UDisk2 udisk;
-    private GLib.HashTable<ObjectPath, GLib.HashTable<string, GLib.HashTable<string, Variant>>> objects;
-    private GLib.DBusConnection storage_dbus_connection;
+    private SessionManager? session_manager;
 
     public signal void InterfacesAdded();
 	public signal void InterfacesRemoved();
 
     construct {
-        try {
-			this.storage_dbus_connection = Bus.get_sync(BusType.SYSTEM);
-
-			this.udisk = this.storage_dbus_connection.get_proxy_sync<UDisk2>("org.freedesktop.UDisks2", "/org/freedesktop/UDisks2");
-			this.udisk.InterfacesAdded.connect((object_path, interfaces_and_properties) => { InterfacesAdded(); });
-			this.udisk.InterfacesRemoved.connect((object_path, interfaces) => { InterfacesRemoved(); });
-		} catch (GLib.IOError e) {
-			this.udisk = null;
-			this.storage_dbus_connection = null;
-		}
-
         var os_pretty_name = "%s".printf (
             Environment.get_os_info (GLib.OsInfoKey.NAME)
         );
@@ -102,21 +85,20 @@ public class About.OSView : Gtk.Box {
             vexpand = true,
             valign = Gtk.Align.START
         };
-        get_storage_frac.begin ();
         var storage_title = new Gtk.Label (_("Storage")) {
             selectable = true,
             margin_bottom = 6,
             xalign = 0
         };
         storage_title.get_style_context ().add_class ("cb-title");
-        string inf = get_storage_info ();
-        var storage_subtitle = new Gtk.Label (inf) {
+        storage_subtitle = new Gtk.Label ("") {
             ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             use_markup = true,
             xalign = 0
         };
         storage_subtitle.get_style_context ().add_class ("cb-subtitle");
+        get_storage_info.begin ();
         var storage_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         storage_box.append (storage_gauge);
         storage_box.append (storage_title);
@@ -185,8 +167,8 @@ public class About.OSView : Gtk.Box {
             use_markup = true,
             xalign = 0
         };
-        get_graphics_info ();
         gpu_subtitle.get_style_context ().add_class ("cb-subtitle");
+        get_graphics_info.begin ();
         var gpu_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         gpu_box.append (gpu_title);
         gpu_box.append (gpu_subtitle);
@@ -531,24 +513,28 @@ public class About.OSView : Gtk.Box {
 
         return GLib.format_size (mem_total, GLib.FormatSizeFlags.DEFAULT);
     }
-    private void get_graphics_info () {
-        try {
-            var dbsi = new DBusProxy.for_bus_sync (
-                BusType.SESSION,
-                DBusProxyFlags.NONE,
-                null,
-                "org.gnome.SessionManager",
-                "/org/gnome/SessionManager",
-                "org.gnome.SessionManager",
-                null
-            );
 
-            gpu_subtitle.label = dbsi.get_cached_property ("Renderer").get_string ();
-        } catch (Error e) {
-            debug (e.message);
-            var renderer = (_("Unknown Graphics"));
-            gpu_subtitle.label = renderer;
+    private async void get_graphics_info () {
+        var primary_gpu = yield get_gpu_info ();
+        gpu_subtitle.label = primary_gpu;
+    }
+    private async string? get_gpu_info () {
+        if (session_manager == null) {
+            try {
+                session_manager = yield Bus.get_proxy (
+                    BusType.SESSION,
+                    "org.gnome.SessionManager",
+                    "/org/gnome/SessionManager"
+                );
+
+                return clean_name (session_manager.renderer);
+            } catch (IOError e) {
+                warning ("Unable to connect to GNOME Session Manager for GPU details: %s", e.message);
+                return _("Unknown Graphics");
+            }
         }
+
+        return "";
     }
 
     private string? get_model_info () {
@@ -569,41 +555,22 @@ public class About.OSView : Gtk.Box {
         }
     }
 
-    private string? get_storage_info () {
-        double storage_capacity = 0.0;
-        double used = 0.0;
-        string storage_capacity_unit = "";
-        string used_unit = "";
-        try {
-            udisk.GetManagedObjects(out objects);
-		    foreach (var o in objects.get_keys()) {
-                var block = storage_dbus_connection.get_proxy_sync<Block>("org.freedesktop.UDisks2", o);
-                storage_capacity += double.parse (GLib.format_size (block.Size));
-                storage_capacity_unit = GLib.format_size (uint64.parse(storage_capacity.to_string ()), GLib.FormatSizeFlags.IEC_UNITS);
-            }
-        } catch (Error e) {
-            critical (e.message);
-        }
-
+    private async void get_storage_info () {
         var file_root = GLib.File.new_for_path ("/");
-        try {
-            var info = file_root.query_filesystem_info (GLib.FileAttribute.FILESYSTEM_USED);
-            used = (double.parse(GLib.format_size (info.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_USED))));
-            used_unit = GLib.format_size (uint64.parse(used.to_string ()), GLib.FormatSizeFlags.IEC_UNITS);
-        } catch (Error e) {
-            critical (e.message);
-        }
+        string storage_capacity = "";
+        string used = "";
 
-        return "%s / %s".printf(used_unit, storage_capacity_unit);
-    }
-    private async void get_storage_frac () {
-        var file_root = GLib.File.new_for_path ("/");
         try {
-            var info = yield file_root.query_filesystem_info_async (GLib.FileAttribute.FILESYSTEM_USED);
-            var used = (double.parse(GLib.format_size (info.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_USED))));
-            storage_gauge.set_fraction (used / 1024);
+            var infos = yield file_root.query_filesystem_info_async (GLib.FileAttribute.FILESYSTEM_SIZE);
+            storage_capacity = GLib.format_size (infos.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_SIZE));
+            var infou = yield file_root.query_filesystem_info_async (GLib.FileAttribute.FILESYSTEM_USED);
+            used = GLib.format_size (infou.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_USED));
+
+            storage_gauge.set_fraction (double.parse(used) / 1024);
+            storage_subtitle.label = used + " / " + storage_capacity;
         } catch (Error e) {
             critical (e.message);
+            storage_subtitle.label = _("Unknown");
         }
     }
 }
