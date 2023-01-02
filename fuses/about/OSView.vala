@@ -14,16 +14,23 @@ public interface SessionManager : Object {
 
 public class About.OSView : Gtk.Box {
     private SystemInterface system_interface;
+    private SessionManager? session_manager;
     private Gtk.Label hostname_subtitle;
     private Gtk.Label gpu_subtitle;
     private Gtk.Label storage_subtitle;
     private Gtk.ProgressBar storage_gauge;
-    private SessionManager? session_manager;
-
-    public signal void InterfacesAdded();
-	public signal void InterfacesRemoved();
 
     construct {
+        try {
+            system_interface = Bus.get_proxy_sync (
+                BusType.SYSTEM,
+                "org.freedesktop.hostname1",
+                "/org/freedesktop/hostname1"
+            );
+        } catch (GLib.Error e) {
+            warning ("%s", e.message);
+        }
+
         var os_pretty_name = "%s".printf (
             Environment.get_os_info (GLib.OsInfoKey.NAME)
         );
@@ -62,7 +69,7 @@ public class About.OSView : Gtk.Box {
         hostname_subtitle.get_style_context ().add_class ("cb-subtitle");
         var hostname_image = new Gtk.Image () {
             halign = Gtk.Align.START,
-            icon_name = system_interface.icon_name + "-symbolic"
+            icon_name = system_interface.icon_name + "-symbolic" ?? "computer-symbolic"
         };
         hostname_image.add_css_class ("rounded-icon");
         var hostname_button = new Gtk.Button () {
@@ -305,23 +312,7 @@ public class About.OSView : Gtk.Box {
         });
     }
 
-    private void get_system_interface_instance () {
-        if (system_interface == null) {
-            try {
-                system_interface = Bus.get_proxy_sync (
-                    BusType.SYSTEM,
-                    "org.freedesktop.hostname1",
-                    "/org/freedesktop/hostname1"
-                );
-            } catch (GLib.Error e) {
-                warning ("%s", e.message);
-            }
-        }
-    }
-
     private string get_host_name () {
-        get_system_interface_instance ();
-
         if (system_interface == null) {
             return GLib.Environment.get_host_name ();
         }
@@ -336,7 +327,6 @@ public class About.OSView : Gtk.Box {
     }
 
     private void set_host_name (string sname) {
-        get_system_interface_instance ();
         hostname_subtitle.label = sname;
 
         if (system_interface.pretty_hostname != null) {
