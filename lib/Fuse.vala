@@ -30,14 +30,14 @@ public abstract class Fusebox.Fuse : GLib.Object {
 
     /**
      * The category under which the Fuse will be stored.
-     * 
+     *
      * Possible {@link Category} values are PERSONAL, HARDWARE, NETWORK or SYSTEM.
      */
     public Category category { get; construct; }
 
     /**
      * The unique name representing the Fuse.
-     * 
+     *
      * It is also used to recognise it with the open-fuse command.
      */
     public string code_name { get; construct; }
@@ -58,7 +58,7 @@ public abstract class Fusebox.Fuse : GLib.Object {
     public string icon { get; construct; }
 
     /**
-     * A map of settings:// endpoints and location to pass to the
+     * A map of settings:\/\/ endpoints and location to pass to the
      * {@link search_callback} method if the value is not %NULL.
      * For example {"input/keyboard", "keyboard"}.
      */
@@ -73,8 +73,8 @@ public abstract class Fusebox.Fuse : GLib.Object {
      * Inform the application that the Fuse can now be listed in the available Fuses.
      * The application will also listen to the notify::can-show signal.
      *
-     * @deprecated: The changing {@link can_show} activate the notify::can-show signal.
      */
+    [Version (deprecated = true)]
     public signal void visibility_changed ();
 
     /**
@@ -91,16 +91,16 @@ public abstract class Fusebox.Fuse : GLib.Object {
 
     /**
      * Called when the Fuse disappear to the user.
-     * 
+     *
      * This is not called when the Fuse got destroyed or the window is closed, use ~Fuse () instead.
      */
     public abstract void hidden ();
 
     /**
      * This function should return the widget that contain the whole interface.
-     * 
+     *
      * When the user click on an action, the second parameter is send to the {@link search_callback} method
-     * 
+     *
      * @param search a {@link string} that represent the search.
      * @return a {@link Gee.TreeMap} containing two strings like {"Keyboard → Behavior → Duration", "keyboard<sep>behavior"}.
      */
@@ -108,7 +108,7 @@ public abstract class Fusebox.Fuse : GLib.Object {
 
     /**
      * This function is used when the user click on a search result, it should show the selected setting (right tab…).
-     * 
+     *
      * @param location a {@link string} that represents the setting to show.
      */
     public abstract void search_callback (string location);

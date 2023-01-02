@@ -4,7 +4,6 @@ project(
     version: '0.1.0',
 )
 
-lib_version = '1.0'
 gnome = import('gnome')
 
 add_project_arguments([
@@ -30,14 +29,16 @@ fuses_dir = get_option('prefix') / get_option('libdir') / 'fusebox-1'
 i18n = import('i18n')
 pkg = import('pkgconfig')
 
+glib_min_version = '2.50'
+
 glib_dep = dependency('glib-2.0', version: '>=2.72')
 gio_dep = dependency('gio-2.0')
 gio_unix_dep = dependency('gio-unix-2.0')
 gmodule_dep = dependency('gmodule-2.0')
 gtk_dep = dependency('gtk4', version: '>=3.10')
 gee_dep = dependency('gee-0.8')
-helium_dep = meson.get_compiler('c').find_library('libhelium', required: false)
-bismuth_dep = meson.get_compiler('c').find_library('libbismuth', required: false)
+helium_dep = dependency('libhelium-1', fallback: [ 'libhelium', 'libhelium_dep' ], version: '>=1.0.0')
+bismuth_dep = dependency('libbismuth-1', fallback: [ 'libbismuth', 'libbismuth_dep' ], version: '>=1.0.0')
 m_dep = meson.get_compiler('c').find_library('m', required : false)
 
 subdir('data')
@@ -48,6 +49,10 @@ if get_option('example')
 endif
 
 subdir('fuses')
+
+if get_option('documentation')
+    subdir('doc')
+endif
 
 gnome.post_install(
   glib_compile_schemas: true,
