@@ -96,9 +96,7 @@ public class DockView : Gtk.Box {
         dock_position_box.append (dock_position_box2);
         dock_position_box.append (dock_pos_middle_check);
 
-        var dock_autohide_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
-            homogeneous = true
-        };
+        var dock_autohide_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         dock_autohide_box.add_css_class ("mini-content-block");
         var dock_autohide_box2 = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
         var dock_autohide_title = new Gtk.Label (_("Intelligent Hiding")) {
@@ -119,9 +117,7 @@ public class DockView : Gtk.Box {
         dock_autohide_box.append (dock_autohide_box2);
         dock_autohide_box.append (dock_autohide_switch);
 
-        var dock_panel_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
-            homogeneous = true
-        };
+        var dock_panel_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         dock_panel_box.add_css_class ("mini-content-block");
         var dock_panel_box2 = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
         var dock_panel_title = new Gtk.Label (_("Panel Mode")) {
@@ -149,14 +145,22 @@ public class DockView : Gtk.Box {
             valign = Gtk.Align.CENTER
         };
 
-        orientation = Gtk.Orientation.VERTICAL;
-        spacing = 12;
-        margin_start = margin_end = 18;
-        append (dock_size_box);
-        append (dock_position_box);
-        append (dock_autohide_box);
-        append (dock_panel_box);
-        append (settings_button);
+        var grid = new Gtk.Grid () {
+            row_spacing = 6,
+            margin_start = 18,
+            margin_end = 18,
+            margin_bottom = 18
+        };
+        grid.attach (dock_size_box, 0, 0);
+        grid.attach (dock_position_box, 0, 1);
+        grid.attach (dock_autohide_box, 0, 2);
+        grid.attach (dock_panel_box, 0, 3);
+        grid.attach (settings_button, 0, 4);
+
+        var clamp = new Bis.Latch ();
+        clamp.set_child (grid);
+
+        append (clamp);
 
         dock_size_small_check.toggled.connect (() => {
             dock_settings.set_int ("dash-max-icon-size", 32);
@@ -194,7 +198,7 @@ public class DockView : Gtk.Box {
         dock_settings.bind ("extend-height", dock_panel_switch, "active", GLib.SettingsBindFlags.DEFAULT);
 
         settings_button.clicked.connect (() => {
-            //
+            // TODO: launch Extension settings
         });
     }
 

@@ -393,7 +393,6 @@ public class AppearanceView : Gtk.Box {
             row_homogeneous = true,
             margin_bottom = 6
         };
-        accent_grid.column_spacing = 6;
         accent_grid.attach (accent_label, 0, 0, 9);
         accent_grid.attach (red, 0, 1);
         accent_grid.attach (orange, 1, 1);
