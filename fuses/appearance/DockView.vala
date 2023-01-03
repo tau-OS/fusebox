@@ -198,7 +198,26 @@ public class DockView : Gtk.Box {
         dock_settings.bind ("extend-height", dock_panel_switch, "active", GLib.SettingsBindFlags.DEFAULT);
 
         settings_button.clicked.connect (() => {
-            // TODO: launch Extension settings
+            try{
+            var dbsi = new DBusProxy.for_bus_sync (
+                                                    BusType.SESSION,
+                                                    DBusProxyFlags.NONE,
+                                                    null,
+                                                    "org.gnome.Shell.Extensions",
+                                                    "/org/gnome/Shell/Extensions",
+                                                    "org.gnome.Shell.Extensions",
+                                                    null
+                                                  );
+            dbsi.call_sync (
+                            "OpenExtensionPrefs",
+                            new Variant ("(ssa{sv})", "dash-to-dock@tauos.co", ""),
+                            DBusCallFlags.NONE,
+                            -1,
+                            null
+                           );
+            } catch (Error e) {
+                warning ("%s", e.message);
+            }
         });
     }
 

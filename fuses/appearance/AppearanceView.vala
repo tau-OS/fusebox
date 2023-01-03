@@ -388,7 +388,7 @@ public class AppearanceView : Gtk.Box {
 
         var accent_grid = new Gtk.Grid () {
             row_spacing = 12,
-            column_spacing = 12,
+            column_homogeneous = true,
             hexpand = true,
             row_homogeneous = true,
             margin_bottom = 6
