@@ -4,7 +4,8 @@ fuse_files = files(
     'WallpaperGrid.vala'
 )
 
-shared_module('fuse-appearance',
+shared_module(
+    'fuse-appearance',
     fuse_files,
     dependencies: [
         libfusebox_dep,

@@ -15,6 +15,9 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton prefer_light_radio;
     private Gtk.ToggleButton prefer_default_radio;
     private Gtk.ToggleButton prefer_dark_radio;
+    private Gtk.ToggleButton prefer_soft_radio;
+    private Gtk.ToggleButton prefer_medium_radio;
+    private Gtk.ToggleButton prefer_harsh_radio;
 
     public Fusebox.Fuse fuse { get; construct set; }
 
@@ -30,6 +33,25 @@ public class AppearanceView : Gtk.Box {
                 case PREFER_DARK:
                     return 1;
                 case PREFER_LIGHT:
+                    return 2;
+            }
+
+            return 0;
+        }
+    }
+
+    private enum DarkModeStrength {
+        MEDIUM,
+        HARSH,
+        SOFT;
+
+        public int to_int () {
+            switch (this) {
+                case MEDIUM:
+                    return 0;
+                case HARSH:
+                    return 1;
+                case SOFT:
                     return 2;
             }
 
@@ -121,6 +143,11 @@ public class AppearanceView : Gtk.Box {
         };
         main_label.add_css_class ("view-title");
 
+        var prefer_label = new Gtk.Label (_("Color Scheme")) {
+            halign = Gtk.Align.START
+        };
+        prefer_label.add_css_class ("cb-title");
+
         var prefer_default_image = new Gtk.Image.from_icon_name ("dark-mode-symbolic") {
             pixel_size = 32
         };
@@ -207,10 +234,108 @@ public class AppearanceView : Gtk.Box {
         prefer_style_box.append (prefer_light_radio);
         prefer_style_box.append (prefer_dark_radio);
 
-        var prefer_label = new Gtk.Label (_("Color Scheme")) {
-            halign = Gtk.Align.START
+        var prefer_dm_sep = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
+            visible = false
         };
-        prefer_label.add_css_class ("cb-title");
+
+        var prefer_dm_label = new Gtk.Label (_("Dark Mode Strength")) {
+            halign = Gtk.Align.START,
+            visible = false
+        };
+        prefer_dm_label.add_css_class ("cb-title");
+
+        var prefer_soft_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/soft.svg") {
+            pixel_size = 96
+        };
+
+        var prefer_soft_card = new Gtk.Grid () {
+            margin_top = 6,
+            margin_bottom = 6,
+            margin_end = 6,
+            margin_start = 6
+        };
+        prefer_soft_card.attach (prefer_soft_image, 0, 0);
+
+        var prefer_soft_grid = new Gtk.Grid () {
+            row_spacing = 6,
+            hexpand = true,
+            halign = Gtk.Align.CENTER
+        };
+        prefer_soft_grid.attach (prefer_soft_card, 0, 0);
+        prefer_soft_grid.attach (new Gtk.Label (_("Soft")), 0, 1);
+
+        prefer_soft_radio = new Gtk.ToggleButton () {
+            hexpand = true,
+            tooltip_text = _("The intensity of the dark mode will be softer.")
+        };
+        prefer_soft_radio.add_css_class ("image-button");
+        prefer_soft_radio.child = (prefer_soft_grid);
+
+        var prefer_medium_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/medium.svg") {
+            pixel_size = 96
+        };
+
+        var prefer_medium_card = new Gtk.Grid () {
+            margin_top = 6,
+            margin_bottom = 6,
+            margin_end = 6,
+            margin_start = 6
+        };
+        prefer_medium_card.attach (prefer_medium_image, 0, 0);
+
+        var prefer_medium_grid = new Gtk.Grid () {
+            row_spacing = 6,
+            hexpand = true,
+            halign = Gtk.Align.CENTER
+        };
+        prefer_medium_grid.attach (prefer_medium_card, 0, 0);
+        prefer_medium_grid.attach (new Gtk.Label (_("Medium")), 0, 1);
+
+        prefer_medium_radio = new Gtk.ToggleButton () {
+            group = prefer_soft_radio,
+            tooltip_text = _("The intensity of the dark mode will be the default."),
+            hexpand = true
+        };
+        prefer_medium_radio.add_css_class ("image-button");
+        prefer_medium_radio.child = (prefer_medium_grid);
+
+        var prefer_harsh_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/harsh.svg") {
+            pixel_size = 96
+        };
+
+        var prefer_harsh_card = new Gtk.Grid () {
+            margin_top = 6,
+            margin_bottom = 6,
+            margin_end = 6,
+            margin_start = 6
+        };
+        prefer_harsh_card.attach (prefer_harsh_image, 0, 0);
+
+        var prefer_harsh_grid = new Gtk.Grid () {
+            row_spacing = 6,
+            hexpand = true,
+            halign = Gtk.Align.CENTER
+        };
+        prefer_harsh_grid.attach (prefer_harsh_card, 0, 0);
+        prefer_harsh_grid.attach (new Gtk.Label (_("Harsh")), 0, 1);
+
+        prefer_harsh_radio = new Gtk.ToggleButton () {
+            group = prefer_soft_radio,
+            tooltip_text = _("The intensity of the dark mode will be harsher."),
+            hexpand = true
+        };
+        prefer_harsh_radio.add_css_class ("image-button");
+        prefer_harsh_radio.child = (prefer_harsh_grid);
+
+        var prefer_dm_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
+            spacing = 12,
+            hexpand = true,
+            homogeneous = true,
+            visible = false
+        };
+        prefer_dm_box.append (prefer_soft_radio);
+        prefer_dm_box.append (prefer_medium_radio);
+        prefer_dm_box.append (prefer_harsh_radio);
 
         var prefer_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
             spacing = 12,
@@ -219,6 +344,9 @@ public class AppearanceView : Gtk.Box {
         prefer_main_box.add_css_class ("mini-content-block");
         prefer_main_box.append (prefer_label);
         prefer_main_box.append (prefer_style_box);
+        prefer_main_box.append (prefer_dm_sep);
+        prefer_main_box.append (prefer_dm_label);
+        prefer_main_box.append (prefer_dm_box);
 
         var grid = new Gtk.Grid () {
             row_spacing = 6,
@@ -304,17 +432,41 @@ public class AppearanceView : Gtk.Box {
 
         prefer_default_radio.toggled.connect (() => {
             set_color_scheme (ColorScheme.NO_PREFERENCE);
+            prefer_dm_sep.visible = false;
+            prefer_dm_label.visible = false;
+            prefer_dm_box.visible = false;
         });
         prefer_light_radio.toggled.connect (() => {
             set_color_scheme (ColorScheme.PREFER_LIGHT);
+            prefer_dm_sep.visible = false;
+            prefer_dm_label.visible = false;
+            prefer_dm_box.visible = false;
         });
         prefer_dark_radio.toggled.connect (() => {
             set_color_scheme (ColorScheme.PREFER_DARK);
+            prefer_dm_sep.visible = true;
+            prefer_dm_label.visible = true;
+            prefer_dm_box.visible = true;
         });
 
         color_scheme_refresh ();
         interface_settings.notify["changed::color-scheme"].connect (() => {
             color_scheme_refresh ();
+        });
+
+        prefer_soft_radio.toggled.connect (() => {
+            set_dark_mode_strength (DarkModeStrength.SOFT);
+        });
+        prefer_medium_radio.toggled.connect (() => {
+            set_dark_mode_strength (DarkModeStrength.MEDIUM);
+        });
+        prefer_harsh_radio.toggled.connect (() => {
+            set_dark_mode_strength (DarkModeStrength.HARSH);
+        });
+
+        dark_mode_strength_refresh ();
+        tau_appearance_settings.notify["changed::dark-mode-strength"].connect (() => {
+            dark_mode_strength_refresh ();
         });
     }
 
@@ -348,6 +500,28 @@ public class AppearanceView : Gtk.Box {
             prefer_default_radio.set_active (false);
             prefer_light_radio.set_active (false);
             prefer_dark_radio.set_active (true);
+        }
+    }
+
+    private void set_dark_mode_strength (DarkModeStrength strength) {
+        tau_appearance_settings.set_enum ("dark-mode-strength", strength.to_int ());
+    }
+
+    private void dark_mode_strength_refresh () {
+        int value = tau_appearance_settings.get_enum ("dark-mode-strength");
+
+        if (value == DarkModeStrength.SOFT) {
+            prefer_soft_radio.set_active (true);
+            prefer_medium_radio.set_active (false);
+            prefer_harsh_radio.set_active (false);
+        } else if (value == DarkModeStrength.MEDIUM) {
+            prefer_soft_radio.set_active (false);
+            prefer_medium_radio.set_active (true);
+            prefer_harsh_radio.set_active (false);
+        } else if (value == DarkModeStrength.HARSH) {
+            prefer_soft_radio.set_active (false);
+            prefer_medium_radio.set_active (false);
+            prefer_harsh_radio.set_active (true);
         }
     }
 
