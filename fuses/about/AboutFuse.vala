@@ -21,10 +21,17 @@ public class About.Fuse : Fusebox.Fuse {
         if (main_grid == null) {
             var os_view = new OSView ();
 
+            var view_label = new Gtk.Label ("About") {
+                halign = Gtk.Align.START,
+                margin_start = 18
+            };
+            view_label.add_css_class ("view-title");
+
             main_grid = new Gtk.Grid () {
                 row_spacing = 12
             };
-            main_grid.attach (os_view, 0, 0);
+            main_grid.attach (view_label, 0, 0);
+            main_grid.attach (os_view, 0, 1);
         }
 
         return main_grid;

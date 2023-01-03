@@ -3,6 +3,7 @@ public class Appearance.Fuse : Fusebox.Fuse {
     private const string WALLPAPER = "wallpaper";
     private const string DOCK = "dock";
     private Gtk.Grid main_grid;
+    private Gtk.Stack main_stack;
 
     public Fuse () {
         var settings = new Gee.TreeMap<string, string?> (null, null);
@@ -21,18 +22,27 @@ public class Appearance.Fuse : Fusebox.Fuse {
         );
 
         Bis.init ();
-
-        typeof (WallpaperGrid).ensure ();
     }
 
     public override Gtk.Widget get_widget () {
         if (main_grid == null) {
             var appearance_view = new AppearanceView (this);
+            var dock_view = new DockView (this);
+
+            main_stack = new Gtk.Stack ();
+            main_stack.add_titled (appearance_view, "appearance", _("Appearance"));
+            main_stack.add_titled (dock_view, "dock", _("Dock"));
+
+            var stack_switcher = new He.ViewSwitcher () {
+                margin_start = 18
+            };
+            stack_switcher.stack = main_stack;
 
             main_grid = new Gtk.Grid () {
-                row_spacing = 6
+                row_spacing = 12
             };
-            main_grid.attach (appearance_view, 0, 0);
+            main_grid.attach (stack_switcher, 0, 0);
+            main_grid.attach (main_stack, 0, 1);
         }
 
         return main_grid;

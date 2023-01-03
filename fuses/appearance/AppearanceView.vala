@@ -137,12 +137,6 @@ public class AppearanceView : Gtk.Box {
     }
 
     construct {
-        var main_label = new Gtk.Label (_("Appearance")) {
-            halign = Gtk.Align.START,
-            margin_bottom = 6
-        };
-        main_label.add_css_class ("view-title");
-
         var prefer_label = new Gtk.Label (_("Color Scheme")) {
             halign = Gtk.Align.START
         };
@@ -355,8 +349,7 @@ public class AppearanceView : Gtk.Box {
             margin_bottom = 18
         };
 
-        grid.attach (main_label, 0, 0);
-        grid.attach (prefer_main_box, 0, 1);
+        grid.attach (prefer_main_box, 0, 0);
 
         var accent_label = new Gtk.Label (_("Accent Color")) {
             halign = Gtk.Align.START
@@ -414,10 +407,10 @@ public class AppearanceView : Gtk.Box {
         accent_grid.attach (multi, 9, 1);
         accent_grid.add_css_class ("mini-content-block");
 
-        grid.attach (accent_grid, 0, 2);
+        grid.attach (accent_grid, 0, 1);
 
         var wallpaper_view = new Appearance.WallpaperGrid (fuse);
-        grid.attach (wallpaper_view, 0, 3);
+        grid.attach (wallpaper_view, 0, 2);
         wallpaper_view.update_wallpaper_folder.begin ();
 
         var clamp = new Bis.Latch ();

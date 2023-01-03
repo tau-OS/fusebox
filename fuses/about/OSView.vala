@@ -187,14 +187,6 @@ public class About.OSView : Gtk.Box {
             halign = Gtk.Align.CENTER
         };
 
-        var view_label = new Gtk.Label ("About") {
-            halign = Gtk.Align.START,
-            margin_bottom = 6,
-            margin_start = 18,
-            margin_end = 18
-        };
-        view_label.add_css_class ("view-title");
-
         var stor_host_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             margin_bottom = 6,
             vexpand = false,
@@ -220,7 +212,6 @@ public class About.OSView : Gtk.Box {
         scroller.set_child (info_box);
 
         var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        mbox.append (view_label);
         mbox.append (scroller);
         mbox.append (bug_button);
 

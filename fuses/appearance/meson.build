@@ -1,7 +1,8 @@
 fuse_files = files(
     'AppearanceFuse.vala',
     'AppearanceView.vala',
-    'WallpaperGrid.vala'
+    'WallpaperGrid.vala',
+    'DockView.vala',
 )
 
 shared_module(
@@ -10,7 +11,7 @@ shared_module(
     dependencies: [
         libfusebox_dep,
         meson.get_compiler('vala').find_library('posix'),
-        dependency('libhelium-1', fallback: [ 'libhelium', 'helium_dep' ]),
+        dependency('libhelium-1'),
         dependency('libbismuth-1', fallback: [ 'libbismuth', 'bismuth_dep' ], version: '>=1.0.0'),
     ],
     install: true,
