@@ -423,7 +423,7 @@ public class About.OSView : Gtk.Box {
             return null;
         }
 
-        var counts = new GLib.HashTable<string, uint> (null, null);
+        var counts = new GLib.HashTable<string, uint> (str_hash, str_equal);
         const string[] KEYS = { "model name", "cpu", "Processor" };
 
         for (int i = 0; i < info.ncpu; i++) {
@@ -467,7 +467,10 @@ public class About.OSView : Gtk.Box {
                 result += "\n";
             }
 
-            result += "%s ".printf (clean_name (key));
+            // get core count
+            uint cores = counts.@get (key);
+
+            result += "%s x%u".printf (clean_name (key), cores);
         }
 
         return result;
