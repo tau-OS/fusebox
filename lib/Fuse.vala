@@ -26,7 +26,7 @@ public abstract class Fusebox.Fuse : GLib.Object {
     /**
      * The common used separator.
      */
-    public const string SEP = "<sep>";
+    public string SEP = "<sep>";
 
     /**
      * The category under which the Fuse will be stored.
