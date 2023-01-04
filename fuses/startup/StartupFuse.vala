@@ -22,7 +22,6 @@
 public class Startup.Fuse : Fusebox.Fuse {
     private const string STARTUP = "startup";
     private Gtk.Grid main_grid;
-    private Gtk.Stack main_stack;
     public Fuse () {
         var settings = new Gee.TreeMap<string, string?> (null, null);
         settings.set ("startup", STARTUP);

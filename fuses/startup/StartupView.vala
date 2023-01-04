@@ -52,7 +52,12 @@ public class StartupView : Gtk.Box {
         list.append (app_row2);
 
 
-        mbox.append (list);
+        // add helium overlay
+        var overlay = new He.OverlayButton ("", null, null);
+        overlay.icon = "list-add-symbolic";
+        overlay.child = (list);
+
+        mbox.append (overlay);
 
         mbox.add_css_class ("mini-content-block");
 
