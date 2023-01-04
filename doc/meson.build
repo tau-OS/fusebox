@@ -33,6 +33,4 @@ target = custom_target(
     build_by_default: true,
     output: dir,
     depends: libfusebox_lib,
-    install: true,
-    install_dir: docs_dir,
 )
