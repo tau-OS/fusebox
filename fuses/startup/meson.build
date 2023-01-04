@@ -1,6 +1,12 @@
 fuse_files = files(
     'StartupFuse.vala',
-    'StartupView.vala'
+    'StartupView.vala',
+    'Utils.vala',
+    'Backend/DesktopFileEnumerator.vala',
+    'Backend/KeyFile.vala',
+    'Backend/KeyFileFactory.vala',
+    'Backend/Monitor.vala',
+    'Entities/AppInfo.vala'
 )
 
 
@@ -11,6 +17,9 @@ shared_module('fuse-startup',
         meson.get_compiler('vala').find_library('posix'),
         dependency('libhelium-1', fallback: [ 'libhelium', 'helium_dep' ]),
         dependency('libbismuth-1', fallback: [ 'libbismuth', 'bismuth_dep' ], version: '>=1.0.0'),
+        dependency('glib-2.0', version: '>=2.34'),
+        dependency('gio-2.0', version: '>=2.34'),
+        dependency('gobject-2.0', version: '>=2.34'),
     ],
     install: true,
     install_dir: join_paths(fuses_dir, 'system')

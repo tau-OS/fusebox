@@ -15,9 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
+ * //////////////////////////////////////////////////////////////////////////
+ *
+ * Fusebox startup applications fuse (plugin)
+ *
+ * Author: Pornpipat "Cappy" Popum <cappy@cappuchino.xyz>
+ * This file is part of Fusebox.
+ *
+ * This Fusebox fuse manages startup applications.
+ * These startup applications are in XDG autostart format. See
+ * https://specifications.freedesktop.org/autostart-spec/autostart-spec-latest.html
+ * for more information.
+ * This fuse allows users to add, remove and edit startup applications.
+ * It also allows the ablity to create a custom startup shortcut with custom commands and arguments.
+ *
+ * The XDG autostart parser is based on code from elementary OS's Startup Applications plug.
  */
-
-// XDG Autostart manager
 
 public class Startup.Fuse : Fusebox.Fuse {
     private const string STARTUP = "startup";
