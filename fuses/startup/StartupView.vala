@@ -17,44 +17,39 @@ public class StartupView : Gtk.Box {
         // the actual list to contain the startup apps
         var list = new Gtk.ListBox ();
         list.set_show_separators (true);
+
+        // set spacing between rows
+        // gtk4
+        list.set_header_func ((row, before) => {
+            if (before != null) {
+                row.set_margin_top (6);
+            } else {
+                row.set_margin_bottom (6);
+            }
+        });
+
         list.selection_mode = Gtk.SelectionMode.SINGLE;
-        // example app
-        var app_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-        app_box.selection_mode = Gtk.SelectionMode.SINGLE;
-        var app_icon = new Gtk.Image () {
-            icon_name = "org.gnome.Nautilus",
-            pixel_size = 48
+
+        // example apps
+        var app1 = new AppEntry () {
+            app_name = "Nautilus",
+            app_desc = "File Manager",
+            app_icon = "org.gnome.Nautilus",
+            app_enabled = true
         };
-        app_box.append (app_icon);
-
-        var label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        label_box.halign = Gtk.Align.START;
-        var app_name = new Gtk.Label ("Nautilus");
-        app_name.add_css_class ("cb-title");
-        app_name.halign = Gtk.Align.START;
-        label_box.append (app_name);
-        var app_desc = new Gtk.Label ("File Manager");
-        app_desc.add_css_class ("cb-subtitle");
-        app_desc.halign = Gtk.Align.START;
-        label_box.append (app_desc);
-
-        app_box.append (label_box);
-
-        // toggle switch at the end of the box
-        var app_switch = new Gtk.Switch ();
-        app_switch.halign = Gtk.Align.END;
-        app_switch.hexpand = true;
-
-        app_switch.valign = Gtk.Align.CENTER;
-        app_box.append (app_switch);
-
-
-        var app_row = new Gtk.ListBoxRow ();
-        app_row.set_child (app_box);
+        var app_row = app1.into_row ();
 
         list.append (app_row);
 
+        var app2 = new AppEntry () {
+            app_name = "Terminal",
+            app_desc = "Terminal Emulator",
+            app_icon = "org.gnome.Terminal",
+            app_enabled = false
+        };
+        var app_row2 = app2.into_row ();
 
+        list.append (app_row2);
 
 
         mbox.append (list);
@@ -68,5 +63,75 @@ public class StartupView : Gtk.Box {
         append (clamp);
         //
 
+    }
+}
+
+
+private class AppEntry : Gtk.Box {
+    public string app_name { get; set construct;}
+    public string app_desc { get; set construct;}
+    public string app_icon { get; set construct;}
+    public bool app_enabled { get; set construct;}
+
+    construct {
+        orientation = Gtk.Orientation.HORIZONTAL;
+        spacing = 6;
+
+        var icon = new Gtk.Image () {
+            icon_name = app_icon,
+            pixel_size = 48
+        };
+        append (icon);
+
+        notify["app-icon"].connect (() => {
+            icon.icon_name = app_icon;
+        });
+
+        var label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        label_box.halign = Gtk.Align.START;
+        var name = new Gtk.Label (app_name);
+        name.add_css_class ("cb-title");
+        name.halign = Gtk.Align.START;
+        label_box.append (name);
+
+        notify["app-name"].connect (() => {
+            name.label = app_name;
+        });
+
+        var desc = new Gtk.Label (app_desc);
+        desc.add_css_class ("cb-subtitle");
+        desc.halign = Gtk.Align.START;
+        label_box.append (desc);
+
+        notify["app-desc"].connect (() => {
+            desc.label = app_desc;
+        });
+
+        append (label_box);
+
+        // toggle switch at the end of the box
+        var app_switch = new Gtk.Switch ();
+        app_switch.halign = Gtk.Align.END;
+        app_switch.hexpand = true;
+        app_switch.valign = Gtk.Align.CENTER;
+        app_switch.active = app_enabled;
+        append (app_switch);
+
+
+        notify["app-enabled"].connect (() => {
+            app_switch.active = app_enabled;
+        });
+
+
+
+
+
+    }
+
+    // function to wrap in a row
+    public Gtk.ListBoxRow into_row () {
+        var row = new Gtk.ListBoxRow ();
+        row.set_child (this);
+        return row;
     }
 }
