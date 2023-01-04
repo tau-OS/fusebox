@@ -36,7 +36,7 @@ public class Startup.Fuse : Fusebox.Fuse {
     private const string STARTUP = "startup";
     private Gtk.Grid main_grid;
     public Fuse () {
-        var settings = new Gee.TreeMap<string, string?> (null, null);
+        var settings = new GLib.HashTable<string, string?> (null, null);
         settings.set ("startup", STARTUP);
         Object (
             category: Category.SYSTEM,
@@ -82,10 +82,9 @@ public class Startup.Fuse : Fusebox.Fuse {
         }
     }
 
-    public override async Gee.TreeMap<string, string> search (string search) {
-        var search_results = new Gee.TreeMap<string, string> (
-            (GLib.CompareDataFunc<string>)strcmp,
-            (Gee.EqualDataFunc<string>)str_equal
+    public override async GLib.HashTable<string, string> search (string search) {
+        var search_results = new GLib.HashTable<string, string> (
+            null, null
         );
 
         //  search_results.set ("%s → %s".printf (display_name, _("About")), OS);

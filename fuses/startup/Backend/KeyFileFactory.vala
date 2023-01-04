@@ -21,10 +21,10 @@
 
 class Startup.Backend.KeyFileFactory : GLib.Object {
 
-    static Gee.Map <string, KeyFile> cache;
+    static GLib.HashTable <string, KeyFile> cache;
 
     public static void init () {
-        cache = new Gee.HashMap <string, KeyFile> ();
+        cache = new GLib.HashTable <string, KeyFile> (null, null);
     }
 
     public static KeyFile get_or_create (string path) {
