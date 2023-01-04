@@ -22,6 +22,7 @@
 public class Startup.Fuse : Fusebox.Fuse {
     private const string STARTUP = "startup";
     private Gtk.Grid main_grid;
+    private Gtk.Stack main_stack;
     public Fuse () {
         var settings = new Gee.TreeMap<string, string?> (null, null);
         settings.set ("startup", STARTUP);
@@ -37,18 +38,22 @@ public class Startup.Fuse : Fusebox.Fuse {
 
     public override Gtk.Widget get_widget () {
         if (main_grid == null) {
-            main_grid = new Gtk.Grid ();
-        }
+            var startup_view = new StartupView(this);
+            main_grid = new Gtk.Grid () {
+                row_spacing = 12
+            };
 
-        // add some text
-        var label = new Gtk.Label (_("Manage applications that start automatically"));
-        label.get_style_context ().add_class ("h2");
-        label.set_halign (Gtk.Align.START);
-        label.set_margin_top (12);
-        label.set_margin_bottom (12);
-        label.set_margin_start (12);
-        label.set_margin_end (12);
-        main_grid.attach (label, 0, 0, 1, 1);
+            var view_label = new Gtk.Label ("Startup Applications") {
+                halign = Gtk.Align.START,
+                margin_start = 18
+            };
+            view_label.add_css_class ("view-title");
+
+            main_grid.attach (view_label, 0, 0);
+            main_grid.attach (startup_view, 0, 1);
+
+
+        }
 
         return main_grid;
     }

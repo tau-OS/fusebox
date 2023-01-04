@@ -1,5 +1,5 @@
 fuse_files = files(
-    'StartupFuse.vala'
+    'StartupFuse.vala',
     'StartupView.vala'
 )
 
