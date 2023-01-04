@@ -52,20 +52,22 @@ public class StartupView : Gtk.Box {
         list.append (app_row2);
 
 
-        // add helium overlay
-        var overlay = new He.OverlayButton ("", null, null);
-        overlay.icon = "list-add-symbolic";
-        overlay.child = (list);
-
-        mbox.append (overlay);
-
-        mbox.add_css_class ("mini-content-block");
+        var lbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        lbox.add_css_class ("mini-content-block");
+        lbox.append (list);
 
         var clamp = new Bis.Latch ();
-        clamp.set_child (mbox);
+
+        var overlay = new He.OverlayButton ("", null, null);
+        overlay.icon = "list-add-symbolic";
+        overlay.child = (lbox);
+
+        clamp.child = (overlay);
+
+        mbox.append (clamp);
 
         // return the thing
-        append (clamp);
+        append (mbox);
         //
 
     }
