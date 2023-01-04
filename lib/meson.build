@@ -55,14 +55,13 @@ libfusebox_lib = library('fusebox-1',
 )
 
 pkg.generate(
+    libfusebox_lib,
     filebase: 'fusebox-1',
     name: 'Fusebox',
     description: 'Fusebox API',
     version: meson.project_version(),
     subdirs: 'fusebox-1',
     variables: ['Fusesdir=${libdir}/fusebox-1'],
-    libraries: libfusebox_lib,
-    requires: libfusebox_deps
 )
 
 if get_option('introspection')
