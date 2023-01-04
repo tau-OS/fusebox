@@ -2,3 +2,4 @@
 
 subdir('appearance')
 subdir('about')
+subdir('startup')
