@@ -19,7 +19,6 @@ libfusebox_deps = [
     gio_dep,
     gio_unix_dep,
     gmodule_dep,
-    gee_dep,
     gtk_dep,
 ]
 

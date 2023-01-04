@@ -6,7 +6,7 @@ public class Appearance.Fuse : Fusebox.Fuse {
     private Gtk.Stack main_stack;
 
     public Fuse () {
-        var settings = new Gee.TreeMap<string, string?> (null, null);
+        var settings = new GLib.HashTable<string, string?> (null, null);
         settings.set ("appearance", null);
         settings.set ("appearance/accents", ACCENTS);
         settings.set ("appearance/wallpaper", WALLPAPER);
@@ -60,10 +60,9 @@ public class Appearance.Fuse : Fusebox.Fuse {
         }
     }
 
-    public override async Gee.TreeMap<string, string> search (string search) {
-        var search_results = new Gee.TreeMap<string, string> (
-            (GLib.CompareDataFunc<string>)strcmp,
-            (Gee.EqualDataFunc<string>)str_equal
+    public override async GLib.HashTable<string, string> search (string search) {
+        var search_results = new GLib.HashTable<string, string> (
+            null, null
         );
 
         search_results.set ("%s → %s".printf (display_name, _("Accent Color")), ACCENTS);

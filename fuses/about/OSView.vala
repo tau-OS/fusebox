@@ -331,7 +331,7 @@ public class About.OSView : Gtk.Box {
                                                         "org.freedesktop.hostname1",
                                                         null
                                                       );
-                dbsi.call_sync (            
+                dbsi.call_sync (
                                 "SetPrettyHostname",
                                 new Variant ("(sb)", sname, false),
                                 DBusCallFlags.NONE,
@@ -354,7 +354,7 @@ public class About.OSView : Gtk.Box {
                                                         "org.freedesktop.hostname1",
                                                         null
                                                       );
-                dbsi.call_sync (            
+                dbsi.call_sync (
                                 "SetStaticHostname",
                                 new Variant ("(sb)", sname.replace (" ","-").replace("'","").ascii_down (), false),
                                 DBusCallFlags.NONE,
@@ -423,7 +423,7 @@ public class About.OSView : Gtk.Box {
             return null;
         }
 
-        var counts = new Gee.HashMap<string, uint> ();
+        var counts = new GLib.HashTable<string, uint> (null, null);
         const string[] KEYS = { "model name", "cpu", "Processor" };
 
         for (int i = 0; i < info.ncpu; i++) {
@@ -450,24 +450,24 @@ public class About.OSView : Gtk.Box {
                 continue;
             }
 
-            if (!counts.has_key (model)) {
+            if (!counts.contains (model)) {
                 counts.@set (model, 1);
             } else {
                 counts.@set (model, counts.@get (model) + 1);
             }
         }
 
-        if (counts.size == 0) {
+        if (counts.size() == 0) {
             return null;
         }
 
         string result = "";
-        foreach (var cpu in counts.entries) {
+        foreach (var key in counts.get_keys_as_array()) {
             if (result.length > 0) {
                 result += "\n";
             }
 
-            result += "%s ".printf (clean_name (cpu.key));
+            result += "%s ".printf (clean_name (key));
         }
 
         return result;

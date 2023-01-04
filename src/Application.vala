@@ -35,7 +35,6 @@ namespace Fusebox {
         public const string ACTION_PREFIX = "win.";
         public const string ACTION_ABOUT = "about";
         public SimpleActionGroup actions;
-        public static Gee.MultiMap<string, string> action_accelerators = new Gee.HashMultiMap<string, string> ();
         private const GLib.ActionEntry[] ACTION_ENTRIES = {
             {ACTION_ABOUT, action_about },
         };
@@ -388,7 +387,7 @@ namespace Fusebox {
                     fuse_widgets[fuse_widget] = fuse;
                 }
 
-                category_view.fuse_search_result.foreach ((entry) => {
+                foreach (var entry in category_view.fuse_search_result) {
                     if (fuse.display_name == entry.fuse_name) {
                         if (entry.open_window == null) {
                             fuse.search_callback (""); // open default in the switch
@@ -396,11 +395,11 @@ namespace Fusebox {
                             fuse.search_callback (entry.open_window);
                         }
                         debug ("open section:%s of fuse: %s", entry.open_window, fuse.display_name);
-                        return true;
+                        continue;
                     }
 
-                    return false;
-                });
+                    break;
+                }
 
                 // open window was set by command line argument
                 if (open_window != null) {
@@ -429,7 +428,7 @@ namespace Fusebox {
                     continue;
                 }
 
-                if (supported_settings.has_key (setting_path)) {
+                if (supported_settings.contains (setting_path)) {
                     load_fuse (fuse);
                     open_window = supported_settings.get (setting_path);
                     return true;

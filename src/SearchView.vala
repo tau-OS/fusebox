@@ -81,11 +81,11 @@ public class Fusebox.SearchView : Gtk.Box {
         var fuses_manager = Fusebox.FusesManager.get_default ();
         foreach (var fuse in fuses_manager.get_fuses ()) {
             var settings = fuse.supported_settings;
-            if (settings == null || settings.size <= 0) {
+            if (settings == null || settings.size() <= 0) {
                 continue;
             }
 
-            string uri = settings.keys.to_array ()[0];
+            string uri = settings.get_keys_as_array ()[0];
 
             var search_row = new SearchRow (
                 fuse.icon,
@@ -96,17 +96,17 @@ public class Fusebox.SearchView : Gtk.Box {
 
             // Using search to get sub settings
             var search_results = yield fuse.search ("");
-            foreach (var result in search_results.entries) {
-                unowned string title = result.key;
-                var view = result.value;
+            foreach (var key in search_results.get_keys_as_array()) {
+                unowned string title = key;
+                var view = search_results.lookup(key);
 
                 // get uri from fuse's supported_settings
                 // Use main fuse uri as fallback
                 string sub_uri = uri;
                 if (view != "") {
-                    foreach (var setting in settings.entries) {
-                        if (setting.value == view) {
-                            sub_uri = setting.key;
+                    foreach (var setting_key in settings.get_keys_as_array()) {
+                        if (settings.lookup(setting_key) == view) {
+                            sub_uri = setting_key;
                             break;
                         }
                     }

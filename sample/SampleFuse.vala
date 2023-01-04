@@ -27,7 +27,7 @@ public class Sample.Fuse : Fusebox.Fuse {
                 display_name: _("Sample Fuse"),
                 description:_("Does nothing, nya!"),
                 icon: "system-run",
-                supported_settings: new Gee.TreeMap<string, string?> (null, null));
+                supported_settings: new GLib.HashTable<string, string?> (null, null));
         supported_settings.set ("wallpaper", null);
     }
 
@@ -60,8 +60,8 @@ public class Sample.Fuse : Fusebox.Fuse {
     }
 
     // 'search' returns results like ("Keyboard → Behavior → Duration", "keyboard<sep>behavior")
-    public override async Gee.TreeMap<string, string> search (string search) {
-        return new Gee.TreeMap<string, string> (null, null);
+    public override async GLib.HashTable<string, string> search (string search) {
+        return new GLib.HashTable<string, string> (null, null);
     }
 }
 

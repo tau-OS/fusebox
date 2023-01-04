@@ -20,7 +20,7 @@ namespace Fusebox {
 
     public class CategoryView : Gtk.Box {
         public FusesSearch fuse_search { get; construct; }
-        public Gee.ArrayList<SearchEntry?> fuse_search_result { get; construct; }
+        public unowned GLib.List<SearchEntry?> fuse_search_result { get; construct; }
         public Fusebox.Category personal_category { get; construct; }
         public Fusebox.Category network_category { get; construct; }
         public Fusebox.Category system_category { get; construct; }
@@ -38,7 +38,7 @@ namespace Fusebox {
             system_category = new Fusebox.Category (Fusebox.Fuse.Category.SYSTEM);
 
             fuse_search = new FusesSearch ();
-            fuse_search_result = new Gee.ArrayList<SearchEntry?> ();
+            fuse_search_result = new GLib.List<SearchEntry?> ();
 
             var category_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
             category_box.append (personal_category);

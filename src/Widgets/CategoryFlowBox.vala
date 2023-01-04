@@ -51,12 +51,12 @@ namespace Fusebox {
             flowbox.set_sort_func (fuse_sort_func);
         }
 
-        public Gee.ArrayList get_fuses () {
-            var fuses = new Gee.ArrayList<Fuse?> ();
+        public GLib.List<Fuse?> get_fuses () {
+            var fuses = new GLib.List<Fuse?> ();
 
             var child = flowbox.get_first_child ();
             while (child != null) {
-                fuses.add (((CategoryIcon) child).fuse);
+                fuses.append (((CategoryIcon) child).fuse);
                 child = child.get_next_sibling ();
             }
 

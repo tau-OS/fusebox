@@ -28,12 +28,12 @@ public class Fusebox.FusesManager : GLib.Object {
     [CCode (has_target = false)]
     private delegate Fusebox.Fuse RegisterPluginFunction (Module module);
 
-    private Gee.LinkedList<Fusebox.Fuse> fuses;
+    private GLib.List<Fusebox.Fuse> fuses;
 
     public signal void fuse_added (Fusebox.Fuse fuse);
 
     private FusesManager () {
-        fuses = new Gee.LinkedList<Fusebox.Fuse> ();
+        fuses = new GLib.List<Fusebox.Fuse> ();
         var base_folder = File.new_for_path (Build.FUSES_DIR);
         find_fuseins (base_folder);
     }
@@ -89,19 +89,19 @@ public class Fusebox.FusesManager : GLib.Object {
 
     private void register_fuse (Fusebox.Fuse fuse) {
         debug ("%s registered", fuse.code_name);
-        if (fuses.contains (fuse)) {
+        if (fuses.find (fuse) != null) {
             return;
         }
 
-        fuses.add (fuse);
+        fuses.append (fuse);
         fuse_added (fuse);
     }
 
     public bool has_fuses () {
-        return !fuses.is_empty;
+        return fuses.length() != 0;
     }
 
-    public Gee.Collection<Fusebox.Fuse> get_fuses () {
-        return fuses.read_only_view;
+    public unowned GLib.List<Fusebox.Fuse> get_fuses () {
+        return fuses;
     }
 }

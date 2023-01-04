@@ -62,7 +62,7 @@ public abstract class Fusebox.Fuse : GLib.Object {
      * {@link search_callback} method if the value is not %NULL.
      * For example {"input/keyboard", "keyboard"}.
      */
-    public Gee.TreeMap<string, string?> supported_settings { get; construct; default = new Gee.TreeMap<string, string?> (null, null); }
+    public GLib.HashTable<string, string?> supported_settings { get; construct; default = new GLib.HashTable<string, string?> (null, null); }
 
     /**
      * Inform if the Fuse should be shown or not
@@ -102,9 +102,9 @@ public abstract class Fusebox.Fuse : GLib.Object {
      * When the user click on an action, the second parameter is send to the {@link search_callback} method
      *
      * @param search a {@link string} that represent the search.
-     * @return a {@link Gee.TreeMap} containing two strings like {"Keyboard → Behavior → Duration", "keyboard<sep>behavior"}.
+     * @return a {@link GLib.HashTable} containing two strings like {"Keyboard → Behavior → Duration", "keyboard<sep>behavior"}.
      */
-    public abstract async Gee.TreeMap<string, string> search (string search);
+    public abstract async GLib.HashTable<string, string> search (string search);
 
     /**
      * This function is used when the user click on a search result, it should show the selected setting (right tab…).

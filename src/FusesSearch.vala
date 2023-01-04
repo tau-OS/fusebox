@@ -24,12 +24,12 @@ namespace Fusebox {
     }
 
     public class FusesSearch {
-        public Gee.ArrayList<SearchEntry?> search_entries;
+        public GLib.List<SearchEntry?> search_entries;
         public bool ready {get; private set;}
 
         public FusesSearch () {
             ready = false;
-            search_entries = new Gee.ArrayList<SearchEntry?> ();
+            search_entries = new GLib.List<SearchEntry?> ();
             cache_search_entries.begin ((obj, res) => {
                 cache_search_entries.end (res);
                 ready = true;
@@ -43,14 +43,14 @@ namespace Fusebox {
             foreach (var fuse in fusesmanager.get_fuses ()) {
                 var tmp_entries = yield fuse.search ("");
 
-                foreach (var entry in tmp_entries.entries) {
-                    string [] tmp = entry.key.split (" → ");
+                foreach (var key in tmp_entries.get_keys_as_array()) {
+                    string [] tmp = key.split (" → ");
                     SearchEntry tmp_entry = SearchEntry ();
                     tmp_entry.fuse_name = tmp[0];
-                    string ui_elements_name = entry.key;
+                    string ui_elements_name = key;
                     tmp_entry.ui_elements = ui_elements_name;
-                    tmp_entry.open_window = entry.value;
-                    search_entries.add (tmp_entry);
+                    tmp_entry.open_window = tmp_entries.lookup(key);
+                    search_entries.append (tmp_entry);
                     debug ("FusesSearch: add open window: %s ", tmp_entry.open_window);
                     debug ("FusesSearch: add ui elements: %s ", tmp_entry.ui_elements);
                     debug ("FusesSearch: add fuse name: %s ", tmp_entry.fuse_name);

@@ -1,4 +1,5 @@
 # Fusebox
+
 ![Fusebox Screenshot](data/screenshot.png?raw=true)
 
 ## Fuses
@@ -9,13 +10,12 @@ Fusebox is just the container application for Fusebox Fuses, which provide the a
 
 You'll need the following dependencies:
 
-* libgee-0.8-dev
-* libglib2.0-dev
-* libgtk-4-dev
-* libhelium-1-dev
-* libbismuth-1-dev
-* meson
-* valac
+- libglib2.0-dev
+- libgtk-4-dev
+- libhelium-1-dev
+- libbismuth-1-dev
+- meson
+- valac
 
 Run `meson` to configure the build environment and then `ninja` to build
 
