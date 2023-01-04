@@ -51,7 +51,6 @@ libfusebox_lib = library('fusebox-1',
     version: fusebox_gi_version,
     install: true,
     install_dir: [true, include_dir, true, true],
-    name_prefix: ''
 )
 
 pkg.generate(
