@@ -199,7 +199,12 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             
             active_wallpaper = children;
             children.checked = true;
-            wallpaper_removal_button.visible = true;
+            var system_bg = get_system_bg_directories ();
+            if (children.uri.contains (system_bg)) {
+                wallpaper_removal_button.visible = false;
+            } else {
+                wallpaper_removal_button.visible = true;
+            }
             current_wallpaper_path = children.uri;
             update_wallpaper.begin (current_wallpaper_path);
         }
