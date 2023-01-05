@@ -210,6 +210,10 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
         
         public void update_wallpaper_folder () {
+            if (last_cancellable != null) {
+                last_cancellable.cancel ();
+            }
+
             var cancellable = new Cancellable ();
             last_cancellable = cancellable;
 
@@ -274,9 +278,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
         
         private void clean_wallpapers () {
-            do {
-                wallpaper_view.get_first_child ().destroy ();
-            } while (wallpaper_view.get_first_child () != null);
+            while (wallpaper_view.get_first_child () != null) {
+                wallpaper_view.remove (wallpaper_view.get_first_child ());
+            }
         }
         
         private static string get_local_bg_directory () {
@@ -406,6 +410,11 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             Object (uri: uri);
         }
         
+        ~WallpaperContainer () {
+            if (this != null)
+                this.unparent ();
+        }
+
         construct {
             height_request = THUMB_HEIGHT + 6;
             width_request = THUMB_WIDTH + 6;
