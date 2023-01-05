@@ -20,6 +20,7 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton prefer_harsh_radio;
 
     public Fusebox.Fuse fuse { get; construct set; }
+    public Appearance.WallpaperGrid wallpaper_view;
 
     private enum ColorScheme {
         NO_PREFERENCE,
@@ -408,9 +409,8 @@ public class AppearanceView : Gtk.Box {
 
         grid.attach (accent_grid, 0, 1);
 
-        var wallpaper_view = new Appearance.WallpaperGrid (fuse);
+        wallpaper_view = new Appearance.WallpaperGrid (fuse);
         grid.attach (wallpaper_view, 0, 2);
-        wallpaper_view.update_wallpaper_folder.begin ();
 
         var clamp = new Bis.Latch ();
         clamp.set_child (grid);

@@ -5,6 +5,8 @@ public class Appearance.Fuse : Fusebox.Fuse {
     private Gtk.Grid main_grid;
     private Gtk.Stack main_stack;
 
+    private AppearanceView appearance_view;
+
     public Fuse () {
         var settings = new GLib.HashTable<string, string?> (null, null);
         settings.set ("appearance", null);
@@ -26,7 +28,7 @@ public class Appearance.Fuse : Fusebox.Fuse {
 
     public override Gtk.Widget get_widget () {
         if (main_grid == null) {
-            var appearance_view = new AppearanceView (this);
+            appearance_view = new AppearanceView (this);
             var dock_view = new DockView (this);
 
             main_stack = new Gtk.Stack ();
@@ -49,9 +51,11 @@ public class Appearance.Fuse : Fusebox.Fuse {
     }
 
     public override void shown () {
+        appearance_view.wallpaper_view.update_wallpaper_folder ();
     }
 
     public override void hidden () {
+        appearance_view.wallpaper_view.cancel_thumbnail_generation ();
     }
 
     public override void search_callback (string location) {

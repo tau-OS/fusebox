@@ -190,7 +190,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             return dest;
         }
         
-        private void update_checked_wallpaper (Gtk.FlowBox box, Gtk.FlowBoxChild child) {
+        private async void update_checked_wallpaper (Gtk.FlowBox box, Gtk.FlowBoxChild child) {
             var children = (Appearance.WallpaperContainer) wallpaper_view.get_selected_children ().data;
             
             if (active_wallpaper != null && active_wallpaper != children) {
@@ -204,21 +204,23 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             update_wallpaper.begin (current_wallpaper_path);
         }
         
-        public async void update_wallpaper_folder () {
-            if (last_cancellable != null) {
-                last_cancellable.cancel ();
-            }
-            
+        public void update_wallpaper_folder () {
             var cancellable = new Cancellable ();
             last_cancellable = cancellable;
-            
+
             clean_wallpapers ();
-            
+
             foreach (unowned string directory in get_bg_directories ()) {
                 load_wallpapers.begin (directory, cancellable);
             }
         }
         
+        public void cancel_thumbnail_generation () {
+            if (last_cancellable != null) {
+                last_cancellable.cancel ();
+            }
+        }
+
         private async void load_wallpapers (string basefolder, Cancellable cancellable, bool toplevel_folder = true) {
             if (cancellable.is_cancelled ()) {
                 return;
@@ -267,26 +269,23 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
         
         private void clean_wallpapers () {
-            while (wallpaper_view.get_first_child () != null) {
+            do {
                 wallpaper_view.get_first_child ().destroy ();
-            }
+            } while (wallpaper_view.get_first_child () != null);
         }
         
         private static string get_local_bg_directory () {
             return Path.build_filename (Environment.get_user_data_dir (), "backgrounds") + "/";
         }
         
-        private static string[] get_system_bg_directories () {
-            string[] directories = {};
-            foreach (unowned string data_dir in Environment.get_system_data_dirs ()) {
-                var system_background_dir = Path.build_filename (data_dir, "backgrounds") + "/";
-                if (FileUtils.test (system_background_dir, FileTest.EXISTS)) {
-                    debug ("Found system background directory: %s", system_background_dir);
-                    directories += system_background_dir;
-                }
+        private static string get_system_bg_directories () {
+            var system_background_dir = Path.build_filename ("/usr/share/backgrounds") + "/";
+            if (FileUtils.test (system_background_dir, FileTest.EXISTS)) {
+                debug ("Found system background directory: %s", system_background_dir);
+                return system_background_dir;
+            } else {
+                return "";
             }
-            
-            return directories;
         }
         
         private string[] get_bg_directories () {
@@ -294,10 +293,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             
             // Add user background directory first
             background_directories += get_local_bg_directory ();
-            
-            foreach (var bg_dir in get_system_bg_directories ()) {
-                background_directories += bg_dir;
-            }
+            background_directories += get_system_bg_directories ();
             
             if (background_directories.length == 0) {
                 warning ("No background directories found");
@@ -331,11 +327,10 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             
             var uri1_is_system = false;
             var uri2_is_system = false;
-            foreach (var bg_dir in get_system_bg_directories ()) {
-                bg_dir = "file://" + bg_dir;
-                uri1_is_system = uri1.has_prefix (bg_dir) || uri1_is_system;
-                uri2_is_system = uri2.has_prefix (bg_dir) || uri2_is_system;
-            }
+            var bg_dir = get_system_bg_directories ();
+            bg_dir = "file://" + bg_dir;
+            uri1_is_system = uri1.has_prefix (bg_dir) || uri1_is_system;
+            uri2_is_system = uri2.has_prefix (bg_dir) || uri2_is_system;
             
             // Sort system wallpapers last
             if (uri1_is_system && !uri2_is_system) {
