@@ -31,7 +31,7 @@ public abstract class Fusebox.Fuse : GLib.Object {
     /**
      * The category under which the Fuse will be stored.
      *
-     * Possible {@link Category} values are PERSONAL, HARDWARE, NETWORK or SYSTEM.
+     * Possible {@link Category} values are PERSONAL, NETWORK or SYSTEM.
      */
     public Category category { get; construct; }
 
@@ -68,14 +68,6 @@ public abstract class Fusebox.Fuse : GLib.Object {
      * Inform if the Fuse should be shown or not
      */
     public bool can_show { get; set; default=true; }
-
-    /**
-     * Inform the application that the Fuse can now be listed in the available Fuses.
-     * The application will also listen to the notify::can-show signal.
-     *
-     */
-    [Version (deprecated = true)]
-    public signal void visibility_changed ();
 
     /**
      * Returns the widget that contain the whole interface.

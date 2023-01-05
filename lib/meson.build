@@ -9,7 +9,6 @@ config_header = configure_file(
 )
 
 fusebox_sources = files(
-    'config.vapi',
     'FusesManager.vala',
     'Fuse.vala',
 )

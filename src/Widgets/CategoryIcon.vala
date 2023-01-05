@@ -42,10 +42,6 @@ public class Fusebox.CategoryIcon : Gtk.ListBoxRow {
 
         child = layout;
 
-        fuse.visibility_changed.connect (() => {
-            changed ();
-        });
-
         fuse.notify["can-show"].connect (() => {
             changed ();
         });

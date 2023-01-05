@@ -41,8 +41,8 @@ namespace Fusebox {
             fuse_search_result = new GLib.List<SearchEntry?> ();
 
             var category_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
-            category_box.append (personal_category);
             category_box.append (network_category);
+            category_box.append (personal_category);
             category_box.append (system_category);
 
             var category_scrolled = new Gtk.ScrolledWindow () {

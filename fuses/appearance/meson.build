@@ -15,5 +15,5 @@ shared_module(
         dependency('libbismuth-1', fallback: [ 'libbismuth', 'bismuth_dep' ], version: '>=1.0.0'),
     ],
     install: true,
-    install_dir: join_paths(fuses_dir, 'system')
+    install_dir: join_paths(fuses_dir, 'personal')
 )
