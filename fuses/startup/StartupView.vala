@@ -58,17 +58,59 @@ public class StartupView : Gtk.Box {
         append (mbox);
         //
     }
+    private Gtk.ListBoxRow[] get_startup_apps () {
+        Gtk.ListBoxRow[] rows = {};
+
+        // get the app list
+        foreach (unowned string path in Startup.Utils.get_autostart_files ()) {
+            debug ("path: %s\n", path);
+
+            // load keyfile from path
+
+            var key_file = new Startup.Backend.KeyFile (path);
+
+            var appinfo = key_file.create_app_info ();
+
+            debug ("name: %s\n", appinfo.name);
+
+            var app = new AppEntry (key_file);
+            var row = app.into_row ();
+            rows += row;
+        }
+        return rows;
+    }
 }
 
 
 private class AppEntry : Gtk.Box {
-    public string app_name { get; set construct; }
-    public string app_desc { get; set construct; }
-    public string app_icon { get; set construct; }
-    public bool app_enabled { get; set construct; }
     public Startup.Backend.KeyFile keyfile { get; set construct; }
+    private string app_name { get; set; }
+    private string app_desc { get; set; }
+    private string app_icon { get; set; }
+    private bool app_enabled { get; set; }
+    public string create_icon (string iconname) {
+
+
+        var icon_theme = Gtk.IconTheme.get_for_display (Gdk.Display.get_default ());
+        if (icon_theme.has_icon (iconname)) {
+            return iconname;
+        } else {
+            return "application-default-icon";
+        }
+    }
+
+    public AppEntry (Startup.Backend.KeyFile _keyfile) {
+        Object (keyfile: _keyfile);
+    }
 
     construct {
+
+        app_name = keyfile.keyfile_get_string (KeyFileDesktop.KEY_NAME);
+        app_desc = keyfile.keyfile_get_string (KeyFileDesktop.KEY_COMMENT);
+        app_icon = keyfile.keyfile_get_string (KeyFileDesktop.KEY_ICON);
+        app_enabled = keyfile.active;
+
+
         orientation = Gtk.Orientation.HORIZONTAL;
         spacing = 6;
 
@@ -131,12 +173,10 @@ private class AppEntry : Gtk.Box {
         append (edit_button);
 
         edit_button.clicked.connect (() => {
-            //  var keyname = keyfile.keyfile_get_string ("Name");
-            //  print ("edit button clicked: %s\n", keyname);
-            new StartupAppDialog () {
-                keyFile = keyfile.get_instance (keyfile.path)
-            }.show();
-            //  dialog.show ();
+            // var keyname = keyfile.keyfile_get_string ("Name");
+            // print ("edit button clicked: %s\n", keyname);
+            new StartupAppDialog (keyfile.get_instance (keyfile.path)).show ();
+            // dialog.show ();
         });
 
 
@@ -158,8 +198,6 @@ private class AppEntry : Gtk.Box {
         notify["app-enabled"].connect (() => {
             app_switch.active = app_enabled;
         });
-
-
     }
 
     public void toggle_active (bool state) {
@@ -167,7 +205,7 @@ private class AppEntry : Gtk.Box {
         app_enabled = state;
         print ("toggle_active: %b\n", app_enabled);
         // notify
-        //  return app_enabled;
+        // return app_enabled;
     }
 
     // function to wrap in a row
@@ -197,43 +235,4 @@ private class AppEntry : Gtk.Box {
         var list = (Gtk.ListBox) row.get_parent ();
         list.remove (row);
     }
-}
-
-public string create_icon (string iconname) {
-
-
-    var icon_theme = Gtk.IconTheme.get_for_display (Gdk.Display.get_default ());
-    if (icon_theme.has_icon (iconname)) {
-        return iconname;
-    } else {
-        return "application-default-icon";
-    }
-}
-
-private Gtk.ListBoxRow[] get_startup_apps () {
-    var rows = new Gtk.ListBoxRow[0];
-
-    // get the app list
-    foreach (unowned string path in Startup.Utils.get_autostart_files ()) {
-        print ("path: %s\n", path);
-
-        // load keyfile from path
-
-        var keyfile = new Startup.Backend.KeyFile (path);
-
-        var appinfo = keyfile.create_app_info ();
-
-        print ("name: %s\n", appinfo.name);
-
-        var app = new AppEntry () {
-            app_name = appinfo.name,
-            app_desc = appinfo.comment,
-            app_icon = appinfo.icon,
-            app_enabled = appinfo.active,
-            keyfile = keyfile
-        };
-        var row = app.into_row ();
-        rows += row;
-    }
-    return rows;
 }

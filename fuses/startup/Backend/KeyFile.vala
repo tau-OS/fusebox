@@ -126,7 +126,7 @@ public class Startup.Backend.KeyFile : GLib.Object {
         debug ("-- Done --");
     }
 
-    private bool keyfile_get_bool (string key) {
+    public bool keyfile_get_bool (string key) {
         try {
             return keyfile.get_boolean (KeyFileDesktop.GROUP, key);
         } catch (KeyFileError e) {
@@ -146,7 +146,7 @@ public class Startup.Backend.KeyFile : GLib.Object {
         return "";
     }
 
-    private string keyfile_get_locale_string (string key) {
+    public string keyfile_get_locale_string (string key) {
         foreach (string lang in languages) {
             try {
                 return keyfile.get_locale_string (KeyFileDesktop.GROUP, key, lang);
