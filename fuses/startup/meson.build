@@ -2,6 +2,7 @@ fuse_files = files(
     'StartupFuse.vala',
     'StartupView.vala',
     'Utils.vala',
+    'StartupAppDialog.vala',
     'Backend/DesktopFileEnumerator.vala',
     'Backend/KeyFile.vala',
     'Backend/KeyFileFactory.vala',

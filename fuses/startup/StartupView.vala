@@ -31,29 +31,7 @@ public class StartupView : Gtk.Box {
             }
         });
 
-        list.set_selection_mode(Gtk.SelectionMode.SINGLE);
-
-
-        //  // example apps
-        //  var app1 = new AppEntry () {
-        //      app_name = "Nautilus",
-        //      app_desc = "File Manager",
-        //      app_icon = "org.gnome.Nautilus",
-        //      app_enabled = true
-        //  };
-        //  var app_row = app1.into_row ();
-
-        //  list.append (app_row);
-
-        //  var app2 = new AppEntry () {
-        //      app_name = "Terminal",
-        //      app_desc = "Terminal Emulator",
-        //      app_icon = "org.gnome.Terminal",
-        //      app_enabled = false
-        //  };
-        //  var app_row2 = app2.into_row ();
-        
-        //  list.append (app_row2);
+        list.set_selection_mode (Gtk.SelectionMode.SINGLE);
         var approw = get_startup_apps ();
 
         foreach (var row in approw) {
@@ -79,16 +57,16 @@ public class StartupView : Gtk.Box {
 
         append (mbox);
         //
-
     }
 }
 
 
 private class AppEntry : Gtk.Box {
-    public string app_name { get; set construct;}
-    public string app_desc { get; set construct;}
-    public string app_icon { get; set construct;}
-    public bool app_enabled { get; set construct;}
+    public string app_name { get; set construct; }
+    public string app_desc { get; set construct; }
+    public string app_icon { get; set construct; }
+    public bool app_enabled { get; set construct; }
+    public Startup.Backend.KeyFile keyfile { get; set construct; }
 
     construct {
         orientation = Gtk.Orientation.HORIZONTAL;
@@ -134,6 +112,33 @@ private class AppEntry : Gtk.Box {
         app_switch.active = app_enabled;
         append (app_switch);
 
+        app_switch.notify["active"].connect (() => {
+            toggle_active (app_switch.active);
+            save ();
+        });
+
+        // edit button
+        // todo: move to overlay
+        var edit_button = new Gtk.Button ();
+        edit_button.add_css_class ("flat");
+        edit_button.add_css_class ("suggested-action");
+
+        var edit_icon = new Gtk.Image () {
+            icon_name = "document-edit-symbolic",
+            pixel_size = 16
+        };
+        edit_button.set_child (edit_icon);
+        append (edit_button);
+
+        edit_button.clicked.connect (() => {
+            //  var keyname = keyfile.keyfile_get_string ("Name");
+            //  print ("edit button clicked: %s\n", keyname);
+            new StartupAppDialog () {
+                keyFile = keyfile.get_instance (keyfile.path)
+            }.show();
+            //  dialog.show ();
+        });
+
 
         // delete button
 
@@ -147,12 +152,22 @@ private class AppEntry : Gtk.Box {
         };
         delete_button.set_child (delete_icon);
         append (delete_button);
+        delete_button.clicked.connect (delete);
 
 
         notify["app-enabled"].connect (() => {
             app_switch.active = app_enabled;
         });
 
+
+    }
+
+    public void toggle_active (bool state) {
+        keyfile.active = state;
+        app_enabled = state;
+        print ("toggle_active: %b\n", app_enabled);
+        // notify
+        //  return app_enabled;
     }
 
     // function to wrap in a row
@@ -160,6 +175,27 @@ private class AppEntry : Gtk.Box {
         var row = new Gtk.ListBoxRow ();
         row.set_child (this);
         return row;
+    }
+
+    public void save () {
+        keyfile.write_to_file ();
+    }
+
+    public void delete () {
+        // get keyfile path
+        var path = keyfile.path;
+        // delete the file
+        File file = File.new_for_path (path);
+        try {
+            file.delete ();
+        } catch (Error e) {
+            warning ("Error deleting file: %s", e.message);
+        }
+        // remove the row
+        print ("delete\n");
+        var row = (Gtk.ListBoxRow) get_parent ();
+        var list = (Gtk.ListBox) row.get_parent ();
+        list.remove (row);
     }
 }
 
@@ -194,6 +230,7 @@ private Gtk.ListBoxRow[] get_startup_apps () {
             app_desc = appinfo.comment,
             app_icon = appinfo.icon,
             app_enabled = appinfo.active,
+            keyfile = keyfile
         };
         var row = app.into_row ();
         rows += row;

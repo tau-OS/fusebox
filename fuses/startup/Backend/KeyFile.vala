@@ -60,7 +60,7 @@ public class Startup.Backend.KeyFile : GLib.Object {
 
     public string path { get; set; }
 
-    private GLib.KeyFile keyfile;
+    public GLib.KeyFile keyfile;
     private static string[] languages;
     private static string preferred_language;
 
@@ -136,7 +136,7 @@ public class Startup.Backend.KeyFile : GLib.Object {
         return false;
     }
 
-    private string keyfile_get_string (string key) {
+    public string keyfile_get_string (string key) {
         try {
             return keyfile.get_string (KeyFileDesktop.GROUP, key);
         } catch (KeyFileError e) {
@@ -173,5 +173,11 @@ public class Startup.Backend.KeyFile : GLib.Object {
             active = active,
             path = path
         };
+    }
+
+    public KeyFile get_instance (string? path) {
+        // deep clone of current keyfile
+        //  var new_keyfile = new KeyFile (path);
+        return new KeyFile (path);
     }
 }
