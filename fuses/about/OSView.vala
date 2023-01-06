@@ -299,6 +299,20 @@ public class About.OSView : Gtk.Box {
                 } catch (Error e) {
                     critical (e.message);
                 }
+            } else {
+                warning ("Could not find Mondai, falling back to bugurl");
+                // get bugurl from /etc/os-release
+                var bugurl = Environment.get_os_info ("BUG_REPORT_URL");
+
+                if (bugurl != null) {
+                    try {
+                        AppInfo.launch_default_for_uri (bugurl, null);
+                    } catch (Error e) {
+                        critical (e.message);
+                    }
+                } else {
+                    warning ("Could not find bugurl");
+                }
             }
         });
     }
