@@ -9,7 +9,7 @@ public interface SystemInterface : Object {
 [DBus (name = "org.gnome.SessionManager")]
 public interface SessionManager : Object {
     [DBus (name = "Renderer")]
-    public abstract string renderer { owned get;}
+    public abstract string renderer { owned get; }
 }
 
 public class About.OSView : Gtk.Box {
@@ -23,20 +23,20 @@ public class About.OSView : Gtk.Box {
     construct {
         try {
             system_interface = Bus.get_proxy_sync (
-                BusType.SYSTEM,
-                "org.freedesktop.hostname1",
-                "/org/freedesktop/hostname1"
+                                                   BusType.SYSTEM,
+                                                   "org.freedesktop.hostname1",
+                                                   "/org/freedesktop/hostname1"
             );
         } catch (GLib.Error e) {
             warning ("%s", e.message);
         }
 
         var os_pretty_name = "%s".printf (
-            Environment.get_os_info (GLib.OsInfoKey.NAME)
+                                          Environment.get_os_info (GLib.OsInfoKey.NAME)
         );
         var os_sub_name = "<b>%s %s</b>".printf (
-            Environment.get_os_info (GLib.OsInfoKey.VERSION_ID) ?? "",
-            Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME) ?? "(Guadalajara)" // Remember to change this with every new GNOME release until we do a new DE
+                                                 Environment.get_os_info (GLib.OsInfoKey.VERSION_ID) ?? "",
+                                                 Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME) ?? "(Guadalajara)" // Remember to change this with every new GNOME release until we do a new DE
         );
         var os_title = new Gtk.Label (os_pretty_name) {
             ellipsize = Pango.EllipsizeMode.END,
@@ -44,7 +44,7 @@ public class About.OSView : Gtk.Box {
             xalign = 0
         };
         os_title.get_style_context ().add_class ("view-title");
-        var os_subtitle = new Gtk.Label (os_sub_name.replace ("(","“").replace(")","”")) {
+        var os_subtitle = new Gtk.Label (os_sub_name.replace ("(", "“").replace (")", "”")) {
             ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             use_markup = true,
@@ -337,21 +337,21 @@ public class About.OSView : Gtk.Box {
         if (system_interface.pretty_hostname != null) {
             try {
                 var dbsi = new DBusProxy.for_bus_sync (
-                                                        BusType.SYSTEM,
-                                                        DBusProxyFlags.NONE,
-                                                        null,
-                                                        "org.freedesktop.hostname1",
-                                                        "/org/freedesktop/hostname1",
-                                                        "org.freedesktop.hostname1",
-                                                        null
-                                                      );
+                                                       BusType.SYSTEM,
+                                                       DBusProxyFlags.NONE,
+                                                       null,
+                                                       "org.freedesktop.hostname1",
+                                                       "/org/freedesktop/hostname1",
+                                                       "org.freedesktop.hostname1",
+                                                       null
+                );
                 dbsi.call_sync (
                                 "SetPrettyHostname",
                                 new Variant ("(sb)", sname, false),
                                 DBusCallFlags.NONE,
                                 -1,
                                 null
-                               );
+                );
             } catch (GLib.Error e) {
                 warning ("%s", e.message);
             }
@@ -360,21 +360,21 @@ public class About.OSView : Gtk.Box {
             try {
                 sname.canon ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'", ' ');
                 var dbsi = new DBusProxy.for_bus_sync (
-                                                        BusType.SYSTEM,
-                                                        DBusProxyFlags.NONE,
-                                                        null,
-                                                        "org.freedesktop.hostname1",
-                                                        "/org/freedesktop/hostname1",
-                                                        "org.freedesktop.hostname1",
-                                                        null
-                                                      );
+                                                       BusType.SYSTEM,
+                                                       DBusProxyFlags.NONE,
+                                                       null,
+                                                       "org.freedesktop.hostname1",
+                                                       "/org/freedesktop/hostname1",
+                                                       "org.freedesktop.hostname1",
+                                                       null
+                );
                 dbsi.call_sync (
                                 "SetStaticHostname",
-                                new Variant ("(sb)", sname.replace (" ","-").replace("'","").ascii_down (), false),
+                                new Variant ("(sb)", sname.replace (" ", "-").replace ("'", "").ascii_down (), false),
                                 DBusCallFlags.NONE,
                                 -1,
                                 null
-                               );
+                );
             } catch (GLib.Error e) {
                 warning ("%s", e.message);
             }
@@ -390,19 +390,19 @@ public class About.OSView : Gtk.Box {
         string pretty = GLib.Markup.escape_text (info).strip ();
 
         const ReplaceStrings REPLACE_STRINGS[] = {
-            { "Mesa DRI ", ""},
-            { "Mesa (.*)", "\\1"},
-            { "[(]R[)]", "®"},
-            { "[(]TM[)]", "™"},
-            { "Gallium .* on (AMD .*)", "\\1"},
-            { "(AMD .*) [(].*", "\\1"},
-            { "(AMD Ryzen) (.*)", "\\1 \\2"},
-            { "(AMD [A-Z])(.*)", "\\1\\L\\2\\E"},
-            { "Advanced Micro Devices, Inc\\. \\[.*?\\] .*? \\[(.*?)\\] .*", "AMD® \\1"},
-            { "Advanced Micro Devices, Inc\\. \\[.*?\\] (.*)", "AMD® \\1"},
-            { "Graphics Controller", "Graphics"},
-            { "Intel Corporation", "Intel®"},
-            { "NVIDIA Corporation (.*) \\[(\\S*) (\\S*) (.*)\\]", "NVIDIA® \\2® \\3® \\4"}
+            { "Mesa DRI ", "" },
+            { "Mesa (.*)", "\\1" },
+            { "[(]R[)]", "®" },
+            { "[(]TM[)]", "™" },
+            { "Gallium .* on (AMD .*)", "\\1" },
+            { "(AMD .*) [(].*", "\\1" },
+            { "(AMD Ryzen) (.*)", "\\1 \\2" },
+            { "(AMD [A-Z])(.*)", "\\1\\L\\2\\E" },
+            { "Advanced Micro Devices, Inc\\. \\[.*?\\] .*? \\[(.*?)\\] .*", "AMD® \\1" },
+            { "Advanced Micro Devices, Inc\\. \\[.*?\\] (.*)", "AMD® \\1" },
+            { "Graphics Controller", "Graphics" },
+            { "Intel Corporation", "Intel®" },
+            { "NVIDIA Corporation (.*) \\[(\\S*) (\\S*) (.*)\\]", "NVIDIA® \\2® \\3® \\4" }
         };
 
         try {
@@ -420,7 +420,8 @@ public class About.OSView : Gtk.Box {
 
         return pretty;
     }
-    private string? try_get_arm_model (GLib.HashTable<string, string> values) {
+
+    private string ? try_get_arm_model (GLib.HashTable<string, string> values) {
         string? cpu_implementer = values.lookup ("CPU implementer");
         string? cpu_part = values.lookup ("CPU part");
 
@@ -430,7 +431,8 @@ public class About.OSView : Gtk.Box {
 
         return ARMPartDecoder.decode_arm_model (cpu_implementer, cpu_part);
     }
-    private string? get_cpu_info () {
+
+    private string ? get_cpu_info () {
         unowned GLibTop.sysinfo? info = GLibTop.get_sysinfo ();
 
         if (info == null) {
@@ -471,12 +473,12 @@ public class About.OSView : Gtk.Box {
             }
         }
 
-        if (counts.size() == 0) {
+        if (counts.size () == 0) {
             return null;
         }
 
         string result = "";
-        foreach (var key in counts.get_keys_as_array()) {
+        foreach (var key in counts.get_keys_as_array ()) {
             if (result.length > 0) {
                 result += "\n";
             }
@@ -493,7 +495,7 @@ public class About.OSView : Gtk.Box {
     private string get_mem_info () {
         uint64 mem_total = 0;
 
-        GUdev.Client client = new GUdev.Client ({"dmi"});
+        GUdev.Client client = new GUdev.Client ({ "dmi" });
         GUdev.Device? device = client.query_by_sysfs_path ("/sys/devices/virtual/dmi/id");
 
         if (device != null) {
@@ -514,16 +516,16 @@ public class About.OSView : Gtk.Box {
 
     private async void get_graphics_info () {
         var primary_gpu = yield get_gpu_info ();
+
         gpu_subtitle.label = primary_gpu;
     }
-    private async string? get_gpu_info () {
+
+    private async string ? get_gpu_info () {
         if (session_manager == null) {
             try {
-                session_manager = yield Bus.get_proxy (
-                    BusType.SESSION,
+                session_manager = yield Bus.get_proxy (BusType.SESSION,
                     "org.gnome.SessionManager",
-                    "/org/gnome/SessionManager"
-                );
+                    "/org/gnome/SessionManager");
 
                 return clean_name (session_manager.renderer);
             } catch (IOError e) {
@@ -535,7 +537,7 @@ public class About.OSView : Gtk.Box {
         return "";
     }
 
-    private string? get_model_info () {
+    private string ? get_model_info () {
         try {
             var oem_file = new KeyFile ();
             oem_file.load_from_file ("/etc/oem.conf", KeyFileFlags.NONE);
@@ -560,11 +562,16 @@ public class About.OSView : Gtk.Box {
 
         try {
             var infos = yield file_root.query_filesystem_info_async (GLib.FileAttribute.FILESYSTEM_SIZE);
+
             storage_capacity = GLib.format_size (infos.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_SIZE));
             var infou = yield file_root.query_filesystem_info_async (GLib.FileAttribute.FILESYSTEM_USED);
+
             used = GLib.format_size (infou.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_USED));
 
-            storage_gauge.set_fraction (double.parse(used) / 1024);
+            // reverse the fraction because we want to show used space
+            var fraction = 1 - (double.parse (used) / 1024);
+
+            storage_gauge.set_fraction (fraction);
             storage_subtitle.label = used + " / " + storage_capacity;
         } catch (Error e) {
             critical (e.message);
@@ -732,7 +739,7 @@ public class About.ARMPartDecoder {
         { 0x69, INTEL_PARTS, "Intel" },
     };
 
-    public static string? decode_arm_model (string cpu_implementer, string cpu_part) {
+    public static string ? decode_arm_model (string cpu_implementer, string cpu_part) {
         string? result = null;
 
         if (cpu_implementer == null || cpu_part == null) {
@@ -740,8 +747,8 @@ public class About.ARMPartDecoder {
         }
 
         // long.parse supports 0x format hex strings
-        int cpu_implementer_int = (int)long.parse (cpu_implementer);
-        int cpu_part_int = (int)long.parse (cpu_part);
+        int cpu_implementer_int = (int) long.parse (cpu_implementer);
+        int cpu_part_int = (int) long.parse (cpu_part);
 
         if (cpu_implementer_int == 0 || cpu_part_int == 0) {
             return result;
