@@ -299,27 +299,31 @@ public class About.OSView : Gtk.Box {
         });
 
         bug_button.clicked.connect (() => {
-            var appinfo = new GLib.DesktopAppInfo ("co.tauos.Mondai");
-            if (appinfo != null) {
-                try {
-                    appinfo.launch (null, null);
-                } catch (Error e) {
-                    critical (e.message);
-                }
-            } else {
-                warning ("Could not find Mondai, falling back to bugurl");
-                // get bugurl from /etc/os-release
-                var bugurl = Environment.get_os_info ("BUG_REPORT_URL");
-
-                if (bugurl != null) {
+            try {
+                var appinfo = GLib.AppInfo.create_from_commandline ("co.tauos.Mondai", "co.tauos.Mondai", GLib.AppInfoCreateFlags.NONE);
+                if (appinfo != null) {
                     try {
-                        AppInfo.launch_default_for_uri (bugurl, null);
+                        appinfo.launch (null, null);
                     } catch (Error e) {
                         critical (e.message);
                     }
                 } else {
-                    warning ("Could not find bugurl");
+                    warning ("Could not find Mondai, falling back to bugurl");
+                    // get bugurl from /etc/os-release
+                    var bugurl = Environment.get_os_info ("BUG_REPORT_URL");
+
+                    if (bugurl != null) {
+                        try {
+                            AppInfo.launch_default_for_uri (bugurl, null);
+                        } catch (Error e) {
+                            critical (e.message);
+                        }
+                    } else {
+                        warning ("Could not find bugurl");
+                    }
                 }
+            } catch (Error e) {
+                critical (e.message);
             }
         });
     }
