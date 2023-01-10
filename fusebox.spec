@@ -83,7 +83,6 @@ git submodule update --init --recursive
 %{_bindir}/co.tauos.Fusebox
 %{_datadir}/applications/co.tauos.Fusebox.desktop
 %{_datadir}/glib-2.0/schemas/co.tauos.Fusebox.gschema.xml
-%{_datadir}/icons/hicolor/128x128/co.tauos.Fusebox.svg
 %{_datadir}/metainfo/co.tauos.Fusebox.appdata.xml
 
 %changelog
