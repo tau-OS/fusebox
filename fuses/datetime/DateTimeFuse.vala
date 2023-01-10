@@ -6,7 +6,7 @@ public class DateTime.Fuse : Fusebox.Fuse {
         settings.set ("DateTime", null);
 
         Object (
-            category: Category.PERSONAL,
+            category: Category.SYSTEM,
             code_name: "co.tauos.Fusebox.DateTime",
             display_name: _("Date & Time"),
             description: _("Setup time and date"),

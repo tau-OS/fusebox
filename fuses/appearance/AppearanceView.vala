@@ -242,6 +242,7 @@ public class AppearanceView : Gtk.Box {
         var prefer_soft_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/soft.svg") {
             pixel_size = 96
         };
+        prefer_soft_image.add_css_class ("icon-dropshadow");
 
         var prefer_soft_card = new Gtk.Grid () {
             margin_top = 6,
@@ -269,6 +270,7 @@ public class AppearanceView : Gtk.Box {
         var prefer_medium_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/medium.svg") {
             pixel_size = 96
         };
+        prefer_medium_image.add_css_class ("icon-dropshadow");
 
         var prefer_medium_card = new Gtk.Grid () {
             margin_top = 6,
@@ -297,6 +299,7 @@ public class AppearanceView : Gtk.Box {
         var prefer_harsh_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/harsh.svg") {
             pixel_size = 96
         };
+        prefer_harsh_image.add_css_class ("icon-dropshadow");
 
         var prefer_harsh_card = new Gtk.Grid () {
             margin_top = 6,
@@ -666,3 +669,4 @@ public class AppearanceView : Gtk.Box {
         }
     }
 }
+
