@@ -22,44 +22,6 @@ public class AppearanceView : Gtk.Box {
     public Fusebox.Fuse fuse { get; construct set; }
     public Appearance.WallpaperGrid wallpaper_view;
 
-    private enum ColorScheme {
-        NO_PREFERENCE,
-        PREFER_DARK,
-        PREFER_LIGHT;
-
-        public int to_int () {
-            switch (this) {
-                case NO_PREFERENCE:
-                    return 0;
-                case PREFER_DARK:
-                    return 1;
-                case PREFER_LIGHT:
-                    return 2;
-            }
-
-            return 0;
-        }
-    }
-
-    private enum DarkModeStrength {
-        MEDIUM,
-        HARSH,
-        SOFT;
-
-        public int to_int () {
-            switch (this) {
-                case MEDIUM:
-                    return 0;
-                case HARSH:
-                    return 1;
-                case SOFT:
-                    return 2;
-            }
-
-            return 0;
-        }
-    }
-
     private enum AccentColor {
         MULTI,
         RED,
@@ -194,23 +156,23 @@ public class AppearanceView : Gtk.Box {
         prefer_light_radio.add_css_class ("image-button");
         prefer_light_radio.child = (prefer_light_grid);
 
-        var prefer_dark_image = new Gtk.Image.from_icon_name ("weather-clear-night-symbolic") {
+        var DARK_image = new Gtk.Image.from_icon_name ("weather-clear-night-symbolic") {
             pixel_size = 32
         };
 
-        var prefer_dark_card = new Gtk.Grid () {
+        var DARK_card = new Gtk.Grid () {
             margin_top = 6,
             margin_bottom = 6,
             margin_end = 6,
             margin_start = 6
         };
-        prefer_dark_card.attach (prefer_dark_image, 0, 0);
+        DARK_card.attach (DARK_image, 0, 0);
 
-        var prefer_dark_grid = new Gtk.Grid () {
+        var DARK_grid = new Gtk.Grid () {
             row_spacing = 6
         };
-        prefer_dark_grid.attach (prefer_dark_card, 0, 0);
-        prefer_dark_grid.attach (new Gtk.Label (_("Dark")), 0, 1);
+        DARK_grid.attach (DARK_card, 0, 0);
+        DARK_grid.attach (new Gtk.Label (_("Dark")), 0, 1);
 
         prefer_dark_radio = new Gtk.ToggleButton () {
             group = prefer_default_radio,
@@ -218,7 +180,7 @@ public class AppearanceView : Gtk.Box {
             hexpand = true
         };
         prefer_dark_radio.add_css_class ("image-button");
-        prefer_dark_radio.child = (prefer_dark_grid);
+        prefer_dark_radio.child = (DARK_grid);
 
         var prefer_style_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             spacing = 12,
@@ -242,6 +204,7 @@ public class AppearanceView : Gtk.Box {
         var prefer_soft_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/soft.svg") {
             pixel_size = 96
         };
+        prefer_soft_image.add_css_class ("icon-dropshadow");
 
         var prefer_soft_card = new Gtk.Grid () {
             margin_top = 6,
@@ -269,6 +232,7 @@ public class AppearanceView : Gtk.Box {
         var prefer_medium_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/medium.svg") {
             pixel_size = 96
         };
+        prefer_medium_image.add_css_class ("icon-dropshadow");
 
         var prefer_medium_card = new Gtk.Grid () {
             margin_top = 6,
@@ -297,6 +261,7 @@ public class AppearanceView : Gtk.Box {
         var prefer_harsh_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/harsh.svg") {
             pixel_size = 96
         };
+        prefer_harsh_image.add_css_class ("icon-dropshadow");
 
         var prefer_harsh_card = new Gtk.Grid () {
             margin_top = 6,
@@ -423,19 +388,19 @@ public class AppearanceView : Gtk.Box {
         });
 
         prefer_default_radio.toggled.connect (() => {
-            set_color_scheme (ColorScheme.NO_PREFERENCE);
+            set_color_scheme (He.Desktop.ColorScheme.NO_PREFERENCE);
             prefer_dm_sep.visible = false;
             prefer_dm_label.visible = false;
             prefer_dm_box.visible = false;
         });
         prefer_light_radio.toggled.connect (() => {
-            set_color_scheme (ColorScheme.PREFER_LIGHT);
+            set_color_scheme (He.Desktop.ColorScheme.LIGHT);
             prefer_dm_sep.visible = false;
             prefer_dm_label.visible = false;
             prefer_dm_box.visible = false;
         });
         prefer_dark_radio.toggled.connect (() => {
-            set_color_scheme (ColorScheme.PREFER_DARK);
+            set_color_scheme (He.Desktop.ColorScheme.DARK);
             prefer_dm_sep.visible = true;
             prefer_dm_label.visible = true;
             prefer_dm_box.visible = true;
@@ -447,13 +412,13 @@ public class AppearanceView : Gtk.Box {
         });
 
         prefer_soft_radio.toggled.connect (() => {
-            set_dark_mode_strength (DarkModeStrength.SOFT);
+            set_dark_mode_strength (He.Desktop.DarkModeStrength.SOFT);
         });
         prefer_medium_radio.toggled.connect (() => {
-            set_dark_mode_strength (DarkModeStrength.MEDIUM);
+            set_dark_mode_strength (He.Desktop.DarkModeStrength.MEDIUM);
         });
         prefer_harsh_radio.toggled.connect (() => {
-            set_dark_mode_strength (DarkModeStrength.HARSH);
+            set_dark_mode_strength (He.Desktop.DarkModeStrength.HARSH);
         });
 
         dark_mode_strength_refresh ();
@@ -462,55 +427,55 @@ public class AppearanceView : Gtk.Box {
         });
     }
 
-    private void set_color_scheme (ColorScheme color_scheme) {
-        if (color_scheme == ColorScheme.NO_PREFERENCE) {
+    private void set_color_scheme (He.Desktop.ColorScheme color_scheme) {
+        if (color_scheme == He.Desktop.ColorScheme.NO_PREFERENCE) {
             interface_settings.set_string ("gtk-theme", "Adwaita");
             theme_settings.set_string ("name", "Helium");
-        } else if (color_scheme == ColorScheme.PREFER_LIGHT) {
+        } else if (color_scheme == He.Desktop.ColorScheme.LIGHT) {
             interface_settings.set_string ("gtk-theme", "Adwaita");
             theme_settings.set_string ("name", "Helium");
-        } else if (color_scheme == ColorScheme.PREFER_DARK) {
+        } else if (color_scheme == He.Desktop.ColorScheme.DARK) {
             interface_settings.set_string ("gtk-theme", "Adwaita-dark");
             theme_settings.set_string ("name", "Helium-dark");
         }
 
-        interface_settings.set_enum ("color-scheme", color_scheme.to_int ());
+        interface_settings.set_enum ("color-scheme", color_scheme);
     }
 
     private void color_scheme_refresh () {
         int value = interface_settings.get_enum ("color-scheme");
 
-        if (value == ColorScheme.NO_PREFERENCE) {
+        if (value == He.Desktop.ColorScheme.NO_PREFERENCE) {
             prefer_default_radio.set_active (true);
             prefer_light_radio.set_active (false);
             prefer_dark_radio.set_active (false);
-        } else if (value == ColorScheme.PREFER_LIGHT) {
+        } else if (value == He.Desktop.ColorScheme.LIGHT) {
             prefer_default_radio.set_active (false);
             prefer_light_radio.set_active (true);
             prefer_dark_radio.set_active (false);
-        } else if (value == ColorScheme.PREFER_DARK) {
+        } else if (value == He.Desktop.ColorScheme.DARK) {
             prefer_default_radio.set_active (false);
             prefer_light_radio.set_active (false);
             prefer_dark_radio.set_active (true);
         }
     }
 
-    private void set_dark_mode_strength (DarkModeStrength strength) {
-        tau_appearance_settings.set_enum ("dark-mode-strength", strength.to_int ());
+    private void set_dark_mode_strength (He.Desktop.DarkModeStrength strength) {
+        tau_appearance_settings.set_enum ("dark-mode-strength", strength);
     }
 
     private void dark_mode_strength_refresh () {
         int value = tau_appearance_settings.get_enum ("dark-mode-strength");
 
-        if (value == DarkModeStrength.SOFT) {
+        if (value == He.Desktop.DarkModeStrength.SOFT) {
             prefer_soft_radio.set_active (true);
             prefer_medium_radio.set_active (false);
             prefer_harsh_radio.set_active (false);
-        } else if (value == DarkModeStrength.MEDIUM) {
+        } else if (value == He.Desktop.DarkModeStrength.MEDIUM) {
             prefer_soft_radio.set_active (false);
             prefer_medium_radio.set_active (true);
             prefer_harsh_radio.set_active (false);
-        } else if (value == DarkModeStrength.HARSH) {
+        } else if (value == He.Desktop.DarkModeStrength.HARSH) {
             prefer_soft_radio.set_active (false);
             prefer_medium_radio.set_active (false);
             prefer_harsh_radio.set_active (true);
@@ -666,3 +631,4 @@ public class AppearanceView : Gtk.Box {
         }
     }
 }
+

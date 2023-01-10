@@ -41,6 +41,38 @@
 			]
 		},
         {
+            "name" : "geocode-glib",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Denable-installed-tests=false",
+                "-Denable-introspection=true",
+                "-Denable-gtk-doc=false",
+                "-Dsoup2=false"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/geocode-glib.git"
+                }
+            ]
+        },
+        {
+            "name" : "gweather",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dgtk_doc=false",
+                "-Dsoup2=false",
+                "-Denable_vala=true"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libgweather.git",
+                    "branch": "main"
+                }
+            ]
+        },
+        {
             "name" : "fusebox",
             "builddir" : true,
             "buildsystem" : "meson",

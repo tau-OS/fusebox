@@ -1,5 +1,6 @@
 # Add each fuse subdir here.
 
 subdir('appearance')
-subdir('about')
 subdir('startup')
+subdir('datetime')
+subdir('about')

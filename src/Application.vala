@@ -243,13 +243,9 @@ namespace Fusebox {
             main_box.append (sep);
             main_box.append (box);
 
-            var window_handle = new Gtk.WindowHandle () {
-                child = main_box
-            };
-
             main_window = new He.ApplicationWindow (this) {
                 application = this,
-                child = window_handle,
+                child = main_box,
                 icon_name = application_id,
                 title = _("Fusebox")
             };
