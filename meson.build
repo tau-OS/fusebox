@@ -37,7 +37,7 @@ gio_unix_dep = dependency('gio-unix-2.0')
 gmodule_dep = dependency('gmodule-2.0')
 gtk_dep = dependency('gtk4', version: '>=3.10')
 helium_dep = dependency('libhelium-1')
-bismuth_dep = dependency('libbismuth-1', fallback: [ 'libbismuth', 'libbismuth_dep' ], version: '>=1.0.0')
+bismuth_dep = dependency('libbismuth-1', fallback: [ 'libbismuth', 'libbismuth_dep' ], version: '>=1.0.0', required : true)
 m_dep = meson.get_compiler('c').find_library('m', required : false)
 
 subdir('data')
