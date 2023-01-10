@@ -23,6 +23,7 @@ BuildRequires:  gettext
 BuildRequires:  meson
 BuildRequires:  git
 BuildRequires:  desktop-file-utils
+BuildRequires:  valac
 BuildRequires:  pkgconfig(accountsservice)
 BuildRequires:  pkgconfig(gio-2.0) >= %{glib2_version}
 BuildRequires:  pkgconfig(gnome-desktop-4) >= %{gnome_desktop_version}
