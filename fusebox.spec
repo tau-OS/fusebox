@@ -42,7 +42,7 @@ BuildRequires:  pkgconfig(ibus-1.0)
 BuildRequires:  pkgconfig(pwquality)
 
 Requires: libhelium%{?_isa} >= %{libhelium_version}
-Requires: pkgconfig(libbismuth-1.0)
+Requires: libbismuth%{?_isa} >= %{libhelium_version}
 Requires: glib2%{?_isa} >= %{glib2_version}
 Requires: gnome-desktop4%{?_isa} >= %{gnome_desktop_version}
 Requires: gnome-settings-daemon%{?_isa} >= %{gsd_version}
