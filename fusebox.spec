@@ -45,7 +45,7 @@ allows to configure keyboard and mouse properties, sound setup, desktop theme
 and background, user interface properties, screen resolution, and other settings.
 
 %prep
-%setup -q -n fusebox-main -Sgit
+%autosetup -q -n fusebox-main -Sgit
 git init
 git remote add origin https://github.com/tau-OS/fusebox
 git pull -v origin main --force --rebase
