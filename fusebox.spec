@@ -44,6 +44,9 @@ This package contains the settings application for the tauOS desktop, which
 allows to configure keyboard and mouse properties, sound setup, desktop theme
 and background, user interface properties, screen resolution, and other settings.
 
+%prep
+%setup -q -n fusebox
+
 %build
 %meson
 %meson_build
