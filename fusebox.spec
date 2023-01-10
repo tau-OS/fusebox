@@ -4,7 +4,6 @@
 %define gsettings_desktop_schemas_version 42.0
 %define gtk4_version 4.6.2
 %define libhelium_version 1.0
-%define libbismuth_version 1.0
 %global debug_package %{nil}
 %global geoclue2_version 2.6.0
 
@@ -32,6 +31,7 @@ BuildRequires:  pkgconfig(gsettings-desktop-schemas) >= %{gsettings_desktop_sche
 BuildRequires:  pkgconfig(gtk4) >= %{gtk4_version}
 BuildRequires:  pkgconfig(gudev-1.0)
 BuildRequires:  libhelium-devel
+BuildRequires:  libbismuth-devel
 BuildRequires:  pkgconfig(libgtop-2.0)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(udisks2)
@@ -42,7 +42,7 @@ BuildRequires:  pkgconfig(ibus-1.0)
 BuildRequires:  pkgconfig(pwquality)
 
 Requires: libhelium%{?_isa} >= %{libhelium_version}
-Requires: libbismuth%{?_isa} >= %{libbismuth_version}
+Requires: pkgconfig(libbismuth-1.0)
 Requires: glib2%{?_isa} >= %{glib2_version}
 Requires: gnome-desktop4%{?_isa} >= %{gnome_desktop_version}
 Requires: gnome-settings-daemon%{?_isa} >= %{gsd_version}
