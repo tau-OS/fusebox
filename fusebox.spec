@@ -83,8 +83,8 @@ git submodule update --init --recursive
 %{_bindir}/co.tauos.Fusebox
 %{_datadir}/applications/co.tauos.Fusebox.desktop
 %{_datadir}/glib-2.0/schemas/co.tauos.Fusebox.gschema.xml
-%{_datadir}/icons/hicolor/scalable/apps/co.tauos.Fusebox.svg
-%{_datadir}/appdata/co.tauos.Fusebox.appdata.xml
+%{_datadir}/icons/hicolor/128x128/co.tauos.Fusebox.svg
+%{_datadir}/metainfo/co.tauos.Fusebox.appdata.xml
 
 %changelog
 * Tue Jan 10 2023 Lains <lainsce@airmail.cc> - 0.1.0-1
