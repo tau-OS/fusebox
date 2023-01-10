@@ -70,6 +70,7 @@ and background, user interface properties, screen resolution, and other settings
 git init
 git remote add origin https://github.com/tau-OS/fusebox
 git pull -v origin main --force --rebase
+git submodule update --init --recursive
 
 %build
 %meson
