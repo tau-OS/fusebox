@@ -45,7 +45,7 @@ allows to configure keyboard and mouse properties, sound setup, desktop theme
 and background, user interface properties, screen resolution, and other settings.
  
 %prep
-%autosetup -n fusebox
+%autosetup
 
 %build
 %meson
