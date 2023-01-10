@@ -84,6 +84,19 @@ git submodule update --init --recursive
 %{_datadir}/applications/co.tauos.Fusebox.desktop
 %{_datadir}/glib-2.0/schemas/co.tauos.Fusebox.gschema.xml
 %{_datadir}/metainfo/co.tauos.Fusebox.appdata.xml
+%{_includedir}/fusebox-1.h
+%{_lib}/fusebox-1/personal/libfuse-appearance.so
+%{_lib}/fusebox-1/system/libfuse-about.so
+%{_lib}/fusebox-1/system/libfuse-datetime.so
+%{_lib}/girepository-1.0/fusebox-1.typelib
+%{_lib}/libfusebox-1.so
+%{_lib}/libfusebox-1.so.1
+%{_lib}/pkgconfig/fusebox-1.pc
+%{_datadir}/gir-1.0/fusebox-1.gir
+%{_datadir}/icons/hicolor/128x128/apps/co.tauos.Fusebox.svg
+%{_datadir}/icons/hicolor/128x128@2/apps/co.tauos.Fusebox.svg
+%{_datadir}/vala/vapi/fusebox-1.deps
+%{_datadir}/vala/vapi/fusebox-1.vapi
 
 %changelog
 * Tue Jan 10 2023 Lains <lainsce@airmail.cc> - 0.1.0-1
