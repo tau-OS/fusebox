@@ -62,5 +62,5 @@ and background, user interface properties, screen resolution, and other settings
 %{_datadir}/appdata/co.tauos.Fusebox.appdata.xml
 
 %changelog
-* Sat Dec 30 2022 Lains <lainsce@airmail.cc> - 0.1.0-1
+* Tue Jan 10 2023 Lains <lainsce@airmail.cc> - 0.1.0-1
 - Initial Release
