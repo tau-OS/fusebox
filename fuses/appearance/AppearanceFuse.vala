@@ -51,11 +51,11 @@ public class Appearance.Fuse : Fusebox.Fuse {
     }
 
     public override void shown () {
-        appearance_view.wallpaper_view.update_wallpaper_folder ();
+        appearance_view.wallpaper_view.update_wallpaper_folder.begin ();
     }
 
     public override void hidden () {
-        appearance_view.wallpaper_view.cancel_thumbnail_generation ();
+        appearance_view.wallpaper_view.cancel_thumbnail_generation.begin ();
     }
 
     public override void search_callback (string location) {

@@ -148,7 +148,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                     var dest = copy_for_library (uri);
                     if (dest != null) {
                         var local_uri = dest;
-                        add_wallpaper_from_file (local_uri);
+                        add_wallpaper_from_file.begin (local_uri);
                     }
                     chooser.destroy ();
                 }
@@ -165,7 +165,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         private static File? copy_for_library (File source) {
             File? dest = null;
     
-            string local_bg_directory = get_local_bg_directory ();
+            string local_bg_directory = Path.build_filename (Environment.get_user_data_dir (), "backgrounds") + "/";
             try {
                 File folder = File.new_for_path (local_bg_directory);
                 folder.make_directory_with_parents ();
@@ -199,7 +199,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             
             active_wallpaper = children;
             children.checked = true;
-            var system_bg = get_system_bg_directories ();
+            var system_bg = Path.build_filename ("/usr/share/backgrounds") + "/";
             if (children.uri.contains (system_bg)) {
                 wallpaper_removal_button.visible = false;
             } else {
@@ -209,22 +209,29 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             update_wallpaper.begin (current_wallpaper_path);
         }
         
-        public void update_wallpaper_folder () {
+        public async void update_wallpaper_folder () {
             if (last_cancellable != null) {
                 last_cancellable.cancel ();
+                return;
             }
 
             var cancellable = new Cancellable ();
             last_cancellable = cancellable;
 
-            clean_wallpapers ();
+            Idle.add (() => {
+                while (wallpaper_view.get_first_child () != null) {
+                    wallpaper_view.remove (wallpaper_view.get_first_child ());
+                }
 
-            foreach (unowned string directory in get_bg_directories ()) {
-                load_wallpapers.begin (directory, cancellable);
-            }
+                foreach (unowned string directory in get_bg_directories ()) {
+                    load_wallpapers.begin (directory, cancellable);
+                }
+
+                return false;
+            });
         }
         
-        public void cancel_thumbnail_generation () {
+        public async void cancel_thumbnail_generation () {
             if (last_cancellable != null) {
                 last_cancellable.cancel ();
             }
@@ -258,7 +265,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                     }
                     
                     var file = directory.resolve_relative_path (file_info.get_name ());
-                    add_wallpaper_from_file (file);
+                    add_wallpaper_from_file.begin (file);
                 }
                 
                 if (toplevel_folder) {
@@ -277,32 +284,12 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             }
         }
         
-        private void clean_wallpapers () {
-            while (wallpaper_view.get_first_child () != null) {
-                wallpaper_view.remove (wallpaper_view.get_first_child ());
-            }
-        }
-        
-        private static string get_local_bg_directory () {
-            return Path.build_filename (Environment.get_user_data_dir (), "backgrounds") + "/";
-        }
-        
-        private static string get_system_bg_directories () {
-            var system_background_dir = Path.build_filename ("/usr/share/backgrounds") + "/";
-            if (FileUtils.test (system_background_dir, FileTest.EXISTS)) {
-                debug ("Found system background directory: %s", system_background_dir);
-                return system_background_dir;
-            } else {
-                return "";
-            }
-        }
-        
         private string[] get_bg_directories () {
             string[] background_directories = {};
             
             // Add user background directory first
-            background_directories += get_local_bg_directory ();
-            background_directories += get_system_bg_directories ();
+            background_directories += Path.build_filename (Environment.get_user_data_dir (), "backgrounds") + "/";
+            background_directories += Path.build_filename ("/usr/share/backgrounds") + "/";
             
             if (background_directories.length == 0) {
                 warning ("No background directories found");
@@ -311,7 +298,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             return background_directories;
         }
         
-        private void add_wallpaper_from_file (GLib.File file) {
+        private async void add_wallpaper_from_file (GLib.File file) {
             var wallpaper = new Appearance.WallpaperContainer (file.get_uri ());
             wallpaper_view.append (wallpaper);
             
@@ -336,7 +323,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             
             var uri1_is_system = false;
             var uri2_is_system = false;
-            var bg_dir = get_system_bg_directories ();
+            var bg_dir = Path.build_filename ("/usr/share/backgrounds") + "/";
             bg_dir = "file://" + bg_dir;
             uri1_is_system = uri1.has_prefix (bg_dir) || uri1_is_system;
             uri2_is_system = uri2.has_prefix (bg_dir) || uri2_is_system;
@@ -371,9 +358,12 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         
         private Gtk.Revealer check_revealer;
         private Gtk.ToggleButton check;
-        private Gtk.Image image;
+        Gtk.Image image;
         
+        public string? thumb_path { get; construct set; }
+        public bool thumb_valid { get; construct; }
         public string uri { get; construct; }
+        public Gdk.Pixbuf thumb { get; set; }
         public uint64 creation_date = 0;
         
         public bool checked {
@@ -419,11 +409,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             height_request = THUMB_HEIGHT + 6;
             width_request = THUMB_WIDTH + 6;
             
-            image = new Gtk.Image () {
-                halign = Gtk.Align.CENTER,
-                valign = Gtk.Align.CENTER,
-                pixel_size = THUMB_WIDTH
-            };
+            image = new Gtk.Image ();
             
             check = new Gtk.ToggleButton () {
                 halign = Gtk.Align.START,
@@ -450,17 +436,134 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                 checked = true;
             });
             
-            make_thumb.begin ();
+            try {
+                if (uri != null) {
+                    if (thumb_path != null && thumb_valid) {
+                        update_thumb.begin ();
+                    } else {
+                        generate_and_load_thumb ();
+                    }
+                } else {
+                    thumb = new Gdk.Pixbuf (Gdk.Colorspace.RGB, false, 8, THUMB_WIDTH, THUMB_HEIGHT);
+                    image.gicon = thumb;
+                }
+            } catch (Error e) {
+                critical ("Failed to load wallpaper thumbnail: %s", e.message);
+                return;
+            }
         }
 
-        public async void make_thumb () {
+        private void generate_and_load_thumb () {
+            ThumbnailGenerator.get_default ().get_thumbnail (uri, THUMB_WIDTH, () => {
+                try {
+                    var file = File.new_for_uri (uri);
+                    var info = file.query_info (FileAttribute.THUMBNAIL_PATH + "," + FileAttribute.THUMBNAIL_IS_VALID, 0);
+                    thumb_path = info.get_attribute_as_string (FileAttribute.THUMBNAIL_PATH);
+                    update_thumb.begin ();
+                } catch (Error e) {
+                    warning ("Error loading thumbnail for '%s': %s", uri, e.message);
+                }
+            });
+        }
+
+        private async void update_thumb () {
+            if (thumb_path == null) {
+                return;
+            }
+
             try {
-                var file = File.new_for_uri (uri);
-                var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
-                pixbuf = pixbuf.scale_simple (THUMB_WIDTH, THUMB_HEIGHT, Gdk.InterpType.BILINEAR);
-                image.set_from_pixbuf (pixbuf);
+                image.set_from_file (thumb_path);
             } catch (Error e) {
-                //
+                warning (e.message);
             }
         }
     }
+
+[DBus (name = "org.freedesktop.thumbnails.Thumbnailer1")]
+interface Appearance.Thumbnailer : Object {
+    public signal void ready (uint32 handle, string[] uris);
+    public signal void finished (uint32 handle);
+    public abstract uint32 queue (string[] uris, string [] mime_types, string flavor, string scheduler, uint32 dequeue) throws GLib.Error;
+    public abstract void dequeue (uint32 handle) throws GLib.Error;
+}
+
+public class Appearance.ThumbnailGenerator {
+    private const string THUMBNAILER_DBUS_ID = "org.freedesktop.thumbnails.Thumbnailer1";
+    private const string THUMBNAILER_DBUS_PATH = "/org/freedesktop/thumbnails/Thumbnailer1";
+
+    public delegate void ThumbnailReady ();
+    public class ThumbnailReadyWrapper {
+        public unowned ThumbnailReady cb { get; set; }
+    }
+
+    private static ThumbnailGenerator? instance = null;
+    private Thumbnailer? thumbnailer = null;
+    private GLib.HashTable<uint32, ThumbnailReadyWrapper> queued_delegates = new GLib.HashTable<uint32, ThumbnailReadyWrapper> (null, null);
+    private GLib.Array<uint32> handles = new GLib.Array<uint32> ();
+
+    public static ThumbnailGenerator get_default () {
+        if (instance == null) {
+            instance = new ThumbnailGenerator ();
+        }
+
+        return instance;
+    }
+
+    public ThumbnailGenerator () {
+        try {
+            thumbnailer = Bus.get_proxy_sync (BusType.SESSION, THUMBNAILER_DBUS_ID, THUMBNAILER_DBUS_PATH);
+            thumbnailer.ready.connect ((handle, uris) => {
+                if (queued_delegates.contains (handle)) {
+                    queued_delegates [handle].cb ();
+                }
+            });
+
+            thumbnailer.finished.connect ((handle) => {
+                queued_delegates.remove (handle);
+                handles.remove_index (handle);
+            });
+        } catch (Error e) {
+            warning ("Unable to connect to system thumbnailer: %s", e.message);
+        }
+    }
+
+    public void dequeue_all () {
+        foreach (var handle in handles) {
+            try {
+                thumbnailer.dequeue (handle);
+            } catch (GLib.Error e) {
+                warning ("Unable to tell thumbnailer to stop creating thumbnails: %s", e.message);
+            }
+        }
+    }
+
+    public void get_thumbnail (string uri, uint size, ThumbnailReady callback) {
+        string thumb_size = "normal";
+
+        if (size > 128) {
+            thumb_size = "large";
+        }
+
+        if (thumbnailer != null) {
+            var wrapper = new ThumbnailReadyWrapper ();
+            wrapper.cb = callback;
+
+            try {
+                var handle = thumbnailer.queue ({ uri }, { get_mime_type (uri) }, thumb_size, "default", 0);
+                handles.append_val (handle);
+                queued_delegates.@set (handle, wrapper);
+            } catch (GLib.Error e) {
+                warning ("Unable to queue thumbnail generation for '%s': %s", uri, e.message);
+            }
+        }
+    }
+
+    private string get_mime_type (string uri) {
+        try {
+            return ContentType.guess (Filename.from_uri (uri), null, null);
+        } catch (ConvertError e) {
+            warning ("Error converting filename '%s' while guessing mime type: %s", uri, e.message);
+            return "";
+        }
+    }
+}

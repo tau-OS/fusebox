@@ -233,14 +233,12 @@ namespace Fusebox {
             };
 
             var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+            box.add_css_class ("main-view");
             box.append (sheaderbar);
             box.append (halbum);
 
-            var sep = new Gtk.Separator (Gtk.Orientation.VERTICAL);
-
             var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             main_box.append (sbox);
-            main_box.append (sep);
             main_box.append (box);
 
             main_window = new He.ApplicationWindow (this) {
