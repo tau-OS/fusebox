@@ -544,7 +544,7 @@ public class Appearance.ThumbnailGenerator {
 
             try {
                 var handle = thumbnailer.queue ({ uri }, { get_mime_type (uri) }, thumb_size, "default", 0);
-                handles.add (handle);
+                handles.append (handle);
                 queued_delegates.@set (handle, wrapper);
             } catch (GLib.Error e) {
                 warning ("Unable to queue thumbnail generation for '%s': %s", uri, e.message);
