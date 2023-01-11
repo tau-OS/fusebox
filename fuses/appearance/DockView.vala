@@ -14,7 +14,9 @@ public class DockView : Gtk.Box {
     }
 
     static construct {
-        dock_settings = new GLib.Settings ("com.fyralabs.kiri.panel.panel");
+        if (GLib.Environment.find_program_in_path ("kiri-panel") != null) {
+            dock_settings = new GLib.Settings ("com.fyralabs.kiri.panel.panel");
+        }
     }
 
     construct {
@@ -154,92 +156,98 @@ public class DockView : Gtk.Box {
 
         append (clamp);
 
-        dock_size_small_check.toggled.connect (() => {
-            dock_settings.set_int ("size", 32);
-        });
-        dock_size_medium_check.toggled.connect (() => {
-            dock_settings.set_int ("size", 48);
-        });
-        dock_size_big_check.toggled.connect (() => {
-            dock_settings.set_int ("size", 64);
-        });
-        dock_size_refresh ();
-        dock_settings.notify["changed::size"].connect (() => {
+        if (GLib.Environment.find_program_in_path ("kiri-panel") != null) {
+            dock_size_small_check.toggled.connect (() => {
+                dock_settings.set_int ("size", 32);
+            });
+            dock_size_medium_check.toggled.connect (() => {
+                dock_settings.set_int ("size", 48);
+            });
+            dock_size_big_check.toggled.connect (() => {
+                dock_settings.set_int ("size", 64);
+            });
             dock_size_refresh ();
-        });
-
-        dock_pos_left_check.toggled.connect (() => {
-            dock_settings.set_enum ("location", 8);
-            dock_img.icon_name = "dock-left-symbolic";
-        });
-        dock_pos_middle_check.toggled.connect (() => {
-            dock_settings.set_enum ("location", 2);
-            dock_img.icon_name = "dock-bottom-symbolic";
-        });
-        dock_pos_right_check.toggled.connect (() => {
-            dock_settings.set_enum ("location", 16);
-            dock_img.icon_name = "dock-right-symbolic";
-        });
-        dock_position_refresh ();
-        dock_settings.notify["changed::location"].connect (() => {
+            dock_settings.notify["changed::size"].connect (() => {
+                dock_size_refresh ();
+            });
+    
+            dock_pos_left_check.toggled.connect (() => {
+                dock_settings.set_enum ("location", 8);
+                dock_img.icon_name = "dock-left-symbolic";
+            });
+            dock_pos_middle_check.toggled.connect (() => {
+                dock_settings.set_enum ("location", 2);
+                dock_img.icon_name = "dock-bottom-symbolic";
+            });
+            dock_pos_right_check.toggled.connect (() => {
+                dock_settings.set_enum ("location", 16);
+                dock_img.icon_name = "dock-right-symbolic";
+            });
             dock_position_refresh ();
-        });
-
-        if (dock_autohide_switch.active) {
-            dock_settings.set_enum ("autohide", 4);
-        } else {
-            dock_settings.set_enum ("autohide", 4);
-        }
-        dock_autohide_switch.notify["active"].connect (() => {
+            dock_settings.notify["changed::location"].connect (() => {
+                dock_position_refresh ();
+            });
+    
             if (dock_autohide_switch.active) {
                 dock_settings.set_enum ("autohide", 4);
             } else {
                 dock_settings.set_enum ("autohide", 4);
             }
-        });
-
-        dock_settings.bind ("dock-mode", dock_panel_switch, "active", GLib.SettingsBindFlags.DEFAULT);
+            dock_autohide_switch.notify["active"].connect (() => {
+                if (dock_autohide_switch.active) {
+                    dock_settings.set_enum ("autohide", 4);
+                } else {
+                    dock_settings.set_enum ("autohide", 4);
+                }
+            });
+    
+            dock_settings.bind ("dock-mode", dock_panel_switch, "active", GLib.SettingsBindFlags.DEFAULT);
+        }
     }
 
     private void dock_position_refresh () {
-        int value = dock_settings.get_enum ("location");
-        if (value == 16) {
-            dock_pos_left_check.set_active (false);
-            dock_pos_middle_check.set_active (false);
-            dock_pos_right_check.set_active (true);
-        } else if (value == 2) {
-            dock_pos_left_check.set_active (false);
-            dock_pos_middle_check.set_active (true);
-            dock_pos_right_check.set_active (false);
-        } else if (value == 8) {
-            dock_pos_left_check.set_active (true);
-            dock_pos_middle_check.set_active (false);
-            dock_pos_right_check.set_active (false);
-        } else {
-            dock_pos_left_check.set_active (false);
-            dock_pos_middle_check.set_active (true);
-            dock_pos_right_check.set_active (false);
+        if (GLib.Environment.find_program_in_path ("kiri-panel") != null) {
+            int value = dock_settings.get_enum ("location");
+            if (value == 16) {
+                dock_pos_left_check.set_active (false);
+                dock_pos_middle_check.set_active (false);
+                dock_pos_right_check.set_active (true);
+            } else if (value == 2) {
+                dock_pos_left_check.set_active (false);
+                dock_pos_middle_check.set_active (true);
+                dock_pos_right_check.set_active (false);
+            } else if (value == 8) {
+                dock_pos_left_check.set_active (true);
+                dock_pos_middle_check.set_active (false);
+                dock_pos_right_check.set_active (false);
+            } else {
+                dock_pos_left_check.set_active (false);
+                dock_pos_middle_check.set_active (true);
+                dock_pos_right_check.set_active (false);
+            }
         }
     }
 
     private void dock_size_refresh () {
-        int value = dock_settings.get_int ("size");
-        if (value == 32) {
-            dock_size_small_check.set_active (true);
-            dock_size_medium_check.set_active (false);
-            dock_size_big_check.set_active (false);
-        } else if (value == 48) {
-            dock_size_small_check.set_active (false);
-            dock_size_medium_check.set_active (true);
-            dock_size_big_check.set_active (false);
-        } else if (value == 64) {
-            dock_size_small_check.set_active (false);
-            dock_size_medium_check.set_active (false);
-            dock_size_big_check.set_active (true);
-        } else {
-            dock_size_small_check.set_active (false);
-            dock_size_medium_check.set_active (true);
-            dock_size_big_check.set_active (false);
+        if (GLib.Environment.find_program_in_path ("kiri-panel") != null) {
+            int value = dock_settings.get_int ("size");
+            if (value == 32) {
+                dock_size_small_check.set_active (true);
+                dock_size_medium_check.set_active (false);
+                dock_size_big_check.set_active (false);
+            } else if (value == 48) {
+                dock_size_small_check.set_active (false);
+                dock_size_medium_check.set_active (true);
+                dock_size_big_check.set_active (false);
+            } else if (value == 64) {
+                dock_size_small_check.set_active (false);
+                dock_size_medium_check.set_active (false);
+                dock_size_big_check.set_active (true);
+            } else {
+                dock_size_small_check.set_active (false);
+                dock_size_medium_check.set_active (true);
+                dock_size_big_check.set_active (false);
+            }
         }
     }
 }
