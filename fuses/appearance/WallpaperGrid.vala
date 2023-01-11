@@ -493,7 +493,7 @@ public class Appearance.ThumbnailGenerator {
     private static ThumbnailGenerator? instance = null;
     private Thumbnailer? thumbnailer = null;
     private GLib.HashTable<uint32, ThumbnailReadyWrapper> queued_delegates = new GLib.HashTable<uint32, ThumbnailReadyWrapper> (null, null);
-    private GLib.Array<uint32> handles = new GLib.Array<uint32> ();
+    private GLib.List<uint32> handles = new GLib.List<uint32> ();
 
     public static ThumbnailGenerator get_default () {
         if (instance == null) {
@@ -514,7 +514,7 @@ public class Appearance.ThumbnailGenerator {
 
             thumbnailer.finished.connect ((handle) => {
                 queued_delegates.remove (handle);
-                handles.remove_index (handle);
+                handles.remove (handle);
             });
         } catch (Error e) {
             warning ("Unable to connect to system thumbnailer: %s", e.message);
@@ -544,7 +544,7 @@ public class Appearance.ThumbnailGenerator {
 
             try {
                 var handle = thumbnailer.queue ({ uri }, { get_mime_type (uri) }, thumb_size, "default", 0);
-                handles.append_val (handle);
+                handles.add (handle);
                 queued_delegates.@set (handle, wrapper);
             } catch (GLib.Error e) {
                 warning ("Unable to queue thumbnail generation for '%s': %s", uri, e.message);

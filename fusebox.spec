@@ -8,7 +8,7 @@
 %global geoclue2_version 2.6.0
 
 Name:           fusebox
-Version:        0.1.4
+Version:        0.1.5
 Release:        1
 Summary:        Change system and user settings.
 
