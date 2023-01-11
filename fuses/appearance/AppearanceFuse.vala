@@ -33,7 +33,9 @@ public class Appearance.Fuse : Fusebox.Fuse {
 
             main_stack = new Gtk.Stack ();
             main_stack.add_titled (appearance_view, "appearance", _("Appearance"));
-            main_stack.add_titled (dock_view, "dock", _("Dock"));
+            if (GLib.Environment.find_program_in_path ("kiri-panel") != null) {
+                main_stack.add_titled (dock_view, "dock", _("Dock"));
+            }
 
             var stack_switcher = new He.ViewSwitcher () {
                 margin_start = 18
