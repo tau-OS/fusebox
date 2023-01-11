@@ -358,7 +358,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         
         private Gtk.Revealer check_revealer;
         private Gtk.ToggleButton check;
-        Gtk.Image image;
+        Gtk.Picture image;
         
         public string? thumb_path { get; construct set; }
         public bool thumb_valid { get; construct; }
@@ -409,7 +409,10 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             height_request = THUMB_HEIGHT + 6;
             width_request = THUMB_WIDTH + 6;
             
-            image = new Gtk.Image ();
+            image = new Gtk.Picture () {
+                can_shrink = true,
+                keep_aspect_ratio = false
+            };
             
             check = new Gtk.ToggleButton () {
                 halign = Gtk.Align.START,
@@ -443,9 +446,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                     } else {
                         generate_and_load_thumb ();
                     }
-                } else {
-                    thumb = new Gdk.Pixbuf (Gdk.Colorspace.RGB, false, 8, THUMB_WIDTH, THUMB_HEIGHT);
-                    image.gicon = thumb;
                 }
             } catch (Error e) {
                 critical ("Failed to load wallpaper thumbnail: %s", e.message);
@@ -454,28 +454,22 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
 
         private void generate_and_load_thumb () {
-            ThumbnailGenerator.get_default ().get_thumbnail (uri, THUMB_WIDTH, () => {
+            var scale = get_style_context ().get_scale ();
+            ThumbnailGenerator.get_default ().get_thumbnail (uri, THUMB_WIDTH * scale, () => {
                 try {
-                    var file = File.new_for_uri (uri);
-                    var info = file.query_info (FileAttribute.THUMBNAIL_PATH + "," + FileAttribute.THUMBNAIL_IS_VALID, 0);
-                    thumb_path = info.get_attribute_as_string (FileAttribute.THUMBNAIL_PATH);
                     update_thumb.begin ();
                 } catch (Error e) {
-                    warning ("Error loading thumbnail for '%s': %s", uri, e.message);
+                    warning ("Error loading thumbnail for \"%s\": %s", uri, e.message);
                 }
             });
         }
 
         private async void update_thumb () {
-            if (thumb_path == null) {
+            if (!thumb_valid || thumb_path == null) {
                 return;
             }
 
-            try {
-                image.set_from_file (thumb_path);
-            } catch (Error e) {
-                warning (e.message);
-            }
+            image.set_filename (thumb_path);
         }
     }
 
