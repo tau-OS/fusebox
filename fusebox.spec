@@ -8,7 +8,7 @@
 %global geoclue2_version 2.6.0
 
 Name:           fusebox
-Version:        0.1.0
+Version:        0.1.1
 Release:        1
 Summary:        Change system and user settings.
 
@@ -59,11 +59,19 @@ Recommends: nm-connection-editor
 Recommends: gnome-remote-desktop
 Recommends: rygel
 Recommends: switcheroo-control
- 
+
 %description
 This package contains the settings application for the tauOS desktop, which
 allows to configure keyboard and mouse properties, sound setup, desktop theme
 and background, user interface properties, screen resolution, and other settings.
+
+%package devel
+Summary:        Development files for fusebox
+Requires:       fusebox = %{version}-%{release}
+
+%description devel
+This package contains the libraries and header files that are needed
+for settings fuses for fusebox.
 
 %prep
 %autosetup -n fusebox-main -Sgit
@@ -84,19 +92,21 @@ git submodule update --init --recursive
 %{_datadir}/applications/co.tauos.Fusebox.desktop
 %{_datadir}/glib-2.0/schemas/co.tauos.Fusebox.gschema.xml
 %{_datadir}/metainfo/co.tauos.Fusebox.appdata.xml
-%{_includedir}/fusebox-1.h
-%{_prefix}/%{_lib}/fusebox-1/personal/libfuse-appearance.so
-%{_prefix}/%{_lib}/fusebox-1/system/libfuse-about.so
-%{_prefix}/%{_lib}/fusebox-1/system/libfuse-datetime.so
-%{_prefix}/%{_lib}/girepository-1.0/fusebox-1.typelib
-%{_prefix}/%{_lib}/libfusebox-1.so
-%{_prefix}/%{_lib}/libfusebox-1.so.1
-%{_prefix}/%{_lib}/pkgconfig/fusebox-1.pc
-%{_datadir}/gir-1.0/fusebox-1.gir
+%{_libdir}/fusebox-1/personal/libfuse-appearance.so
+%{_libdir}/fusebox-1/system/libfuse-about.so
+%{_libdir}/fusebox-1/system/libfuse-datetime.so
+%{_libdir}/girepository-1.0/fusebox-1.typelib
+%{_libdir}/libfusebox-1.so
+%{_libdir}/libfusebox-1.so.1
 %{_datadir}/icons/hicolor/128x128/apps/co.tauos.Fusebox.svg
 %{_datadir}/icons/hicolor/128x128@2/apps/co.tauos.Fusebox.svg
+
+%files devel
 %{_datadir}/vala/vapi/fusebox-1.deps
 %{_datadir}/vala/vapi/fusebox-1.vapi
+%{_libdir}/pkgconfig/fusebox-1.pc
+%{_datadir}/gir-1.0/fusebox-1.gir
+%{_includedir}/fusebox-1.h
 
 %changelog
 * Tue Jan 10 2023 Lains <lainsce@airmail.cc> - 0.1.0-1
