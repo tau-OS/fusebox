@@ -14,7 +14,7 @@ public class DockView : Gtk.Box {
     }
 
     static construct {
-        dock_settings = new GLib.Settings ("org.gnome.shell.extensions.dash-to-dock");
+        dock_settings = new GLib.Settings ("com.fyralabs.kiri.panel.panel");
     }
 
     construct {
@@ -138,13 +138,6 @@ public class DockView : Gtk.Box {
         dock_panel_box.append (dock_panel_box2);
         dock_panel_box.append (dock_panel_switch);
 
-        var settings_button = new He.PillButton (_("Advanced Settings…")) {
-            hexpand = true,
-            margin_bottom = 12,
-            halign = Gtk.Align.CENTER,
-            valign = Gtk.Align.CENTER
-        };
-
         var grid = new Gtk.Grid () {
             row_spacing = 6,
             margin_start = 18,
@@ -155,7 +148,6 @@ public class DockView : Gtk.Box {
         grid.attach (dock_position_box, 0, 1);
         grid.attach (dock_autohide_box, 0, 2);
         grid.attach (dock_panel_box, 0, 3);
-        grid.attach (settings_button, 0, 4);
 
         var clamp = new Bis.Latch ();
         clamp.set_child (grid);
@@ -163,67 +155,55 @@ public class DockView : Gtk.Box {
         append (clamp);
 
         dock_size_small_check.toggled.connect (() => {
-            dock_settings.set_int ("dash-max-icon-size", 32);
+            dock_settings.set_int ("size", 32);
         });
         dock_size_medium_check.toggled.connect (() => {
-            dock_settings.set_int ("dash-max-icon-size", 48);
+            dock_settings.set_int ("size", 48);
         });
         dock_size_big_check.toggled.connect (() => {
-            dock_settings.set_int ("dash-max-icon-size", 64);
+            dock_settings.set_int ("size", 64);
         });
         dock_size_refresh ();
-        dock_settings.notify["changed::dash-max-icon-size"].connect (() => {
+        dock_settings.notify["changed::size"].connect (() => {
             dock_size_refresh ();
         });
 
         dock_pos_left_check.toggled.connect (() => {
-            dock_settings.set_enum ("dock-position", 3);
+            dock_settings.set_enum ("location", 8);
             dock_img.icon_name = "dock-left-symbolic";
         });
         dock_pos_middle_check.toggled.connect (() => {
-            dock_settings.set_enum ("dock-position", 2);
+            dock_settings.set_enum ("location", 2);
             dock_img.icon_name = "dock-bottom-symbolic";
         });
         dock_pos_right_check.toggled.connect (() => {
-            dock_settings.set_enum ("dock-position", 1);
+            dock_settings.set_enum ("location", 16);
             dock_img.icon_name = "dock-right-symbolic";
         });
         dock_position_refresh ();
-        dock_settings.notify["changed::dock-position"].connect (() => {
+        dock_settings.notify["changed::location"].connect (() => {
             dock_position_refresh ();
         });
 
-        dock_settings.bind ("dock-fixed", dock_autohide_switch, "active", GLib.SettingsBindFlags.INVERT_BOOLEAN);
-
-        dock_settings.bind ("extend-height", dock_panel_switch, "active", GLib.SettingsBindFlags.DEFAULT);
-
-        settings_button.clicked.connect (() => {
-            try{
-            var dbsi = new DBusProxy.for_bus_sync (
-                                                    BusType.SESSION,
-                                                    DBusProxyFlags.NONE,
-                                                    null,
-                                                    "org.gnome.Shell.Extensions",
-                                                    "/org/gnome/Shell/Extensions",
-                                                    "org.gnome.Shell.Extensions",
-                                                    null
-                                                  );
-            dbsi.call_sync (
-                            "OpenExtensionPrefs",
-                            new Variant ("(ssa{sv})", "dash-to-dock@tauos.co", ""),
-                            DBusCallFlags.NONE,
-                            -1,
-                            null
-                           );
-            } catch (Error e) {
-                warning ("%s", e.message);
+        if (dock_autohide_switch.active) {
+            dock_settings.set_enum ("autohide", 4);
+        } else {
+            dock_settings.set_enum ("autohide", 4);
+        }
+        dock_autohide_switch.notify["active"].connect (() => {
+            if (dock_autohide_switch.active) {
+                dock_settings.set_enum ("autohide", 4);
+            } else {
+                dock_settings.set_enum ("autohide", 4);
             }
         });
+
+        dock_settings.bind ("dock-mode", dock_panel_switch, "active", GLib.SettingsBindFlags.DEFAULT);
     }
 
     private void dock_position_refresh () {
-        int value = dock_settings.get_enum ("dock-position");
-        if (value == 1) {
+        int value = dock_settings.get_enum ("location");
+        if (value == 16) {
             dock_pos_left_check.set_active (false);
             dock_pos_middle_check.set_active (false);
             dock_pos_right_check.set_active (true);
@@ -231,7 +211,7 @@ public class DockView : Gtk.Box {
             dock_pos_left_check.set_active (false);
             dock_pos_middle_check.set_active (true);
             dock_pos_right_check.set_active (false);
-        } else if (value == 3) {
+        } else if (value == 8) {
             dock_pos_left_check.set_active (true);
             dock_pos_middle_check.set_active (false);
             dock_pos_right_check.set_active (false);
@@ -243,7 +223,7 @@ public class DockView : Gtk.Box {
     }
 
     private void dock_size_refresh () {
-        int value = dock_settings.get_int ("dash-max-icon-size");
+        int value = dock_settings.get_int ("size");
         if (value == 32) {
             dock_size_small_check.set_active (true);
             dock_size_medium_check.set_active (false);
