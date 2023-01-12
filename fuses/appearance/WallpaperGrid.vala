@@ -416,6 +416,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
 
         construct {
             width_request = THUMB_WIDTH + 6;
+            height_request = THUMB_HEIGHT;
             
             image = new Gtk.Picture ();
             
