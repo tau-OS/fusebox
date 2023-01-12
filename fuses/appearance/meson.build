@@ -2,7 +2,7 @@ fuse_files = files(
     'AppearanceFuse.vala',
     'AppearanceView.vala',
     'WallpaperGrid.vala',
-    'DockView.vala',
+    # 'DockView.vala',
 )
 
 shared_module(
