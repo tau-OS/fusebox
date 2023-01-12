@@ -301,16 +301,23 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
         
         private async void add_wallpaper_from_file (GLib.File file) {
-            var wallpaper = new Appearance.WallpaperContainer (file.get_uri ());
-            wallpaper_view.append (wallpaper);
-            
-            if (current_wallpaper_path.has_suffix (file.get_uri ()) && settings.get_string ("picture-options") != "none") {
-                this.wallpaper_view.select_child (wallpaper);
-                wallpaper.checked = true;
-                active_wallpaper = wallpaper;
+            try {
+                var info = file.query_info (string.joinv (",", REQUIRED_FILE_ATTRS), 0);
+                var thumb_path = info.get_attribute_as_string (FileAttribute.THUMBNAIL_PATH);
+                var thumb_valid = info.get_attribute_boolean (FileAttribute.THUMBNAIL_IS_VALID);
+                var wallpaper = new WallpaperContainer (file.get_uri (), thumb_path, thumb_valid);
+                wallpaper_view.append (wallpaper);
+                
+                if (current_wallpaper_path.has_suffix (file.get_uri ()) && settings.get_string ("picture-options") != "none") {
+                    this.wallpaper_view.select_child (wallpaper);
+                    wallpaper.checked = true;
+                    active_wallpaper = wallpaper;
+                }
+                
+                wallpaper_view.invalidate_sort ();
+            } catch (Error e) {
+                //
             }
-            
-            wallpaper_view.invalidate_sort ();
         }
         
         private int wallpapers_sort_function (Gtk.FlowBoxChild _child1, Gtk.FlowBoxChild _child2) {
@@ -360,9 +367,12 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         
         private Gtk.Revealer check_revealer;
         private Gtk.ToggleButton check;
-        private Gtk.Image image;
+        private Gtk.Picture image;
 
+        public string? thumb_path { get; construct set; }
+        public bool thumb_valid { get; construct; }
         public string uri { get; construct; }
+        public Gdk.Pixbuf thumb { get; set; }
         public uint64 creation_date = 0;
         
         public bool checked {
@@ -395,8 +405,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             }
         }
         
-        public WallpaperContainer (string uri) {
-            Object (uri: uri);
+        public WallpaperContainer (string uri, string? thumb_path, bool thumb_valid) {
+            Object (uri: uri, thumb_path: thumb_path, thumb_valid: thumb_valid);
         }
         
         ~WallpaperContainer () {
@@ -405,10 +415,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
 
         construct {
-            height_request = THUMB_HEIGHT + 6;
             width_request = THUMB_WIDTH + 6;
             
-            image = new Gtk.Image ();
+            image = new Gtk.Picture ();
             
             check = new Gtk.ToggleButton () {
                 halign = Gtk.Align.START,
@@ -430,13 +439,25 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             halign = Gtk.Align.CENTER;
             valign = Gtk.Align.CENTER;
             set_child (overlay);
+
+            if (uri != null) {
+                var file = File.new_for_uri (uri);
+                try {
+                    var info = file.query_info ("*", FileQueryInfoFlags.NONE);
+                    creation_date = info.get_attribute_uint64 (GLib.FileAttribute.TIME_CREATED);
+                } catch (Error e) {
+                    critical (e.message);
+                }
+            }
             
             activate.connect (() => {
                 checked = true;
             });
             
             try {
-                if (uri != null) {
+                if (thumb_valid && thumb_path != null) {
+                    update_thumb.begin ();
+                } else {
                     generate_and_load_thumb ();
                 }
             } catch (Error e) {
@@ -446,18 +467,18 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
 
         private void generate_and_load_thumb () {
-            ThumbnailGenerator.get_default ().get_thumbnail (uri, THUMB_WIDTH, () => {
-                try {
-                    update_thumb.begin (uri);
-                } catch (Error e) {
-                    warning ("Error loading thumbnail for \"%s\": %s", uri, e.message);
-                }
+            var scale = get_style_context ().get_scale ();
+            ThumbnailGenerator.get_default ().get_thumbnail (uri, THUMB_WIDTH * scale, () => {
+                update_thumb.begin ();
             });
         }
 
-        private async void update_thumb (string uri) {
-            warning ("Trying to update image %s!".printf(uri));
-            image.set_from_resource (uri);
+        private async void update_thumb () {
+            if (!thumb_valid || thumb_path == null) {
+                return;
+            }
+    
+            image.set_filename (thumb_path);
         }
     }
 
