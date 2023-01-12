@@ -32,7 +32,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     };
     
     public Fusebox.Fuse fuse { get; construct set; }
-    private GLib.Settings settings;
     
     private Gtk.ScrolledWindow wallpaper_scrolled_window;
     private Gtk.FlowBox wallpaper_view;
@@ -41,6 +40,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     
     private Appearance.WallpaperContainer active_wallpaper = null;
     private Appearance.WallpaperContainer wallpaper_for_removal = null;
+
+    private static GLib.Settings tau_appearance_settings;
+    private static GLib.Settings settings;
     
     private Cancellable last_cancellable;
     
@@ -51,9 +53,13 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     public WallpaperGrid (Fusebox.Fuse _fuse) {
         Object (fuse: _fuse);
     }
+
+    static construct {
+        tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
+        settings = new GLib.Settings ("org.gnome.desktop.background");
+    }
     
     construct {
-            settings = new GLib.Settings ("org.gnome.desktop.background");
             
             wallpaper_view = new Gtk.FlowBox () {
                 activate_on_single_click = true,
@@ -218,17 +224,13 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             var cancellable = new Cancellable ();
             last_cancellable = cancellable;
 
-            Idle.add (() => {
-                while (wallpaper_view.get_first_child () != null) {
-                    wallpaper_view.remove (wallpaper_view.get_first_child ());
-                }
+            while (wallpaper_view.get_first_child () != null) {
+                wallpaper_view.remove (wallpaper_view.get_first_child ());
+            }
 
-                foreach (unowned string directory in get_bg_directories ()) {
-                    load_wallpapers.begin (directory, cancellable);
-                }
-
-                return false;
-            });
+            foreach (unowned string directory in get_bg_directories ()) {
+                load_wallpapers.begin (directory, cancellable);
+            }
         }
         
         public async void cancel_thumbnail_generation () {
@@ -358,12 +360,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         
         private Gtk.Revealer check_revealer;
         private Gtk.ToggleButton check;
-        Gtk.Picture image;
-        
-        public string? thumb_path { get; construct set; }
-        public bool thumb_valid { get; construct; }
+        private Gtk.Image image;
+
         public string uri { get; construct; }
-        public Gdk.Pixbuf thumb { get; set; }
         public uint64 creation_date = 0;
         
         public bool checked {
@@ -409,10 +408,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             height_request = THUMB_HEIGHT + 6;
             width_request = THUMB_WIDTH + 6;
             
-            image = new Gtk.Picture () {
-                can_shrink = true,
-                keep_aspect_ratio = false
-            };
+            image = new Gtk.Image ();
             
             check = new Gtk.ToggleButton () {
                 halign = Gtk.Align.START,
@@ -441,11 +437,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             
             try {
                 if (uri != null) {
-                    if (thumb_path != null && thumb_valid) {
-                        update_thumb.begin ();
-                    } else {
-                        generate_and_load_thumb ();
-                    }
+                    generate_and_load_thumb ();
                 }
             } catch (Error e) {
                 critical ("Failed to load wallpaper thumbnail: %s", e.message);
@@ -454,110 +446,106 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
 
         private void generate_and_load_thumb () {
-            var scale = get_style_context ().get_scale ();
-            ThumbnailGenerator.get_default ().get_thumbnail (uri, THUMB_WIDTH * scale, () => {
+            ThumbnailGenerator.get_default ().get_thumbnail (uri, THUMB_WIDTH, () => {
                 try {
-                    update_thumb.begin ();
+                    update_thumb.begin (uri);
                 } catch (Error e) {
                     warning ("Error loading thumbnail for \"%s\": %s", uri, e.message);
                 }
             });
         }
 
-        private async void update_thumb () {
-            if (!thumb_valid || thumb_path == null) {
-                return;
+        private async void update_thumb (string uri) {
+            warning ("Trying to update image %s!".printf(uri));
+            image.set_from_resource (uri);
+        }
+    }
+
+    [DBus (name = "org.freedesktop.thumbnails.Thumbnailer1")]
+    interface Appearance.Thumbnailer : Object {
+        public signal void ready (uint32 handle, string[] uris);
+        public signal void finished (uint32 handle);
+        public abstract uint32 queue (string[] uris, string [] mime_types, string flavor, string scheduler, uint32 dequeue) throws GLib.Error;
+        public abstract void dequeue (uint32 handle) throws GLib.Error;
+    }
+    
+    public class Appearance.ThumbnailGenerator {
+        private const string THUMBNAILER_DBUS_ID = "org.freedesktop.thumbnails.Thumbnailer1";
+        private const string THUMBNAILER_DBUS_PATH = "/org/freedesktop/thumbnails/Thumbnailer1";
+    
+        public delegate void ThumbnailReady ();
+        public class ThumbnailReadyWrapper {
+            public unowned ThumbnailReady cb { get; set; }
+        }
+    
+        private static ThumbnailGenerator? instance = null;
+        private Thumbnailer? thumbnailer = null;
+        private Gee.HashMap<uint32, ThumbnailReadyWrapper> queued_delegates = new Gee.HashMap<uint32, ThumbnailReadyWrapper> ();
+        private Gee.ArrayList<uint32> handles = new Gee.ArrayList<uint32> ();
+    
+        public static ThumbnailGenerator get_default () {
+            if (instance == null) {
+                instance = new ThumbnailGenerator ();
             }
-
-            image.set_filename (thumb_path);
+    
+            return instance;
         }
-    }
-
-[DBus (name = "org.freedesktop.thumbnails.Thumbnailer1")]
-interface Appearance.Thumbnailer : Object {
-    public signal void ready (uint32 handle, string[] uris);
-    public signal void finished (uint32 handle);
-    public abstract uint32 queue (string[] uris, string [] mime_types, string flavor, string scheduler, uint32 dequeue) throws GLib.Error;
-    public abstract void dequeue (uint32 handle) throws GLib.Error;
-}
-
-public class Appearance.ThumbnailGenerator {
-    private const string THUMBNAILER_DBUS_ID = "org.freedesktop.thumbnails.Thumbnailer1";
-    private const string THUMBNAILER_DBUS_PATH = "/org/freedesktop/thumbnails/Thumbnailer1";
-
-    public delegate void ThumbnailReady ();
-    public class ThumbnailReadyWrapper {
-        public unowned ThumbnailReady cb { get; set; }
-    }
-
-    private static ThumbnailGenerator? instance = null;
-    private Thumbnailer? thumbnailer = null;
-    private GLib.HashTable<uint32, ThumbnailReadyWrapper> queued_delegates = new GLib.HashTable<uint32, ThumbnailReadyWrapper> (null, null);
-    private GLib.List<uint32> handles = new GLib.List<uint32> ();
-
-    public static ThumbnailGenerator get_default () {
-        if (instance == null) {
-            instance = new ThumbnailGenerator ();
+    
+        public ThumbnailGenerator () {
+            try {
+                thumbnailer = Bus.get_proxy_sync (BusType.SESSION, THUMBNAILER_DBUS_ID, THUMBNAILER_DBUS_PATH);
+                thumbnailer.ready.connect ((handle, uris) => {
+                    if (queued_delegates.has_key (handle)) {
+                        queued_delegates [handle].cb ();
+                    }
+                });
+    
+                thumbnailer.finished.connect ((handle) => {
+                    queued_delegates.unset (handle);
+                    handles.remove (handle);
+                });
+            } catch (Error e) {
+                warning ("Unable to connect to system thumbnailer: %s", e.message);
+            }
         }
-
-        return instance;
-    }
-
-    public ThumbnailGenerator () {
-        try {
-            thumbnailer = Bus.get_proxy_sync (BusType.SESSION, THUMBNAILER_DBUS_ID, THUMBNAILER_DBUS_PATH);
-            thumbnailer.ready.connect ((handle, uris) => {
-                if (queued_delegates.contains (handle)) {
-                    queued_delegates [handle].cb ();
+    
+        public void dequeue_all () {
+            foreach (var handle in handles) {
+                try {
+                    thumbnailer.dequeue (handle);
+                } catch (GLib.Error e) {
+                    warning ("Unable to tell thumbnailer to stop creating thumbnails: %s", e.message);
                 }
-            });
-
-            thumbnailer.finished.connect ((handle) => {
-                queued_delegates.remove (handle);
-                handles.remove (handle);
-            });
-        } catch (Error e) {
-            warning ("Unable to connect to system thumbnailer: %s", e.message);
+            }
         }
-    }
-
-    public void dequeue_all () {
-        foreach (var handle in handles) {
+    
+        public void get_thumbnail (string uri, uint size, ThumbnailReady callback) {
+            string thumb_size = "normal";
+    
+            if (size > 128) {
+                thumb_size = "large";
+            }
+    
+            if (thumbnailer != null) {
+                var wrapper = new ThumbnailReadyWrapper ();
+                wrapper.cb = callback;
+    
+                try {
+                    var handle = thumbnailer.queue ({ uri }, { get_mime_type (uri) }, thumb_size, "default", 0);
+                    handles.add (handle);
+                    queued_delegates.@set (handle, wrapper);
+                } catch (GLib.Error e) {
+                    warning ("Unable to queue thumbnail generation for '%s': %s", uri, e.message);
+                }
+            }
+        }
+    
+        private string get_mime_type (string uri) {
             try {
-                thumbnailer.dequeue (handle);
-            } catch (GLib.Error e) {
-                warning ("Unable to tell thumbnailer to stop creating thumbnails: %s", e.message);
+                return ContentType.guess (Filename.from_uri (uri), null, null);
+            } catch (ConvertError e) {
+                warning ("Error converting filename '%s' while guessing mime type: %s", uri, e.message);
+                return "";
             }
         }
     }
-
-    public void get_thumbnail (string uri, uint size, ThumbnailReady callback) {
-        string thumb_size = "normal";
-
-        if (size > 128) {
-            thumb_size = "large";
-        }
-
-        if (thumbnailer != null) {
-            var wrapper = new ThumbnailReadyWrapper ();
-            wrapper.cb = callback;
-
-            try {
-                var handle = thumbnailer.queue ({ uri }, { get_mime_type (uri) }, thumb_size, "default", 0);
-                handles.append (handle);
-                queued_delegates.@set (handle, wrapper);
-            } catch (GLib.Error e) {
-                warning ("Unable to queue thumbnail generation for '%s': %s", uri, e.message);
-            }
-        }
-    }
-
-    private string get_mime_type (string uri) {
-        try {
-            return ContentType.guess (Filename.from_uri (uri), null, null);
-        } catch (ConvertError e) {
-            warning ("Error converting filename '%s' while guessing mime type: %s", uri, e.message);
-            return "";
-        }
-    }
-}
