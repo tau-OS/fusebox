@@ -15,7 +15,7 @@ public class DockView : Gtk.Box {
 
     static construct {
         if (GLib.Environment.find_program_in_path ("kiri-panel") != null) {
-            dock_settings = new GLib.Settings ("com.fyralabs.kiri.panel.panel");
+            dock_settings = new GLib.Settings ("com.fyralabs.kiri.panel");
         }
     }
 
