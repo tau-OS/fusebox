@@ -67,7 +67,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                 column_spacing = 12,
                 valign = Gtk.Align.START,
                 selection_mode = Gtk.SelectionMode.SINGLE,
-                max_children_per_line = 4
+                max_children_per_line = 4,
+                min_children_per_line = 4
             };
             wallpaper_view.child_activated.connect (update_checked_wallpaper);
             wallpaper_view.set_sort_func (wallpapers_sort_function);
