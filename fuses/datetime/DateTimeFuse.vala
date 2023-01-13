@@ -11,7 +11,8 @@ public class DateTime.Fuse : Fusebox.Fuse {
             display_name: _("Date & Time"),
             description: _("Setup time and date"),
             icon: "document-open-recent-symbolic",
-            supported_settings: settings
+            supported_settings: settings,
+            index: 1
         );
 
         Bis.init ();

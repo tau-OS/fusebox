@@ -47,8 +47,6 @@ namespace Fusebox {
             flowbox.row_activated.connect ((child) => {
                 ((FuseboxApp) GLib.Application.get_default ()).load_fuse (((CategoryIcon) child).fuse);
             });
-
-            flowbox.set_sort_func (fuse_sort_func);
         }
 
         public GLib.List<Fuse?> get_fuses () {
@@ -56,7 +54,7 @@ namespace Fusebox {
 
             var child = flowbox.get_first_child ();
             while (child != null) {
-                fuses.append (((CategoryIcon) child).fuse);
+                fuses.insert (((CategoryIcon) child).fuse, ((CategoryIcon) child).fuse.index);
                 child = child.get_next_sibling ();
             }
 
@@ -80,13 +78,6 @@ namespace Fusebox {
 
             hide ();
             return false;
-        }
-
-        private int fuse_sort_func (Gtk.ListBoxRow child_a, Gtk.ListBoxRow child_b) {
-            var fuse_name_a = ((CategoryIcon) child_a).fuse.display_name;
-            var fuse_name_b = ((CategoryIcon) child_b).fuse.display_name;
-
-            return strcmp (fuse_name_a, fuse_name_b);
         }
     }
 }

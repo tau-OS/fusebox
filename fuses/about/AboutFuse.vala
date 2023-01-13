@@ -13,7 +13,8 @@ public class About.Fuse : Fusebox.Fuse {
             display_name: _("About"),
             description: _("View OS information"),
             icon: "dialog-information-symbolic",
-            supported_settings: settings
+            supported_settings: settings,
+            index: 5
         );
     }
 

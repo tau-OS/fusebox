@@ -36,6 +36,11 @@ public abstract class Fusebox.Fuse : GLib.Object {
     public Category category { get; construct; }
 
     /**
+     * The placement index of the fuse; starts at 0.
+     */
+     public int index { get; construct; }
+
+    /**
      * The unique name representing the Fuse.
      *
      * It is also used to recognise it with the open-fuse command.

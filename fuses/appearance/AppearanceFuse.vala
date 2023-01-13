@@ -20,7 +20,8 @@ public class Appearance.Fuse : Fusebox.Fuse {
             display_name: _("Appearance"),
             description: _("Choose an accent color and change wallpaper"),
             icon: "applications-graphics-symbolic",
-            supported_settings: settings
+            supported_settings: settings,
+            index: 0
         );
 
         Bis.init ();
