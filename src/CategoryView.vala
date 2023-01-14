@@ -24,6 +24,7 @@ namespace Fusebox {
         public Fusebox.Category personal_category { get; construct; }
         public Fusebox.Category network_category { get; construct; }
         public Fusebox.Category system_category { get; construct; }
+        public Fusebox.Category custom_category { get; construct; }
 
         public string? fuse_to_open { get; construct set; default = null; }
 
@@ -36,6 +37,7 @@ namespace Fusebox {
             personal_category = new Fusebox.Category (Fusebox.Fuse.Category.PERSONAL);
             network_category = new Fusebox.Category (Fusebox.Fuse.Category.NETWORK);
             system_category = new Fusebox.Category (Fusebox.Fuse.Category.SYSTEM);
+            custom_category = new Fusebox.Category (Fusebox.Fuse.Category.CUSTOM);
 
             fuse_search = new FusesSearch ();
             fuse_search_result = new GLib.List<SearchEntry?> ();
@@ -44,6 +46,7 @@ namespace Fusebox {
             category_box.append (network_category);
             category_box.append (personal_category);
             category_box.append (system_category);
+            category_box.append (custom_category);
 
             var category_scrolled = new Gtk.ScrolledWindow () {
                 child = category_box,
@@ -97,6 +100,9 @@ namespace Fusebox {
                 case Fusebox.Fuse.Category.SYSTEM:
                     system_category.add (icon);
                     break;
+                case Fusebox.Fuse.Category.CUSTOM:
+                    custom_category.add (icon);
+                    break;
                 default:
                     return;
             }
@@ -112,6 +118,10 @@ namespace Fusebox {
             }
 
             if (system_category.has_child ()) {
+                any_found = true;
+            }
+
+            if (custom_category.has_child ()) {
                 any_found = true;
             }
 
@@ -134,6 +144,8 @@ namespace Fusebox {
                     return _("Connections");
                 case Fuse.Category.SYSTEM:
                     return _("System");
+                case Fuse.Category.CUSTOM:
+                    return _("Miscellaneous");
             }
 
             return null;

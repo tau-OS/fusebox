@@ -20,7 +20,8 @@ public abstract class Fusebox.Fuse : GLib.Object {
     public enum Category {
         NETWORK = 0,
         PERSONAL = 1,
-        SYSTEM = 2
+        SYSTEM = 2,
+        CUSTOM = 3
     }
 
     /**
