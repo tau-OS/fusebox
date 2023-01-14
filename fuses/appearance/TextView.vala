@@ -2,11 +2,9 @@ public class Appearance.TextView : Gtk.Box {
     private const string DYSLEXIA_KEY = "dyslexia-friendly-support";
     private const string FONT_KEY = "font-name";
     private const string DOCUMENT_FONT_KEY = "document-font-name";
-    private const string MONOSPACE_FONT_KEY = "monospace-font-name";
 
     private const string OD_REG_FONT = "OpenDyslexic Regular 9";
     private const string OD_DOC_FONT = "OpenDyslexic Regular 10";
-    private const string OD_MON_FONT = "OpenDyslexicMono Regular 10";
 
     private uint scale_timeout;
 
@@ -98,21 +96,17 @@ public class Appearance.TextView : Gtk.Box {
 
         var interface_font = interface_settings.get_string (FONT_KEY);
         var document_font = interface_settings.get_string (DOCUMENT_FONT_KEY);
-        var monospace_font = interface_settings.get_string (MONOSPACE_FONT_KEY);
 
-        dyslexia_font_switch.active = interface_font == OD_REG_FONT || document_font == OD_DOC_FONT || monospace_font == OD_MON_FONT;
+        dyslexia_font_switch.active = interface_font == OD_REG_FONT || document_font == OD_DOC_FONT;
 
-        dyslexia_font_switch.state_set.connect (() => {
+        dyslexia_font_switch.notify["state"].connect (() => {
             if (dyslexia_font_switch.active) {
                 interface_settings.set_string (FONT_KEY, OD_REG_FONT);
                 interface_settings.set_string (DOCUMENT_FONT_KEY, OD_DOC_FONT);
-                interface_settings.set_string (MONOSPACE_FONT_KEY, OD_MON_FONT);
             } else {
                 interface_settings.reset (FONT_KEY);
                 interface_settings.reset (DOCUMENT_FONT_KEY);
-                interface_settings.reset (MONOSPACE_FONT_KEY);
             }
-            return Gdk.EVENT_PROPAGATE;
         });
     }
 }
