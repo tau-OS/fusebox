@@ -9,7 +9,7 @@
 
 Name:           fusebox
 Version:        0.1.6
-Release:        2
+Release:        3
 Summary:        Change system and user settings.
 
 License:        GPLv3+ and CC-BY-SA
