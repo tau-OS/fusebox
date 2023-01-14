@@ -35,7 +35,7 @@ public class Fusebox.CategoryIcon : Gtk.ListBoxRow {
             xalign = 0
         };
 
-        var layout = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var layout = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 16);
         layout.append (icon);
         layout.append (fuse_name);
         layout.add_css_class ("fuse-block");

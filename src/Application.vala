@@ -207,14 +207,14 @@ namespace Fusebox {
             var window_eventcontrollerkey = new Gtk.EventControllerKey ();
 
             var label = new Gtk.Label ("Settings") {
-                halign = Gtk.Align.START
+                halign = Gtk.Align.START,
+                margin_start = 18,
+                margin_end = 18
             };
             label.add_css_class ("view-title");
 
             var ssbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
-                hexpand = false,
-                margin_start = 18,
-                margin_end = 18
+                hexpand = false
             };
             ssbox.append (label);
             ssbox.append (search_box);
@@ -250,8 +250,8 @@ namespace Fusebox {
             add_window (main_window);
             main_window.present ();
             main_window.set_size_request (360, 360);
-            main_window.default_height = 800;
-            main_window.default_width = 830;
+            main_window.default_height = 600;
+            main_window.default_width = 800;
             // Actions
             actions = new SimpleActionGroup ();
             actions.add_action_entries (ACTION_ENTRIES, this);

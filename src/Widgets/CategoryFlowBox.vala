@@ -30,6 +30,7 @@ namespace Fusebox {
             var category_label = new Gtk.Label (Fusebox.CategoryView.get_category_name (category));
             category_label.halign = Gtk.Align.START;
             category_label.add_css_class ("heading");
+            category_label.add_css_class ("dim-label");
 
             flowbox = new Gtk.ListBox () {
                 activate_on_single_click = true,

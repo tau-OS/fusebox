@@ -42,7 +42,10 @@ namespace Fusebox {
             fuse_search = new FusesSearch ();
             fuse_search_result = new GLib.List<SearchEntry?> ();
 
-            var category_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+            var category_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+                margin_start = 18,
+                margin_end = 18
+            };
             category_box.append (network_category);
             category_box.append (personal_category);
             category_box.append (system_category);
