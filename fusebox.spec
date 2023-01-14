@@ -95,6 +95,8 @@ git submodule update --init --recursive
 %{_libdir}/fusebox-1/personal/libfuse-appearance.so
 %{_libdir}/fusebox-1/system/libfuse-about.so
 %{_libdir}/fusebox-1/system/libfuse-datetime.so
+%{_libdir}/fusebox-1/system/libfuse-startup.so
+%{_libdir}/fusebox-1/system/libfuse-locale.so
 %{_libdir}/girepository-1.0/fusebox-1.typelib
 %{_libdir}/libfusebox-1.so
 %{_libdir}/libfusebox-1.so.1
