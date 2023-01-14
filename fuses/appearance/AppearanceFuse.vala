@@ -34,7 +34,7 @@ public class Appearance.Fuse : Fusebox.Fuse {
             var text_view = new TextView ();
 
             main_stack = new Gtk.Stack ();
-            main_stack.add_titled (appearance_view, "desktop", _("Dekstop"));
+            main_stack.add_titled (appearance_view, "desktop", _("Desktop"));
             main_stack.add_titled (text_view, "text", _("Text"));
             //  if (GLib.Environment.find_program_in_path ("kiri-panel") != null) {
             //      main_stack.add_titled (dock_view, "dock", _("Dock"));
