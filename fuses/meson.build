@@ -3,3 +3,4 @@
 subdir('appearance')
 subdir('datetime')
 subdir('about')
+subdir('locale')

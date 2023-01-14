@@ -8,7 +8,8 @@ gnome = import('gnome')
 
 add_project_arguments([
         '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
-        '-DG_LOG_DOMAIN="co.tauos.Fusebox"'
+        '-DG_LOG_DOMAIN="co.tauos.Fusebox"',
+        '-DGNOME_DESKTOP_USE_UNSTABLE_API',
     ],
     language: 'c'
 )
