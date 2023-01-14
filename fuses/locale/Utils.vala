@@ -1,11 +1,11 @@
 namespace Locale {
-  private class LanguageLocale {
+  private class LocaleModel {
     public string locale;
     public string name;
     public string native_name;
     public string language_code;
 
-    public LanguageLocale.from_locale(string locale) {
+    public LocaleModel.from_locale(string locale) {
       string language_code;
       Gnome.Languages.parse_locale(locale, out language_code, null, null, null);
       this.locale = locale;
@@ -15,30 +15,67 @@ namespace Locale {
     }
   }
 
-  private GLib.List<LanguageLocale?> get_all_languages() {
+  private GLib.List<LocaleModel?> get_all_locales() {
     var locales = Gnome.Languages.get_all_locales();
-    var languages = new GLib.List<LanguageLocale>();
+    var languages = new GLib.List<LocaleModel>();
 
     foreach (var locale in locales) {
-      languages.append(new LanguageLocale.from_locale(locale));
+      languages.append(new LocaleModel.from_locale(locale));
     }
 
     return languages;
   }
 
-  private LanguageLocale get_current_language(Locale1Proxy proxy) {
-    string? locale = null;
+  private struct SystemLocale {
+    public LocaleModel language;
+    public LocaleModel? region;
+  }
+
+  private SystemLocale get_system_locale(Locale1Proxy proxy) {
+    LocaleModel? language_locale = null;
     foreach (var l in proxy.locale) {
       if (l.has_prefix("LANG=")) {
-        locale = l.split("=")[1];
+        language_locale = new LocaleModel.from_locale(l.split("=")[1]);
         break;
       }
     }
 
-    if (locale == null) {
-      critical("Could not get locale from Locale1");
+    if (language_locale == null) {
+      critical("Could not get languagelocale from Locale1");
     }
 
-    return new LanguageLocale.from_locale(locale);
+    LocaleModel? region_locale = null;
+    foreach (var l in proxy.locale) {
+      if (l.has_prefix("LC_MEASUREMENT=")) {
+        region_locale = new LocaleModel.from_locale(l.split("=")[1]);
+        break;
+      }
+    }
+
+    return SystemLocale() {
+      language = language_locale,
+      region = region_locale
+    };
+  }
+
+  // ? Region is also a locale, although for fomatting of dates, times, currency, etc.
+  private void update_system_locale(Locale1Proxy proxy, SystemLocale system_locale) {
+    var locales = new GLib.Array<string>();
+    locales.append_val("LANG=%s".printf(system_locale.language.locale));
+
+    var region = system_locale.region?.locale;
+    if (region != null) {
+      locales.append_val("LC_MEASUREMENT=%s".printf(region));
+      locales.append_val("LC_MONETARY=%s".printf(region));
+      locales.append_val("LC_NUMERIC=%s".printf(region));
+      locales.append_val("LC_PAPER=%s".printf(region));
+      locales.append_val("LC_TIME=%s".printf(region));
+    }
+
+    try {
+      proxy.set_locale(locales.data, true);
+    } catch (GLib.Error e) {
+      critical("Could not set region locale: %s", e.message);
+    }
   }
 }

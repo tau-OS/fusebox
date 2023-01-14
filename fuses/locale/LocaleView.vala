@@ -15,8 +15,8 @@ public interface Locale1Proxy : GLib.Object {
 
 public class Locale.LocaleView : Gtk.Box {
     private Locale1Proxy locale1_proxy;
-    private LanguageLocale current_language_locale;
-    private signal void current_language_updated ();
+    private SystemLocale current_system_locale;
+    private signal void current_system_locale_updated ();
     construct {
         try {
             var connection = Bus.get_sync (BusType.SYSTEM);
@@ -29,7 +29,7 @@ public class Locale.LocaleView : Gtk.Box {
             critical (e.message);
         }
 
-        this.current_language_locale = get_current_language (locale1_proxy);
+        this.current_system_locale = get_system_locale (locale1_proxy);
 
         var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
 
@@ -41,9 +41,10 @@ public class Locale.LocaleView : Gtk.Box {
                 var language = dialog.selected_language;
                 dialog.destroy ();
                 try {
-                    locale1_proxy.set_locale (new string[] {"LANG=" + language.locale}, true);
-                    this.current_language_locale = language;
-                    current_language_updated();
+                    var new_system_locale = get_system_locale (locale1_proxy);
+                    new_system_locale.language = language;
+                    this.current_system_locale = new_system_locale;
+                    current_system_locale_updated ();
                 } catch (GLib.Error e) {
                     critical (e.message);
                 }
@@ -53,9 +54,9 @@ public class Locale.LocaleView : Gtk.Box {
         var language_block = new He.MiniContentBlock.with_details(_("Language"), null, language_button) {
             hexpand = true,
         };
-        language_block.subtitle = this.current_language_locale.name;
-        this.current_language_updated.connect (() => {
-            language_block.subtitle = this.current_language_locale.name;
+        language_block.subtitle = this.current_system_locale.language.name;
+        this.current_system_locale_updated.connect (() => {
+            language_block.subtitle = this.current_system_locale.language.name;
         });
         mbox.append(language_block);
 
@@ -63,6 +64,10 @@ public class Locale.LocaleView : Gtk.Box {
         var format_block = new He.MiniContentBlock.with_details(_("Format"), null, format_button) {
             hexpand = true,
         };
+        format_block.subtitle = this.current_system_locale.region?.name ?? this.current_system_locale.language.name;
+        this.current_system_locale_updated.connect (() => {
+            format_block.subtitle = this.current_system_locale.region?.name ?? this.current_system_locale.language.name;
+        });
         mbox.append(format_block);
 
         var clamp = new Bis.Latch ();

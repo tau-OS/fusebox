@@ -1,10 +1,10 @@
 class Locale.LanguagePicker : He.Window {
-  static GLib.List<Locale.LanguageLocale> language_list;
+  static GLib.List<Locale.LocaleModel> language_list;
   static construct {
-    language_list = get_all_languages ();
+    language_list = get_all_locales ();
   }
 
-  public Locale.LanguageLocale? selected_language { get; private set; }
+  public Locale.LocaleModel? selected_language { get; private set; }
 
   public LanguagePicker (He.ApplicationWindow parent) {
     this.parent = parent;

@@ -1,7 +1,7 @@
 class Locale.LanguageRow : Gtk.ListBoxRow {
-  public LanguageLocale language_locale { get; construct; }
+  public LocaleModel language_locale { get; construct; }
 
-  public LanguageRow (LanguageLocale language_locale) {
+  public LanguageRow (LocaleModel language_locale) {
     Object (language_locale: language_locale);
   }
 
