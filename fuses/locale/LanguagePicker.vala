@@ -49,10 +49,10 @@ class Locale.LanguagePicker : He.Window {
       listbox.append (new Locale.LanguageRow (language));
     }
     listbox.set_filter_func((row) => {
-      return (row as Locale.LanguageRow).language_locale.name.down ().contains (search_entry.text.down ());
+      return ((Locale.LanguageRow)row).language_locale.name.down ().contains (search_entry.text.down ());
     });
     listbox.set_sort_func((row1, row2) => {
-      return (row1 as Locale.LanguageRow).language_locale.name.collate ((row2 as Locale.LanguageRow).language_locale.name);
+      return ((Locale.LanguageRow)row1).language_locale.name.collate (((Locale.LanguageRow)row2).language_locale.name);
     });
     search_entry.changed.connect (() => {
       listbox.invalidate_filter ();
