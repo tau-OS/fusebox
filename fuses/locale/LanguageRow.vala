@@ -1,8 +1,8 @@
-class Locale.LanguageRow : Gtk.ListBoxRow {
-  public LocaleModel language_locale { get; construct; }
+class Locale.LocaleRow : Gtk.ListBoxRow {
+  public LocaleModel locale { get; construct; }
 
-  public LanguageRow (LocaleModel language_locale) {
-    Object (language_locale: language_locale);
+  public LocaleRow (LocaleModel locale) {
+    Object (locale: locale);
   }
 
   construct {
@@ -10,13 +10,13 @@ class Locale.LanguageRow : Gtk.ListBoxRow {
     box.add_css_class ("mini-content-block");
     set_child (box);
 
-    var name = new Gtk.Label (language_locale.name) {
+    var name = new Gtk.Label (locale.name) {
       xalign = 0
     };
     name.add_css_class ("cb-title");
     box.append (name);
 
-    var native_name = new Gtk.Label (language_locale.native_name) {
+    var native_name = new Gtk.Label (locale.native_name) {
       xalign = 0
     };
     native_name.add_css_class ("cb-subtitle");

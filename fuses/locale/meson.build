@@ -2,6 +2,7 @@ fuse_files = files(
     'LocaleFuse.vala',
     'LocaleView.vala',
     'LanguagePicker.vala',
+    'FormatPicker.vala',
     'LanguageRow.vala',
     'Utils.vala',
 )

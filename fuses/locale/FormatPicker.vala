@@ -1,12 +1,12 @@
-class Locale.LanguagePicker : He.Window {
-  static GLib.List<Locale.LocaleModel> language_list;
+class Locale.FormatPicker : He.Window {
+  static GLib.List<Locale.LocaleModel> format_list;
   static construct {
-    language_list = get_all_locales ();
+    format_list = get_all_locales ();
   }
 
-  public Locale.LocaleModel? selected_language { get; private set; }
+  public Locale.LocaleModel? selected_format { get; private set; }
 
-  public LanguagePicker (He.ApplicationWindow parent) {
+  public FormatPicker (He.ApplicationWindow parent) {
     this.parent = parent;
   }
 
@@ -17,7 +17,7 @@ class Locale.LanguagePicker : He.Window {
 
     var content = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
 
-    var title = new Gtk.Label (_("Language")) {
+    var title = new Gtk.Label (_("Format")) {
       margin_top = 34,
       margin_start = 18,
       halign = Gtk.Align.START,
@@ -26,7 +26,7 @@ class Locale.LanguagePicker : He.Window {
     content.append(title);
 
     var search_entry = new Gtk.SearchEntry() {
-      placeholder_text = "Search languages…",
+      placeholder_text = "Search formats…",
       margin_start = 18,
       halign = Gtk.Align.START
     };
@@ -44,8 +44,8 @@ class Locale.LanguagePicker : He.Window {
 
     };
     listbox.add_css_class ("content-list");
-    foreach (var language in language_list) {
-      listbox.append (new Locale.LocaleRow (language));
+    foreach (var format in format_list) {
+      listbox.append (new Locale.LocaleRow (format));
     }
     listbox.set_filter_func((row) => {
       return ((Locale.LocaleRow)row).locale.name.down ().contains (search_entry.text.down ());
@@ -72,11 +72,11 @@ class Locale.LanguagePicker : He.Window {
     });
     button_box.append (cancel_button);
 
-    var apply_button = new He.FillButton (_("Set Language"));
+    var apply_button = new He.FillButton (_("Set Format"));
     apply_button.clicked.connect (() => {
       var selected = listbox.get_selected_row () as Locale.LocaleRow;
       if (selected != null) {
-        selected_language = selected.locale;
+        selected_format = selected.locale;
       }
     });
     button_box.append (apply_button);

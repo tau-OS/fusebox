@@ -28,7 +28,7 @@ namespace Locale {
 
   private struct SystemLocale {
     public LocaleModel language;
-    public LocaleModel? region;
+    public LocaleModel? format;
   }
 
   private SystemLocale get_system_locale(Locale1Proxy proxy) {
@@ -44,38 +44,37 @@ namespace Locale {
       critical("Could not get languagelocale from Locale1");
     }
 
-    LocaleModel? region_locale = null;
+    LocaleModel? format_locale = null;
     foreach (var l in proxy.locale) {
       if (l.has_prefix("LC_MEASUREMENT=")) {
-        region_locale = new LocaleModel.from_locale(l.split("=")[1]);
+        format_locale = new LocaleModel.from_locale(l.split("=")[1]);
         break;
       }
     }
 
     return SystemLocale() {
       language = language_locale,
-      region = region_locale
+      format = format_locale
     };
   }
 
-  // ? Region is also a locale, although for fomatting of dates, times, currency, etc.
   private void update_system_locale(Locale1Proxy proxy, SystemLocale system_locale) {
     var locales = new GLib.Array<string>();
     locales.append_val("LANG=%s".printf(system_locale.language.locale));
 
-    var region = system_locale.region?.locale;
-    if (region != null) {
-      locales.append_val("LC_MEASUREMENT=%s".printf(region));
-      locales.append_val("LC_MONETARY=%s".printf(region));
-      locales.append_val("LC_NUMERIC=%s".printf(region));
-      locales.append_val("LC_PAPER=%s".printf(region));
-      locales.append_val("LC_TIME=%s".printf(region));
+    var format = system_locale.format?.locale;
+    if (format != null) {
+      locales.append_val("LC_MEASUREMENT=%s".printf(format));
+      locales.append_val("LC_MONETARY=%s".printf(format));
+      locales.append_val("LC_NUMERIC=%s".printf(format));
+      locales.append_val("LC_PAPER=%s".printf(format));
+      locales.append_val("LC_TIME=%s".printf(format));
     }
 
     try {
       proxy.set_locale(locales.data, true);
     } catch (GLib.Error e) {
-      critical("Could not set region locale: %s", e.message);
+      critical("Could not set system locale: %s", e.message);
     }
   }
 }
