@@ -1,20 +1,20 @@
 fuse_files = files(
-    'AppearanceFuse.vala',
-    'AppearanceView.vala',
-    'WallpaperGrid.vala',
-    # 'DockView.vala',
+    'LocaleFuse.vala',
+    'LocaleView.vala',
+    'LanguagePicker.vala',
+    'LanguageRow.vala',
+    'Utils.vala',
 )
 
-shared_module(
-    'fuse-appearance',
+shared_module('fuse-locale',
     fuse_files,
     dependencies: [
-        libfusebox_dep,
         meson.get_compiler('vala').find_library('posix'),
+        libfusebox_dep,
         dependency('libhelium-1'),
-        dependency('gee-0.8'),
         dependency('libbismuth-1', fallback: [ 'libbismuth', 'bismuth_dep' ], version: '>=1.0.0'),
+        dependency('gnome-desktop-4'),
     ],
     install: true,
-    install_dir: join_paths(fuses_dir, 'personal')
+    install_dir: join_paths(fuses_dir, 'system')
 )

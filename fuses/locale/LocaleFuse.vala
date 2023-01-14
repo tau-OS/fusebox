@@ -1,31 +1,37 @@
-public class DateTime.Fuse : Fusebox.Fuse {
+public class Locale.Fuse : Fusebox.Fuse {
+    private const string LOCALE = "locale";
     private Gtk.Grid main_grid;
 
     public Fuse () {
         var settings = new GLib.HashTable<string, string?> (null, null);
-        settings.set ("DateTime", null);
+        settings.set ("locale", null);
 
         Object (
-            category: Category.SYSTEM,
-            code_name: "co.tauos.Fusebox.DateTime",
-            display_name: _("Date & Time"),
-            description: _("Setup time and date"),
-            icon: "document-open-recent-symbolic",
+            category: Category.PERSONAL,
+            code_name: "co.tauos.Fusebox.Locale",
+            display_name: _("Locale"),
+            description: _("Change system locale"),
+            icon: "settings-locale",
             supported_settings: settings,
-            index: 1
+            index: 2
         );
-
-        Bis.init ();
     }
 
     public override Gtk.Widget get_widget () {
         if (main_grid == null) {
-            var datetime_view = new DateTimeView ();
+            var locale_view = new LocaleView ();
+
+            var view_label = new Gtk.Label ("Locale") {
+                halign = Gtk.Align.START,
+                margin_start = 18
+            };
+            view_label.add_css_class ("view-title");
 
             main_grid = new Gtk.Grid () {
                 row_spacing = 12
             };
-            main_grid.attach (datetime_view, 0, 0);
+            main_grid.attach (view_label, 0, 0);
+            main_grid.attach (locale_view, 0, 1);
         }
 
         return main_grid;
@@ -48,15 +54,14 @@ public class DateTime.Fuse : Fusebox.Fuse {
             null, null
         );
 
-        search_results.set ("%s → %s".printf (display_name, _("Date")), "date");
-        search_results.set ("%s → %s".printf (display_name, _("Time")), "time");
+        search_results.set ("%s → %s".printf (display_name, _("Locale")), LOCALE);
 
         return search_results;
     }
 }
 
 public Fusebox.Fuse get_fuse (Module module) {
-    debug ("Activating DateTime Fuse");
-    var fuse = new DateTime.Fuse ();
+    debug ("Activating Locale Fuse");
+    var fuse = new Locale.Fuse ();
     return fuse;
 }

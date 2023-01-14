@@ -20,7 +20,8 @@ public class Appearance.Fuse : Fusebox.Fuse {
             display_name: _("Appearance"),
             description: _("Choose an accent color and change wallpaper"),
             icon: "applications-graphics-symbolic",
-            supported_settings: settings
+            supported_settings: settings,
+            index: 0
         );
 
         Bis.init ();
@@ -29,11 +30,13 @@ public class Appearance.Fuse : Fusebox.Fuse {
     public override Gtk.Widget get_widget () {
         if (main_grid == null) {
             appearance_view = new AppearanceView (this);
-            var dock_view = new DockView (this);
+            //  var dock_view = new DockView (this);
 
             main_stack = new Gtk.Stack ();
             main_stack.add_titled (appearance_view, "appearance", _("Appearance"));
-            main_stack.add_titled (dock_view, "dock", _("Dock"));
+            //  if (GLib.Environment.find_program_in_path ("kiri-panel") != null) {
+            //      main_stack.add_titled (dock_view, "dock", _("Dock"));
+            //  }
 
             var stack_switcher = new He.ViewSwitcher () {
                 margin_start = 18
@@ -51,11 +54,11 @@ public class Appearance.Fuse : Fusebox.Fuse {
     }
 
     public override void shown () {
-        appearance_view.wallpaper_view.update_wallpaper_folder ();
+        appearance_view.wallpaper_view.update_wallpaper_folder.begin ();
     }
 
     public override void hidden () {
-        appearance_view.wallpaper_view.cancel_thumbnail_generation ();
+        appearance_view.wallpaper_view.cancel_thumbnail_generation.begin ();
     }
 
     public override void search_callback (string location) {

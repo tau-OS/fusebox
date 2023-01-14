@@ -20,7 +20,8 @@ public abstract class Fusebox.Fuse : GLib.Object {
     public enum Category {
         NETWORK = 0,
         PERSONAL = 1,
-        SYSTEM = 2
+        SYSTEM = 2,
+        CUSTOM = 3
     }
 
     /**
@@ -34,6 +35,11 @@ public abstract class Fusebox.Fuse : GLib.Object {
      * Possible {@link Category} values are PERSONAL, NETWORK or SYSTEM.
      */
     public Category category { get; construct; }
+
+    /**
+     * The placement index of the fuse; starts at 0.
+     */
+     public int index { get; construct; }
 
     /**
      * The unique name representing the Fuse.

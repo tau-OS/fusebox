@@ -1,6 +1,5 @@
 public class AppearanceView : Gtk.Box {
     private static GLib.Settings interface_settings;
-    private static GLib.Settings theme_settings;
     private static GLib.Settings tau_appearance_settings;
     private PrefersAccentColorButton red;
     private PrefersAccentColorButton orange;
@@ -96,7 +95,6 @@ public class AppearanceView : Gtk.Box {
     static construct {
         tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
         interface_settings = new GLib.Settings ("org.gnome.desktop.interface");
-        theme_settings = new GLib.Settings ("org.gnome.shell.extensions.user-theme");
     }
 
     construct {
@@ -429,14 +427,11 @@ public class AppearanceView : Gtk.Box {
 
     private void set_color_scheme (He.Desktop.ColorScheme color_scheme) {
         if (color_scheme == He.Desktop.ColorScheme.NO_PREFERENCE) {
-            interface_settings.set_string ("gtk-theme", "Adwaita");
-            theme_settings.set_string ("name", "Helium");
+            interface_settings.set_string ("gtk-theme", "Helium");
         } else if (color_scheme == He.Desktop.ColorScheme.LIGHT) {
-            interface_settings.set_string ("gtk-theme", "Adwaita");
-            theme_settings.set_string ("name", "Helium");
+            interface_settings.set_string ("gtk-theme", "Helium");
         } else if (color_scheme == He.Desktop.ColorScheme.DARK) {
-            interface_settings.set_string ("gtk-theme", "Adwaita-dark");
-            theme_settings.set_string ("name", "Helium-dark");
+            interface_settings.set_string ("gtk-theme", "Helium-dark");
         }
 
         interface_settings.set_enum ("color-scheme", color_scheme);
