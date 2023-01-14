@@ -41,10 +41,11 @@ public class Startup.Fuse : Fusebox.Fuse {
         Object (
             category: Category.SYSTEM,
             code_name: "co.tauos.Fusebox.Startup",
-            display_name: _("Startup Applications"),
+            display_name: _("App Autostart"),
             description: _("Manage applications that start automatically"),
             icon: "system-run-symbolic",
-            supported_settings: settings
+            supported_settings: settings,
+            index: 6
         );
     }
 
@@ -55,7 +56,7 @@ public class Startup.Fuse : Fusebox.Fuse {
                 row_spacing = 12
             };
 
-            var view_label = new Gtk.Label ("Startup Applications") {
+            var view_label = new Gtk.Label ("App Autostart") {
                 halign = Gtk.Align.START,
                 margin_start = 18
             };
@@ -87,8 +88,7 @@ public class Startup.Fuse : Fusebox.Fuse {
             null, null
         );
 
-        //  search_results.set ("%s → %s".printf (display_name, _("About")), OS);
-        //  search_results.set ("%s → %s".printf (display_name, _("Report A Problem")), OS);
+        search_results.set ("%s → %s".printf (display_name, _("Startup")), STARTUP);
 
         return search_results;
     }

@@ -1,26 +1,37 @@
 public class StartupAppDialog : He.Window {
     public Startup.Backend.KeyFile keyFile { get; set construct; }
     private Startup.Backend.KeyFile kf { get; set; }
-
     private Gtk.Box mainBox = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
 
-    public StartupAppDialog (Startup.Backend.KeyFile keyfile) {
+    public StartupAppDialog (Startup.Backend.KeyFile keyfile, He.ApplicationWindow parent) {
         Object (keyFile: keyfile);
+        this.parent = parent;
+        this.transient_for = parent;
+        this.modal = true;
+        this.resizable = false;
+        this.set_size_request (440, 450);
     }
 
     construct {
-        // we dupe the keyfile so we do not actually segfault
-        // kf = keyFile.get_instance ();
-
-
-        this.modal = true;
-        var title = new Gtk.Label (_("Edit Startup Entry"));
+        var title = new Gtk.Label (_("Edit Startup Entry")) {
+            margin_top = 34,
+            margin_start = 18,
+            halign = Gtk.Align.START
+        };
         title.add_css_class ("view-title");
         mainBox.append (title);
 
-        var icon_btn = new Gtk.Button ();
+        var icon_btn = new He.TintButton ("") {
+            width_request = 128,
+            height_request = 128,
+            halign = Gtk.Align.CENTER
+        };
         // TODO: lains: do icon sizing
-        var btn_content = new He.ButtonContent ();
+        var btn_content = new He.ButtonContent () {
+            valign = Gtk.Align.CENTER,
+            halign = Gtk.Align.CENTER
+        };
+        btn_content.image.pixel_size = 96;
 
         // get icon name
         try {
@@ -29,16 +40,19 @@ public class StartupAppDialog : He.Window {
         } catch (GLib.KeyFileError e) {
             warning (e.message);
         }
-        // var icon = new Gtk.Image ();
-        icon_btn.set_child (btn_content);
+        icon_btn.child = (btn_content);
 
         mainBox.append (icon_btn);
 
-
         // settings content
-        var name_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        var name_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
+            margin_start = 18,
+            margin_end = 18
+        };
 
-        var name_label = new Gtk.Label (_("Name"));
+        var name_label = new Gtk.Label (_("Name")) {
+            xalign = 0
+        };
         name_label.add_css_class ("cb-title");
         name_view.append (name_label);
 
@@ -47,13 +61,6 @@ public class StartupAppDialog : He.Window {
         name_view.append (name_entry);
 
         // connect to keyfile's name
-
-        // keyfile desktop entry object group of keyfile
-        // var kf = keyFile.keyfile.get_keys (KeyFileDesktop.GROUP);
-        // name_entry.bind_property ("text", keyFile, "name", GLib.BindingFlags.BIDIRECTIONAL);
-
-        // get text
-        // !? segfault????
         try {
             var name = keyFile.keyfile_get_string (KeyFileDesktop.KEY_NAME);
             name_entry.text = name;
@@ -68,9 +75,14 @@ public class StartupAppDialog : He.Window {
         mainBox.append (name_view);
 
         // Exec
-        var command_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        var command_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
+            margin_start = 18,
+            margin_end = 18
+        };
 
-        var command_label = new Gtk.Label (_("Execute"));
+        var command_label = new Gtk.Label (_("Execute")) {
+            xalign = 0
+        };
         command_label.add_css_class ("cb-title");
         command_view.append (command_label);
 
@@ -89,9 +101,14 @@ public class StartupAppDialog : He.Window {
         command_view.append (command_entry);
         mainBox.append (command_view);
 
-        var comment_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        var comment_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
+            margin_start = 18,
+            margin_end = 18
+        };
 
-        var comment_label = new Gtk.Label (_("Comment"));
+        var comment_label = new Gtk.Label (_("Comment")) {
+            xalign = 0
+        };
         comment_label.add_css_class ("cb-title");
         comment_view.append (comment_label);
 
@@ -110,30 +127,16 @@ public class StartupAppDialog : He.Window {
         comment_view.append (comment_entry);
         mainBox.append (comment_view);
 
-        var terminal_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        // checkbox
-        var terminal_check = new Gtk.CheckButton.with_label (_("Run in Terminal"));
-        terminal_check.hexpand = true;
-        // connect to keyfile's terminal
-        try {
-            var terminal = keyFile.keyfile_get_bool (KeyFileDesktop.KEY_TERMINAL);
-            terminal_check.active = terminal;
-        } catch (GLib.KeyFileError e) {
-            warning (e.message);
-        }
-
-        terminal_check.notify["active"].connect (() => {
-            keyFile.keyfile.set_boolean (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_TERMINAL, terminal_check.active);
-        });
-        terminal_view.append (terminal_check);
-
-        mainBox.append (terminal_view);
-
         // categories
         // todo: use He.Chip for categories
-        var categories_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        var categories_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
+            margin_start = 18,
+            margin_end = 18
+        };
 
-        var categories_label = new Gtk.Label (_("Categories"));
+        var categories_label = new Gtk.Label (_("Categories")) {
+            xalign = 0
+        };
         categories_label.add_css_class ("cb-title");
         categories_view.append (categories_label);
 
@@ -152,11 +155,38 @@ public class StartupAppDialog : He.Window {
         categories_view.append (categories_entry);
         mainBox.append (categories_view);
 
+        var terminal_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
+            margin_start = 18,
+            margin_end = 18,
+            margin_bottom = 12
+        };
+
+        // checkbox
+        var terminal_check = new Gtk.CheckButton.with_label (_("Run in Terminal"));
+        terminal_check.hexpand = true;
+        // connect to keyfile's terminal
+        try {
+            var terminal = keyFile.keyfile_get_bool (KeyFileDesktop.KEY_TERMINAL);
+            terminal_check.active = terminal;
+        } catch (GLib.KeyFileError e) {
+            warning (e.message);
+        }
+
+        terminal_check.notify["active"].connect (() => {
+            keyFile.keyfile.set_boolean (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_TERMINAL, terminal_check.active);
+        });
+        terminal_view.append (terminal_check);
+
+        mainBox.append (terminal_view);
 
         // finish up
-        var controls = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-        controls.hexpand = true;
-        controls.halign = Gtk.Align.CENTER;
+        var controls = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6) {
+            hexpand = true,
+            homogeneous = true,
+            margin_start = 18,
+            margin_end = 18,
+            margin_bottom = 18
+        };
 
         var cancel_btn = new He.TextButton (_("Cancel"));
         cancel_btn.clicked.connect (() => {
@@ -172,6 +202,9 @@ public class StartupAppDialog : He.Window {
 
         mainBox.append (controls);
 
-        child = mainBox;
+        var winhandle = new Gtk.WindowHandle ();
+        winhandle.set_child (mainBox);
+
+        child = winhandle;
     }
 }

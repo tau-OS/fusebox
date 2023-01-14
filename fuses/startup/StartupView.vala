@@ -9,17 +9,10 @@ public class StartupView : Gtk.Box {
     // TODO: load gsettings to show system apps
     public bool show_system_apps { get; set construct; }
 
-
     construct {
-
-        // container for everything
-        var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        mbox.margin_start = 24;
-
-
         // the actual list to contain the startup apps
         var list = new Gtk.ListBox ();
-        list.set_show_separators (true);
+        list.add_css_class ("content-list");
 
         // set spacing between rows
         // gtk4
@@ -43,19 +36,21 @@ public class StartupView : Gtk.Box {
         lbox.add_css_class ("mini-content-block");
         lbox.append (list);
 
-        var clamp = new Bis.Latch ();
+        var overlay = new He.OverlayButton ("", null, null) {
+            margin_start = 18,
+            margin_end = 18,
+            margin_bottom = 18,
+            icon = "list-add-symbolic",
+            child = (lbox),
+            label = _("Create")
+        };
 
-        var overlay = new He.OverlayButton ("", null, null);
-        overlay.icon = "list-add-symbolic";
-        overlay.child = (lbox);
-
-        clamp.child = (overlay);
-
-        mbox.append (clamp);
+        var clamp = new Bis.Latch () {
+            child = (overlay)
+        };
 
         // return the thing
-
-        append (mbox);
+        append (clamp);
         //
     }
     private Gtk.ListBoxRow[] get_startup_apps () {
@@ -88,9 +83,8 @@ private class AppEntry : Gtk.Box {
     private string app_desc { get; set; }
     private string app_icon { get; set; }
     private bool app_enabled { get; set; }
+
     public string create_icon (string iconname) {
-
-
         var icon_theme = Gtk.IconTheme.get_for_display (Gdk.Display.get_default ());
         if (icon_theme.has_icon (iconname)) {
             return iconname;
@@ -104,56 +98,57 @@ private class AppEntry : Gtk.Box {
     }
 
     construct {
-
         app_name = keyfile.keyfile_get_string (KeyFileDesktop.KEY_NAME);
         app_desc = keyfile.keyfile_get_string (KeyFileDesktop.KEY_COMMENT);
         app_icon = keyfile.keyfile_get_string (KeyFileDesktop.KEY_ICON);
         app_enabled = keyfile.active;
 
-
         orientation = Gtk.Orientation.HORIZONTAL;
         spacing = 6;
+        add_css_class ("mini-content-block");
+
+        var label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
+            halign = Gtk.Align.START
+        };
 
         var icon = new Gtk.Image () {
             icon_name = app_icon,
             pixel_size = 48
         };
         append (icon);
-
         notify["app-icon"].connect (() => {
             icon.icon_name = create_icon (app_icon);
         });
 
-        var label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        label_box.halign = Gtk.Align.START;
-        var name = new Gtk.Label (app_name);
+        var name = new Gtk.Label (app_name) {
+            xalign = 0
+        };
         name.add_css_class ("cb-title");
-        name.halign = Gtk.Align.START;
         label_box.append (name);
-
         notify["app-name"].connect (() => {
             name.label = app_name;
         });
 
-        var desc = new Gtk.Label (app_desc);
+        var desc = new Gtk.Label (app_desc) {
+            xalign = 0
+        };
         desc.add_css_class ("cb-subtitle");
-        desc.halign = Gtk.Align.START;
         label_box.append (desc);
-
         notify["app-desc"].connect (() => {
             desc.label = app_desc;
         });
-
         append (label_box);
 
         // toggle switch at the end of the box
-        var app_switch = new Gtk.Switch ();
-        app_switch.halign = Gtk.Align.END;
-        app_switch.hexpand = true;
-        app_switch.valign = Gtk.Align.CENTER;
-        app_switch.active = app_enabled;
+        var app_switch = new Gtk.Switch () {
+            halign = Gtk.Align.END,
+            valign = Gtk.Align.CENTER,
+            margin_end = 6,
+            hexpand = true,
+            active = app_enabled,
+            tooltip_text = _("Turn on/off this app autostart entry.")
+        };
         append (app_switch);
-
         app_switch.notify["active"].connect (() => {
             toggle_active (app_switch.active);
             save ();
@@ -161,36 +156,23 @@ private class AppEntry : Gtk.Box {
 
         // edit button
         // todo: move to overlay
-        var edit_button = new Gtk.Button ();
-        edit_button.add_css_class ("flat");
-        edit_button.add_css_class ("suggested-action");
-
-        var edit_icon = new Gtk.Image () {
-            icon_name = "document-edit-symbolic",
-            pixel_size = 16
+        var edit_button = new He.DisclosureButton ("") {
+            icon = "document-edit-symbolic",
+            tooltip_text = _("Edit this app autostart entry.")
         };
-        edit_button.set_child (edit_icon);
         append (edit_button);
-
         edit_button.clicked.connect (() => {
-            // var keyname = keyfile.keyfile_get_string ("Name");
-            // print ("edit button clicked: %s\n", keyname);
-            new StartupAppDialog (keyfile.get_instance (keyfile.path)).show ();
-            // dialog.show ();
+            new StartupAppDialog (keyfile.get_instance (keyfile.path), He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this)).show ();
         });
 
 
         // delete button
 
-        var delete_button = new Gtk.Button ();
-        delete_button.add_css_class ("flat");
-        delete_button.add_css_class ("destructive-action");
-
-        var delete_icon = new Gtk.Image () {
-            icon_name = "list-remove-symbolic",
-            pixel_size = 16
+        var delete_button = new He.DisclosureButton ("") {
+            icon = "user-trash-symbolic",
+            tooltip_text = _("Delete this app autostart entry.")
         };
-        delete_button.set_child (delete_icon);
+        delete_button.add_css_class ("meson-red");
         append (delete_button);
         delete_button.clicked.connect (delete);
 

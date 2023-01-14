@@ -55,6 +55,15 @@ public class Startup.Backend.Monitor : Object {
             case FileMonitorEvent.CHANGED:
                 file_edited (path);
                 break;
+            case FileMonitorEvent.CHANGES_DONE_HINT:
+            case FileMonitorEvent.UNMOUNTED:
+            case FileMonitorEvent.MOVED_IN:
+            case FileMonitorEvent.ATTRIBUTE_CHANGED:
+            case FileMonitorEvent.MOVED:
+            case FileMonitorEvent.MOVED_OUT:
+            case FileMonitorEvent.PRE_UNMOUNT:
+            case FileMonitorEvent.RENAMED:
+                break;
         }
     }
 }

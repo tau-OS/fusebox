@@ -20,18 +20,5 @@
 */
 
 class Startup.Backend.KeyFileFactory : GLib.Object {
-
-    static GLib.HashTable <string, KeyFile> cache;
-
-    public static void init () {
-        cache = new GLib.HashTable <string, KeyFile> (null, null);
-    }
-
-    public static KeyFile get_or_create (string path) {
-        if (cache [path] == null) {
-            cache [path] = new KeyFile (path);
-        }
-
-        return cache [path];
-    }
+    // Guess this class is never used
 }

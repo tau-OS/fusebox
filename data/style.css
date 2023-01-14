@@ -82,3 +82,16 @@ button.flat label {
         #cb76b8 91%
     );
 }
+
+.mini-content-block .mini-content-block {
+  background: @view_bg_color;
+}
+
+.mini-content-block .mini-content-block:hover {
+  background: alpha(@accent_bg_color, 0.1);
+  color: @view_fg_color;
+}
+
+.mini-content-block entry {
+  background: @window_bg_color;
+}

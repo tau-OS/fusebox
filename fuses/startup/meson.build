@@ -14,9 +14,9 @@ fuse_files = files(
 shared_module('fuse-startup',
     fuse_files,
     dependencies: [
-        libfusebox_dep,
         meson.get_compiler('vala').find_library('posix'),
-        dependency('libhelium-1', fallback: [ 'libhelium', 'helium_dep' ]),
+        libfusebox_dep,
+        dependency('libhelium-1'),
         dependency('libbismuth-1', fallback: [ 'libbismuth', 'bismuth_dep' ], version: '>=1.0.0'),
         dependency('glib-2.0', version: '>=2.34'),
         dependency('gio-2.0', version: '>=2.34'),
