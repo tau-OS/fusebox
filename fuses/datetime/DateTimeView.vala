@@ -103,6 +103,22 @@ public class DateTime.DateTimeView : Gtk.Box {
         timezone_auto_box.append (timezone_label_box);
         timezone_auto_box.append (timezone_switch);
 
+        try {
+            datetime1 = Bus.get_proxy_sync (
+                                            BusType.SYSTEM,
+                                            "org.freedesktop.timedate1",
+                                            "/org/freedesktop/timedate1"
+                                           );
+
+            if (datetime1.CanNTP == false) {
+                date_time_switch.sensitive = false;
+            } else if (datetime1.NTP) {
+                date_time_switch.active = true;
+            }
+        } catch (IOError e) {
+            critical (e.message);
+        }
+
         var timezone_manual_label = new Gtk.Label (_("Timezone")) {
             halign = Gtk.Align.START,
             sensitive = false
@@ -195,22 +211,6 @@ public class DateTime.DateTimeView : Gtk.Box {
         append (clamp);
         orientation = Gtk.Orientation.VERTICAL;
 
-        try {
-            datetime1 = Bus.get_proxy_sync (
-                                            BusType.SYSTEM,
-                                            "org.freedesktop.timedate1",
-                                            "/org/freedesktop/timedate1"
-                                           );
-
-            if (datetime1.CanNTP == false) {
-                date_time_switch.sensitive = false;
-            } else if (datetime1.NTP) {
-                date_time_switch.active = true;
-            }
-        } catch (IOError e) {
-            critical (e.message);
-        }
-
         date_time_switch.notify["state"].connect (() => {
             try {
                 datetime1.SetNTP (date_time_switch.active, true);
@@ -299,9 +299,10 @@ public class DateTime.DateTimeView : Gtk.Box {
 
         location_finder.notify["selected-row"].connect (() => {
             var loc = location_finder.get_selected_location ();
-            if (loc != null)
+            if (loc != null) {
                 change_tz (loc.get_timezone_str ());
                 timezone_manual_button_content.label = loc.get_timezone_str ();
+            }
         });
 
         change_tz (datetime1.Timezone);
@@ -337,7 +338,10 @@ public class DateTime.DateTimeView : Gtk.Box {
         var tz = _(_tz);
         var english_tz = _tz;
 
-        tz = location_finder.selected_row.data.loc.get_timezone_str ();
+        var location = location_finder.get_selected_location();
+        if (location != null) {
+            tz = location.get_timezone_str ();
+        }
 
         if (datetime1.Timezone != english_tz) {
             try {
