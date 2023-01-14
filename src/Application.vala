@@ -127,7 +127,9 @@ namespace Fusebox {
             search_box = new Gtk.SearchEntry () {
                 placeholder_text = _("Search Settings"),
                 visible = false,
-                halign = Gtk.Align.START
+                halign = Gtk.Align.START,
+                margin_start = 18,
+                margin_end = 18
             };
             search_box.add_controller (search_box_eventcontrollerkey);
             search_box.add_css_class ("search");
