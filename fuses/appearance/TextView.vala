@@ -97,6 +97,11 @@ public class Appearance.TextView : Gtk.Box {
         var interface_font = interface_settings.get_string (FONT_KEY);
         var document_font = interface_settings.get_string (DOCUMENT_FONT_KEY);
 
+        if (interface_font == OD_REG_FONT) {
+            dyslexia_font_switch.active = true;
+        } else {
+            dyslexia_font_switch.active = false;
+        }
         dyslexia_font_switch.notify["active"].connect (() => {
             if (dyslexia_font_switch.active) {
                 interface_settings.set_string (FONT_KEY, OD_REG_FONT);
