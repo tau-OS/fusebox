@@ -100,6 +100,9 @@ namespace Fusebox {
                 case Fusebox.Fuse.Category.SYSTEM:
                     system_category.add (icon);
                     break;
+                case Fusebox.Fuse.Category.CUSTOM:
+                    custom_category.add (icon);
+                    break;
                 default:
                     return;
             }
@@ -115,6 +118,10 @@ namespace Fusebox {
             }
 
             if (system_category.has_child ()) {
+                any_found = true;
+            }
+
+            if (custom_category.has_child ()) {
                 any_found = true;
             }
 
@@ -137,6 +144,8 @@ namespace Fusebox {
                     return _("Connections");
                 case Fuse.Category.SYSTEM:
                     return _("System");
+                case Fuse.Category.CUSTOM:
+                    return _("Miscellaneous");
             }
 
             return null;
