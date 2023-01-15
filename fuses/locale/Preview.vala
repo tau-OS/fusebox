@@ -1,41 +1,43 @@
 class Locale.Preview : He.ContentList {
   public LocaleModel locale { get; set; }
 
-  public Preview (LocaleModel locale) {
-    base ();
-    this.locale = locale;
-
+  construct {
     this.title = "Preview";
 
     var example = get_examples_for_locale(this.locale);
 
-    var time_label = new Gtk.Label(example.time);
-    var date_label = new Gtk.Label(example.date);
-    var money_label = new Gtk.Label(example.money);
-    var temperature_label = new Gtk.Label(example.temperature);
-
     var time_block = new He.MiniContentBlock() {
       title = "Time",
-      child = time_label
     };
     this.add (time_block);
 
     var date_block = new He.MiniContentBlock() {
       title = "Date",
-      child = date_label
     };
     this.add (date_block);
 
-    var money_block = new He.MiniContentBlock() {
-      title = "Money",
-      child = money_label
+    var currency_block = new He.MiniContentBlock() {
+      title = "Currency",
+      subtitle = example.currency,
     };
-    this.add (money_block);
+    this.add (currency_block);
 
     var temperature_block = new He.MiniContentBlock() {
       title = "Temperature",
-      child = temperature_label
     };
     this.add (temperature_block);
+
+    this.notify["locale"].connect (() => {
+      if (this.locale == null) {
+        return;
+      }
+
+      var examples = get_examples_for_locale(this.locale);
+
+      time_block.subtitle = examples.time;
+      date_block.subtitle = examples.date;
+      currency_block.subtitle = examples.currency;
+      temperature_block.subtitle = examples.temperature;
+    });
   }
 }

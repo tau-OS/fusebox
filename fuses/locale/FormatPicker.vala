@@ -5,7 +5,6 @@ class Locale.FormatPicker : He.Window {
   }
 
   public Locale.LocaleModel? selected_format { get; private set; }
-  private Locale.Preview? preview;
 
   public FormatPicker (He.ApplicationWindow parent) {
     this.parent = parent;
@@ -44,7 +43,6 @@ class Locale.FormatPicker : He.Window {
     var listbox = new Gtk.ListBox() {
       margin_start = 18,
       margin_end = 18,
-
     };
     listbox.add_css_class ("content-list");
     foreach (var format in format_list) {
@@ -86,18 +84,18 @@ class Locale.FormatPicker : He.Window {
     });
     button_box.append (apply_button);
 
+    var preview = new Preview () {
+      visible = false,
+      margin_end = 18
+    };
+    preview.set_size_request (250, -1);
+    main.append (preview);
+
     listbox.row_selected.connect (() => {
       var selected = listbox.get_selected_row () as Locale.LocaleRow;
       apply_button.sensitive = selected != null;
-      if (selected != null) {
-        if (this.preview != null) {
-          main.remove (this.preview);
-          this.preview.destroy ();
-        }
-
-        this.preview = new Locale.Preview (selected.locale);
-        main.append (this.preview);
-      }
+      preview.visible = selected != null;
+      preview.locale = selected?.locale;
     });
 
     this.set_child (main);

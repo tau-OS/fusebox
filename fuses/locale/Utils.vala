@@ -84,7 +84,7 @@ namespace Locale {
   private struct LocaleExample {
     public string date;
     public string time;
-    public string money;
+    public string currency;
     public string temperature;
   }
 
@@ -104,8 +104,8 @@ namespace Locale {
     var realunit = GWeather.TemperatureUnit.DEFAULT.to_real();
     var temperature = realunit == GWeather.TemperatureUnit.CENTIGRADE ? "20°C" : "68°F";
 
-    var money = new uint8[100];
-    strfmon(money, money.length, "%n", 1234.56);
+    var currency = new uint8[100];
+    strfmon(currency, currency.length, "%n", 1234.56);
 
     if (GLib.Intl.setlocale(GLib.LocaleCategory.ALL, current_locale) == null) {
       critical("Could not reset locale to %s", current_locale);
@@ -114,7 +114,7 @@ namespace Locale {
     return LocaleExample() {
       date = date,
       time = time,
-      money = (string)money,
+      currency = (string)currency,
       temperature = temperature
     };
   }
