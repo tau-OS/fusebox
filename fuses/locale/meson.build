@@ -4,6 +4,7 @@ fuse_files = files(
     'LanguagePicker.vala',
     'FormatPicker.vala',
     'LanguageRow.vala',
+    'Preview.vala',
     'Utils.vala',
 )
 
@@ -15,6 +16,7 @@ shared_module('fuse-locale',
         dependency('libhelium-1'),
         dependency('libbismuth-1', fallback: [ 'libbismuth', 'bismuth_dep' ], version: '>=1.0.0'),
         dependency('gnome-desktop-4'),
+        dependency('gweather4', version: '>= 3.90.0'),
     ],
     install: true,
     install_dir: join_paths(fuses_dir, 'system')

@@ -72,7 +72,9 @@ class Locale.LanguagePicker : He.Window {
     });
     button_box.append (cancel_button);
 
-    var apply_button = new He.FillButton (_("Set Language"));
+    var apply_button = new He.FillButton (_("Set Language")) {
+      sensitive = false,
+    };
     apply_button.clicked.connect (() => {
       var selected = listbox.get_selected_row () as Locale.LocaleRow;
       if (selected != null) {
@@ -80,6 +82,11 @@ class Locale.LanguagePicker : He.Window {
       }
     });
     button_box.append (apply_button);
+
+    listbox.row_selected.connect (() => {
+      var selected = listbox.get_selected_row () as Locale.LocaleRow;
+      apply_button.sensitive = selected != null;
+    });
 
     this.set_child (content);
   }

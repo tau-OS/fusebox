@@ -5,6 +5,7 @@ class Locale.FormatPicker : He.Window {
   }
 
   public Locale.LocaleModel? selected_format { get; private set; }
+  private Locale.Preview? preview;
 
   public FormatPicker (He.ApplicationWindow parent) {
     this.parent = parent;
@@ -15,7 +16,9 @@ class Locale.FormatPicker : He.Window {
     this.resizable = false;
     this.set_size_request (440, 550);
 
+    var main = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
     var content = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+    main.append (content);
 
     var title = new Gtk.Label (_("Format")) {
       margin_top = 34,
@@ -72,7 +75,9 @@ class Locale.FormatPicker : He.Window {
     });
     button_box.append (cancel_button);
 
-    var apply_button = new He.FillButton (_("Set Format"));
+    var apply_button = new He.FillButton (_("Set Format")) {
+      sensitive = false,
+    };
     apply_button.clicked.connect (() => {
       var selected = listbox.get_selected_row () as Locale.LocaleRow;
       if (selected != null) {
@@ -81,6 +86,20 @@ class Locale.FormatPicker : He.Window {
     });
     button_box.append (apply_button);
 
-    this.set_child (content);
+    listbox.row_selected.connect (() => {
+      var selected = listbox.get_selected_row () as Locale.LocaleRow;
+      apply_button.sensitive = selected != null;
+      if (selected != null) {
+        if (this.preview != null) {
+          main.remove (this.preview);
+          this.preview.destroy ();
+        }
+
+        this.preview = new Locale.Preview (selected.locale);
+        main.append (this.preview);
+      }
+    });
+
+    this.set_child (main);
   }
 }

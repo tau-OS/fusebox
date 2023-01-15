@@ -1,3 +1,6 @@
+[CCode (cheader_filename = "monetary.h", cname = "strfmon")]
+extern ssize_t strfmon([CCode (array_length = false)] uint8[] s, size_t max, string format, ...);
+
 namespace Locale {
   private class LocaleModel {
     public string locale;
@@ -76,5 +79,43 @@ namespace Locale {
     } catch (GLib.Error e) {
       critical("Could not set system locale: %s", e.message);
     }
+  }
+
+  private struct LocaleExample {
+    public string date;
+    public string time;
+    public string money;
+    public string temperature;
+  }
+
+  private LocaleExample get_examples_for_locale(LocaleModel locale) {
+    var current_locale = GLib.Intl.setlocale(GLib.LocaleCategory.ALL, null);
+    if (current_locale == null) {
+      critical("Could not get current locale");
+    }
+    var example_locale = GLib.Intl.setlocale(GLib.LocaleCategory.ALL, locale.locale);
+    if (example_locale == null) {
+      critical("Could not set locale to %s", locale.locale);
+    }
+
+    var date = new GLib.DateTime.now_local().format("%x");
+    var time = new GLib.DateTime.now_local().format("%X");
+
+    var realunit = GWeather.TemperatureUnit.DEFAULT.to_real();
+    var temperature = realunit == GWeather.TemperatureUnit.CENTIGRADE ? "20°C" : "68°F";
+
+    var money = new uint8[100];
+    strfmon(money, money.length, "%n", 1234.56);
+
+    if (GLib.Intl.setlocale(GLib.LocaleCategory.ALL, current_locale) == null) {
+      critical("Could not reset locale to %s", current_locale);
+    }
+
+    return LocaleExample() {
+      date = date,
+      time = time,
+      money = (string)money,
+      temperature = temperature
+    };
   }
 }
