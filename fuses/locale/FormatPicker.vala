@@ -15,9 +15,11 @@ class Locale.FormatPicker : He.Window {
     this.resizable = false;
     this.set_size_request (440, 550);
 
-    var main = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+    var main = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+    var side = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+    main.append (side);
     var content = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
-    main.append (content);
+    side.append (content);
 
     var title = new Gtk.Label (_("Format")) {
       margin_top = 34,
@@ -64,10 +66,12 @@ class Locale.FormatPicker : He.Window {
       margin_start = 18,
       margin_end = 18,
       margin_bottom = 18,
+      halign = Gtk.Align.END
     };
-    content.append (button_box);
+    main.append (button_box);
 
     var cancel_button = new He.TextButton (_("Cancel"));
+    cancel_button.set_size_request(200, -1);
     cancel_button.clicked.connect (() => {
       this.destroy ();
     });
@@ -76,6 +80,7 @@ class Locale.FormatPicker : He.Window {
     var apply_button = new He.FillButton (_("Set Format")) {
       sensitive = false,
     };
+    apply_button.set_size_request(200, -1);
     apply_button.clicked.connect (() => {
       var selected = listbox.get_selected_row () as Locale.LocaleRow;
       if (selected != null) {
@@ -89,7 +94,7 @@ class Locale.FormatPicker : He.Window {
       margin_end = 18
     };
     preview.set_size_request (250, -1);
-    main.append (preview);
+    side.append (preview);
 
     listbox.row_selected.connect (() => {
       var selected = listbox.get_selected_row () as Locale.LocaleRow;
