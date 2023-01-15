@@ -129,7 +129,8 @@ namespace Fusebox {
                 visible = false,
                 halign = Gtk.Align.START,
                 margin_start = 18,
-                margin_end = 18
+                margin_end = 18,
+                margin_bottom = 12
             };
             search_box.add_controller (search_box_eventcontrollerkey);
             search_box.add_css_class ("search");
@@ -211,11 +212,12 @@ namespace Fusebox {
             var label = new Gtk.Label ("Settings") {
                 halign = Gtk.Align.START,
                 margin_start = 18,
-                margin_end = 18
+                margin_end = 18,
+                margin_bottom = 12
             };
             label.add_css_class ("view-title");
 
-            var ssbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+            var ssbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
                 hexpand = false
             };
             ssbox.append (label);

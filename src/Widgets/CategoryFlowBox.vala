@@ -62,7 +62,8 @@ namespace Fusebox {
             } else {
                 var header_label = new Gtk.Label (header_string) {
                     halign = Gtk.Align.START,
-                    margin_bottom = 6
+                    margin_bottom = 6,
+                    margin_top = 6
                 };
                 header_label.add_css_class ("heading");
                 header_label.add_css_class ("dim-label");

@@ -38,7 +38,8 @@ namespace Fusebox {
 
             var category_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
                 margin_start = 18,
-                margin_end = 18
+                margin_end = 18,
+                margin_bottom = 18
             };
             category_box.append (category);
 

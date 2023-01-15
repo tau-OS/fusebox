@@ -31,7 +31,11 @@ public class Fusebox.SearchView : Gtk.Box {
 
         search_entry = app.search_box;
 
-        listbox = new Gtk.ListBox ();
+        listbox = new Gtk.ListBox () {
+            margin_start = 18,
+            margin_end = 18,
+            margin_bottom = 18
+        };
         listbox.add_css_class ("content-list");
         listbox.selection_mode = Gtk.SelectionMode.BROWSE;
         listbox.set_filter_func (filter_func);
