@@ -22,19 +22,23 @@ public class AppearanceView : Gtk.Box {
     public Appearance.WallpaperGrid wallpaper_view;
 
     private enum AccentColor {
-        MULTI,
-        RED,
-        ORANGE,
-        YELLOW,
-        GREEN,
-        MINT,
-        BLUE,
-        PURPLE,
-        PINK,
-        MONO;
+        MULTI = 0,
+        PURPLE = 1,
+        PINK = 2,
+        RED = 3,
+        ORANGE = 4,
+        YELLOW = 5,
+        GREEN = 6,
+        MINT = 7,
+        BLUE = 8,
+        MONO = 9;
 
         public string to_string () {
             switch (this) {
+                case PURPLE:
+                    return "tau-purple";
+                case PINK:
+                    return "fermion-pink";
                 case RED:
                     return "meson-red";
                 case ORANGE:
@@ -45,10 +49,6 @@ public class AppearanceView : Gtk.Box {
                     return "muon-green";
                 case BLUE:
                     return "proton-blue";
-                case PURPLE:
-                    return "tau-purple";
-                case PINK:
-                    return "fermion-pink";
                 case MINT:
                     return "baryon-mint";
                 case MONO:
@@ -58,33 +58,6 @@ public class AppearanceView : Gtk.Box {
             }
 
             return "multi";
-        }
-
-        public int to_int () {
-            switch (this) {
-                case RED:
-                    return 3;
-                case ORANGE:
-                    return 4;
-                case YELLOW:
-                    return 5;
-                case GREEN:
-                    return 6;
-                case BLUE:
-                    return 8;
-                case PURPLE:
-                    return 1;
-                case PINK:
-                    return 2;
-                case MINT:
-                    return 7;
-                case MONO:
-                    return 9;
-                case MULTI:
-                    return 0;
-            }
-
-            return 0;
         }
     }
 
@@ -320,34 +293,34 @@ public class AppearanceView : Gtk.Box {
         };
         accent_label.add_css_class ("cb-title");
 
-        blue = new PrefersAccentColorButton (AccentColor.BLUE);
-        blue.tooltip_text = _("Blue");
-
-        mint = new PrefersAccentColorButton (AccentColor.MINT, blue);
-        mint.tooltip_text = _("Mint");
-
-        green = new PrefersAccentColorButton (AccentColor.GREEN, blue);
-        green.tooltip_text = _("Green");
-
-        yellow = new PrefersAccentColorButton (AccentColor.YELLOW, blue);
-        yellow.tooltip_text = _("Yellow");
-
-        orange = new PrefersAccentColorButton (AccentColor.ORANGE, blue);
-        orange.tooltip_text = _("Orange");
-
-        red = new PrefersAccentColorButton (AccentColor.RED, blue);
-        red.tooltip_text = _("Red");
-
-        pink = new PrefersAccentColorButton (AccentColor.PINK, blue);
-        pink.tooltip_text = _("Pink");
-
-        purple = new PrefersAccentColorButton (AccentColor.PURPLE, blue);
+        purple = new PrefersAccentColorButton (AccentColor.PURPLE);
         purple.tooltip_text = _("Purple");
 
-        mono = new PrefersAccentColorButton (AccentColor.MONO, blue);
+        pink = new PrefersAccentColorButton (AccentColor.PINK, purple);
+        pink.tooltip_text = _("Pink");
+
+        red = new PrefersAccentColorButton (AccentColor.RED, purple);
+        red.tooltip_text = _("Red");
+
+        orange = new PrefersAccentColorButton (AccentColor.ORANGE, purple);
+        orange.tooltip_text = _("Orange");
+
+        yellow = new PrefersAccentColorButton (AccentColor.YELLOW, purple);
+        yellow.tooltip_text = _("Yellow");
+
+        green = new PrefersAccentColorButton (AccentColor.GREEN, purple);
+        green.tooltip_text = _("Green");
+
+        blue = new PrefersAccentColorButton (AccentColor.BLUE, purple);
+        blue.tooltip_text = _("Blue");
+
+        mint = new PrefersAccentColorButton (AccentColor.MINT, purple);
+        mint.tooltip_text = _("Mint");
+
+        mono = new PrefersAccentColorButton (AccentColor.MONO, purple);
         mono.tooltip_text = _("Mono");
 
-        multi = new PrefersAccentColorButton (AccentColor.MULTI, blue);
+        multi = new PrefersAccentColorButton (AccentColor.MULTI, purple);
         multi.tooltip_text = _("Automatic");
 
         var accent_grid = new Gtk.Grid () {
@@ -358,14 +331,14 @@ public class AppearanceView : Gtk.Box {
             margin_bottom = 6
         };
         accent_grid.attach (accent_label, 0, 0, 9);
-        accent_grid.attach (red, 0, 1);
-        accent_grid.attach (orange, 1, 1);
-        accent_grid.attach (yellow, 2, 1);
-        accent_grid.attach (green, 3, 1);
-        accent_grid.attach (mint, 4, 1);
-        accent_grid.attach (blue, 5, 1);
-        accent_grid.attach (purple, 6, 1);
-        accent_grid.attach (pink, 7, 1);
+        accent_grid.attach (purple, 0, 1);
+        accent_grid.attach (pink, 1, 1);
+        accent_grid.attach (red, 2, 1);
+        accent_grid.attach (orange, 3, 1);
+        accent_grid.attach (yellow, 4, 1);
+        accent_grid.attach (green, 5, 1);
+        accent_grid.attach (mint, 6, 1);
+        accent_grid.attach (blue, 7, 1);
         accent_grid.attach (mono, 8, 1);
         accent_grid.attach (multi, 9, 1);
         accent_grid.add_css_class ("mini-content-block");
@@ -582,17 +555,6 @@ public class AppearanceView : Gtk.Box {
             pink.set_active (false);
             mono.set_active (false);
             multi.set_active (true);
-        } else {
-            red.set_active (false);
-            orange.set_active (false);
-            yellow.set_active (false);
-            green.set_active (false);
-            mint.set_active (false);
-            blue.set_active (false);
-            purple.set_active (true);
-            pink.set_active (false);
-            mono.set_active (false);
-            multi.set_active (false);
         }
     }
 
@@ -612,7 +574,7 @@ public class AppearanceView : Gtk.Box {
 
             realize.connect (() => {
                 toggled.connect (() => {
-                    tau_appearance_settings.set_enum ("accent-color", color.to_int ());
+                    tau_appearance_settings.set_enum ("accent-color", color);
                 });
             });
         }
