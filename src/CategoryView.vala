@@ -21,10 +21,7 @@ namespace Fusebox {
     public class CategoryView : Gtk.Box {
         public FusesSearch fuse_search { get; construct; }
         public unowned GLib.List<SearchEntry?> fuse_search_result { get; construct; }
-        public Fusebox.Category personal_category { get; construct; }
-        public Fusebox.Category network_category { get; construct; }
-        public Fusebox.Category system_category { get; construct; }
-        public Fusebox.Category custom_category { get; construct; }
+        public Fusebox.Category category { get; construct; }
 
         public string? fuse_to_open { get; construct set; default = null; }
 
@@ -34,10 +31,7 @@ namespace Fusebox {
         construct {
             alert_view = new He.EmptyPage ();
 
-            personal_category = new Fusebox.Category (Fusebox.Fuse.Category.PERSONAL);
-            network_category = new Fusebox.Category (Fusebox.Fuse.Category.NETWORK);
-            system_category = new Fusebox.Category (Fusebox.Fuse.Category.SYSTEM);
-            custom_category = new Fusebox.Category (Fusebox.Fuse.Category.CUSTOM);
+            category = new Fusebox.Category ();
 
             fuse_search = new FusesSearch ();
             fuse_search_result = new GLib.List<SearchEntry?> ();
@@ -46,10 +40,7 @@ namespace Fusebox {
                 margin_start = 18,
                 margin_end = 18
             };
-            category_box.append (network_category);
-            category_box.append (personal_category);
-            category_box.append (system_category);
-            category_box.append (custom_category);
+            category_box.append (category);
 
             var category_scrolled = new Gtk.ScrolledWindow () {
                 child = category_box,
@@ -93,38 +84,11 @@ namespace Fusebox {
         public void add_fuse (Fusebox.Fuse fuse) {
             var icon = new Fusebox.CategoryIcon (fuse);
 
-            switch (fuse.category) {
-                case Fusebox.Fuse.Category.PERSONAL:
-                    personal_category.add (icon);
-                    break;
-                case Fusebox.Fuse.Category.NETWORK:
-                    network_category.add (icon);
-                    break;
-                case Fusebox.Fuse.Category.SYSTEM:
-                    system_category.add (icon);
-                    break;
-                case Fusebox.Fuse.Category.CUSTOM:
-                    custom_category.add (icon);
-                    break;
-                default:
-                    return;
-            }
+            category.add (icon);
 
             var any_found = false;
 
-            if (personal_category.has_child ()) {
-                any_found = true;
-            }
-
-            if (network_category.has_child ()) {
-                any_found = true;
-            }
-
-            if (system_category.has_child ()) {
-                any_found = true;
-            }
-
-            if (custom_category.has_child ()) {
+            if (category.has_child ()) {
                 any_found = true;
             }
 

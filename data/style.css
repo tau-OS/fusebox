@@ -6,12 +6,13 @@ entry.search {
     background: @card_bg_color;
     padding: 14.5px 16px;
     border-radius: 8px;
+    color: @view_fg_color;
 }
 .fuse-block:hover {
     background: alpha(@view_fg_color, 0.4);
 }
-.fuse-block:active {
-    background: alpha(@view_fg_color, 0.6);
+row:selected .fuse-block {
+  background: alpha(@view_fg_color, 0.1);
 }
 
 .main-content-block {

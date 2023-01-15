@@ -18,36 +18,72 @@
 
 namespace Fusebox {
     public class Category : Gtk.Box {
-        public Fusebox.Fuse.Category category { get; construct; }
-
         private Gtk.ListBox flowbox;
 
-        public Category (Fusebox.Fuse.Category category) {
-            Object (category: category);
-        }
-
         construct {
-            var category_label = new Gtk.Label (Fusebox.CategoryView.get_category_name (category));
-            category_label.halign = Gtk.Align.START;
-            category_label.add_css_class ("heading");
-            category_label.add_css_class ("dim-label");
-
             flowbox = new Gtk.ListBox () {
                 activate_on_single_click = true,
-                selection_mode = Gtk.SelectionMode.NONE
+                selection_mode = Gtk.SelectionMode.BROWSE
             };
             flowbox.add_css_class ("content-list");
+            flowbox.set_sort_func (sort_function);
+            flowbox.set_header_func (header_function);
 
             valign = Gtk.Align.START;
             spacing = 6;
             orientation = Gtk.Orientation.VERTICAL;
 
-            append (category_label);
             append (flowbox);
 
             flowbox.row_activated.connect ((child) => {
                 ((FuseboxApp) GLib.Application.get_default ()).load_fuse (((CategoryIcon) child).fuse);
             });
+        }
+
+        private void header_function (Gtk.ListBoxRow row1, Gtk.ListBoxRow? row2) {
+            var name1 = ((CategoryIcon) row1).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_","");
+            var name2 = ((CategoryIcon) row2).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_","");
+            string header_string = null;
+            
+            if (name1 != "") {
+                header_string = name1;
+            } else {
+                header_string = "";
+            }
+
+            if (name2 != null) {
+                if (name2 == header_string) {
+                    return;
+                }
+            }
+    
+            if (header_string == null) {
+                return;
+            } else {
+                var header_label = new Gtk.Label (header_string) {
+                    halign = Gtk.Align.START,
+                    margin_start = 6
+                };
+                header_label.add_css_class ("heading");
+                header_label.add_css_class ("dim-label");
+                row1.set_header (header_label);
+            }
+        }
+
+        [CCode (instance_pos = -1)]
+        private int sort_function (Gtk.ListBoxRow row1, Gtk.ListBoxRow row2) {
+            var name1 = ((CategoryIcon) row1).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_","");
+            var name2 = ((CategoryIcon) row2).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_","");
+
+            if (name1 != null) {
+                if (name2 == null) {
+                    return -1;
+                }
+            } else if (name2 != null) {
+                return 1;
+            }
+
+            return name1.collate (name2);
         }
 
         public GLib.List<Fuse?> get_fuses () {
