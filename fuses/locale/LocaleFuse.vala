@@ -9,7 +9,7 @@ public class Locale.Fuse : Fusebox.Fuse {
         Object (
             category: Category.PERSONAL,
             code_name: "co.tauos.Fusebox.Locale",
-            display_name: _("Locale"),
+            display_name: _("Region & Locale"),
             description: _("Change system locale"),
             icon: "settings-locale",
             supported_settings: settings,
@@ -21,7 +21,7 @@ public class Locale.Fuse : Fusebox.Fuse {
         if (main_grid == null) {
             var locale_view = new LocaleView ();
 
-            var view_label = new Gtk.Label ("Locale") {
+            var view_label = new Gtk.Label ("Region & Locale") {
                 halign = Gtk.Align.START,
                 margin_start = 18
             };
