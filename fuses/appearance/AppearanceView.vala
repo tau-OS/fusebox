@@ -426,14 +426,6 @@ public class AppearanceView : Gtk.Box {
     }
 
     private void set_color_scheme (He.Desktop.ColorScheme color_scheme) {
-        if (color_scheme == He.Desktop.ColorScheme.NO_PREFERENCE) {
-            interface_settings.set_string ("gtk-theme", "Helium");
-        } else if (color_scheme == He.Desktop.ColorScheme.LIGHT) {
-            interface_settings.set_string ("gtk-theme", "Helium");
-        } else if (color_scheme == He.Desktop.ColorScheme.DARK) {
-            interface_settings.set_string ("gtk-theme", "Helium-dark");
-        }
-
         interface_settings.set_enum ("color-scheme", color_scheme);
     }
 
