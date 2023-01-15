@@ -348,8 +348,12 @@ public class AppearanceView : Gtk.Box {
         wallpaper_view = new Appearance.WallpaperGrid (fuse);
         grid.attach (wallpaper_view, 0, 2);
 
+        var sw = new Gtk.ScrolledWindow ();
+        sw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
+        sw.set_child (grid);
+
         var clamp = new Bis.Latch ();
-        clamp.set_child (grid);
+        clamp.set_child (sw);
 
         append (clamp);
   

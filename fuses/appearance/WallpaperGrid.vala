@@ -73,13 +73,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             wallpaper_view.child_activated.connect (update_checked_wallpaper);
             wallpaper_view.set_sort_func (wallpapers_sort_function);
             
-            wallpaper_scrolled_window = new Gtk.ScrolledWindow () {
-                hexpand = true,
-                vexpand = true,
-                hscrollbar_policy = Gtk.PolicyType.NEVER
-            };
-            wallpaper_scrolled_window.set_child (wallpaper_view);
-            
             var wallpaper_label = new Gtk.Label (_("Wallpaper")) {
                 halign = Gtk.Align.START
             };
@@ -115,7 +108,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             };
             wallpaper_main_box.add_css_class ("mini-content-block");
             wallpaper_main_box.append (wallpaper_title_box);
-            wallpaper_main_box.append (wallpaper_scrolled_window);
+            wallpaper_main_box.append (wallpaper_view);
             
             view_overlay = new He.OverlayButton ("", null, null);
             view_overlay.icon = "list-add-symbolic";
