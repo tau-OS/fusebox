@@ -173,7 +173,7 @@ namespace Fusebox {
                 halign = Gtk.Align.END,
                 margin_start = 18,
                 margin_end = 18,
-                margin_bottom = 12
+                margin_top = 18
             };
             bar.append (search_button);
             bar.append (menu_button);
@@ -220,9 +220,9 @@ namespace Fusebox {
 
             var label = new Gtk.Label ("Settings") {
                 halign = Gtk.Align.START,
+                margin_top = 6,
                 margin_start = 18,
                 margin_end = 18,
-                margin_bottom = 12
             };
             label.add_css_class ("view-title");
 
