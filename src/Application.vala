@@ -222,7 +222,7 @@ namespace Fusebox {
                 halign = Gtk.Align.START,
                 margin_start = 18,
                 margin_end = 18,
-                margin_bottom = 18
+                margin_bottom = 12
             };
             label.add_css_class ("view-title");
 
@@ -246,7 +246,9 @@ namespace Fusebox {
                 flat = true,
             };
 
-            var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+            var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+                margin_top = 6
+            };
             box.add_css_class ("main-view");
             box.append (sheaderbar);
             box.append (halbum);
