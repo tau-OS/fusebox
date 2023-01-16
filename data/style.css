@@ -96,3 +96,7 @@ button.flat label {
 .mini-content-block entry {
   background: @window_bg_color;
 }
+
+.disclosure-button button:not(.menu-button) {
+  border-radius: 999px;
+}

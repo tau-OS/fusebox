@@ -144,6 +144,7 @@ namespace Fusebox {
 
             var search_button = new Gtk.ToggleButton ();
             search_button.icon_name = "system-search-symbolic";
+            search_button.add_css_class ("disclosure-button");
 
             var menu_popover = new Gtk.Popover () {
                 autohide = true
@@ -165,9 +166,17 @@ namespace Fusebox {
                 popover = menu_popover,
                 icon_name = "open-menu-symbolic"
             };
+            menu_button.add_css_class ("disclosure-button");
 
-            headerbar.append (menu_button);
-            headerbar.append (search_button);
+            var bar = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
+                hexpand = true,
+                halign = Gtk.Align.END,
+                margin_start = 18,
+                margin_end = 18,
+                margin_bottom = 12
+            };
+            bar.append (search_button);
+            bar.append (menu_button);
 
             search_button.toggled.connect (() => {
                 search_box.visible = search_button.active;
@@ -213,7 +222,7 @@ namespace Fusebox {
                 halign = Gtk.Align.START,
                 margin_start = 18,
                 margin_end = 18,
-                margin_bottom = 12
+                margin_bottom = 18
             };
             label.add_css_class ("view-title");
 
@@ -221,6 +230,7 @@ namespace Fusebox {
                 hexpand = false
             };
             ssbox.append (label);
+            ssbox.append (bar);
             ssbox.append (search_box);
             ssbox.append (search_stack);
 
@@ -347,6 +357,7 @@ namespace Fusebox {
             };
             button.set_action_name (action_name);
             button.add_css_class ("flat");
+            button.add_css_class ("menu-button");
             return button;
         }
 
