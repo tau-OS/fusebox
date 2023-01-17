@@ -247,9 +247,7 @@ namespace Fusebox {
                 flat = true,
             };
 
-            var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
-                margin_top = 6
-            };
+            var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
             box.add_css_class ("main-view");
             box.append (sheaderbar);
             box.append (halbum);
