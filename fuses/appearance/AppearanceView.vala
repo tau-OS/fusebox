@@ -92,7 +92,7 @@ public class AppearanceView : Gtk.Box {
             row_spacing = 6
         };
         prefer_default_grid.attach (prefer_default_card, 0, 0);
-        prefer_default_grid.attach (new Gtk.Label (_("Auto")), 0, 1);
+        prefer_default_grid.attach (new Gtk.Label (_("Set By Apps")), 0, 1);
 
         prefer_default_radio = new Gtk.ToggleButton () {
             hexpand = true,
@@ -321,7 +321,7 @@ public class AppearanceView : Gtk.Box {
         mono.tooltip_text = _("Mono");
 
         multi = new PrefersAccentColorButton (AccentColor.MULTI, purple);
-        multi.tooltip_text = _("Automatic");
+        multi.tooltip_text = _("Set By Apps");
 
         var accent_grid = new Gtk.Grid () {
             row_spacing = 12,
