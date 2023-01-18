@@ -221,7 +221,6 @@ namespace Fusebox {
 
             var label = new Gtk.Label ("Settings") {
                 halign = Gtk.Align.START,
-                margin_top = 6,
                 margin_start = 18,
                 margin_end = 18,
             };
