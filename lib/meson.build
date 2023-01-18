@@ -1,4 +1,5 @@
 config_vapi = meson.get_compiler('vala').find_library('config', dirs: meson.current_source_dir())
+config_vapi_file = files('config.vapi')
 
 config_data = configuration_data()
 config_data.set_quoted('FUSES_DIR', fuses_dir)

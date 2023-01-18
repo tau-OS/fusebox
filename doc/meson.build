@@ -14,6 +14,7 @@ target = custom_target(
         '--pkg=gtk4',
         '--pkg=posix',
         fusebox_sources,
+        config_vapi_file,
         '--target-glib=' + glib_min_version,
         '--package-name=' + meson.project_name(),
         '--package-version=' + meson.project_version(),
