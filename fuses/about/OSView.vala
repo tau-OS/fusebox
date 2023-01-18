@@ -226,6 +226,7 @@ public class About.OSView : Gtk.Box {
         clamp.set_child (mbox);
 
         append (clamp);
+        orientation = Gtk.Orientation.VERTICAL;
 
         hostname_button.clicked.connect (() => {
             var rename_button = new He.FillButton (_("Rename")) {

@@ -136,16 +136,8 @@ namespace Fusebox {
             search_box.add_controller (search_box_eventcontrollerkey);
             search_box.add_css_class ("search");
 
-            headerbar = new He.AppBar () {
-                show_buttons = false,
-                show_back = false,
-                flat = true,
-                width_request = 250
-            };
-
             var search_button = new Gtk.ToggleButton ();
             search_button.icon_name = "system-search-symbolic";
-            search_button.add_css_class ("disclosure-button");
 
             var menu_popover = new Gtk.Popover () {
                 autohide = true
@@ -167,17 +159,20 @@ namespace Fusebox {
                 popover = menu_popover,
                 icon_name = "open-menu-symbolic"
             };
-            menu_button.add_css_class ("disclosure-button");
 
-            var bar = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
-                hexpand = true,
-                halign = Gtk.Align.END,
-                margin_start = 18,
-                margin_end = 18,
-                margin_top = 18
+            headerbar = new He.AppBar () {
+                show_buttons = false,
+                show_back = false,
+                flat = true,
+                width_request = 250
             };
-            bar.append (search_button);
-            bar.append (menu_button);
+            headerbar.append (search_button);
+            headerbar.append (menu_button);
+            var label = new Gtk.Label ("Settings") {
+                halign = Gtk.Align.START
+            };
+            label.add_css_class ("view-title");
+            headerbar.viewtitle_widget = label;
 
             search_button.toggled.connect (() => {
                 search_box.visible = search_button.active;
@@ -219,18 +214,9 @@ namespace Fusebox {
 
             var window_eventcontrollerkey = new Gtk.EventControllerKey ();
 
-            var label = new Gtk.Label ("Settings") {
-                halign = Gtk.Align.START,
-                margin_start = 18,
-                margin_end = 18,
-            };
-            label.add_css_class ("view-title");
-
             var ssbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
                 hexpand = false
             };
-            ssbox.append (label);
-            ssbox.append (bar);
             ssbox.append (search_box);
             ssbox.append (search_stack);
 
@@ -240,15 +226,8 @@ namespace Fusebox {
             sbox.append (headerbar);
             sbox.append (ssbox);
 
-            var sheaderbar = new He.AppBar () {
-                show_buttons = true,
-                show_back = false,
-                flat = true,
-            };
-
             var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
             box.add_css_class ("main-view");
-            box.append (sheaderbar);
             box.append (halbum);
 
             var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);

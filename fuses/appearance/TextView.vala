@@ -64,12 +64,7 @@ public class Appearance.TextView : Gtk.Box {
         dyslexia_box.append (dyslexia_font_switch);
         dyslexia_box.add_css_class ("mini-content-block");
 
-        var grid = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
-            margin_start = 18,
-            margin_end = 18,
-            margin_bottom = 18,
-            margin_top = 12
-        };
+        var grid = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         grid.append (size_box);
         grid.append (dyslexia_box);
 

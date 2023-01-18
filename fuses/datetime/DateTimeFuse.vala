@@ -22,10 +22,22 @@ public class DateTime.Fuse : Fusebox.Fuse {
         if (main_grid == null) {
             var datetime_view = new DateTimeView ();
 
+            var view_label = new Gtk.Label (_("Date & Time")) {
+                halign = Gtk.Align.START
+            };
+            view_label.add_css_class ("view-title");
+
+            var appbar = new He.AppBar () {
+                viewtitle_widget = view_label,
+                show_back = false,
+                flat = true
+            };
+
             main_grid = new Gtk.Grid () {
                 row_spacing = 12
             };
-            main_grid.attach (datetime_view, 0, 0);
+            main_grid.attach (appbar, 0, 0);
+            main_grid.attach (datetime_view, 0, 1);
         }
 
         return main_grid;

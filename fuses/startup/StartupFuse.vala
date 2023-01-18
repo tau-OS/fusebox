@@ -57,12 +57,17 @@ public class Startup.Fuse : Fusebox.Fuse {
             };
 
             var view_label = new Gtk.Label ("App Autostart") {
-                halign = Gtk.Align.START,
-                margin_start = 18
+                halign = Gtk.Align.START
             };
             view_label.add_css_class ("view-title");
 
-            main_grid.attach (view_label, 0, 0);
+            var appbar = new He.AppBar () {
+                viewtitle_widget = view_label,
+                show_back = false,
+                flat = true
+            };
+
+            main_grid.attach (appbar, 0, 0);
             main_grid.attach (startup_view, 0, 1);
 
 

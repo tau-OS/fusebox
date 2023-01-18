@@ -51,7 +51,7 @@ public class StartupView : Gtk.Box {
 
         // return the thing
         append (clamp);
-        //
+        orientation = Gtk.Orientation.VERTICAL;
     }
     private Gtk.ListBoxRow[] get_startup_apps () {
         Gtk.ListBoxRow[] rows = {};

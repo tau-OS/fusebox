@@ -23,15 +23,20 @@ public class About.Fuse : Fusebox.Fuse {
             var os_view = new OSView ();
 
             var view_label = new Gtk.Label ("About") {
-                halign = Gtk.Align.START,
-                margin_start = 18
+                halign = Gtk.Align.START
             };
             view_label.add_css_class ("view-title");
+
+            var appbar = new He.AppBar () {
+                viewtitle_widget = view_label,
+                show_back = false,
+                flat = true
+            };
 
             main_grid = new Gtk.Grid () {
                 row_spacing = 12
             };
-            main_grid.attach (view_label, 0, 0);
+            main_grid.attach (appbar, 0, 0);
             main_grid.attach (os_view, 0, 1);
         }
 

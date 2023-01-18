@@ -90,6 +90,8 @@ public class Locale.LocaleView : Gtk.Box {
 
         var clamp = new Bis.Latch ();
         clamp.set_child (mbox);
+
         this.append (clamp);
+        orientation = Gtk.Orientation.VERTICAL;
     }
 }

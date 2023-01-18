@@ -22,15 +22,20 @@ public class Locale.Fuse : Fusebox.Fuse {
             var locale_view = new LocaleView ();
 
             var view_label = new Gtk.Label ("Region & Locale") {
-                halign = Gtk.Align.START,
-                margin_start = 18
+                halign = Gtk.Align.START
             };
             view_label.add_css_class ("view-title");
+
+            var appbar = new He.AppBar () {
+                viewtitle_widget = view_label,
+                show_back = false,
+                flat = true
+            };
 
             main_grid = new Gtk.Grid () {
                 row_spacing = 12
             };
-            main_grid.attach (view_label, 0, 0);
+            main_grid.attach (appbar, 0, 0);
             main_grid.attach (locale_view, 0, 1);
         }
 

@@ -40,15 +40,19 @@ public class Appearance.Fuse : Fusebox.Fuse {
             //      main_stack.add_titled (dock_view, "dock", _("Dock"));
             //  }
 
-            var stack_switcher = new He.ViewSwitcher () {
-                margin_start = 18
-            };
+            var stack_switcher = new He.ViewSwitcher ();
             stack_switcher.stack = main_stack;
+
+            var appbar = new He.AppBar () {
+                viewtitle_widget = stack_switcher,
+                show_back = false,
+                flat = true
+            };
 
             main_grid = new Gtk.Grid () {
                 row_spacing = 12
             };
-            main_grid.attach (stack_switcher, 0, 0);
+            main_grid.attach (appbar, 0, 0);
             main_grid.attach (main_stack, 0, 1);
         }
 

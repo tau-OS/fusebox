@@ -190,15 +190,7 @@ public class DateTime.DateTimeView : Gtk.Box {
         timeformat_box.append (timeformat_label);
         timeformat_box.append (timeformat_toggle_box);
 
-        var main_label = new Gtk.Label (_("Date & Time")) {
-            halign = Gtk.Align.START,
-            margin_start = 18,
-            margin_bottom = 6
-        };
-        main_label.add_css_class ("view-title");
-
         var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        mbox.append (main_label);
         mbox.append (date_time_box);
         mbox.append (timezone_box);
         mbox.append (timeformat_box);
