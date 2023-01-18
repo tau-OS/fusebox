@@ -12,7 +12,7 @@ shared_module('fuse-about',
         meson.get_compiler('vala').find_library('posix'),
         libfusebox_dep,
         dependency('libhelium-1'),
-        dependency('libbismuth-1', fallback: [ 'libbismuth', 'bismuth_dep' ], version: '>=1.0.0'),
+        dependency('libbismuth-1', version: '>=1.0.0'),
     ],
     install: true,
     install_dir: join_paths(fuses_dir, 'system')
