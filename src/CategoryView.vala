@@ -28,6 +28,8 @@ namespace Fusebox {
         private Gtk.Stack stack;
         private He.EmptyPage alert_view;
 
+        public Gtk.ScrolledWindow scroller;
+
         construct {
             alert_view = new He.EmptyPage ();
 
@@ -43,14 +45,14 @@ namespace Fusebox {
             };
             category_box.append (category);
 
-            var category_scrolled = new Gtk.ScrolledWindow () {
+            scroller = new Gtk.ScrolledWindow () {
                 child = category_box,
                 hscrollbar_policy = Gtk.PolicyType.NEVER
             };
 
             stack = new Gtk.Stack ();
             stack.add_child (alert_view);
-            stack.add_named (category_scrolled, "category-grid");
+            stack.add_named (scroller, "category-grid");
 
             append (stack);
         }

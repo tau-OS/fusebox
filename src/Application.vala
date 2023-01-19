@@ -168,11 +168,8 @@ namespace Fusebox {
             };
             headerbar.append (search_button);
             headerbar.append (menu_button);
-            var label = new Gtk.Label ("Settings") {
-                halign = Gtk.Align.START
-            };
-            label.add_css_class ("view-title");
-            headerbar.viewtitle_widget = label;
+            headerbar.viewtitle_label = "Test";
+            headerbar.viewsubtitle_label = "";
 
             search_button.toggled.connect (() => {
                 search_box.visible = search_button.active;
@@ -180,6 +177,8 @@ namespace Fusebox {
 
             category_view = new Fusebox.CategoryView (fuse_to_open);
             category_view.load_default_fuses.begin ();
+
+            headerbar.scroller = category_view.scroller;
 
             album = new Bis.Album () {
                 can_navigate_back = true,
