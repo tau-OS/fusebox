@@ -167,7 +167,7 @@ namespace Fusebox {
             };
             headerbar.append (search_button);
             headerbar.append (menu_button);
-            headerbar.viewtitle_label = "Test";
+            headerbar.viewtitle_label = "Settings";
             headerbar.viewsubtitle_label = "";
 
             search_button.toggled.connect (() => {
