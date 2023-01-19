@@ -356,8 +356,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     }
     
     public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
-        private const int THUMB_WIDTH = 100;
-        private const int THUMB_HEIGHT = 100;
+        private const int THUMB_WIDTH = 128;
+        private const int THUMB_HEIGHT = 128;
         
         private Gtk.Revealer check_revealer;
         private Gtk.ToggleButton check;
@@ -409,10 +409,12 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
 
         construct {
-            width_request = THUMB_WIDTH + 6;
+            width_request = THUMB_WIDTH;
             height_request = THUMB_HEIGHT;
             
-            image = new Gtk.Picture ();
+            image = new Gtk.Picture () {
+                content_fit = Gtk.ContentFit.COVER
+            };
             
             check = new Gtk.ToggleButton () {
                 halign = Gtk.Align.START,
