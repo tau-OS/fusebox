@@ -412,9 +412,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             width_request = THUMB_WIDTH;
             height_request = THUMB_HEIGHT;
             
-            image = new Gtk.Picture () {
-                content_fit = Gtk.ContentFit.COVER
-            };
+            image = new Gtk.Picture ();
             
             check = new Gtk.ToggleButton () {
                 halign = Gtk.Align.START,
