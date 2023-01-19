@@ -196,12 +196,22 @@ namespace Fusebox {
             };
             empty_page.action_button.visible = false;
 
+            var eheaderbar = new He.AppBar () {
+                show_buttons = true,
+                show_back = false,
+                flat = true
+            };
+
+            var ebox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+            ebox.append (eheaderbar);
+            ebox.append (empty_page);
+
             halbum = new Bis.Album () {
                 can_navigate_back = true,
                 can_navigate_forward = true,
                 can_unfold = false
             };
-            halbum.append (empty_page);
+            halbum.append (ebox);
 
             var searchview = new SearchView ();
 
