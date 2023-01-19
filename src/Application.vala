@@ -163,7 +163,6 @@ namespace Fusebox {
             headerbar = new He.AppBar () {
                 show_buttons = false,
                 show_back = false,
-                flat = true,
                 width_request = 250
             };
             headerbar.append (search_button);
@@ -198,8 +197,7 @@ namespace Fusebox {
 
             var eheaderbar = new He.AppBar () {
                 show_buttons = true,
-                show_back = false,
-                flat = true
+                show_back = false
             };
 
             var ebox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
