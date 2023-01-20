@@ -13,6 +13,7 @@ shared_module('fuse-about',
         libfusebox_dep,
         dependency('libhelium-1'),
         dependency('libbismuth-1', version: '>=1.0.0'),
+        dependency('gl'),
     ],
     install: true,
     install_dir: join_paths(fuses_dir, 'system')
