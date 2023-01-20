@@ -48,6 +48,17 @@ class Accounts.EditAccount : He.Window {
     password_confirm_entry.visibility = false;
     password_confirm_entry.set_parent (password_confirm_block);
 
+
+    var administrator_block = new He.MiniContentBlock () {
+      title = "Administrator",
+      subtitle = "An administrator account can act on system sensitive settings."
+    };
+    main_box.append (administrator_block);
+
+    var administrator_switch = new Gtk.Switch ();
+    administrator_switch.set_parent (administrator_block);
+
+
     var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
       homogeneous = true,
       valign = Gtk.Align.END,
