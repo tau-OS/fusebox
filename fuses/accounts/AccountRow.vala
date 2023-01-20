@@ -22,16 +22,26 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
     subtitle.add_css_class ("cb-subtitle");
     headings.append(subtitle);
 
-    var edit_button = new He.DisclosureButton ("document-edit-symbolic") {
+    var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6) {
       hexpand = true,
       valign = Gtk.Align.CENTER,
       halign = Gtk.Align.END,
     };
-    edit_button.clicked.connect (() => {
-      var dialog = new Accounts.EditAccount (He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this));
+    main_box.append(button_box);
+
+    var change_password_button = new He.DisclosureButton ("dialog-password-symbolic");
+    change_password_button.clicked.connect (() => {
+      var dialog = new Accounts.ChangePassword (user, He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this));
       dialog.present ();
     });
-    main_box.append(edit_button);
+    button_box.append(change_password_button);
+
+    var edit_button = new He.DisclosureButton ("document-edit-symbolic");
+    edit_button.clicked.connect (() => {
+      var dialog = new Accounts.EditAccount (user, He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this));
+      dialog.present ();
+    });
+    button_box.append(edit_button);
     main_box.add_css_class ("mini-content-block");
 
     this.set_child (main_box);
