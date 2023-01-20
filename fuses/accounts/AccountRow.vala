@@ -2,7 +2,7 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
   public AccountRow(Act.User user) {
     var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 
-    var avatar = new He.Avatar (64, null, user.real_name) {
+    var avatar = new He.Avatar (64, user.icon_file != null ? "file://" + user.icon_file : null, user.real_name) {
       margin_end = 24,
     };
     main_box.append(avatar);
@@ -47,7 +47,8 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
     this.set_child (main_box);
 
     user.changed.connect (() => {
-      avatar.set_name (user.real_name);
+      avatar.image = user.icon_file != null ? "file://" + user.icon_file : null;
+      avatar.name = user.real_name;
       title.label = user.real_name;
       subtitle.label = user.account_type == Act.UserAccountType.ADMINISTRATOR ? "Administrator" : "User";
     });

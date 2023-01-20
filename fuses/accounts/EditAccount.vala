@@ -11,6 +11,18 @@ class Accounts.EditAccount : He.Window {
       margin_start = 12,
       margin_end = 12,
     };
+
+    var avatar_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6) {
+      margin_bottom = 12
+    };
+    main_box.append (avatar_box);
+
+    var avatar = new He.Avatar (128, user.icon_file != null ? "file://" + user.icon_file : null, user.real_name);
+    avatar_box.append (avatar);
+
+    var avatar_button = new He.DisclosureButton ("document-edit-symbolic");
+    avatar_box.append (avatar_button);
+
     var username_block = new He.MiniContentBlock () {
       title = "Username",
     };
