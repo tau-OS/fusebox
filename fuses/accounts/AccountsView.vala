@@ -1,4 +1,6 @@
 public class Accounts.AccountsView : Gtk.Box {
+    private ListStore account_list = get_account_list_store ();
+
     construct {
         var users = Act.UserManager.get_default ().list_users ();
 
@@ -7,9 +9,11 @@ public class Accounts.AccountsView : Gtk.Box {
         var overlay_button = new He.OverlayButton ("list-add-symbolic", null, null);
         mbox.append (overlay_button);
 
-        var user_list = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        var user_list = new Gtk.ListBox ();
+        user_list.bind_model (this.account_list, (user) => {
+            return new Accounts.AccountRow ();
+        });
         user_list.add_css_class ("content-list");
-        user_list.append(new Accounts.AccountRow ());
         overlay_button.child = user_list;
 
         var clamp = new Bis.Latch ();

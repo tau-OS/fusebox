@@ -2,6 +2,7 @@ fuse_files = files(
     'AccountsFuse.vala',
     'AccountsView.vala',
     'AccountRow.vala',
+    'Utils.vala'
 )
 
 shared_module('fuse-accounts',

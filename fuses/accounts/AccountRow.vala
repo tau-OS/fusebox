@@ -1,14 +1,16 @@
-public class Accounts.AccountRow : Gtk.Box {
+public class Accounts.AccountRow : Gtk.ListBoxRow {
   construct {
+    var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+
     var avatar = new He.Avatar (64, null, "Lea Gray") {
       margin_end = 24,
     };
-    this.append(avatar);
+    main_box.append(avatar);
 
     var headings = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
       valign = Gtk.Align.CENTER,
     };
-    this.append(headings);
+    main_box.append(headings);
     var title = new Gtk.Label ("Lea Gray") {
       xalign = 0,
     };
@@ -25,8 +27,9 @@ public class Accounts.AccountRow : Gtk.Box {
       valign = Gtk.Align.CENTER,
       halign = Gtk.Align.END,
     };
-    this.append(edit_button);
+    main_box.append(edit_button);
+    main_box.add_css_class ("mini-content-block");
 
-    this.add_css_class ("mini-content-block");
+    this.set_child (main_box);
   }
 }
