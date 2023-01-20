@@ -108,10 +108,10 @@ namespace Fusebox {
 
         public static string? get_category_name (Fusebox.Fuse.Category category) {
             switch (category) {
-                case Fuse.Category.PERSONAL:
-                    return _("Personal");
                 case Fuse.Category.NETWORK:
                     return _("Connections");
+                case Fuse.Category.PERSONAL:
+                    return _("Personal");
                 case Fuse.Category.SYSTEM:
                     return _("System");
                 case Fuse.Category.CUSTOM:
