@@ -10,7 +10,7 @@ public class DateTime.Fuse : Fusebox.Fuse {
             code_name: "co.tauos.Fusebox.DateTime",
             display_name: _("Date & Time"),
             description: _("Setup time and date"),
-            icon: "document-open-recent-symbolic",
+            icon: "settings-time-symbolic",
             supported_settings: settings,
             index: 1
         );

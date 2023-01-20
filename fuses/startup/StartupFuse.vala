@@ -43,7 +43,7 @@ public class Startup.Fuse : Fusebox.Fuse {
             code_name: "co.tauos.Fusebox.Startup",
             display_name: _("App Autostart"),
             description: _("Manage applications that start automatically"),
-            icon: "system-run-symbolic",
+            icon: "settings-applications-symbolic",
             supported_settings: settings,
             index: 6
         );

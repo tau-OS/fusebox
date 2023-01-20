@@ -11,7 +11,7 @@ public class Locale.Fuse : Fusebox.Fuse {
             code_name: "co.tauos.Fusebox.Locale",
             display_name: _("Region & Locale"),
             description: _("Change system locale"),
-            icon: "settings-locale",
+            icon: "settings-region-symbolic",
             supported_settings: settings,
             index: 2
         );

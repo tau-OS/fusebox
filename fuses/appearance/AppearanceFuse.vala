@@ -19,7 +19,7 @@ public class Appearance.Fuse : Fusebox.Fuse {
             code_name: "co.tauos.Fusebox.Appearance",
             display_name: _("Appearance"),
             description: _("Choose an accent color and change wallpaper"),
-            icon: "applications-graphics-symbolic",
+            icon: "settings-appearance-symbolic",
             supported_settings: settings,
             index: 0
         );

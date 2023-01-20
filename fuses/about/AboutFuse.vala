@@ -12,7 +12,7 @@ public class About.Fuse : Fusebox.Fuse {
             code_name: "co.tauos.Fusebox.About",
             display_name: _("About"),
             description: _("View OS information"),
-            icon: "dialog-information-symbolic",
+            icon: "settings-about-symbolic",
             supported_settings: settings,
             index: 5
         );

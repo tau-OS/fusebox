@@ -11,7 +11,7 @@ public class Accounts.Fuse : Fusebox.Fuse {
             code_name: "co.tauos.Fusebox.Accounts",
             display_name: _("Accounts"),
             description: _("Manage user accounts"),
-            icon: "settings-locale",
+            icon: "settings-users-symbolic",
             supported_settings: settings,
             index: 2
         );
