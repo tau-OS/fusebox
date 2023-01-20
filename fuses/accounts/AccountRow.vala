@@ -1,8 +1,8 @@
 public class Accounts.AccountRow : Gtk.ListBoxRow {
-  construct {
+  public AccountRow(Act.User user) {
     var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 
-    var avatar = new He.Avatar (64, null, "Lea Gray") {
+    var avatar = new He.Avatar (64, null, user.real_name) {
       margin_end = 24,
     };
     main_box.append(avatar);
@@ -11,12 +11,12 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
       valign = Gtk.Align.CENTER,
     };
     main_box.append(headings);
-    var title = new Gtk.Label ("Lea Gray") {
+    var title = new Gtk.Label (user.real_name) {
       xalign = 0,
     };
     title.add_css_class ("cb-title");
     headings.append(title);
-    var subtitle = new Gtk.Label ("User") {
+    var subtitle = new Gtk.Label (user.account_type == Act.UserAccountType.ADMINISTRATOR ? "Administrator" : "User") {
       xalign = 0,
     };
     subtitle.add_css_class ("cb-subtitle");
@@ -35,5 +35,11 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
     main_box.add_css_class ("mini-content-block");
 
     this.set_child (main_box);
+
+    user.changed.connect (() => {
+      avatar.set_name (user.real_name);
+      title.label = user.real_name;
+      subtitle.label = user.account_type == Act.UserAccountType.ADMINISTRATOR ? "Administrator" : "User";
+    });
   }
 }

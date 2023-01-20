@@ -11,7 +11,7 @@ public class Accounts.AccountsView : Gtk.Box {
 
         var user_list = new Gtk.ListBox ();
         user_list.bind_model (this.account_list, (user) => {
-            return new Accounts.AccountRow ();
+            return new Accounts.AccountRow ((Act.User) user);
         });
         user_list.add_css_class ("content-list");
         overlay_button.child = user_list;
