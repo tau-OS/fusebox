@@ -27,6 +27,10 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
       valign = Gtk.Align.CENTER,
       halign = Gtk.Align.END,
     };
+    edit_button.clicked.connect (() => {
+      var dialog = new Accounts.EditAccount (He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this));
+      dialog.present ();
+    });
     main_box.append(edit_button);
     main_box.add_css_class ("mini-content-block");
 
