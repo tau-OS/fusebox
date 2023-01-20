@@ -1,3 +1,9 @@
+[CCode (cheader_filename = "GL/gl.h", cname = "GL_RENDERER")]
+extern const uint GL_RENDERER;
+
+[CCode (cheader_filename = "GL/gl.h", cname = "glGetString")]
+extern unowned string glGetString(uint name);
+
 [DBus (name = "org.freedesktop.hostname1")]
 public interface SystemInterface : Object {
     [DBus (name = "IconName")]
@@ -539,9 +545,8 @@ public class About.OSView : Gtk.Box {
                     "org.gnome.SessionManager",
                     "/org/gnome/SessionManager");
 
-                print("gpu: %s\n", session_manager.renderer);
-
-                return clean_name (session_manager.renderer);
+                // ! really sus
+                return clean_name (session_manager.renderer == "" ? glGetString(GL_RENDERER) : session_manager.renderer);
             } catch (IOError e) {
                 warning ("Unable to connect to GNOME Session Manager for GPU details: %s", e.message);
                 return _("Unknown Graphics");
