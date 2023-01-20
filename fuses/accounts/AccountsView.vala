@@ -9,7 +9,9 @@ public class Accounts.AccountsView : Gtk.Box {
         var overlay_button = new He.OverlayButton ("list-add-symbolic", null, null);
         mbox.append (overlay_button);
 
-        var user_list = new Gtk.ListBox ();
+        var user_list = new Gtk.ListBox () {
+            selection_mode = Gtk.SelectionMode.NONE
+        };
         user_list.bind_model (this.account_list, (user) => {
             return new Accounts.AccountRow ((Act.User) user);
         });
