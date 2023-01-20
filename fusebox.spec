@@ -94,6 +94,7 @@ git submodule update --init --recursive
 %{_datadir}/metainfo/co.tauos.Fusebox.appdata.xml
 %{_libdir}/fusebox-1/personal/libfuse-appearance.so
 %{_libdir}/fusebox-1/system/libfuse-about.so
+%{_libdir}/fusebox-1/system/libfuse-accounts.so
 %{_libdir}/fusebox-1/system/libfuse-datetime.so
 %{_libdir}/fusebox-1/system/libfuse-startup.so
 %{_libdir}/fusebox-1/system/libfuse-locale.so
