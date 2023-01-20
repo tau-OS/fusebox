@@ -8,7 +8,12 @@ class Accounts.EditAccount : He.Window {
     this.resizable = false;
     this.set_size_request (440, 550);
 
-    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+      margin_bottom = 12,
+      margin_top = 12,
+      margin_start = 12,
+      margin_end = 12,
+    };
     var username_block = new He.MiniContentBlock () {
       title = "Username",
     };
@@ -42,6 +47,26 @@ class Accounts.EditAccount : He.Window {
     var password_confirm_entry = new Gtk.Entry ();
     password_confirm_entry.visibility = false;
     password_confirm_block.child = password_confirm_entry;
+
+    var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
+      homogeneous = true,
+      valign = Gtk.Align.END,
+      vexpand = true,
+    };
+    main_box.append (button_box);
+
+    var cancel_button = new He.TextButton (_("Cancel"));
+    cancel_button.set_size_request(200, -1);
+    cancel_button.clicked.connect (() => {
+      this.destroy ();
+    });
+    button_box.append (cancel_button);
+
+    var apply_button = new He.FillButton (_("Edit Account")) {
+      sensitive = false,
+    };
+    apply_button.set_size_request(200, -1);
+    button_box.append (apply_button);
 
     this.set_child (main_box);
   }
