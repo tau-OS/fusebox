@@ -539,6 +539,8 @@ public class About.OSView : Gtk.Box {
                     "org.gnome.SessionManager",
                     "/org/gnome/SessionManager");
 
+                print("gpu: %s\n", session_manager.renderer);
+
                 return clean_name (session_manager.renderer);
             } catch (IOError e) {
                 warning ("Unable to connect to GNOME Session Manager for GPU details: %s", e.message);
