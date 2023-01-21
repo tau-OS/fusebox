@@ -174,7 +174,7 @@ public class DateTime.DateTimeView : Gtk.Box {
             group = timeformat_12h_toggle
         };
 
-        var timeformat_toggle_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6) {
+        var timeformat_toggle_box = new He.SegmentedButton () {
             halign = Gtk.Align.END,
             hexpand = true
         };
