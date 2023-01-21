@@ -7,6 +7,10 @@ public class Accounts.AccountsView : Gtk.Box {
         var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
 
         var overlay_button = new He.OverlayButton ("list-add-symbolic", null, null);
+        overlay_button.clicked.connect (() => {
+            var dialog = new Accounts.CreateAccount (He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this));
+            dialog.present ();
+        });
         mbox.append (overlay_button);
 
         var user_list = new Gtk.ListBox () {

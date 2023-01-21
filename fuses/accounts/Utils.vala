@@ -23,3 +23,14 @@ ListStore get_account_list_store () {
 
   return list;
 }
+
+void create_user (string username, string fullname, string password, Act.UserAccountType user_type, string? avatar_path) {
+  var user_manager = Act.UserManager.get_default ();
+  var user = user_manager.create_user (username, fullname, user_type);
+
+  user.set_password (password, "");
+
+  if (avatar_path != null) {
+    user.set_icon_file (avatar_path);
+  }
+}

@@ -1,36 +1,31 @@
-class Accounts.EditAccount : He.Window {
-  private Act.User user;
+class Accounts.CreateAccount : He.Window {
+  private static Regex username_regex;
 
-  private string real_name;
-  private bool administator;
-  private string icon_file;
+  static construct {
+    username_regex = new Regex ("^[a-z][a-z0-9_-]*$");
+  }
+
+  private string username = "";
+  private string real_name = "";
+  private bool administator = false;
+  private string? icon_file = null;
+  private string password = "";
+  private string password_confirm = "";
+
 
   bool fields_changed () {
-    return this.real_name != this.user.get_real_name () ||
-           this.administator != (this.user.get_account_type () == Act.UserAccountType.ADMINISTRATOR) ||
-           this.icon_file != this.user.icon_file;
+    return this.username != "" &&
+           username_regex.match (this.username) &&
+           this.real_name != "" &&
+           this.password != "" &&
+           this.password_confirm != "" &&
+           this.password == this.password_confirm;
   }
 
-  void update_user () {
-    if (this.real_name != this.user.get_real_name ())
-      this.user.set_real_name (this.real_name);
-
-    if (this.administator != (this.user.get_account_type () == Act.UserAccountType.ADMINISTRATOR))
-      this.user.set_account_type (this.administator ? Act.UserAccountType.ADMINISTRATOR : Act.UserAccountType.STANDARD);
-
-    if (this.icon_file != this.user.icon_file)
-      this.user.set_icon_file (this.icon_file);
-  }
-
-  public EditAccount (Act.User user, He.ApplicationWindow parent) {
+  public CreateAccount (He.ApplicationWindow parent) {
     this.parent = parent;
     this.modal = true;
     this.resizable = false;
-
-    this.user = user;
-    this.real_name = user.get_real_name ();
-    this.administator = user.get_account_type () == Act.UserAccountType.ADMINISTRATOR;
-    this.icon_file = user.icon_file;
 
     var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
       margin_bottom = 12,
@@ -47,7 +42,7 @@ class Accounts.EditAccount : He.Window {
     };
     main_box.append (avatar_box);
 
-    var avatar = new He.Avatar (96, user.icon_file != null ? "file://" + user.icon_file : null, user.real_name);
+    var avatar = new He.Avatar (96, null, "New User");
     var avatar_edit_button = new He.DisclosureButton ("document-edit-symbolic") {
       valign = Gtk.Align.END,
       halign = Gtk.Align.END,
@@ -61,7 +56,7 @@ class Accounts.EditAccount : He.Window {
     avatar_overlay.add_overlay (avatar_edit_button);
     avatar_box.append (avatar_overlay);
 
-    var title = new Gtk.Label(user.real_name) {
+    var title = new Gtk.Label("New User") {
       halign = Gtk.Align.CENTER,
     };
     title.add_css_class ("large-title");
@@ -73,8 +68,8 @@ class Accounts.EditAccount : He.Window {
     main_box.append (username_block);
 
     var username_entry = new Gtk.Entry () {
-      text = user.get_user_name (),
-      sensitive = false,
+      placeholder_text = "emilyfuentes",
+      max_length = 32,
     };
     username_entry.set_parent (username_block);
 
@@ -84,10 +79,32 @@ class Accounts.EditAccount : He.Window {
     main_box.append (name_block);
 
     var name_entry = new Gtk.Entry () {
-      text = user.real_name,
       placeholder_text = "Emily Fuentes",
     };
     name_entry.set_parent (name_block);
+
+    var password_block = new He.MiniContentBlock () {
+      title = "Password",
+    };
+    main_box.append (password_block);
+
+    var password_entry = new Gtk.Entry () {
+      visibility = false,
+      placeholder_text = "••••••••",
+    };
+    password_entry.set_parent (password_block);
+
+    var password_confirm_block = new He.MiniContentBlock () {
+      title = "Confirm Password",
+    };
+    main_box.append (password_confirm_block);
+
+    var password_confirm_entry = new Gtk.Entry () {
+      visibility = false,
+      placeholder_text = "••••••••",
+    };
+
+    password_confirm_entry.set_parent (password_confirm_block);
 
     var administrator_block = new He.MiniContentBlock () {
       title = "Administrator",
@@ -97,7 +114,6 @@ class Accounts.EditAccount : He.Window {
     main_box.append (administrator_block);
 
     var administrator_switch = new Gtk.Switch () {
-      active = user.get_account_type () == Act.UserAccountType.ADMINISTRATOR,
       valign = Gtk.Align.CENTER,
     };
     administrator_switch.add_css_class ("bg-meson-red");
@@ -118,11 +134,17 @@ class Accounts.EditAccount : He.Window {
     });
     button_box.append (cancel_button);
 
-    var apply_button = new He.FillButton (_("Edit Account")) {
+    var apply_button = new He.FillButton (_("Create Account")) {
       sensitive = false,
     };
     apply_button.clicked.connect (() => {
-      this.update_user ();
+      create_user (
+        this.username,
+        this.real_name,
+        this.password,
+        this.administator ? Act.UserAccountType.ADMINISTRATOR : Act.UserAccountType.STANDARD,
+        this.icon_file
+      );
       this.destroy ();
     });
     apply_button.set_size_request(200, -1);
@@ -130,8 +152,24 @@ class Accounts.EditAccount : He.Window {
 
     this.set_child (main_box);
 
+    username_entry.changed.connect (() => {
+      this.username = username_entry.text;
+      apply_button.sensitive = this.fields_changed ();
+    });
+
     name_entry.changed.connect (() => {
       this.real_name = name_entry.text;
+      title.set_text (this.real_name);
+      apply_button.sensitive = this.fields_changed ();
+    });
+
+    password_entry.changed.connect (() => {
+      this.password = password_entry.text;
+      apply_button.sensitive = this.fields_changed ();
+    });
+
+    password_confirm_entry.changed.connect (() => {
+      this.password_confirm = password_confirm_entry.text;
       apply_button.sensitive = this.fields_changed ();
     });
 
@@ -163,5 +201,31 @@ class Accounts.EditAccount : He.Window {
         dialog.destroy ();
       });
     });
+
+    // * TODO: Add regex to username entry
+    //  var username_editable = username_entry.get_delegate ();
+
+    //  username_editable.insert_text.connect ((text, position) => {
+    //    var new_text = username_entry.text == "" ? text : username_entry.text.slice (0, position) + text + username_entry.text.slice (position, -1);
+    //    if (new_text == "") {
+    //      return;
+    //    };
+
+    //    if (!username_regex.match (username_entry.text)) {
+    //      print("no match");
+    //      GLib.Signal.stop_emission_by_name (username_editable, "insert-text");
+    //    };
+    //  });
+
+    //  username_editable.delete_text.connect ((start, end) => {
+    //    var new_text = username_entry.text.slice (0, start) + username_entry.text.slice (end, -1);
+    //    if (new_text == "") {
+    //      return;
+    //    };
+
+    //    if (!username_regex.match (username_entry.text)) {
+    //      GLib.Signal.stop_emission_by_name (username_editable, "delete-text");
+    //    };
+    //  });
   }
 }

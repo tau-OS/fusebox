@@ -4,7 +4,8 @@ fuse_files = files(
     'AccountRow.vala',
     'Utils.vala',
     'EditAccount.vala',
-    'ChangePassword.vala'
+    'ChangePassword.vala',
+    'CreateAccount.vala',
 )
 
 shared_module('fuse-accounts',
