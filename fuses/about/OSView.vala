@@ -97,7 +97,7 @@ public class About.OSView : Gtk.Box {
 
         storage_gauge = new Gtk.ProgressBar () {
             vexpand = true,
-            valign = Gtk.Align.START
+            valign = Gtk.Align.CENTER
         };
         var storage_title = new Gtk.Label (_("Storage")) {
             selectable = true,
@@ -627,8 +627,7 @@ public class About.OSView : Gtk.Box {
 
             used = GLib.format_size (infou.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_USED));
 
-            // reverse the fraction because we want to show used space
-            var fraction = 1 - (double.parse (used) / 1024);
+            var fraction = (double.parse (used) * 1.04858) / (double.parse (storage_capacity) * 1.04858);
 
             storage_gauge.set_fraction (fraction);
             storage_subtitle.label = used + " / " + storage_capacity;
