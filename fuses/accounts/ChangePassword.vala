@@ -3,7 +3,6 @@ class Accounts.ChangePassword : He.Window {
     this.parent = parent;
     this.modal = true;
     this.resizable = false;
-    this.set_size_request (440, 550);
 
     var main = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
       margin_top = 12,
