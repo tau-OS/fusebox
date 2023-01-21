@@ -6,13 +6,13 @@ entry.search {
     background: @card_bg_color;
     padding: 14.5px 16px;
     border-radius: 8px;
-    color: @view_fg_color;
+    color: @card_fg_color;
 }
 .fuse-block:hover {
-    background: alpha(@view_fg_color, 0.4);
+    background: alpha(@card_fg_color, 0.4);
 }
 row:selected .fuse-block {
-  background: alpha(@view_fg_color, 0.1);
+  background: alpha(@card_fg_color, 0.1);
 }
 
 .main-content-block {
@@ -33,11 +33,7 @@ button.flat label {
 }
 
 .checked-up {
-  background: linear-gradient(
-        180deg,
-        @view_bg_color 0%,
-        shade(@view_bg_color, 0.8) 100%
-  );
+  background: shade(@view_bg_color, 0.8);
   color: @view_fg_color;
   box-shadow: inset 0 0 0 1px @borders;
   margin-top: 3px;
@@ -72,7 +68,7 @@ button.flat label {
 }
 .multi-color radio {
   background: linear-gradient(
-        90deg,
+        45deg,
         #e25480 0%,
         #f99e5c 13%,
         #febc16 26%,
@@ -82,19 +78,6 @@ button.flat label {
         #a57bcd 78%,
         #cb76b8 91%
     );
-}
-
-.mini-content-block .mini-content-block {
-  background: @view_bg_color;
-}
-
-.mini-content-block .mini-content-block:hover {
-  background: alpha(@accent_bg_color, 0.1);
-  color: @view_fg_color;
-}
-
-.mini-content-block entry {
-  background: @window_bg_color;
 }
 
 .menu-button {
