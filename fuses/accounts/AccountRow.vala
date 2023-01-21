@@ -36,9 +36,9 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
       var dialog = new He.Dialog (
         true,
         He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this),
-        "Delete " + user.real_name,
+        "Delete " + user.real_name + "'s Account",
         "Are you sure you want to delete this account?",
-        "",
+        "You cannot undo this action, and will delete " + user.real_name + "'s data.",
         "dialog-warning-symbolic",
         new He.FillButton("Delete"),
         null
