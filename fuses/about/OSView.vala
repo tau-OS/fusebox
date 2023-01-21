@@ -615,16 +615,16 @@ public class About.OSView : Gtk.Box {
     }
 
     private async void get_storage_info () {
+        // We are only interested in the main drive's size
         var file_root = GLib.File.new_for_path ("/");
         string storage_capacity = "";
         string used = "";
 
         try {
             var infos = yield file_root.query_filesystem_info_async (GLib.FileAttribute.FILESYSTEM_SIZE);
-
             storage_capacity = GLib.format_size (infos.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_SIZE));
-            var infou = yield file_root.query_filesystem_info_async (GLib.FileAttribute.FILESYSTEM_USED);
 
+            var infou = yield file_root.query_filesystem_info_async (GLib.FileAttribute.FILESYSTEM_USED);
             used = GLib.format_size (infou.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_USED));
 
             var fraction = (double.parse (used) * 1.04858) / (double.parse (storage_capacity) * 1.04858);
