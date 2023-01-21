@@ -17,6 +17,7 @@ shared_module('fuse-locale',
         dependency('libbismuth-1', version: '>=1.0.0'),
         dependency('gnome-desktop-4'),
         dependency('gweather4', version: '>= 3.90.0'),
+        dependency('accountsservice')
     ],
     install: true,
     install_dir: join_paths(fuses_dir, 'system')

@@ -81,6 +81,49 @@ namespace Locale {
     }
   }
 
+  // ? Note that the system locale is the default when user language/format is not set
+  private struct UserLocale {
+    public LocaleModel? language;
+    public LocaleModel? format;
+  }
+
+  private UserLocale get_user_locale(Act.User current_user) {
+    var locale_settings = new GLib.Settings("org.gnome.system.locale");
+
+    var language_id = current_user.language;
+    var format_id = locale_settings.get_string("region");
+
+    LocaleModel? language_locale = null;
+    if (language_id != null && language_id != "") {
+      language_locale = new LocaleModel.from_locale(language_id);
+    }
+
+    LocaleModel? format_locale = null;
+    if (format_id != null && format_id != "") {
+      format_locale = new LocaleModel.from_locale(format_id);
+    }
+
+    return UserLocale() {
+      language = language_locale,
+      format = format_locale
+    };
+  }
+
+  private void update_user_locale(Act.User current_user, UserLocale user_locale) {
+    var locale_settings = new GLib.Settings("org.gnome.system.locale");
+
+    var language_id = user_locale.language?.locale;
+    var format_id = user_locale.format?.locale;
+
+    if (language_id != null) {
+      current_user.set_language(language_id);
+    }
+
+    if (format_id != null) {
+      locale_settings.set_string("region", format_id);
+    }
+  }
+
   private struct LocaleExample {
     public string date;
     public string time;

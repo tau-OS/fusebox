@@ -15,9 +15,17 @@ public interface Locale1Proxy : GLib.Object {
 
 public class Locale.LocaleView : Gtk.Box {
     private Locale1Proxy locale1_proxy;
-    private SystemLocale current_system_locale;
-    private signal void current_system_locale_updated ();
+    private UserLocale current_user_locale;
+    private signal void current_user_locale_updated ();
     construct {
+        var user_manager = Act.UserManager.get_default ();
+        var current_user = user_manager.get_user (Environment.get_user_name ());
+
+        current_user.notify["is-loaded"].connect (() => {
+            this.current_user_locale = get_user_locale (current_user);
+            current_user_locale_updated ();
+        });
+
         try {
             var connection = Bus.get_sync (BusType.SYSTEM);
             locale1_proxy = connection.get_proxy_sync<Locale1Proxy> (
@@ -29,7 +37,8 @@ public class Locale.LocaleView : Gtk.Box {
             critical (e.message);
         }
 
-        this.current_system_locale = get_system_locale (locale1_proxy);
+        var system_locale = get_system_locale (locale1_proxy);
+        this.current_user_locale = get_user_locale (current_user);
 
         var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
 
@@ -41,11 +50,11 @@ public class Locale.LocaleView : Gtk.Box {
                 var language = dialog.selected_language;
                 dialog.destroy ();
                 try {
-                    var new_system_locale = get_system_locale (locale1_proxy);
-                    new_system_locale.language = language;
-                    update_system_locale (locale1_proxy, new_system_locale);
-                    this.current_system_locale = new_system_locale;
-                    current_system_locale_updated ();
+                    var new_user_locale = get_user_locale (current_user);
+                    new_user_locale.language = language;
+                    update_user_locale (current_user, new_user_locale);
+                    this.current_user_locale = new_user_locale;
+                    current_user_locale_updated ();
                 } catch (GLib.Error e) {
                     critical (e.message);
                 }
@@ -55,9 +64,10 @@ public class Locale.LocaleView : Gtk.Box {
         var language_block = new He.MiniContentBlock.with_details(_("Language"), null, language_button) {
             hexpand = true,
         };
-        language_block.subtitle = this.current_system_locale.language.name;
-        this.current_system_locale_updated.connect (() => {
-            language_block.subtitle = this.current_system_locale.language.name;
+        print ("%s", this.current_user_locale.language?.name ?? system_locale.language.name);
+        language_block.subtitle = this.current_user_locale.language?.name ?? system_locale.language.name;
+        this.current_user_locale_updated.connect (() => {
+            language_block.subtitle = this.current_user_locale.language?.name ?? system_locale.language.name;
         });
         mbox.append(language_block);
 
@@ -69,11 +79,11 @@ public class Locale.LocaleView : Gtk.Box {
                 var format = dialog.selected_format;
                 dialog.destroy ();
                 try {
-                    var new_system_locale = get_system_locale (locale1_proxy);
-                    new_system_locale.format = format;
-                    update_system_locale (locale1_proxy, new_system_locale);
-                    this.current_system_locale = new_system_locale;
-                    current_system_locale_updated ();
+                    var new_user_locale = get_user_locale (current_user);
+                    new_user_locale.format = format;
+                    update_user_locale (current_user, new_user_locale);
+                    this.current_user_locale = new_user_locale;
+                    current_user_locale_updated ();
                 } catch (GLib.Error e) {
                     critical (e.message);
                 }
@@ -82,9 +92,9 @@ public class Locale.LocaleView : Gtk.Box {
         var format_block = new He.MiniContentBlock.with_details(_("Format"), null, format_button) {
             hexpand = true,
         };
-        format_block.subtitle = this.current_system_locale.format?.name ?? this.current_system_locale.language.name;
-        this.current_system_locale_updated.connect (() => {
-            format_block.subtitle = this.current_system_locale.format?.name ?? this.current_system_locale.language.name;
+        format_block.subtitle = this.current_user_locale.format?.name ?? this.current_user_locale.language?.name ?? system_locale.format?.name ?? system_locale.language.name;
+        this.current_user_locale_updated.connect (() => {
+            format_block.subtitle = this.current_user_locale.format?.name ?? this.current_user_locale.language?.name ?? system_locale.format?.name ?? system_locale.language.name;
         });
         mbox.append(format_block);
 
