@@ -29,6 +29,30 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
     };
     main_box.append(button_box);
 
+    var delete_button = new He.DisclosureButton ("user-trash-symbolic");
+    delete_button.visible = GLib.Environment.get_user_name () != user.user_name;
+    delete_button.add_css_class ("bg-meson-red");
+    delete_button.clicked.connect (() => {
+      var dialog = new He.Dialog (
+        true,
+        He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this),
+        "Delete " + user.real_name,
+        "Are you sure you want to delete this account?",
+        "",
+        "dialog-warning-symbolic",
+        new He.FillButton("Delete"),
+        null
+      );
+
+      dialog.present ();
+
+      dialog.primary_button.clicked.connect (() => {
+        Act.UserManager.get_default ().delete_user (user, false);
+        dialog.close ();
+      });
+    });
+    button_box.append(delete_button);
+
     var change_password_button = new He.DisclosureButton ("dialog-password-symbolic");
     change_password_button.clicked.connect (() => {
       var dialog = new Accounts.ChangePassword (user, He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this));
