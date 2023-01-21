@@ -22,6 +22,20 @@ public class Accounts.AccountsView : Gtk.Box {
         user_list.add_css_class ("content-list");
         overlay_button.child = user_list;
 
+        var autologin_box = new He.MiniContentBlock () {
+            title = _("Automatic Login"),
+        };
+        mbox.append (autologin_box);
+
+        var autologin_actions_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+        autologin_actions_box.set_parent (autologin_box);
+
+        var autologin_dropdown = new Gtk.DropDown (this.account_list, new Gtk.PropertyExpression (typeof(Act.User), null, "user_name"));
+        autologin_actions_box.append (autologin_dropdown);
+
+        var autologin_switch = new Gtk.Switch ();
+        autologin_actions_box.append (autologin_switch);
+
         var clamp = new Bis.Latch ();
         clamp.set_child (mbox);
         this.append (clamp);
