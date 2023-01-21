@@ -1,23 +1,13 @@
-<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_20_2)">
-<rect width="200" height="200" rx="24" fill="black"/>
-<rect x="0.5" y="0.5" width="199" height="199" rx="23.5" stroke="#FAFAFA" stroke-opacity="0.1"/>
-<rect x="14" y="16" width="173" height="52" rx="8" fill="#2D2D2D"/>
-<rect x="14" y="74" width="173" height="52" rx="8" fill="#2D2D2D"/>
-<rect x="14" y="132" width="173" height="52" rx="8" fill="#2D2D2D"/>
-<rect x="21" y="23" width="21" height="20" rx="10" fill="#BF5669" fill-opacity="0.7"/>
-<rect x="21" y="81" width="21" height="20" rx="10" fill="#78BF56" fill-opacity="0.7"/>
-<rect x="21" y="139" width="21" height="20" rx="10" fill="#569FBF" fill-opacity="0.7"/>
-<rect x="54" y="30" width="127" height="6" rx="3" fill="#F0F0F2"/>
-<rect x="54" y="88" width="127" height="6" rx="3" fill="#F0F0F2"/>
-<rect x="54" y="146" width="127" height="6" rx="3" fill="#F0F0F2"/>
-<rect x="54" y="49" width="90" height="6" rx="3" fill="#F0F0F2" fill-opacity="0.55"/>
-<rect x="54" y="107" width="90" height="6" rx="3" fill="#F0F0F2" fill-opacity="0.55"/>
-<rect x="54" y="165" width="90" height="6" rx="3" fill="#F0F0F2" fill-opacity="0.55"/>
+<svg width="120" height="80" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g style="mix-blend-mode:overlay">
+<rect width="120" height="80" rx="12" fill="black"/>
+<rect x="8" y="8" width="105" height="30" rx="8" fill="#2D2D2D"/>
+<rect x="8" y="43" width="105" height="30" rx="8" fill="#2D2D2D"/>
+<rect x="34" y="16" width="47" height="5" fill="#F0F0F2"/>
+<rect x="34" y="26" width="72" height="5" fill="#F0F0F2" fill-opacity="0.5"/>
+<rect x="34" y="50" width="47" height="5" fill="#F0F0F2"/>
+<rect x="34" y="60" width="72" height="5" fill="#F0F0F2" fill-opacity="0.5"/>
+<rect x="14" y="16" width="15" height="15" rx="7.5" fill="#8AC2FB"/>
+<rect x="14" y="50" width="15" height="15" rx="7.5" fill="#98E8A5"/>
 </g>
-<defs>
-<clipPath id="clip0_20_2">
-<rect width="200" height="200" fill="white"/>
-</clipPath>
-</defs>
 </svg>

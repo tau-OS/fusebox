@@ -76,8 +76,8 @@ public class AppearanceView : Gtk.Box {
         };
         prefer_label.add_css_class ("cb-title");
 
-        var prefer_default_image = new Gtk.Image.from_icon_name ("dark-mode-symbolic") {
-            pixel_size = 32
+        var prefer_default_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/by-apps.svg") {
+            pixel_size = 96
         };
 
         var prefer_default_card = new Gtk.Grid () {
@@ -89,7 +89,8 @@ public class AppearanceView : Gtk.Box {
         prefer_default_card.attach (prefer_default_image, 0, 0);
 
         var prefer_default_grid = new Gtk.Grid () {
-            row_spacing = 6
+            row_spacing = 6,
+            halign = Gtk.Align.CENTER
         };
         prefer_default_grid.attach (prefer_default_card, 0, 0);
         prefer_default_grid.attach (new Gtk.Label (_("Set By Apps")), 0, 1);
@@ -101,20 +102,21 @@ public class AppearanceView : Gtk.Box {
         prefer_default_radio.add_css_class ("image-button");
         prefer_default_radio.child = (prefer_default_grid);
 
-        var prefer_light_image = new Gtk.Image.from_icon_name ("weather-clear-symbolic") {
-            pixel_size = 32
+        var prefer_light_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/light.svg") {
+            pixel_size = 96
         };
 
         var prefer_light_card = new Gtk.Grid () {
             margin_top = 6,
             margin_bottom = 6,
             margin_end = 6,
-            margin_start = 6
+            margin_start = 6,
         };
         prefer_light_card.attach (prefer_light_image, 0, 0);
 
         var prefer_light_grid = new Gtk.Grid () {
-            row_spacing = 6
+            row_spacing = 6,
+            halign = Gtk.Align.CENTER
         };
         prefer_light_grid.attach (prefer_light_card, 0, 0);
         prefer_light_grid.attach (new Gtk.Label (_("Light")), 0, 1);
@@ -127,23 +129,24 @@ public class AppearanceView : Gtk.Box {
         prefer_light_radio.add_css_class ("image-button");
         prefer_light_radio.child = (prefer_light_grid);
 
-        var DARK_image = new Gtk.Image.from_icon_name ("weather-clear-night-symbolic") {
-            pixel_size = 32
+        var dark_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/dark.svg") {
+            pixel_size = 96
         };
 
-        var DARK_card = new Gtk.Grid () {
+        var dark_card = new Gtk.Grid () {
             margin_top = 6,
             margin_bottom = 6,
             margin_end = 6,
-            margin_start = 6
+            margin_start = 6,
         };
-        DARK_card.attach (DARK_image, 0, 0);
+        dark_card.attach (dark_image, 0, 0);
 
-        var DARK_grid = new Gtk.Grid () {
-            row_spacing = 6
+        var dark_grid = new Gtk.Grid () {
+            row_spacing = 6,
+            halign = Gtk.Align.CENTER
         };
-        DARK_grid.attach (DARK_card, 0, 0);
-        DARK_grid.attach (new Gtk.Label (_("Dark")), 0, 1);
+        dark_grid.attach (dark_card, 0, 0);
+        dark_grid.attach (new Gtk.Label (_("Dark")), 0, 1);
 
         prefer_dark_radio = new Gtk.ToggleButton () {
             group = prefer_default_radio,
@@ -151,7 +154,7 @@ public class AppearanceView : Gtk.Box {
             hexpand = true
         };
         prefer_dark_radio.add_css_class ("image-button");
-        prefer_dark_radio.child = (DARK_grid);
+        prefer_dark_radio.child = (dark_grid);
 
         var prefer_style_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             spacing = 12,

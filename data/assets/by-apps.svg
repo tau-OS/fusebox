@@ -1,0 +1,20 @@
+<svg width="120" height="80" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g style="mix-blend-mode:overlay">
+<rect width="120" height="80" rx="12" fill="#2D2D2D"/>
+<path d="M60 0H108C114.627 0 120 5.37258 120 12V68C120 74.6274 114.627 80 108 80H60V0Z" fill="#F0F0F0"/>
+<path d="M6 15C6 10.5817 9.58172 7 14 7H60V37H14C9.58172 37 6 33.4183 6 29V15Z" fill="#3D3D3D"/>
+<path d="M6 50C6 45.5817 9.58172 42 14 42H60V72H14C9.58172 72 6 68.4183 6 64V50Z" fill="#3D3D3D"/>
+<path d="M60 7H106C110.418 7 114 10.5817 114 15V29C114 33.4183 110.418 37 106 37H60V7Z" fill="#FAFAFA"/>
+<path d="M60 42H106C110.418 42 114 45.5817 114 50V64C114 68.4183 110.418 72 106 72H60V42Z" fill="#FAFAFA"/>
+<rect x="60" y="16" width="21" height="5" fill="#2D2D2D"/>
+<rect x="34" y="16" width="26" height="5" fill="#F0F0F2"/>
+<rect x="60" y="26" width="46" height="5" fill="#2D2D2D" fill-opacity="0.5"/>
+<rect x="34" y="26" width="26" height="5" fill="#F0F0F2" fill-opacity="0.5"/>
+<rect x="60" y="50" width="21" height="5" fill="#2D2D2D"/>
+<rect x="34" y="50" width="26" height="5" fill="#F0F0F2"/>
+<rect x="60" y="60" width="46" height="5" fill="#2D2D2D" fill-opacity="0.5"/>
+<rect x="34" y="60" width="26" height="5" fill="#F0F0F2" fill-opacity="0.5"/>
+<rect x="14" y="16" width="15" height="15" rx="7.5" fill="#8AC2FB"/>
+<rect x="14" y="50" width="15" height="15" rx="7.5" fill="#98E8A5"/>
+</g>
+</svg>
