@@ -1,8 +1,10 @@
 class Accounts.CreateAccount : He.Window {
   private static Regex username_regex;
+  private static Regex allowed_username_chars_regex;
 
   static construct {
     username_regex = new Regex ("^[a-z][a-z0-9_-]*$");
+    allowed_username_chars_regex = new Regex ("^[a-z0-9_-]$");
   }
 
   private string username = "";
@@ -203,29 +205,12 @@ class Accounts.CreateAccount : He.Window {
     });
 
     // * TODO: Add regex to username entry
-    //  var username_editable = username_entry.get_delegate ();
+    var username_editable = username_entry.get_delegate ();
 
-    //  username_editable.insert_text.connect ((text, position) => {
-    //    var new_text = username_entry.text == "" ? text : username_entry.text.slice (0, position) + text + username_entry.text.slice (position, -1);
-    //    if (new_text == "") {
-    //      return;
-    //    };
-
-    //    if (!username_regex.match (username_entry.text)) {
-    //      print("no match");
-    //      GLib.Signal.stop_emission_by_name (username_editable, "insert-text");
-    //    };
-    //  });
-
-    //  username_editable.delete_text.connect ((start, end) => {
-    //    var new_text = username_entry.text.slice (0, start) + username_entry.text.slice (end, -1);
-    //    if (new_text == "") {
-    //      return;
-    //    };
-
-    //    if (!username_regex.match (username_entry.text)) {
-    //      GLib.Signal.stop_emission_by_name (username_editable, "delete-text");
-    //    };
-    //  });
+    username_editable.insert_text.connect ((text, position) => {
+      if (!allowed_username_chars_regex.match (text)) {
+        GLib.Signal.stop_emission_by_name (username_editable, "insert-text");
+      };
+    });
   }
 }
