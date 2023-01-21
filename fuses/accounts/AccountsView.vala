@@ -2,16 +2,17 @@ public class Accounts.AccountsView : Gtk.Box {
     private ListStore account_list = get_account_list_store ();
 
     construct {
-        var users = Act.UserManager.get_default ().list_users ();
-
-        var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        var user_manager = Act.UserManager.get_default ();
+        var users = user_manager.list_users ();
 
         var overlay_button = new He.OverlayButton ("list-add-symbolic", null, null);
         overlay_button.clicked.connect (() => {
             var dialog = new Accounts.CreateAccount (He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this));
             dialog.present ();
         });
-        mbox.append (overlay_button);
+
+        var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        overlay_button.child = mbox;
 
         var user_list = new Gtk.ListBox () {
             selection_mode = Gtk.SelectionMode.NONE
@@ -20,24 +21,52 @@ public class Accounts.AccountsView : Gtk.Box {
             return new Accounts.AccountRow ((Act.User) user);
         });
         user_list.add_css_class ("content-list");
-        overlay_button.child = user_list;
+        mbox.append (user_list);
 
         var autologin_box = new He.MiniContentBlock () {
             title = _("Automatic Login"),
+            margin_top = 12
         };
         mbox.append (autologin_box);
 
         var autologin_actions_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         autologin_actions_box.set_parent (autologin_box);
 
-        var autologin_dropdown = new Gtk.DropDown (this.account_list, new Gtk.PropertyExpression (typeof(Act.User), null, "user_name"));
+        Act.User? inital_autologin_user = null;
+        foreach (var user in users) {
+            if (user.automatic_login) {
+                inital_autologin_user = user;
+                break;
+            }
+        }
+
+        var autologin_dropdown = new Gtk.DropDown (this.account_list, new Gtk.PropertyExpression (typeof(Act.User), null, "real_name"));
         autologin_actions_box.append (autologin_dropdown);
 
+        if (inital_autologin_user != null) {
+            autologin_dropdown.selected = users.index (inital_autologin_user);
+        }
+
         var autologin_switch = new Gtk.Switch ();
+        autologin_switch.active = inital_autologin_user != null;
         autologin_actions_box.append (autologin_switch);
 
+        // TODO If the user cancels, we need to reset the switch to the previous state.. since it seems like it doesn't throw an error, this isn't straightforward
+
+        autologin_dropdown.notify["selected-item"].connect (() => {
+            var user = (Act.User) autologin_dropdown.selected_item;
+            if (autologin_switch.active) {
+                user.set_automatic_login (true);
+            }
+        });
+
+        autologin_switch.notify["active"].connect (() => {
+            var user = (Act.User) autologin_dropdown.selected_item;
+            user.set_automatic_login (autologin_switch.active);
+        });
+
         var clamp = new Bis.Latch ();
-        clamp.set_child (mbox);
+        clamp.set_child (overlay_button);
         this.append (clamp);
         this.orientation = Gtk.Orientation.VERTICAL;
     }
