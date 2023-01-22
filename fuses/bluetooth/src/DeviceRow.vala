@@ -56,7 +56,7 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
 
     private He.FillButton connect_button;
     private He.TintButton forget_button;
-    private Gtk.Image state;
+    private He.ModifierBadge state;
     private Gtk.Label state_label;
     private Gtk.LinkButton settings_button;
 
@@ -73,9 +73,10 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
             pixel_size = 32
         };
 
-        state = new Gtk.Image.from_icon_name ("user-offline");
+        state = new He.ModifierBadge (null);
         state.halign = Gtk.Align.END;
         state.valign = Gtk.Align.END;
+        state.visible = false;
 
         state_label = new Gtk.Label (null);
         state_label.xalign = 0;
@@ -242,26 +243,30 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
     private async void button_clicked () {
         if (!device.paired) {
             set_status (Status.PAIRING);
+            state.visible = true;
             try {
                 yield device.pair ();
             } catch (Error e) {
                 set_status (Status.UNABLE_TO_CONNECT);
+                state.visible = false;
                 critical (e.message);
             }
         } else if (!device.connected) {
             set_status (Status.CONNECTING);
+            state.visible = true;
             try {
                 yield device.connect ();
             } catch (Error e) {
                 set_status (Status.UNABLE_TO_CONNECT_PAIRED);
+                state.visible = false;
                 critical (e.message);
             }
         } else {
             set_status (Status.DISCONNECTING);
+            state.visible = false;
             try {
                 yield device.disconnect ();
             } catch (Error e) {
-                state.icon_name = "user-busy-symbolic";
                 critical (e.message);
             }
         }
@@ -279,8 +284,6 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
 
     private void set_status (Status status) {
         state_label.label = GLib.Markup.printf_escaped ("%s", status.to_string ());
-        state.visible = true;
-
         switch (status) {
             case Status.UNPAIRED:
                 connect_button.label = _("Pair");
@@ -291,30 +294,27 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
                 break;
             case Status.PAIRING:
                 connect_button.sensitive = false;
-                state.icon_name = "user-away-symbolic";
                 settings_button.visible = false;
                 forget_button.visible = false;
                 break;
             case Status.CONNECTED:
                 connect_button.label = _("Disconnect");
                 connect_button.sensitive = true;
-                state.icon_name = "user-available-symbolic";
                 if (settings_button.uri != "") {
                     settings_button.visible = true;
                 }
                 forget_button.sensitive = true;
                 forget_button.visible = true;
+                state.visible = false;
                 break;
             case Status.CONNECTING:
                 connect_button.sensitive = false;
-                state.icon_name = "user-away-symbolic";
                 settings_button.visible = false;
                 forget_button.sensitive = false;
                 forget_button.visible = true;
                 break;
             case Status.DISCONNECTING:
                 connect_button.sensitive = false;
-                state.icon_name = "user-away-symbolic";
                 settings_button.visible = false;
                 forget_button.sensitive = false;
                 forget_button.visible = true;
@@ -322,23 +322,23 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
             case Status.NOT_CONNECTED:
                 connect_button.label = _("Connect");
                 connect_button.sensitive = true;
-                state.icon_name = "user-offline-symbolic";
                 settings_button.visible = false;
                 forget_button.sensitive = true;
                 forget_button.visible = true;
+                state.visible = false;
                 break;
             case Status.UNABLE_TO_CONNECT:
                 connect_button.sensitive = true;
-                state.icon_name = "user-busy-symbolic";
                 settings_button.visible = false;
                 forget_button.visible = false;
+                state.visible = false;
                 break;
             case Status.UNABLE_TO_CONNECT_PAIRED:
                 connect_button.sensitive = true;
-                state.icon_name = "user-offline-symbolic";
                 settings_button.visible = false;
                 forget_button.sensitive = true;
                 forget_button.visible = true;
+                state.visible = false;
                 break;
         }
         status_changed ();
