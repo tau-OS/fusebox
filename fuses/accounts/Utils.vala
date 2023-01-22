@@ -26,7 +26,13 @@ ListStore get_account_list_store () {
 
 void create_user (string username, string fullname, string password, Act.UserAccountType user_type, string? avatar_path) {
   var user_manager = Act.UserManager.get_default ();
-  var user = user_manager.create_user (username, fullname, user_type);
+  Act.User user;
+  try {
+    user = user_manager.create_user (username, fullname, user_type);
+  } catch (Error e) {
+    critical ("Failed to create user %s: %s", username, e.message);
+    return;
+  }
 
   user.set_password (password, "");
 

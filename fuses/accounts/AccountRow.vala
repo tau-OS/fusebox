@@ -47,7 +47,11 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
       dialog.present ();
 
       dialog.primary_button.clicked.connect (() => {
-        Act.UserManager.get_default ().delete_user (user, false);
+        try {
+          Act.UserManager.get_default ().delete_user (user, false);
+        } catch (Error e) {
+          critical("Failed to delete user %s: %s", user.user_name, e.message);
+        }
         dialog.close ();
       });
     });

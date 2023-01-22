@@ -3,8 +3,12 @@ class Accounts.CreateAccount : He.Window {
   private static Regex allowed_username_chars_regex;
 
   static construct {
-    username_regex = new Regex ("^[a-z][a-z0-9_-]*$");
-    allowed_username_chars_regex = new Regex ("^[a-z0-9_-]$");
+    try {
+      username_regex = new Regex ("^[a-z][a-z0-9_-]*$");
+      allowed_username_chars_regex = new Regex ("^[a-z0-9_-]$");
+    } catch (Error e) {
+      critical ("Failed to compile regex: %s", e.message);
+    }
   }
 
   private string username = "";
