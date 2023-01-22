@@ -83,3 +83,12 @@ button.flat label {
 .menu-button {
   border-radius: 0px;
 }
+
+.sidebar-view {
+  background: shade(@view_bg_color, 0.95);
+}
+
+.sidebar-view .disclosure-button,
+.sidebar-view .disclosure-button button {
+  background: shade(@view_bg_color, 0.90);
+}

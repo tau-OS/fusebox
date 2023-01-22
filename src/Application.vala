@@ -232,6 +232,7 @@ namespace Fusebox {
             };
             sbox.append (headerbar);
             sbox.append (ssbox);
+            sbox.add_css_class ("sidebar-view");
 
             var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
             box.add_css_class ("main-view");
