@@ -47,7 +47,6 @@ jobs:
           andaRepo: https://github.com/terrapkg/subatomic-repos/raw/main/terra37.repo
 
       - uses: actions/upload-artifact@v3
-        if: github.event_name == 'pull_request'
         with:
           name: ${{ matrix.pkg }}-${{ matrix.arch }}-${{ matrix.version }}
           path: anda-build/rpm/rpms/*
