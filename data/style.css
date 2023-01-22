@@ -3,7 +3,7 @@ entry.search {
 }
 
 .fuse-block {
-    background: alpha(@accent_bg_color, 0.08);
+    background: alpha(@accent_bg_color, 0.0);
     padding: 14.5px 16px;
     border-radius: 8px;
     color: @view_fg_color;
