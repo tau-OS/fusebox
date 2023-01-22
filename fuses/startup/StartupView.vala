@@ -36,12 +36,16 @@ public class StartupView : Gtk.Box {
         lbox.add_css_class ("mini-content-block");
         lbox.append (list);
 
+        var sw = new Gtk.ScrolledWindow ();
+        sw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
+        sw.set_child (lbox);
+
         var overlay = new He.OverlayButton ("", null, null) {
             margin_start = 18,
             margin_end = 18,
             margin_bottom = 18,
             icon = "list-add-symbolic",
-            child = (lbox),
+            child = (sw),
             label = _("Create")
         };
 
