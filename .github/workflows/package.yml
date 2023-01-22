@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -43,7 +46,14 @@ jobs:
           mockConfig: tau-1-${{ matrix.arch }}
           andaRepo: https://github.com/terrapkg/subatomic-repos/raw/main/terra37.repo
 
+      - uses: actions/upload-artifact@v3
+        if: github.event_name == 'pull_request'
+        with:
+          name: ${{ matrix.pkg }}-${{ matrix.arch }}-${{ matrix.version }}
+          path: anda-build/rpm/rpms/*
+
       - name: Upload to subatomic
+        if: github.event_name != 'pull_request'
         run: |
           subatomic-cli upload --prune \
             --server https://subatomic.fyralabs.com \
