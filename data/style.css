@@ -85,10 +85,5 @@ button.flat label {
 }
 
 .sidebar-view {
-  background: shade(@view_bg_color, 0.95);
-}
-
-.sidebar-view .disclosure-button,
-.sidebar-view .disclosure-button button {
-  background: shade(@view_bg_color, 0.90);
+  background: mix(@view_fg_color, @view_bg_color, 0.95);
 }
