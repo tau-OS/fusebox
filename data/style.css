@@ -3,20 +3,20 @@ entry.search {
 }
 
 .fuse-block {
-    background: alpha(@accent_bg_color, 0.05);
+    background: alpha(@accent_bg_color, 0.08);
     padding: 14.5px 16px;
     border-radius: 8px;
     color: @view_fg_color;
 }
 .fuse-block:hover {
-  background: alpha(@accent_bg_color, 0.08);
+  background: alpha(@accent_bg_color, 0.11);
 }
 row:selected .fuse-block {
-  background: alpha(@accent_bg_color, 0.11);
+  background: alpha(@accent_bg_color, 0.15);
 }
 
 .main-content-block {
-    background: alpha(@accent_bg_color, 0.11);
+    background: alpha(@accent_bg_color, 0.15);
     padding: 18px;
     border-radius: 12px;
 }
