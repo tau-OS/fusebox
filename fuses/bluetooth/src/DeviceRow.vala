@@ -54,8 +54,8 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
         }
     }
 
-    private Gtk.Button connect_button;
-    private Gtk.Button forget_button;
+    private He.FillButton connect_button;
+    private He.TintButton forget_button;
     private Gtk.Image state;
     private Gtk.Label state_label;
     private Gtk.LinkButton settings_button;
@@ -121,29 +121,31 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
             }
         }
 
-        var label = new Gtk.Label (device_name);
-        label.ellipsize = Pango.EllipsizeMode.END;
-        label.hexpand = true;
-        label.xalign = 0;
-        label.add_css_class ("cb-title");
+        var label = new Gtk.Label (device_name) {
+            ellipsize = Pango.EllipsizeMode.END,
+            hexpand = true,
+            xalign = 0
+        };
 
         settings_button = new Gtk.LinkButton ("") {
-            child = new Gtk.Image.from_icon_name ("view-more-horizontal-symbolic"),
-            valign = Gtk.Align.CENTER
+            child = new Gtk.Image.from_icon_name("view-more-horizontal-symbolic"),
+            valign = Gtk.Align.CENTER,
+            visible = false
         };
-        settings_button.visible = false;
         settings_button.add_css_class ("disclosure-button");
 
-        forget_button = new Gtk.Button.from_icon_name ("edit-delete-symbolic") {
+        forget_button = new He.TintButton ("") {
             margin_end = 3,
-            tooltip_text = _("Forget this device"),
+            label = _("Forget"),
             visible = false,
+            valign = Gtk.Align.CENTER,
+            color = He.Colors.RED,
+            tooltip_text = _("Forget this device")
+        };
+
+        connect_button = new He.FillButton ("") {
             valign = Gtk.Align.CENTER
         };
-        forget_button.add_css_class ("disclosure-button");
-
-        connect_button = new Gtk.Button ();
-        connect_button.valign = Gtk.Align.CENTER;
 
         size_group.add_widget (connect_button);
 

@@ -61,25 +61,25 @@ namespace Locale {
     };
   }
 
-  private void update_system_locale(Locale1Proxy proxy, SystemLocale system_locale) {
-    var locales = new GLib.Array<string>();
-    locales.append_val("LANG=%s".printf(system_locale.language.locale));
+  //  private void update_system_locale(Locale1Proxy proxy, SystemLocale system_locale) {
+  //    var locales = new GLib.Array<string>();
+  //    locales.append_val("LANG=%s".printf(system_locale.language.locale));
 
-    var format = system_locale.format?.locale;
-    if (format != null) {
-      locales.append_val("LC_MEASUREMENT=%s".printf(format));
-      locales.append_val("LC_MONETARY=%s".printf(format));
-      locales.append_val("LC_NUMERIC=%s".printf(format));
-      locales.append_val("LC_PAPER=%s".printf(format));
-      locales.append_val("LC_TIME=%s".printf(format));
-    }
+  //    var format = system_locale.format?.locale;
+  //    if (format != null) {
+  //      locales.append_val("LC_MEASUREMENT=%s".printf(format));
+  //      locales.append_val("LC_MONETARY=%s".printf(format));
+  //      locales.append_val("LC_NUMERIC=%s".printf(format));
+  //      locales.append_val("LC_PAPER=%s".printf(format));
+  //      locales.append_val("LC_TIME=%s".printf(format));
+  //    }
 
-    try {
-      proxy.set_locale(locales.data, true);
-    } catch (GLib.Error e) {
-      critical("Could not set system locale: %s", e.message);
-    }
-  }
+  //    try {
+  //      proxy.set_locale(locales.data, true);
+  //    } catch (GLib.Error e) {
+  //      critical("Could not set system locale: %s", e.message);
+  //    }
+  //  }
 
   // ? Note that the system locale is the default when user language/format is not set
   private struct UserLocale {
