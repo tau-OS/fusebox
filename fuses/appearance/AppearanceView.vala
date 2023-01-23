@@ -20,6 +20,7 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton prefer_harsh_radio;
     private Gtk.Box accent_box;
     private Gtk.Switch wallpaper_accent_switch;
+    private He.Desktop desktop = new He.Desktop ();
 
     public Fusebox.Fuse fuse { get; construct set; }
     public Appearance.WallpaperGrid wallpaper_view;
@@ -617,7 +618,6 @@ public class AppearanceView : Gtk.Box {
     }
 
     private async void accent_set () {
-        ((He.Application)He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this).application).default_accent_color = null;
         try {
             var file = File.new_for_uri (wallpaper_view.active_wallpaper.uri);
             var pixbuf = new Gdk.Pixbuf.from_file_at_size (file.get_path (), 512, 512);
@@ -629,8 +629,7 @@ public class AppearanceView : Gtk.Box {
                 // Checking for null avoids getting palette's colors that aren't there.
                 if (palette.dark_muted_swatch != null) {
                     Gdk.RGBA color = {palette.dark_muted_swatch.red, palette.dark_muted_swatch.green, palette.dark_muted_swatch.blue, 1};
-                    He.Color.RGBColor rgb_color = He.Color.from_gdk_rgba(color);
-                    ((He.Application)He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this).application).default_accent_color = rgb_color;
+                    desktop.wallpaper_accent_color = color;
                 }
             });
         } catch (Error e) {}
