@@ -36,6 +36,9 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
         );
 
         manager = new Bluetooth.Services.ObjectManager ();
+    }
+
+    private void connect_manager () {
         manager.bind_property ("is-powered", status_switch, "active", GLib.BindingFlags.DEFAULT);
 
         manager.adapter_added.connect ((adapter) => {
@@ -92,6 +95,8 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
             main_grid.attach (appbar, 0, 0);
             main_grid.attach (main_view, 0, 1);
         }
+
+        connect_manager ();
 
         return main_grid;
     }

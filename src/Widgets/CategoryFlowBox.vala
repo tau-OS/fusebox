@@ -41,33 +41,36 @@ namespace Fusebox {
         }
 
         private void header_function (Gtk.ListBoxRow row1, Gtk.ListBoxRow? row2) {
-            var name1 = ((CategoryIcon) row1).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_","");
-            var name2 = ((CategoryIcon) row2).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_","");
-            string header_string = null;
-            
-            if (name1 != "") {
-                header_string = name1;
-            } else {
-                header_string = "";
-            }
-
-            if (name2 != null) {
-                if (name2 == header_string) {
-                    return;
+            // Type-check Rows
+            if (row1 is CategoryIcon && row2 is CategoryIcon) {
+                var name1 = ((CategoryIcon) row1).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_","");
+                var name2 = ((CategoryIcon) row2).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_","");
+                string header_string = null;
+                
+                if (name1 != "") {
+                    header_string = name1;
+                } else {
+                    header_string = "";
                 }
-            }
-    
-            if (header_string == null) {
-                return;
-            } else {
-                var header_label = new Gtk.Label (header_string) {
-                    halign = Gtk.Align.START,
-                    margin_bottom = 6,
-                    margin_top = 6
-                };
-                header_label.add_css_class ("heading");
-                header_label.add_css_class ("dim-label");
-                row1.set_header (header_label);
+
+                if (name2 != null) {
+                    if (name2 == header_string) {
+                        return;
+                    }
+                }
+        
+                if (header_string == null) {
+                    return;
+                } else {
+                    var header_label = new Gtk.Label (header_string) {
+                        halign = Gtk.Align.START,
+                        margin_bottom = 6,
+                        margin_top = 6
+                    };
+                    header_label.add_css_class ("heading");
+                    header_label.add_css_class ("dim-label");
+                    row1.set_header (header_label);
+                }
             }
         }
 
