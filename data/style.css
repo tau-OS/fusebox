@@ -39,34 +39,34 @@ button.flat label {
   margin-top: 3px;
   margin-left: 3px;
 }
-.meson-red radio {
+.red radio {
   background: #e25480;
 }
-.lepton-orange radio {
+.orange radio {
   background: #f99e5c;
 }
-.electron-yellow radio {
+.yellow radio {
   background: #febc16;
 }
-.muon-green radio {
+.green radio {
   background: #72da82;
 }
-.baryon-mint radio {
+.mint radio {
   background: #85d1bf;
 }
-.proton-blue radio {
+.blue radio {
   background: #58a8fa;
 }
-.tau-purple radio {
+.purple radio {
   background: #a57bcd;
 }
-.fermion-pink radio {
+.pink radio {
   background: #cb76b8;
 }
-.graviton-dark radio {
-  background: #A3A3A3;
+.mono radio {
+  background: #888;
 }
-.multi-color radio {
+.multi radio {
   background: linear-gradient(
         45deg,
         #e25480 0%,
@@ -78,9 +78,6 @@ button.flat label {
         #a57bcd 78%,
         #cb76b8 91%
     );
-}
-.wall-color radio {
-  background: @accent_bg_color;
 }
 
 .menu-button {

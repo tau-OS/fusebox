@@ -26,49 +26,6 @@ public class AppearanceView : Gtk.Box {
     public Appearance.WallpaperGrid wallpaper_view;
     private Appearance.Utils.Palette palette;
 
-    private enum AccentColor {
-        MULTI = 0,
-        PURPLE = 1,
-        PINK = 2,
-        RED = 3,
-        ORANGE = 4,
-        YELLOW = 5,
-        GREEN = 6,
-        MINT = 7,
-        BLUE = 8,
-        MONO = 9,
-        WALL = 10;
-
-        public string to_string () {
-            switch (this) {
-                case PURPLE:
-                    return "tau-purple";
-                case PINK:
-                    return "fermion-pink";
-                case RED:
-                    return "meson-red";
-                case ORANGE:
-                    return "lepton-orange";
-                case YELLOW:
-                    return "electron-yellow";
-                case GREEN:
-                    return "muon-green";
-                case BLUE:
-                    return "proton-blue";
-                case MINT:
-                    return "baryon-mint";
-                case MONO:
-                    return "graviton-dark";
-                case MULTI:
-                    return "multi-color";
-                case WALL:
-                    return "wall-color";
-            }
-
-            return "multi";
-        }
-    }
-
     public AppearanceView (Fusebox.Fuse _fuse) {
         Object (fuse: _fuse);
     }
@@ -305,34 +262,34 @@ public class AppearanceView : Gtk.Box {
         };
         accent_label.add_css_class ("cb-title");
 
-        purple = new PrefersAccentColorButton (AccentColor.PURPLE);
+        purple = new PrefersAccentColorButton ("purple");
         purple.tooltip_text = _("Purple");
 
-        pink = new PrefersAccentColorButton (AccentColor.PINK, purple);
+        pink = new PrefersAccentColorButton ("pink", purple);
         pink.tooltip_text = _("Pink");
 
-        red = new PrefersAccentColorButton (AccentColor.RED, purple);
+        red = new PrefersAccentColorButton ("red", purple);
         red.tooltip_text = _("Red");
 
-        orange = new PrefersAccentColorButton (AccentColor.ORANGE, purple);
+        orange = new PrefersAccentColorButton ("orange", purple);
         orange.tooltip_text = _("Orange");
 
-        yellow = new PrefersAccentColorButton (AccentColor.YELLOW, purple);
+        yellow = new PrefersAccentColorButton ("yellow", purple);
         yellow.tooltip_text = _("Yellow");
 
-        green = new PrefersAccentColorButton (AccentColor.GREEN, purple);
+        green = new PrefersAccentColorButton ("green", purple);
         green.tooltip_text = _("Green");
 
-        blue = new PrefersAccentColorButton (AccentColor.BLUE, purple);
+        blue = new PrefersAccentColorButton ("blue", purple);
         blue.tooltip_text = _("Blue");
 
-        mint = new PrefersAccentColorButton (AccentColor.MINT, purple);
+        mint = new PrefersAccentColorButton ("mint", purple);
         mint.tooltip_text = _("Mint");
 
-        mono = new PrefersAccentColorButton (AccentColor.MONO, purple);
+        mono = new PrefersAccentColorButton ("mono", purple);
         mono.tooltip_text = _("Mono");
 
-        multi = new PrefersAccentColorButton (AccentColor.MULTI, purple);
+        multi = new PrefersAccentColorButton ("multi", purple);
         multi.tooltip_text = _("Set By Apps");
 
         var wallpaper_accent_label = new Gtk.Label (_("Accent Color From Wallpaper")) {
@@ -397,11 +354,10 @@ public class AppearanceView : Gtk.Box {
                 pink.set_active (false);
                 mono.set_active (false);
 
-                tau_appearance_settings.set_enum ("accent-color", AccentColor.WALL);
                 accent_set.begin ();
             } else {
                 desktop.accent_color = null;
-                tau_appearance_settings.set_enum ("accent-color", AccentColor.MULTI);
+                tau_appearance_settings.set_string ("accent-color", "multi");
                 multi.set_active (true);
                 accent_box.sensitive = true;
             }
@@ -512,27 +468,36 @@ public class AppearanceView : Gtk.Box {
 
                 if (palette.dominant_swatch != null) {
                     Gdk.RGBA color = {palette.dominant_swatch.red, palette.dominant_swatch.green, palette.dominant_swatch.blue, 1};
-                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                    desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
+                    tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
                 } else if (palette.muted_swatch != null) {
                     Gdk.RGBA color = {palette.muted_swatch.red, palette.muted_swatch.green, palette.muted_swatch.blue, 1};
-                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                    desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
+                    tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
                 } else if (palette.dark_muted_swatch != null) {
                     Gdk.RGBA color = {palette.dark_muted_swatch.red, palette.dark_muted_swatch.green, palette.dark_muted_swatch.blue, 1};
-                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                    desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
+                    tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
                 } else if (palette.vibrant_swatch != null) {
                     Gdk.RGBA color = {palette.vibrant_swatch.red, palette.vibrant_swatch.green, palette.vibrant_swatch.blue, 1};
-                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                    desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
+                    tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
                 } else {
-                    desktop.accent_color = {0, 0, 0};
+                    desktop.accent_color = make_hex(0, 0, 0);
+                    tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
                 }
             });
         } catch (Error e) {}
     }
 
-    private class PrefersAccentColorButton : Gtk.CheckButton {
-        public AccentColor color { get; construct; }
+    public string make_hex (float red, float green, float blue) {
+        return "#" + "%02x%02x%02x".printf ((uint)red, (uint)green, (uint)blue);
+    }
 
-        public PrefersAccentColorButton (AccentColor color, Gtk.CheckButton? group_member = null) {
+    private class PrefersAccentColorButton : Gtk.CheckButton {
+        public string color { get; construct; }
+
+        public PrefersAccentColorButton (string color, Gtk.CheckButton? group_member = null) {
             Object (
                 color: color,
                 group: group_member
@@ -543,11 +508,11 @@ public class AppearanceView : Gtk.Box {
             add_css_class (color.to_string ());
             add_css_class ("selection-mode");
 
-            active = color == tau_appearance_settings.get_enum ("accent-color");
+            active = color == tau_appearance_settings.get_string ("accent-color");
 
             realize.connect (() => {
                 toggled.connect (() => {
-                    tau_appearance_settings.set_enum ("accent-color", color);
+                    tau_appearance_settings.set_string ("accent-color", color);
                 });
             });
         }
