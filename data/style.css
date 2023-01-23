@@ -79,6 +79,9 @@ button.flat label {
         #cb76b8 91%
     );
 }
+.wall-color radio {
+  background: @accent_bg_color;
+}
 
 .menu-button {
   border-radius: 0px;

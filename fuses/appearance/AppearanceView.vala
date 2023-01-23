@@ -36,7 +36,8 @@ public class AppearanceView : Gtk.Box {
         GREEN = 6,
         MINT = 7,
         BLUE = 8,
-        MONO = 9;
+        MONO = 9,
+        WALL = 10;
 
         public string to_string () {
             switch (this) {
@@ -60,6 +61,8 @@ public class AppearanceView : Gtk.Box {
                     return "graviton-dark";
                 case MULTI:
                     return "multi-color";
+                case WALL:
+                    return "wall-color";
             }
 
             return "multi";
@@ -390,6 +393,8 @@ public class AppearanceView : Gtk.Box {
                 purple.set_active (false);
                 pink.set_active (false);
                 mono.set_active (false);
+
+                tau_appearance_settings.set_enum ("accent-color", AccentColor.WALL);
                 accent_set.begin ();
                 wallpaper_view.notify["current_wallpaper_path"].connect (() => {
                     accent_set.begin ();
@@ -398,9 +403,6 @@ public class AppearanceView : Gtk.Box {
                 accent_box.sensitive = true;
             }
             return Gdk.EVENT_PROPAGATE;
-        });
-        wallpaper_view.notify["current_wallpaper_path"].connect (() => {
-            accent_set.begin ();
         });
 
         var sw = new Gtk.ScrolledWindow ();
@@ -411,11 +413,6 @@ public class AppearanceView : Gtk.Box {
         clamp.set_child (sw);
 
         append (clamp);
-  
-        accent_refresh ();
-        tau_appearance_settings.notify["changed::accent-color"].connect (() => {
-            accent_refresh ();
-        });
 
         prefer_default_radio.toggled.connect (() => {
             set_color_scheme (He.Desktop.ColorScheme.NO_PREFERENCE);
@@ -501,122 +498,6 @@ public class AppearanceView : Gtk.Box {
         }
     }
 
-    private void accent_refresh () {
-        int value = tau_appearance_settings.get_enum ("accent-color");
-
-        if (value == AccentColor.RED) {
-            red.set_active (true);
-            orange.set_active (false);
-            yellow.set_active (false);
-            green.set_active (false);
-            mint.set_active (false);
-            blue.set_active (false);
-            purple.set_active (false);
-            pink.set_active (false);
-            mono.set_active (false);
-            multi.set_active (false);
-        } else if (value == AccentColor.ORANGE) {
-            red.set_active (false);
-            orange.set_active (true);
-            yellow.set_active (false);
-            green.set_active (false);
-            mint.set_active (false);
-            blue.set_active (false);
-            purple.set_active (false);
-            pink.set_active (false);
-            mono.set_active (false);
-            multi.set_active (false);
-        } else if (value == AccentColor.YELLOW) {
-            red.set_active (false);
-            orange.set_active (false);
-            yellow.set_active (true);
-            green.set_active (false);
-            mint.set_active (false);
-            blue.set_active (false);
-            purple.set_active (false);
-            pink.set_active (false);
-            mono.set_active (false);
-            multi.set_active (false);
-        } else if (value == AccentColor.GREEN) {
-            red.set_active (false);
-            orange.set_active (false);
-            yellow.set_active (false);
-            green.set_active (true);
-            mint.set_active (false);
-            blue.set_active (false);
-            purple.set_active (false);
-            pink.set_active (false);
-            mono.set_active (false);
-            multi.set_active (false);
-        } else if (value == AccentColor.MINT) {
-            red.set_active (false);
-            orange.set_active (false);
-            yellow.set_active (false);
-            green.set_active (false);
-            mint.set_active (true);
-            blue.set_active (false);
-            purple.set_active (false);
-            pink.set_active (false);
-            mono.set_active (false);
-            multi.set_active (false);
-        } else if (value == AccentColor.BLUE) {
-            red.set_active (false);
-            orange.set_active (false);
-            yellow.set_active (false);
-            green.set_active (false);
-            mint.set_active (false);
-            blue.set_active (true);
-            purple.set_active (false);
-            pink.set_active (false);
-            mono.set_active (false);
-            multi.set_active (false);
-        } else if (value == AccentColor.PURPLE) {
-            red.set_active (false);
-            orange.set_active (false);
-            yellow.set_active (false);
-            green.set_active (false);
-            mint.set_active (false);
-            blue.set_active (false);
-            purple.set_active (true);
-            pink.set_active (false);
-            mono.set_active (false);
-            multi.set_active (false);
-        } else if (value == AccentColor.PINK) {
-            red.set_active (false);
-            orange.set_active (false);
-            yellow.set_active (false);
-            green.set_active (false);
-            mint.set_active (false);
-            blue.set_active (false);
-            purple.set_active (false);
-            pink.set_active (true);
-            mono.set_active (false);
-            multi.set_active (false);
-        } else if (value == AccentColor.MONO) {
-            red.set_active (false);
-            orange.set_active (false);
-            yellow.set_active (false);
-            green.set_active (false);
-            mint.set_active (false);
-            blue.set_active (false);
-            purple.set_active (false);
-            pink.set_active (false);
-            mono.set_active (true);
-            multi.set_active (false);
-        } else if (value == AccentColor.MULTI) {
-            red.set_active (false);
-            orange.set_active (false);
-            yellow.set_active (false);
-            green.set_active (false);
-            mint.set_active (false);
-            blue.set_active (false);
-            purple.set_active (false);
-            pink.set_active (false);
-            mono.set_active (false);
-            multi.set_active (true);
-        }
-    }
-
     private async void accent_set () {
         try {
             var file = File.new_for_uri (wallpaper_view.active_wallpaper.uri);
@@ -629,6 +510,7 @@ public class AppearanceView : Gtk.Box {
                 // Checking for null avoids getting palette's colors that aren't there.
                 if (palette.dark_muted_swatch != null) {
                     Gdk.RGBA color = {palette.dark_muted_swatch.red, palette.dark_muted_swatch.green, palette.dark_muted_swatch.blue, 1};
+                    desktop.wallpaper_accent_color = null;
                     desktop.wallpaper_accent_color = color;
                 }
             });
@@ -648,6 +530,8 @@ public class AppearanceView : Gtk.Box {
         construct {
             add_css_class (color.to_string ());
             add_css_class ("selection-mode");
+
+            active = color == tau_appearance_settings.get_enum ("accent-color");
 
             realize.connect (() => {
                 toggled.connect (() => {
