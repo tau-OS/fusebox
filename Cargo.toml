@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "fuses/apps",
+]
+
+# force target dir change
+[profile.dev]

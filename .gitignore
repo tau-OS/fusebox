@@ -3,3 +3,4 @@ _build/
 .flatpak
 anda-build/
 builddir/
+target/
