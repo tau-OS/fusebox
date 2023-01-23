@@ -17,15 +17,6 @@
 * Boston, MA 02110-1301 USA
 */
 namespace Appearance.Utils {
-    private static double sanitize_color (double color) {
-        // From WCAG 2.0 https://www.w3.org/TR/WCAG20/#relativeluminancedef
-        if (color <= 0.03928) {
-            return color / 12.92;
-        }
-
-        return Math.pow ((color + 0.055) / 1.055, 2.4);
-    }
-
     public class Palette : Object {
         const double TARGET_DARK_LUMA = 0.26;
         const double MAX_DARK_LUMA = 0.45;
@@ -94,8 +85,8 @@ namespace Appearance.Utils {
         public const uint8 MIN_QUALITY = 1;
         public const uint8 DEFAULT_QUALITY = 5;
         public const uint16 MAX_COLORS = 256;
-        public const uint16 DEFAULT_COLORS = 64;
-        public const uint16 MIN_COLORS = 2;
+        public const uint16 DEFAULT_COLORS = 128;
+        public const uint16 MIN_COLORS = 16;
 
         private Gee.List<Swatch> _swatches;
         public Gee.List<Swatch> swatches {
@@ -331,43 +322,6 @@ namespace Appearance.Utils {
             dark_muted_swatch = find_color_variation (0.5, 0, 1, 0.5, 0, 0.66);
             body_swatch = find_color_variation (TARGET_LIGHT_LUMA, MIN_NORMAL_LUMA, MAX_NORMAL_LUMA, TARGET_VIBRANT_SATURATION, MIN_VIBRANT_SATURATION, MAX_MUTED_SATURATION);
             dominant_swatch = find_color_variation (TARGET_NORMAL_LUMA, MIN_NORMAL_LUMA, MAX_NORMAL_LUMA, TARGET_MUTED_SATURATION, MIN_VIBRANT_SATURATION, TARGET_VIBRANT_SATURATION);
-
-            foreach (var swatch in _swatches) {
-                bool aa_level, aaa_level;
-                passes_wcag_guidelines (dominant_swatch, swatch, out aa_level, out aaa_level);
-            }
-        }
-
-        private static void passes_wcag_guidelines (Swatch bg, Swatch fg, out bool aa_level, out bool aaa_level) {
-            var bg_luminance = get_luminance_wcag (bg);
-            var fg_luminance = get_luminance_wcag (fg);
-
-            double contrast_ratio;
-            if (bg_luminance > fg_luminance) {
-                contrast_ratio = (bg_luminance + 0.05) / (fg_luminance + 0.05);
-            } else {
-                contrast_ratio = (fg_luminance + 0.05) / (bg_luminance + 0.05);
-            }
-
-            if (contrast_ratio >= 4.5) {
-                aa_level = true;
-            } else {
-                aa_level = false;
-            }
-
-            if (contrast_ratio >= 7) {
-                aaa_level = true;
-            } else {
-                aaa_level = false;
-            }
-        }
-
-        private static double get_luminance_wcag (Swatch color) {
-            var red = sanitize_color (color.R) * 0.2126;
-            var green = sanitize_color (color.G) * 0.7152;
-            var blue = sanitize_color (color.B) * 0.0722;
-
-            return (red + green + blue);
         }
 
         private static double get_saturation (Swatch color) {

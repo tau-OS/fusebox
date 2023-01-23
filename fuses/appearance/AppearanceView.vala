@@ -378,7 +378,10 @@ public class AppearanceView : Gtk.Box {
         wallpaper_view = new Appearance.WallpaperGrid (fuse);
         grid.attach (wallpaper_view, 0, 2);
 
-        fusebox_appearance_settings.bind ("wallpaper-accent", wallpaper_accent_switch, "active", SettingsBindFlags.DEFAULT);
+        wallpaper_view.notify["current_wallpaper_path"].connect (() => {
+            accent_set.begin ();
+        });
+
         wallpaper_accent_switch.state_set.connect (() => {
             if (wallpaper_accent_switch.active) {
                 accent_box.sensitive = false;
@@ -396,9 +399,6 @@ public class AppearanceView : Gtk.Box {
 
                 tau_appearance_settings.set_enum ("accent-color", AccentColor.WALL);
                 accent_set.begin ();
-                wallpaper_view.notify["current_wallpaper_path"].connect (() => {
-                    accent_set.begin ();
-                });
             } else {
                 desktop.wallpaper_accent_color = null;
                 accent_box.sensitive = true;
@@ -502,16 +502,26 @@ public class AppearanceView : Gtk.Box {
     private async void accent_set () {
         try {
             var file = File.new_for_uri (wallpaper_view.active_wallpaper.uri);
-            var pixbuf = new Gdk.Pixbuf.from_file_at_size (file.get_path (), 512, 512);
+            var pixbuf = new Gdk.Pixbuf.from_file_at_size (file.get_path (), 1024, 1024);
 
             var palette = new Appearance.Utils.Palette.from_pixbuf (pixbuf);
             palette.generate_async.begin (() => {
                 this.palette = palette;
 
-                // Checking for null avoids getting palette's colors that aren't there.
-                if (palette.dark_muted_swatch != null) {
+                if (palette.dominant_swatch != null) {
+                    Gdk.RGBA color = {palette.dominant_swatch.red, palette.dominant_swatch.green, palette.dominant_swatch.blue, 1};
+                    desktop.wallpaper_accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                } else if (palette.muted_swatch != null) {
+                    Gdk.RGBA color = {palette.muted_swatch.red, palette.muted_swatch.green, palette.muted_swatch.blue, 1};
+                    desktop.wallpaper_accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                } else if (palette.dark_muted_swatch != null) {
                     Gdk.RGBA color = {palette.dark_muted_swatch.red, palette.dark_muted_swatch.green, palette.dark_muted_swatch.blue, 1};
-                    desktop.wallpaper_accent_color = He.Color.from_gdk_rgba (color);
+                    desktop.wallpaper_accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                } else if (palette.vibrant_swatch != null) {
+                    Gdk.RGBA color = {palette.vibrant_swatch.red, palette.vibrant_swatch.green, palette.vibrant_swatch.blue, 1};
+                    desktop.wallpaper_accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                } else {
+                    desktop.wallpaper_accent_color = {0, 0, 0};
                 }
             });
         } catch (Error e) {}
