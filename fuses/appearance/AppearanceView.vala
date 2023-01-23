@@ -400,6 +400,7 @@ public class AppearanceView : Gtk.Box {
                     accent_set.begin ();
                 });
             } else {
+                desktop.wallpaper_accent_color = null;
                 accent_box.sensitive = true;
             }
             return Gdk.EVENT_PROPAGATE;
@@ -510,8 +511,7 @@ public class AppearanceView : Gtk.Box {
                 // Checking for null avoids getting palette's colors that aren't there.
                 if (palette.dark_muted_swatch != null) {
                     Gdk.RGBA color = {palette.dark_muted_swatch.red, palette.dark_muted_swatch.green, palette.dark_muted_swatch.blue, 1};
-                    desktop.wallpaper_accent_color = null;
-                    desktop.wallpaper_accent_color = color;
+                    desktop.wallpaper_accent_color = He.Color.from_gdk_rgba (color);
                 }
             });
         } catch (Error e) {}
