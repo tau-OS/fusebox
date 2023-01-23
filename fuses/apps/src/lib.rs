@@ -4,6 +4,7 @@ use std::{collections::HashMap, ffi::c_void};
 use fusebox::FuseCategory;
 use glib::Object;
 use util::str_hashmap_to_glib_hashtable_value;
+use gettextrs::*;
 
 mod imp;
 mod util;
@@ -19,10 +20,10 @@ impl AppsFuse {
 
         Object::builder()
             .property("category", &FuseCategory::System)
-            .property("code-name", &"apps-use")
-            .property("display-name", &"Applications")
-            .property("description", &"Manage applications")
-            .property("icon", &"system-run")
+            .property("code-name", &"apps-fuse")
+            .property("display-name", &gettext("Applications"))
+            .property("description", &gettext("Manage applications"))
+            .property("icon", &"settings-applications-symbolic")
             .property("supported-settings", &unsafe {
                 str_hashmap_to_glib_hashtable_value(supported_settings)
             })

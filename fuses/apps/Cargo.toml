@@ -8,9 +8,11 @@ edition = "2021"
 [dependencies]
 fusebox = { version = "1.0.0", features = ["gtk_v4_6"], git = "https://github.com/tau-OS/rust/" }
 gettext-rs = "0.7.0"
+gio = { git = "https://github.com/gtk-rs/gtk-rs-core", version = "0.17.0" }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", version = "0.17.0" }
 gtk4 = { git = "https://github.com/gtk-rs/gtk4-rs", version = "0.6", features = ["v4_6"] }
 libc = "0.2.139"
+libflatpak = { git = "https://gitlab.gnome.org/World/Rust/libflatpak-rs.git", version = "0.3.0" }
 libhelium = { git = "https://github.com/tau-OS/rust/", version = "1.0.0" }
 zbus = "3.7.0"
 

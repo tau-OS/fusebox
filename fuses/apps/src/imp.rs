@@ -2,6 +2,7 @@ use fusebox::subclass::prelude::FuseImpl;
 use glib::{subclass::prelude::*, Cast};
 use gtk4::{prelude::*, Align, Grid};
 use gtk4::{Label, Widget};
+use libflatpak::traits::InstallationExt;
 use libhelium::traits::AppBarExt;
 use libhelium::*;
 use gettextrs::*;
@@ -45,6 +46,28 @@ impl Default for AppsFuse {
             .build();
 
         main_grid.attach(&hello_label, 0, 1, 1, 1);
+
+
+        // libflatpak stuff
+
+        // let fl = libflatpak::Instance::all();
+        // for f in fl {
+        //     println!("Flatpak: {:#?}", f);
+        // }
+
+        // let inst = libflatpak::functions::system_installations(gio::Cancellable::NONE).unwrap();
+        // for i in inst {
+        //     println!("Installation: {:#?}", i);
+        //     for r in i.list_installed_refs(gio::Cancellable::NONE).unwrap() {
+        //         println!("Ref: {:#?}", r.list_properties());
+        //     }
+        // }
+
+        // get all flatpak apps
+        let apps = libflatpak::functions::system_installations(gio::Cancellable::NONE).unwrap()[0].list_installed_refs(gio::Cancellable::NONE).unwrap();
+        for r in apps {
+            println!("Ref: {:#?}", r.property::<String>("name"));
+        }
 
         Self {
             widget: main_grid.upcast(),

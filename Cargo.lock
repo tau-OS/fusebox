@@ -307,9 +307,11 @@ version = "0.1.0"
 dependencies = [
  "fusebox",
  "gettext-rs",
+ "gio",
  "glib",
  "gtk4",
  "libc",
+ "libflatpak",
  "libhelium",
  "zbus",
 ]
@@ -750,6 +752,32 @@ name = "libc"
 version = "0.2.139"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "201de327520df007757c1f0adce6e827fe8562fbc28bfd9c15571c66ca1f5f79"
+
+[[package]]
+name = "libflatpak"
+version = "0.3.0"
+source = "git+https://gitlab.gnome.org/World/Rust/libflatpak-rs.git#2e312d12e6d15d4f2488c28caa724e615e5714d7"
+dependencies = [
+ "bitflags",
+ "gio",
+ "glib",
+ "lazy_static",
+ "libc",
+ "libflatpak-sys",
+]
+
+[[package]]
+name = "libflatpak-sys"
+version = "0.3.0"
+source = "git+https://gitlab.gnome.org/World/Rust/libflatpak-rs.git#2e312d12e6d15d4f2488c28caa724e615e5714d7"
+dependencies = [
+ "gio-sys",
+ "glib-sys",
+ "gobject-sys",
+ "libc",
+ "pkg-config",
+ "system-deps",
+]
 
 [[package]]
 name = "libhelium"
