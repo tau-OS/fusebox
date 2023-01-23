@@ -400,8 +400,9 @@ public class AppearanceView : Gtk.Box {
                 tau_appearance_settings.set_enum ("accent-color", AccentColor.WALL);
                 accent_set.begin ();
             } else {
-                desktop.wallpaper_accent_color = null;
+                desktop.accent_color = null;
                 tau_appearance_settings.set_enum ("accent-color", AccentColor.MULTI);
+                multi.set_active (true);
                 accent_box.sensitive = true;
             }
             return Gdk.EVENT_PROPAGATE;
@@ -511,18 +512,18 @@ public class AppearanceView : Gtk.Box {
 
                 if (palette.dominant_swatch != null) {
                     Gdk.RGBA color = {palette.dominant_swatch.red, palette.dominant_swatch.green, palette.dominant_swatch.blue, 1};
-                    desktop.wallpaper_accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
                 } else if (palette.muted_swatch != null) {
                     Gdk.RGBA color = {palette.muted_swatch.red, palette.muted_swatch.green, palette.muted_swatch.blue, 1};
-                    desktop.wallpaper_accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
                 } else if (palette.dark_muted_swatch != null) {
                     Gdk.RGBA color = {palette.dark_muted_swatch.red, palette.dark_muted_swatch.green, palette.dark_muted_swatch.blue, 1};
-                    desktop.wallpaper_accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
                 } else if (palette.vibrant_swatch != null) {
                     Gdk.RGBA color = {palette.vibrant_swatch.red, palette.vibrant_swatch.green, palette.vibrant_swatch.blue, 1};
-                    desktop.wallpaper_accent_color = {(int)color.red, (int)color.green, (int)color.blue};
+                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
                 } else {
-                    desktop.wallpaper_accent_color = {0, 0, 0};
+                    desktop.accent_color = {0, 0, 0};
                 }
             });
         } catch (Error e) {}
