@@ -83,7 +83,3 @@ button.flat label {
 .menu-button {
   border-radius: 0px;
 }
-
-.sidebar-view {
-  background: mix(@view_fg_color, @view_bg_color, 0.95);
-}
