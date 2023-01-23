@@ -38,7 +38,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     private He.OverlayButton view_overlay;
     private He.DisclosureButton wallpaper_removal_button;
     
-    private Appearance.WallpaperContainer active_wallpaper = null;
+    public Appearance.WallpaperContainer active_wallpaper = null;
     private Appearance.WallpaperContainer wallpaper_for_removal = null;
 
     private static GLib.Settings tau_appearance_settings;
@@ -46,7 +46,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     
     private Cancellable last_cancellable;
     
-    private string current_wallpaper_path;
+    public string current_wallpaper_path;
     private bool prevent_update_mode = false; // When restoring the combo state, don't trigger the update.
     private bool finished; // Shows that we got or wallpapers together
     

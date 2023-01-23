@@ -1,6 +1,7 @@
 public class AppearanceView : Gtk.Box {
     private static GLib.Settings interface_settings;
     private static GLib.Settings tau_appearance_settings;
+    private static GLib.Settings fusebox_appearance_settings;
     private PrefersAccentColorButton red;
     private PrefersAccentColorButton orange;
     private PrefersAccentColorButton yellow;
@@ -17,9 +18,12 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton prefer_soft_radio;
     private Gtk.ToggleButton prefer_medium_radio;
     private Gtk.ToggleButton prefer_harsh_radio;
+    private Gtk.Box accent_box;
+    private Gtk.Switch wallpaper_accent_switch;
 
     public Fusebox.Fuse fuse { get; construct set; }
     public Appearance.WallpaperGrid wallpaper_view;
+    private Appearance.Utils.Palette palette;
 
     private enum AccentColor {
         MULTI = 0,
@@ -67,6 +71,7 @@ public class AppearanceView : Gtk.Box {
 
     static construct {
         tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
+        fusebox_appearance_settings = new GLib.Settings ("co.tauos.Fusebox");
         interface_settings = new GLib.Settings ("org.gnome.desktop.interface");
     }
 
@@ -326,6 +331,32 @@ public class AppearanceView : Gtk.Box {
         multi = new PrefersAccentColorButton (AccentColor.MULTI, purple);
         multi.tooltip_text = _("Set By Apps");
 
+        var wallpaper_accent_label = new Gtk.Label (_("Accent Color From Wallpaper")) {
+            halign = Gtk.Align.START
+        };
+        wallpaper_accent_label.add_css_class ("cb-subtitle");
+
+        wallpaper_accent_switch = new Gtk.Switch () {
+            halign = Gtk.Align.END,
+            hexpand = true
+        };
+
+        var wallpaper_accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+        wallpaper_accent_box.append (wallpaper_accent_label);
+        wallpaper_accent_box.append (wallpaper_accent_switch);
+
+        accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 23);
+        accent_box.append (purple);
+        accent_box.append (pink);
+        accent_box.append (red);
+        accent_box.append (orange);
+        accent_box.append (yellow);
+        accent_box.append (green);
+        accent_box.append (mint);
+        accent_box.append (blue);
+        accent_box.append (mono);
+        accent_box.append (multi);
+
         var accent_grid = new Gtk.Grid () {
             row_spacing = 12,
             column_homogeneous = true,
@@ -333,23 +364,43 @@ public class AppearanceView : Gtk.Box {
             row_homogeneous = true,
             margin_bottom = 6
         };
-        accent_grid.attach (accent_label, 0, 0, 9);
-        accent_grid.attach (purple, 0, 1);
-        accent_grid.attach (pink, 1, 1);
-        accent_grid.attach (red, 2, 1);
-        accent_grid.attach (orange, 3, 1);
-        accent_grid.attach (yellow, 4, 1);
-        accent_grid.attach (green, 5, 1);
-        accent_grid.attach (mint, 6, 1);
-        accent_grid.attach (blue, 7, 1);
-        accent_grid.attach (mono, 8, 1);
-        accent_grid.attach (multi, 9, 1);
+        accent_grid.attach (accent_label, 0, 0);
+        accent_grid.attach (accent_box, 0, 1);
+        accent_grid.attach (wallpaper_accent_box, 0, 2);
         accent_grid.add_css_class ("mini-content-block");
 
         grid.attach (accent_grid, 0, 1);
 
         wallpaper_view = new Appearance.WallpaperGrid (fuse);
         grid.attach (wallpaper_view, 0, 2);
+
+        fusebox_appearance_settings.bind ("wallpaper-accent", wallpaper_accent_switch, "active", SettingsBindFlags.DEFAULT);
+        wallpaper_accent_switch.state_set.connect (() => {
+            if (wallpaper_accent_switch.active) {
+                accent_box.sensitive = false;
+
+                multi.set_active (false);
+                red.set_active (false);
+                orange.set_active (false);
+                yellow.set_active (false);
+                green.set_active (false);
+                mint.set_active (false);
+                blue.set_active (false);
+                purple.set_active (false);
+                pink.set_active (false);
+                mono.set_active (false);
+                accent_set.begin ();
+                wallpaper_view.notify["current_wallpaper_path"].connect (() => {
+                    accent_set.begin ();
+                });
+            } else {
+                accent_box.sensitive = true;
+            }
+            return Gdk.EVENT_PROPAGATE;
+        });
+        wallpaper_view.notify["current_wallpaper_path"].connect (() => {
+            accent_set.begin ();
+        });
 
         var sw = new Gtk.ScrolledWindow ();
         sw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
@@ -563,6 +614,26 @@ public class AppearanceView : Gtk.Box {
             mono.set_active (false);
             multi.set_active (true);
         }
+    }
+
+    private async void accent_set () {
+        ((He.Application)He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this).application).default_accent_color = null;
+        try {
+            var file = File.new_for_uri (wallpaper_view.active_wallpaper.uri);
+            var pixbuf = new Gdk.Pixbuf.from_file_at_size (file.get_path (), 512, 512);
+
+            var palette = new Appearance.Utils.Palette.from_pixbuf (pixbuf);
+            palette.generate_async.begin (() => {
+                this.palette = palette;
+
+                // Checking for null avoids getting palette's colors that aren't there.
+                if (palette.dark_muted_swatch != null) {
+                    Gdk.RGBA color = {palette.dark_muted_swatch.red, palette.dark_muted_swatch.green, palette.dark_muted_swatch.blue, 1};
+                    He.Color.RGBColor rgb_color = He.Color.from_gdk_rgba(color);
+                    ((He.Application)He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this).application).default_accent_color = rgb_color;
+                }
+            });
+        } catch (Error e) {}
     }
 
     private class PrefersAccentColorButton : Gtk.CheckButton {
