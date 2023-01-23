@@ -401,6 +401,7 @@ public class AppearanceView : Gtk.Box {
                 accent_set.begin ();
             } else {
                 desktop.wallpaper_accent_color = null;
+                tau_appearance_settings.set_enum ("accent-color", AccentColor.MULTI);
                 accent_box.sensitive = true;
             }
             return Gdk.EVENT_PROPAGATE;
