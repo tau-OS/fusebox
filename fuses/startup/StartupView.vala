@@ -13,6 +13,7 @@ public class StartupView : Gtk.Box {
         // the actual list to contain the startup apps
         var list = new Gtk.ListBox ();
         list.add_css_class ("content-list");
+        list.show_separators = true;
 
         // set spacing between rows
         // gtk4
@@ -125,7 +126,10 @@ private class AppEntry : Gtk.Box {
         });
 
         var name = new Gtk.Label (app_name) {
-            xalign = 0
+            xalign = 0,
+            wrap = true,
+            wrap_mode = Pango.WrapMode.WORD_CHAR,
+            ellipsize = Pango.EllipsizeMode.END
         };
         name.add_css_class ("cb-title");
         label_box.append (name);
@@ -134,8 +138,11 @@ private class AppEntry : Gtk.Box {
         });
 
         var desc = new Gtk.Label (app_desc) {
-            xalign = 0
+            xalign = 0,
+            wrap = true
         };
+        desc.wrap_mode = Pango.WrapMode.WORD_CHAR;
+        desc.ellipsize = Pango.EllipsizeMode.END;
         desc.add_css_class ("cb-subtitle");
         label_box.append (desc);
         notify["app-desc"].connect (() => {
