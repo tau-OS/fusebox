@@ -335,10 +335,7 @@ public class AppearanceView : Gtk.Box {
         wallpaper_view = new Appearance.WallpaperGrid (fuse);
         grid.attach (wallpaper_view, 0, 2);
 
-        wallpaper_view.notify["current_wallpaper_path"].connect (() => {
-            accent_set.begin ();
-        });
-
+        accent_set.begin ();
         wallpaper_accent_switch.state_set.connect (() => {
             if (wallpaper_accent_switch.active) {
                 accent_box.sensitive = false;
@@ -355,6 +352,9 @@ public class AppearanceView : Gtk.Box {
                 mono.set_active (false);
 
                 accent_set.begin ();
+                wallpaper_view.notify["current_wallpaper_path"].connect (() => {
+                    accent_set.begin ();
+                });
             } else {
                 desktop.accent_color = null;
                 tau_appearance_settings.set_string ("accent-color", "multi");
@@ -524,7 +524,7 @@ public class AppearanceView : Gtk.Box {
                      } else if (color == "mint") {
                         tau_appearance_settings.set_string ("accent-color", "#56bfa6");
                      } else if (color == "blue") {
-                        tau_appearance_settings.set_string ("accent-color", "#bf8856");
+                        tau_appearance_settings.set_string ("accent-color", "#268ef9");
                      } else if (color == "mono") {
                         tau_appearance_settings.set_string ("accent-color", "#2d2d2d");
                      } else if (color == "multi") {
