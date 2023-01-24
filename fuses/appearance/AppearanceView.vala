@@ -469,23 +469,20 @@ public class AppearanceView : Gtk.Box {
                 if (palette.dominant_swatch != null) {
                     Gdk.RGBA color = {palette.dominant_swatch.red, palette.dominant_swatch.green, palette.dominant_swatch.blue, 1};
                     desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
-                    tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
                 } else if (palette.muted_swatch != null) {
                     Gdk.RGBA color = {palette.muted_swatch.red, palette.muted_swatch.green, palette.muted_swatch.blue, 1};
                     desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
-                    tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
                 } else if (palette.dark_muted_swatch != null) {
                     Gdk.RGBA color = {palette.dark_muted_swatch.red, palette.dark_muted_swatch.green, palette.dark_muted_swatch.blue, 1};
                     desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
-                    tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
                 } else if (palette.vibrant_swatch != null) {
                     Gdk.RGBA color = {palette.vibrant_swatch.red, palette.vibrant_swatch.green, palette.vibrant_swatch.blue, 1};
                     desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
-                    tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
                 } else {
                     desktop.accent_color = make_hex(0, 0, 0);
-                    tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
                 }
+
+                tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
             });
         } catch (Error e) {}
     }
@@ -512,7 +509,27 @@ public class AppearanceView : Gtk.Box {
 
             realize.connect (() => {
                 toggled.connect (() => {
-                    tau_appearance_settings.set_string ("accent-color", color);
+                    if (color == "purple") {
+                        tau_appearance_settings.set_string ("accent-color", "#8c56bf");
+                     } else if (color == "pink") {
+                        tau_appearance_settings.set_string ("accent-color", "#bf56a8");
+                     } else if (color == "red") {
+                        tau_appearance_settings.set_string ("accent-color", "#db2860");
+                     } else if (color == "orange") {
+                        tau_appearance_settings.set_string ("accent-color", "#f7812b");
+                     } else if (color == "yellow") {
+                        tau_appearance_settings.set_string ("accent-color", "#e0a101");
+                     } else if (color == "green") {
+                        tau_appearance_settings.set_string ("accent-color", "#49d05e");
+                     } else if (color == "mint") {
+                        tau_appearance_settings.set_string ("accent-color", "#56bfa6");
+                     } else if (color == "blue") {
+                        tau_appearance_settings.set_string ("accent-color", "#bf8856");
+                     } else if (color == "mono") {
+                        tau_appearance_settings.set_string ("accent-color", "#2d2d2d");
+                     } else if (color == "multi") {
+                        tau_appearance_settings.set_string ("accent-color", "");
+                     }
                 });
             });
         }
