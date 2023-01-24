@@ -32,6 +32,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     };
     
     public Fusebox.Fuse fuse { get; construct set; }
+    public AppearanceView appearance_view { get; construct set; }
     
     private Gtk.ScrolledWindow wallpaper_scrolled_window;
     private Gtk.FlowBox wallpaper_view;
@@ -50,8 +51,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     private bool prevent_update_mode = false; // When restoring the combo state, don't trigger the update.
     private bool finished; // Shows that we got or wallpapers together
     
-    public WallpaperGrid (Fusebox.Fuse _fuse) {
-        Object (fuse: _fuse);
+    public WallpaperGrid (Fusebox.Fuse _fuse, AppearanceView _appearance_view) {
+        Object (fuse: _fuse, appearance_view: _appearance_view);
     }
 
     static construct {
@@ -124,6 +125,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             var file = File.new_for_uri (uri);
             string furi = file.get_uri ();
             settings.set_string ("picture-uri", furi);
+            if (appearance_view.wallpaper_accent_switch.active)
+                appearance_view.accent_set.begin ();
         }
         
         private void show_wallpaper_chooser () {

@@ -2,6 +2,7 @@ public class AppearanceView : Gtk.Box {
     private static GLib.Settings interface_settings;
     private static GLib.Settings tau_appearance_settings;
     private static GLib.Settings fusebox_appearance_settings;
+    private static GLib.Settings bg_settings;
     private PrefersAccentColorButton red;
     private PrefersAccentColorButton orange;
     private PrefersAccentColorButton yellow;
@@ -19,12 +20,12 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton prefer_medium_radio;
     private Gtk.ToggleButton prefer_harsh_radio;
     private Gtk.Box accent_box;
-    private Gtk.Switch wallpaper_accent_switch;
+    private Appearance.Utils.Palette palette;
     private He.Desktop desktop = new He.Desktop ();
 
     public Fusebox.Fuse fuse { get; construct set; }
     public Appearance.WallpaperGrid wallpaper_view;
-    private Appearance.Utils.Palette palette;
+    public Gtk.Switch wallpaper_accent_switch;
 
     public AppearanceView (Fusebox.Fuse _fuse) {
         Object (fuse: _fuse);
@@ -34,6 +35,7 @@ public class AppearanceView : Gtk.Box {
         tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
         fusebox_appearance_settings = new GLib.Settings ("co.tauos.Fusebox");
         interface_settings = new GLib.Settings ("org.gnome.desktop.interface");
+        bg_settings = new GLib.Settings ("org.gnome.desktop.background");
     }
 
     construct {
@@ -332,12 +334,12 @@ public class AppearanceView : Gtk.Box {
 
         grid.attach (accent_grid, 0, 1);
 
-        wallpaper_view = new Appearance.WallpaperGrid (fuse);
+        wallpaper_view = new Appearance.WallpaperGrid (fuse, this);
         grid.attach (wallpaper_view, 0, 2);
 
         fusebox_appearance_settings.bind ("wallpaper-accent", wallpaper_accent_switch, "active", SettingsBindFlags.DEFAULT);
         fusebox_appearance_settings.bind ("wallpaper-accent", accent_box, "sensitive", SettingsBindFlags.INVERT_BOOLEAN);
-        accent_set.begin ();
+
         wallpaper_accent_switch.state_set.connect (() => {
             if (wallpaper_accent_switch.active) {
                 accent_box.sensitive = false;
@@ -353,13 +355,10 @@ public class AppearanceView : Gtk.Box {
                 pink.set_active (false);
                 mono.set_active (false);
 
+                desktop.accent_color = null;
                 accent_set.begin ();
-                wallpaper_view.notify["current_wallpaper_path"].connect (() => {
-                    accent_set.begin ();
-                });
             } else {
                 desktop.accent_color = null;
-                tau_appearance_settings.set_string ("accent-color", "multi");
                 multi.set_active (true);
                 accent_box.sensitive = true;
             }
@@ -459,9 +458,9 @@ public class AppearanceView : Gtk.Box {
         }
     }
 
-    private async void accent_set () {
+    public async void accent_set () {
         try {
-            var file = File.new_for_uri (wallpaper_view.active_wallpaper.uri);
+            var file = File.new_for_uri (bg_settings.get_string("picture-uri"));
             var pixbuf = new Gdk.Pixbuf.from_file_at_size (file.get_path (), 1024, 1024);
 
             var palette = new Appearance.Utils.Palette.from_pixbuf (pixbuf);
