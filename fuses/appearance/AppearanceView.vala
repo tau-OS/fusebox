@@ -335,6 +335,7 @@ public class AppearanceView : Gtk.Box {
         wallpaper_view = new Appearance.WallpaperGrid (fuse);
         grid.attach (wallpaper_view, 0, 2);
 
+        fusebox_appearance_settings.bind ("wallpaper-accent", wallpaper_accent_switch, "active", SettingsBindFlags.DEFAULT);
         accent_set.begin ();
         wallpaper_accent_switch.state_set.connect (() => {
             if (wallpaper_accent_switch.active) {
