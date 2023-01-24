@@ -468,26 +468,26 @@ public class AppearanceView : Gtk.Box {
 
                 if (palette.dominant_swatch != null) {
                     Gdk.RGBA color = {palette.dominant_swatch.red, palette.dominant_swatch.green, palette.dominant_swatch.blue, 1};
-                    desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
+                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
                 } else if (palette.muted_swatch != null) {
                     Gdk.RGBA color = {palette.muted_swatch.red, palette.muted_swatch.green, palette.muted_swatch.blue, 1};
-                    desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
+                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
                 } else if (palette.dark_muted_swatch != null) {
                     Gdk.RGBA color = {palette.dark_muted_swatch.red, palette.dark_muted_swatch.green, palette.dark_muted_swatch.blue, 1};
-                    desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
+                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
                 } else if (palette.vibrant_swatch != null) {
                     Gdk.RGBA color = {palette.vibrant_swatch.red, palette.vibrant_swatch.green, palette.vibrant_swatch.blue, 1};
-                    desktop.accent_color = make_hex((float)color.red, (float)color.green, (float)color.blue);
+                    desktop.accent_color = {(int)color.red, (int)color.green, (int)color.blue};
                 } else {
-                    desktop.accent_color = make_hex(0, 0, 0);
+                    desktop.accent_color = {0, 0, 0};
                 }
 
-                tau_appearance_settings.set_string ("accent-color", desktop.accent_color);
+                tau_appearance_settings.set_string ("accent-color", makehex(desktop.accent_color.r, desktop.accent_color.g, desktop.accent_color.b));
             });
         } catch (Error e) {}
     }
 
-    public string make_hex (float red, float green, float blue) {
+    public string makehex (int red, int green, int blue) {
         return "#" + "%02x%02x%02x".printf ((uint)red, (uint)green, (uint)blue);
     }
 
@@ -528,7 +528,7 @@ public class AppearanceView : Gtk.Box {
                      } else if (color == "mono") {
                         tau_appearance_settings.set_string ("accent-color", "#2d2d2d");
                      } else if (color == "multi") {
-                        tau_appearance_settings.set_string ("accent-color", "");
+                        tau_appearance_settings.set_string ("accent-color", "#multi");
                      }
                 });
             });
