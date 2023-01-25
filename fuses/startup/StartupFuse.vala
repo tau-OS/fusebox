@@ -63,8 +63,7 @@ public class Startup.Fuse : Fusebox.Fuse {
 
             var appbar = new He.AppBar () {
                 viewtitle_widget = view_label,
-                show_back = false,
-                flat = true
+                show_back = false
             };
 
             main_grid.attach (appbar, 0, 0);

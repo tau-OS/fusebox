@@ -34,7 +34,6 @@ public class StartupView : Gtk.Box {
 
 
         var lbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        lbox.add_css_class ("mini-content-block");
         lbox.append (list);
 
         var sw = new Gtk.ScrolledWindow ();
