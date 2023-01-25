@@ -511,25 +511,25 @@ public class AppearanceView : Gtk.Box {
             realize.connect (() => {
                 toggled.connect (() => {
                     if (color == "purple") {
-                        tau_appearance_settings.set_string ("accent-color", "#8c56bf");
+                        tau_appearance_settings.set_string ("accent-color", "purple");
                      } else if (color == "pink") {
-                        tau_appearance_settings.set_string ("accent-color", "#bf56a8");
+                        tau_appearance_settings.set_string ("accent-color", "pink");
                      } else if (color == "red") {
-                        tau_appearance_settings.set_string ("accent-color", "#db2860");
+                        tau_appearance_settings.set_string ("accent-color", "red");
                      } else if (color == "orange") {
-                        tau_appearance_settings.set_string ("accent-color", "#f7812b");
+                        tau_appearance_settings.set_string ("accent-color", "orange");
                      } else if (color == "yellow") {
-                        tau_appearance_settings.set_string ("accent-color", "#e0a101");
+                        tau_appearance_settings.set_string ("accent-color", "yellow");
                      } else if (color == "green") {
-                        tau_appearance_settings.set_string ("accent-color", "#49d05e");
+                        tau_appearance_settings.set_string ("accent-color", "green");
                      } else if (color == "mint") {
-                        tau_appearance_settings.set_string ("accent-color", "#56bfa6");
+                        tau_appearance_settings.set_string ("accent-color", "mint");
                      } else if (color == "blue") {
-                        tau_appearance_settings.set_string ("accent-color", "#268ef9");
+                        tau_appearance_settings.set_string ("accent-color", "blue");
                      } else if (color == "mono") {
-                        tau_appearance_settings.set_string ("accent-color", "#2d2d2d");
+                        tau_appearance_settings.set_string ("accent-color", "mono");
                      } else if (color == "multi") {
-                        tau_appearance_settings.set_string ("accent-color", "#multi");
+                        tau_appearance_settings.set_string ("accent-color", "multi");
                      }
                 });
             });
