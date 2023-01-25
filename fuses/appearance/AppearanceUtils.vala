@@ -18,20 +18,20 @@
 */
 namespace Appearance.Utils {
     public class Palette : Object {
-        const double TARGET_DARK_LUMA = 0.26;
-        const double MAX_DARK_LUMA = 0.45;
-        const double MIN_LIGHT_LUMA = 0.55;
-        const double TARGET_LIGHT_LUMA = 0.74;
-        const double MIN_NORMAL_LUMA = 0.3;
-        const double TARGET_NORMAL_LUMA = 0.5;
-        const double MAX_NORMAL_LUMA = 0.7;
-        const double TARGET_MUTED_SATURATION = 0.3;
-        const double MAX_MUTED_SATURATION = 0.4;
+        const double TARGET_DARK_LUMA = 0.40;
+        const double MAX_DARK_LUMA = 0.60;
+        const double MIN_LIGHT_LUMA = 0.60;
+        const double TARGET_LIGHT_LUMA = 1;
+        const double MIN_NORMAL_LUMA = 0.40;
+        const double TARGET_NORMAL_LUMA = 0.60;
+        const double MAX_NORMAL_LUMA = 1;
+        const double TARGET_MUTED_SATURATION = 0.40;
+        const double MAX_MUTED_SATURATION = 1;
         const double TARGET_VIBRANT_SATURATION = 1;
-        const double MIN_VIBRANT_SATURATION = 0.35;
-        const double WEIGHT_SATURATION = 0.24;
-        const double WEIGHT_LUMA = 0.52;
-        const double WEIGHT_POPULATION = 0.24;
+        const double MIN_VIBRANT_SATURATION = 0.60;
+        const double WEIGHT_SATURATION = 0.60;
+        const double WEIGHT_LUMA = 0.40;
+        const double WEIGHT_POPULATION = 0.20;
 
         public class Swatch : Object {
             public float R = 0.0f;
