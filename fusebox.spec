@@ -43,6 +43,7 @@ BuildRequires:  pkgconfig(gweather4)
 BuildRequires:  pkgconfig(libgeoclue-2.0) >= %{geoclue2_version}
 BuildRequires:  pkgconfig(ibus-1.0)
 BuildRequires:  pkgconfig(pwquality)
+BuildRequires:  pkgconfig(libpulse)
 
 Requires: libhelium%{?_isa} >= %{libhelium_version}
 Requires: libbismuth%{?_isa} >= %{libhelium_version}
