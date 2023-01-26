@@ -70,7 +70,7 @@ public class DateTime.TimePicker : Gtk.Entry {
         }
 
         max_length = 8;
-        primary_icon_gicon = new ThemedIcon.with_default_fallbacks ("org.gnome.clocks-symbolic");
+        primary_icon_gicon = new ThemedIcon.with_default_fallbacks ("clock-symbolic");
         secondary_icon_gicon = new ThemedIcon.with_default_fallbacks ("pan-down-symbolic");
         icon_release.connect (on_icon_press);
 
@@ -96,10 +96,12 @@ public class DateTime.TimePicker : Gtk.Entry {
         hours_spinbutton.orientation = Gtk.Orientation.VERTICAL;
         hours_spinbutton.wrap = true;
         hours_spinbutton.value_changed.connect (() => update_time (true));
+        hours_spinbutton.add_css_class ("display");
 
         minutes_spinbutton = new Gtk.SpinButton.with_range (0, 59, 1);
         minutes_spinbutton.orientation = Gtk.Orientation.VERTICAL;
         minutes_spinbutton.wrap = true;
+        minutes_spinbutton.add_css_class ("display");
         minutes_spinbutton.value_changed.connect (() => update_time (false));
 
         minutes_spinbutton.output.connect (() => {
@@ -113,6 +115,7 @@ public class DateTime.TimePicker : Gtk.Entry {
         });
 
         var separation_label = new Gtk.Label (_(":"));
+        separation_label.add_css_class ("display");
 
         var pop_grid = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
         pop_grid.append (hours_spinbutton);
