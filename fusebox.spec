@@ -4,12 +4,11 @@
 %define gsettings_desktop_schemas_version 42.0
 %define gtk4_version 4.6.2
 %define libhelium_version 1.0
-%global debug_package %{nil}
 %global geoclue2_version 2.6.0
 
 Name:           fusebox
-Version:        0.1.6
-Release:        18
+Version:        0.1.7
+Release:        1
 Summary:        Change system and user settings.
 
 License:        GPLv3+ and CC-BY-SA
