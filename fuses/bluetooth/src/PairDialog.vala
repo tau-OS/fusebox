@@ -87,25 +87,21 @@ public class PairDialog : He.Dialog {
 
         switch (auth_type) {
             case AuthType.REQUEST_CONFIRMATION:
-                subtitle = _("Confirmation Needed");
                 info = _("Make sure the code displayed on “%s” matches the one below.").printf (device_name);
 
                 var confirm_button = new He.FillButton (_("Pair"));
                 primary_button = confirm_button;
                 break;
             case AuthType.DISPLAY_PASSKEY:
-            subtitle = _("Confirmation Needed By Passkey");
                 info = _("“%s” would like to pair with this device. Make sure the code displayed on “%s” matches the one below.").printf (device_name, device_name);
 
                 var confirm_button = new He.FillButton (_("Pair"));
                 primary_button = confirm_button;
                 break;
             case AuthType.DISPLAY_PIN_CODE:
-                subtitle = _("Confirmation Needed By Pin Code");
                 info = _("Type the code displayed below on “%s”, followed by Enter.").printf (device_name);
                 break;
             case AuthType.REQUEST_AUTHORIZATION:
-                subtitle = _("Confirmation Needed");
                 info = _("“%s” would like to pair with this device.").printf (device_name);
 
                 var confirm_button = new He.FillButton (_("Pair"));
