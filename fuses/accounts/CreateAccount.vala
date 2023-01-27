@@ -78,6 +78,7 @@ class Accounts.CreateAccount : He.Window {
     username_entry.placeholder_text = "efuentes";
     username_entry.max_length = 32;
     username_entry.needs_validation = true;
+    username_entry.support_text = (_("8—32 non-capitalized letters/numbers."));
 
     var name_block = new He.MiniContentBlock () {
       title = "Name",
