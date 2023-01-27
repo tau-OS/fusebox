@@ -77,6 +77,7 @@ class Accounts.CreateAccount : He.Window {
     username_entry.set_parent (username_block);
     username_entry.placeholder_text = "efuentes";
     username_entry.max_length = 32;
+    username_entry.needs_validation = true;
 
     var name_block = new He.MiniContentBlock () {
       title = "Name",
