@@ -233,28 +233,23 @@ public class About.OSView : Gtk.Box {
                 sensitive = false
             };
             var title_label = new Gtk.Label ("Rename Your Computer") {
-                halign = Gtk.Align.START
+                halign = Gtk.Align.CENTER
             };
             title_label.add_css_class ("view-title");
-            var subtitle_label = new Gtk.Label ("The computer's identity") {
-                halign = Gtk.Align.START
-            };
-            subtitle_label.add_css_class ("view-subtitle");
             var text_label = new Gtk.Label ("When you rename your computer, it'll reflect on how it is seen by other devices. For example, via bluetooth and secure shells.") {
                 halign = Gtk.Align.START,
                 wrap = true,
                 wrap_mode = Pango.WrapMode.WORD
             };
             var image = new Gtk.Image () {
-                pixel_size = 128,
+                pixel_size = 64,
                 icon_name = "dialog-information-symbolic"
             };
 
-            var rename_entry = new Gtk.Entry () {
-                text = hostname_subtitle.label
+            var rename_entry = new He.TextField () {
             };
 
-            rename_entry.buffer.inserted_text.connect (() => {
+            rename_entry.notify["is-valid"].connect (() => {
                 rename_button.sensitive = true;
             });
 
@@ -266,7 +261,6 @@ public class About.OSView : Gtk.Box {
             };
             main_box.append (image);
             main_box.append (title_label);
-            main_box.append (subtitle_label);
             main_box.append (text_label);
             main_box.append (rename_entry);
 
@@ -284,8 +278,8 @@ public class About.OSView : Gtk.Box {
                 resizable = false,
                 has_title = false
             };
-            rename_dialog.set_size_request (360, 400);
-            rename_dialog.set_default_size (360, 400);
+            rename_dialog.set_size_request (360, 266);
+            rename_dialog.set_default_size (360, 266);
             rename_dialog.set_child (main_box);
             rename_dialog.show ();
 
