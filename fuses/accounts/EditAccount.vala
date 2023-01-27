@@ -85,8 +85,8 @@ class Accounts.EditAccount : He.Window {
 
     var name_entry = new He.TextField () {
       text = user.real_name,
-      placeholder_text = "Emily Fuentes",
     };
+    name_entry.placeholder_text = "Emily Fuentes";
     name_entry.set_parent (name_block);
 
     var administrator_block = new He.MiniContentBlock () {

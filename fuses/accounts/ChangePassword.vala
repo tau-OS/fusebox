@@ -24,10 +24,9 @@ class Accounts.ChangePassword : He.Window {
     };
     main.append (password_block);
 
-    var password_entry = new He.TextField () {
-      visibility = false,
-      placeholder_text = "••••••••",
-    };
+    var password_entry = new He.TextField ();
+    password_entry.visibility = false;
+    password_entry.placeholder_text = "••••••••";
     password_entry.set_parent (password_block);
 
     var password_confirm_block = new He.MiniContentBlock () {
@@ -35,10 +34,9 @@ class Accounts.ChangePassword : He.Window {
     };
     main.append (password_confirm_block);
 
-    var password_confirm_entry = new He.TextField () {
-      visibility = false,
-      placeholder_text = "••••••••",
-    };
+    var password_confirm_entry = new He.TextField ();
+    password_confirm_entry.visibility = false;
+    password_confirm_entry.placeholder_text = "••••••••";
     password_confirm_entry.set_parent (password_confirm_block);
 
     var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
