@@ -73,11 +73,10 @@ class Accounts.CreateAccount : He.Window {
     };
     main_box.append (username_block);
 
-    var username_entry = new He.TextField () {
-      placeholder_text = "emilyfuentes",
-      max_length = 32,
-    };
+    var username_entry = new He.TextField.from_regex (allowed_username_chars_regex);
     username_entry.set_parent (username_block);
+    username_entry.placeholder_text = "efuentes";
+    username_entry.max_length = 32;
 
     var name_block = new He.MiniContentBlock () {
       title = "Name",
@@ -85,31 +84,28 @@ class Accounts.CreateAccount : He.Window {
     main_box.append (name_block);
 
     var name_entry = new He.TextField () {
-      placeholder_text = "Emily Fuentes",
     };
     name_entry.set_parent (name_block);
+    name_entry.placeholder_text = "Emily Fuentes";
 
     var password_block = new He.MiniContentBlock () {
       title = "Password",
     };
     main_box.append (password_block);
 
-    var password_entry = new He.TextField () {
-      visibility = false,
-      placeholder_text = "••••••••",
-    };
+    var password_entry = new He.TextField ();
     password_entry.set_parent (password_block);
+    password_entry.visibility = false;
+    password_entry.placeholder_text = "••••••••";
 
     var password_confirm_block = new He.MiniContentBlock () {
       title = "Confirm Password",
     };
     main_box.append (password_confirm_block);
 
-    var password_confirm_entry = new He.TextField () {
-      visibility = false,
-      placeholder_text = "••••••••",
-    };
-
+    var password_confirm_entry = new He.TextField ();
+    password_confirm_entry.visibility = false;
+    password_confirm_entry.placeholder_text = "••••••••";
     password_confirm_entry.set_parent (password_confirm_block);
 
     var administrator_block = new He.MiniContentBlock () {
@@ -201,15 +197,6 @@ class Accounts.CreateAccount : He.Window {
 
         dialog.destroy ();
       });
-    });
-
-    // * TODO: Add regex to username entry
-    var username_editable = username_entry.get_delegate ();
-
-    username_editable.insert_text.connect ((text, position) => {
-      if (!allowed_username_chars_regex.match (text)) {
-        GLib.Signal.stop_emission_by_name (username_editable, "insert-text");
-      };
     });
   }
 }
