@@ -72,7 +72,7 @@ class Accounts.EditAccount : He.Window {
     };
     main_box.append (username_block);
 
-    var username_entry = new Gtk.Entry () {
+    var username_entry = new He.TextField () {
       text = user.get_user_name (),
       sensitive = false,
     };
@@ -83,7 +83,7 @@ class Accounts.EditAccount : He.Window {
     };
     main_box.append (name_block);
 
-    var name_entry = new Gtk.Entry () {
+    var name_entry = new He.TextField () {
       text = user.real_name,
       placeholder_text = "Emily Fuentes",
     };
