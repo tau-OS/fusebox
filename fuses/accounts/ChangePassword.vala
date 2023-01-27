@@ -24,7 +24,7 @@ class Accounts.ChangePassword : He.Window {
     };
     main.append (password_block);
 
-    var password_entry = new Gtk.Entry () {
+    var password_entry = new He.TextField () {
       visibility = false,
       placeholder_text = "••••••••",
     };
@@ -35,7 +35,7 @@ class Accounts.ChangePassword : He.Window {
     };
     main.append (password_confirm_block);
 
-    var password_confirm_entry = new Gtk.Entry () {
+    var password_confirm_entry = new He.TextField () {
       visibility = false,
       placeholder_text = "••••••••",
     };
@@ -65,11 +65,7 @@ class Accounts.ChangePassword : He.Window {
     });
     button_box.append (apply_button);
 
-    password_entry.changed.connect (() => {
-      apply_button.sensitive = password_entry.text == password_confirm_entry.text;
-    });
-
-    password_confirm_entry.changed.connect (() => {
+    password_confirm_entry.notify["is-valid"].connect (() => {
       apply_button.sensitive = password_entry.text == password_confirm_entry.text;
     });
   }

@@ -73,7 +73,7 @@ class Accounts.CreateAccount : He.Window {
     };
     main_box.append (username_block);
 
-    var username_entry = new Gtk.Entry () {
+    var username_entry = new He.TextField () {
       placeholder_text = "emilyfuentes",
       max_length = 32,
     };
@@ -84,7 +84,7 @@ class Accounts.CreateAccount : He.Window {
     };
     main_box.append (name_block);
 
-    var name_entry = new Gtk.Entry () {
+    var name_entry = new He.TextField () {
       placeholder_text = "Emily Fuentes",
     };
     name_entry.set_parent (name_block);
@@ -94,7 +94,7 @@ class Accounts.CreateAccount : He.Window {
     };
     main_box.append (password_block);
 
-    var password_entry = new Gtk.Entry () {
+    var password_entry = new He.TextField () {
       visibility = false,
       placeholder_text = "••••••••",
     };
@@ -105,7 +105,7 @@ class Accounts.CreateAccount : He.Window {
     };
     main_box.append (password_confirm_block);
 
-    var password_confirm_entry = new Gtk.Entry () {
+    var password_confirm_entry = new He.TextField () {
       visibility = false,
       placeholder_text = "••••••••",
     };
@@ -169,12 +169,7 @@ class Accounts.CreateAccount : He.Window {
       apply_button.sensitive = this.fields_changed ();
     });
 
-    password_entry.changed.connect (() => {
-      this.password = password_entry.text;
-      apply_button.sensitive = this.fields_changed ();
-    });
-
-    password_confirm_entry.changed.connect (() => {
+    password_confirm_entry.notify["is-valid"].connect (() => {
       this.password_confirm = password_confirm_entry.text;
       apply_button.sensitive = this.fields_changed ();
     });
