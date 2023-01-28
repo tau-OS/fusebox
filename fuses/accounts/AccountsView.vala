@@ -40,14 +40,18 @@ public class Accounts.AccountsView : Gtk.Box {
             }
         }
 
-        var autologin_dropdown = new Gtk.DropDown (this.account_list, new Gtk.PropertyExpression (typeof(Act.User), null, "real_name"));
+        var autologin_dropdown = new Gtk.DropDown (this.account_list, new Gtk.PropertyExpression (typeof(Act.User), null, "real_name")) {
+            valign = Gtk.Align.CENTER
+        };
         autologin_actions_box.append (autologin_dropdown);
 
         if (inital_autologin_user != null) {
             autologin_dropdown.selected = users.index (inital_autologin_user);
         }
 
-        var autologin_switch = new Gtk.Switch ();
+        var autologin_switch = new Gtk.Switch () {
+            valign = Gtk.Align.CENTER
+        };
         autologin_switch.active = inital_autologin_user != null;
         autologin_actions_box.append (autologin_switch);
 

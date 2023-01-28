@@ -295,12 +295,14 @@ public class AppearanceView : Gtk.Box {
         multi.tooltip_text = _("Set By Apps");
 
         var wallpaper_accent_label = new Gtk.Label (_("Accent Color From Wallpaper")) {
-            halign = Gtk.Align.START
+            halign = Gtk.Align.START,
+            valign = Gtk.Align.CENTER
         };
         wallpaper_accent_label.add_css_class ("cb-subtitle");
 
         wallpaper_accent_switch = new Gtk.Switch () {
             halign = Gtk.Align.END,
+            valign = Gtk.Align.CENTER
             hexpand = true
         };
 
