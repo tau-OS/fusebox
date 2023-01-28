@@ -302,7 +302,7 @@ public class AppearanceView : Gtk.Box {
 
         wallpaper_accent_switch = new Gtk.Switch () {
             halign = Gtk.Align.END,
-            valign = Gtk.Align.CENTER
+            valign = Gtk.Align.CENTER,
             hexpand = true
         };
 
