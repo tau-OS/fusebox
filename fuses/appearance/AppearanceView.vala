@@ -463,7 +463,7 @@ public class AppearanceView : Gtk.Box {
     public async void accent_set () {
         try {
             var file = File.new_for_uri (bg_settings.get_string("picture-uri"));
-            var pixbuf = new Gdk.Pixbuf.from_file_at_size (file.get_path (), 100, 100);
+            var pixbuf = new Gdk.Pixbuf.from_file_at_size (file.get_path (), 1366, 768);
 
             var palette = new Appearance.Utils.Palette.from_pixbuf (pixbuf);
             palette.generate_async.begin (() => {

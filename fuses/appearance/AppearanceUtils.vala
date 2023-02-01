@@ -82,11 +82,11 @@ namespace Appearance.Utils {
         }
 
         public const uint8 MAX_QUALITY = 10;
-        public const uint8 MIN_QUALITY = 1;
-        public const uint8 DEFAULT_QUALITY = 5;
-        public const uint16 MAX_COLORS = 256;
+        public const uint8 MIN_QUALITY = 10;
+        public const uint8 DEFAULT_QUALITY = 10;
+        public const uint16 MAX_COLORS = 128;
         public const uint16 DEFAULT_COLORS = 128;
-        public const uint16 MIN_COLORS = 16;
+        public const uint16 MIN_COLORS = 128;
 
         private Gee.List<Swatch> _swatches;
         public Gee.List<Swatch> swatches {
