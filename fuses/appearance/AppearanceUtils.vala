@@ -32,7 +32,7 @@ namespace Appearance.Utils {
         const double MAX_MUTED_SATURATION = 1;
         const double TARGET_VIBRANT_SATURATION = 1;
         const double MIN_VIBRANT_SATURATION = 0.0;
-        const double MAX_VIBRANT_SATURATION = 0.9;
+        const double MAX_VIBRANT_SATURATION = 1;
         const double WEIGHT_SATURATION = 0.2;
         const double WEIGHT_LUMA = 0.5;
         const double WEIGHT_POPULATION = 0.2;

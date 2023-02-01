@@ -284,7 +284,7 @@ public class About.OSView : Gtk.Box {
             rename_dialog.show ();
 
             rename_button.clicked.connect (() => {
-                set_host_name (rename_entry.buffer.get_text ());
+                set_host_name (rename_entry.text);
                 rename_dialog.close ();
             });
 

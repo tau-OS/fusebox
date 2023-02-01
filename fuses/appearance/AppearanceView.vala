@@ -463,13 +463,20 @@ public class AppearanceView : Gtk.Box {
     public async void accent_set () {
         try {
             var file = File.new_for_uri (bg_settings.get_string("picture-uri"));
-            var pixbuf = new Gdk.Pixbuf.from_file_at_size (file.get_path (), 128, 128);
+            var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
+            pixbuf = pixbuf.scale_simple (64, 64, Gdk.InterpType.BILINEAR);
 
             var palette = new Appearance.Utils.Palette.from_pixbuf (pixbuf);
             palette.generate_async.begin (() => {
                 this.palette = palette;
 
-                if (palette.dominant_swatch != null) {
+                if (palette.body_swatch != null) {
+                    Gdk.RGBA color = {palette.body_swatch.red, palette.body_swatch.green, palette.body_swatch.blue, 1};
+                    desktop.accent_color = {color.red, color.green, color.blue};
+                } else if (palette.vibrant_swatch != null) {
+                    Gdk.RGBA color = {palette.vibrant_swatch.red, palette.vibrant_swatch.green, palette.vibrant_swatch.blue, 1};
+                    desktop.accent_color = {color.red, color.green, color.blue};
+                } else if (palette.dominant_swatch != null) {
                     Gdk.RGBA color = {palette.dominant_swatch.red, palette.dominant_swatch.green, palette.dominant_swatch.blue, 1};
                     desktop.accent_color = {color.red, color.green, color.blue};
                 } else {
