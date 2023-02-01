@@ -5,7 +5,9 @@ public class Accounts.AccountsView : Gtk.Box {
         var user_manager = Act.UserManager.get_default ();
         var users = user_manager.list_users ();
 
-        var overlay_button = new He.OverlayButton ("list-add-symbolic", null, null);
+        var overlay_button = new He.OverlayButton ("list-add-symbolic", null, null) {
+            typeb = PRIMARY
+        };
         overlay_button.clicked.connect (() => {
             var dialog = new Accounts.CreateAccount (He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this));
             dialog.present ();

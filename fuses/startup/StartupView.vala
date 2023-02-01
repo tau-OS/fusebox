@@ -46,7 +46,8 @@ public class StartupView : Gtk.Box {
             margin_bottom = 18,
             icon = "list-add-symbolic",
             child = (sw),
-            label = _("Create")
+            label = _("Create"),
+            typeb = PRIMARY
         };
 
         var clamp = new Bis.Latch () {

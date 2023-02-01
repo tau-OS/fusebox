@@ -111,7 +111,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             wallpaper_main_box.append (wallpaper_title_box);
             wallpaper_main_box.append (wallpaper_view);
             
-            view_overlay = new He.OverlayButton ("", null, null);
+            view_overlay = new He.OverlayButton ("", null, null) {
+                typeb = SECONDARY
+            };
             view_overlay.icon = "list-add-symbolic";
             view_overlay.child = (wallpaper_main_box);
             
