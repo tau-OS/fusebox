@@ -463,7 +463,7 @@ public class AppearanceView : Gtk.Box {
     public async void accent_set () {
         try {
             var file = File.new_for_uri (bg_settings.get_string("picture-uri"));
-            var pixbuf = new Gdk.Pixbuf.from_file_at_size (file.get_path (), 1366, 768);
+            var pixbuf = new Gdk.Pixbuf.from_file_at_size (file.get_path (), 128, 128);
 
             var palette = new Appearance.Utils.Palette.from_pixbuf (pixbuf);
             palette.generate_async.begin (() => {
@@ -471,15 +471,6 @@ public class AppearanceView : Gtk.Box {
 
                 if (palette.dominant_swatch != null) {
                     Gdk.RGBA color = {palette.dominant_swatch.red, palette.dominant_swatch.green, palette.dominant_swatch.blue, 1};
-                    desktop.accent_color = {color.red, color.green, color.blue};
-                } else if (palette.muted_swatch != null) {
-                    Gdk.RGBA color = {palette.muted_swatch.red, palette.muted_swatch.green, palette.muted_swatch.blue, 1};
-                    desktop.accent_color = {color.red, color.green, color.blue};
-                } else if (palette.dark_muted_swatch != null) {
-                    Gdk.RGBA color = {palette.dark_muted_swatch.red, palette.dark_muted_swatch.green, palette.dark_muted_swatch.blue, 1};
-                    desktop.accent_color = {color.red, color.green, color.blue};
-                } else if (palette.vibrant_swatch != null) {
-                    Gdk.RGBA color = {palette.vibrant_swatch.red, palette.vibrant_swatch.green, palette.vibrant_swatch.blue, 1};
                     desktop.accent_color = {color.red, color.green, color.blue};
                 } else {
                     desktop.accent_color = {0.0, 0.0, 0.0};
