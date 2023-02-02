@@ -61,10 +61,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     }
     
     construct {
-            
             wallpaper_view = new Gtk.FlowBox () {
                 activate_on_single_click = true,
-                row_spacing = 12,
                 column_spacing = 12,
                 valign = Gtk.Align.START,
                 selection_mode = Gtk.SelectionMode.SINGLE,
@@ -367,7 +365,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         
         private Gtk.Revealer check_revealer;
         private Gtk.ToggleButton check;
-        private Gtk.Picture image;
+        private He.ContentBlockImage image;
 
         public string? thumb_path { get; construct set; }
         public bool thumb_valid { get; construct; }
@@ -415,10 +413,10 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
 
         construct {
-            width_request = THUMB_WIDTH;
-            height_request = THUMB_HEIGHT;
-            
-            image = new Gtk.Picture ();
+            image = new He.ContentBlockImage ("") {
+                requested_height = 135,
+                requested_width = 135
+            };
             
             check = new Gtk.ToggleButton () {
                 halign = Gtk.Align.START,
@@ -429,17 +427,17 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             check.add_css_class ("circular");
             check.add_css_class ("checked-up");
             
-            check_revealer = new Gtk.Revealer ();
+            check_revealer = new Gtk.Revealer () {
+                height_request = THUMB_HEIGHT
+            };
             check_revealer.transition_type = Gtk.RevealerTransitionType.CROSSFADE;
             check_revealer.child = (check);
             
             var overlay = new Gtk.Overlay ();
             overlay.set_child (image);
             overlay.add_overlay (check_revealer);
-            
-            halign = Gtk.Align.CENTER;
-            valign = Gtk.Align.CENTER;
             set_child (overlay);
+            add_css_class ("wallpaper");
 
             if (uri != null) {
                 var file = File.new_for_uri (uri);
@@ -479,7 +477,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                 return;
             }
     
-            image.set_filename (thumb_path);
+            image.file = "file://" + thumb_path;
         }
     }
 
