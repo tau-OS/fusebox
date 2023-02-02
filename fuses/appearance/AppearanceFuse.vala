@@ -45,12 +45,12 @@ public class Appearance.Fuse : Fusebox.Fuse {
 
             var appbar = new He.AppBar () {
                 viewtitle_widget = stack_switcher,
-                show_back = false
+                show_back = false,
+                scroller = appearance_view.sw,
+                viewsubtitle_label = ""
             };
 
-            main_grid = new Gtk.Grid () {
-                row_spacing = 12
-            };
+            main_grid = new Gtk.Grid ();
             main_grid.attach (appbar, 0, 0);
             main_grid.attach (main_stack, 0, 1);
         }
