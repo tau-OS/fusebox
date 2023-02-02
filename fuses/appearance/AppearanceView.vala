@@ -226,7 +226,7 @@ public class AppearanceView : Gtk.Box {
             row_spacing = 6,
             margin_start = 18,
             margin_end = 18,
-            margin_bottom = 18
+            margin_bottom = 18,
             margin_top = 18
         };
         grid.attach (prefer_box, 0, 0);
