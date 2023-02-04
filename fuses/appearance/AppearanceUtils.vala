@@ -18,7 +18,7 @@
 */
 namespace Appearance.Utils {
     public class Palette : Object {
-        const double TARGET_DARK_LUMA = 0.26;
+        const double TARGET_DARK_LUMA = 0.22;
         const double MAX_DARK_LUMA = 0.3;
         const double MIN_LIGHT_LUMA = 0.7;
         const double TARGET_LIGHT_LUMA = 0.74;
