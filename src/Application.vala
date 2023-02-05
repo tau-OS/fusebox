@@ -177,8 +177,6 @@ namespace Fusebox {
             category_view = new Fusebox.CategoryView (fuse_to_open);
             category_view.load_default_fuses.begin ();
 
-            headerbar.scroller = category_view.scroller;
-
             album = new Bis.Album () {
                 can_navigate_back = true,
                 can_navigate_forward = true,
