@@ -85,9 +85,9 @@ namespace Appearance.Utils {
         public const uint8 MIN_QUALITY = 10;
         public const uint8 DEFAULT_QUALITY = 10;
 
-        public const uint16 MAX_COLORS = 4;
-        public const uint16 DEFAULT_COLORS = 4;
-        public const uint16 MIN_COLORS = 4;
+        public const uint16 MAX_COLORS = 256;
+        public const uint16 DEFAULT_COLORS = 64;
+        public const uint16 MIN_COLORS = 16;
 
         private Gee.List<Swatch> _swatches;
         public Gee.List<Swatch> swatches {
@@ -264,7 +264,7 @@ namespace Appearance.Utils {
             }
         }
 
-        private async Gee.List<Swatch> quantize (Gee.List<Swatch> pixels, uint8 depth = 0, uint8 max_depth = 4) {
+        private async Gee.List<Swatch> quantize (Gee.List<Swatch> pixels, uint8 depth = 0, uint8 max_depth = 16) {
             if (depth == max_depth) {
                 int r = 0, g = 0, b = 0;
                 int population = 0;
@@ -287,15 +287,9 @@ namespace Appearance.Utils {
                 g = (int)Math.round (green_sum / (float)population);
                 b = (int)Math.round (blue_sum / (float)population);
 
-                print ("\nR %d".printf(r));
-                print (" G %d ".printf(g));
-                print ("B %d\n".printf(b));
-
                 var list = new Gee.ArrayList<Swatch> ();
-                if (r > 120 || g > 120 || b > 120) {
-                    var color = new Swatch ((uint8)r, (uint8)g, (uint8)b, population);
-                    list.add (color);
-                }
+                var color = new Swatch ((uint8)r, (uint8)g, (uint8)b, population);
+                list.add (color);
                 return list;
             }
 
