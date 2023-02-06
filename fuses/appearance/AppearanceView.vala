@@ -46,7 +46,9 @@ public class AppearanceView : Gtk.Box {
         prefer_label.add_css_class ("cb-title");
 
         var prefer_default_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/by-apps.svg") {
-            pixel_size = 64
+            pixel_size = 64,
+            hexpand = true,
+            halign = Gtk.Align.CENTER
         };
 
         var prefer_default_card = new Gtk.Grid ();
@@ -442,19 +444,7 @@ public class AppearanceView : Gtk.Box {
             palette.generate_async.begin (() => {
                 this.palette = palette;
 
-                if (palette.dark_vibrant_swatch != null) {
-                    Gdk.RGBA color = {palette.dark_vibrant_swatch.red, palette.dark_vibrant_swatch.green, palette.dark_vibrant_swatch.blue, 1};
-                    desktop.accent_color = {color.red, color.green, color.blue};
-                } else if (palette.vibrant_swatch != null) {
-                    Gdk.RGBA color = {palette.vibrant_swatch.red, palette.vibrant_swatch.green, palette.vibrant_swatch.blue, 1};
-                    desktop.accent_color = {color.red, color.green, color.blue};
-                } else if (palette.dark_muted_swatch != null) {
-                    Gdk.RGBA color = {palette.dark_muted_swatch.red, palette.dark_muted_swatch.green, palette.dark_muted_swatch.blue, 1};
-                    desktop.accent_color = {color.red, color.green, color.blue};
-                } else if (palette.muted_swatch != null) {
-                    Gdk.RGBA color = {palette.muted_swatch.red, palette.muted_swatch.green, palette.muted_swatch.blue, 1};
-                    desktop.accent_color = {color.red, color.green, color.blue};
-                } else if (palette.dominant_swatch != null) {
+                if (palette.dominant_swatch != null) {
                     Gdk.RGBA color = {palette.dominant_swatch.red, palette.dominant_swatch.green, palette.dominant_swatch.blue, 1};
                     desktop.accent_color = {color.red, color.green, color.blue};
                 } else {
