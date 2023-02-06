@@ -165,9 +165,14 @@ namespace Fusebox {
                 show_back = false,
                 width_request = 250
             };
+
+            var title_label = new Gtk.Label (_("Settings"));
+            title_label.add_css_class ("view-title");
+            title_label.halign = Gtk.Align.START;
+
             headerbar.append (search_button);
             headerbar.append (menu_button);
-            headerbar.viewtitle_label = "Settings";
+            headerbar.viewtitle_widget = title_label;
             headerbar.viewsubtitle_label = "";
 
             search_button.toggled.connect (() => {
