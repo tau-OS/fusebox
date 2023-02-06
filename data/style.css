@@ -3,20 +3,20 @@ entry.search {
 }
 
 .fuse-block {
-    background: alpha(@accent_bg_color, 0.0);
-    padding: 14.5px 16px;
-    border-radius: 8px;
-    color: @view_fg_color;
+  background: none;
+  padding: 14.5px 16px;
+  border-radius: 8px;
+  color: @view_fg_color;
 }
 .fuse-block:hover {
-  background: alpha(@accent_bg_color, 0.11);
+  background: linear-gradient(0deg, gtkalpha($accent_bg_color, 0.11), gtkalpha($accent_bg_color, 0.11)), image($view_bg_color);
 }
 row:selected .fuse-block {
-  background: alpha(@accent_bg_color, 0.15);
+  background: linear-gradient(0deg, gtkalpha($accent_bg_color, 0.14), gtkalpha($accent_bg_color, 0.14)), image($view_bg_color);
 }
 
 .main-content-block {
-    background: alpha(@accent_bg_color, 0.15);
+    background: linear-gradient(0deg, gtkalpha($accent_bg_color, 0.11), gtkalpha($accent_bg_color, 0.11)), image($view_bg_color);
     padding: 18px;
     border-radius: 12px;
 }
@@ -29,13 +29,13 @@ row:selected .fuse-block {
 }
 
 button.flat label {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 .checked-up {
-  background: shade(@view_bg_color, 0.8);
-  color: @view_fg_color;
-  box-shadow: inset 0 0 0 1px @borders;
+  background: @success_container_bg_color;
+  color: @success_container_fg_color;
+  box-shadow: inset 0 0 0 1px @outline;
   margin-top: 12px;
   margin-left: 6px;
 }
@@ -87,4 +87,11 @@ button.flat label {
 
 .menu-button {
   border-radius: 0px;
+  background: none;
+}
+.menu-button:hover {
+  background: linear-gradient(0deg, gtkalpha($accent_bg_color, 0.08), gtkalpha($accent_bg_color, 0.08)), image($view_bg_color);
+}
+.menu-button:active {
+  background: linear-gradient(0deg, gtkalpha($accent_bg_color, 0.05), gtkalpha($accent_bg_color, 0.05)), image($view_bg_color);
 }
