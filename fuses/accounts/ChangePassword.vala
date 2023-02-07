@@ -17,7 +17,7 @@ class Accounts.ChangePassword : He.Window {
       halign = Gtk.Align.START,
     };
     title.add_css_class ("view-title");
-    main.append(title);
+    main.append (title);
 
     var password_block = new He.MiniContentBlock () {
       title = "Password",
@@ -56,7 +56,7 @@ class Accounts.ChangePassword : He.Window {
     var apply_button = new He.FillButton (_("Update")) {
       sensitive = false,
     };
-    apply_button.set_size_request(200, -1);
+    apply_button.set_size_request (200, -1);
     apply_button.clicked.connect (() => {
       user.set_password (password_entry.text, user.password_hint);
       this.destroy ();

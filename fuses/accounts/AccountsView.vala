@@ -9,7 +9,7 @@ public class Accounts.AccountsView : Gtk.Box {
             typeb = PRIMARY
         };
         overlay_button.clicked.connect (() => {
-            var dialog = new Accounts.CreateAccount (He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this));
+            var dialog = new Accounts.CreateAccount (He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this));
             dialog.present ();
         });
 
@@ -42,7 +42,13 @@ public class Accounts.AccountsView : Gtk.Box {
             }
         }
 
-        var autologin_dropdown = new Gtk.DropDown (this.account_list, new Gtk.PropertyExpression (typeof(Act.User), null, "real_name")) {
+        var autologin_dropdown = new Gtk.DropDown (this.account_list,
+                                        new Gtk.PropertyExpression (typeof (Act.User),
+                                                                                null,
+                                                                                "real_name"
+                                                                               )
+                                                  )
+        {
             valign = Gtk.Align.CENTER
         };
         autologin_actions_box.append (autologin_dropdown);

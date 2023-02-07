@@ -61,7 +61,7 @@ class Accounts.EditAccount : He.Window {
     avatar_overlay.add_overlay (avatar_edit_button);
     avatar_box.append (avatar_overlay);
 
-    var title = new Gtk.Label(user.real_name) {
+    var title = new Gtk.Label (user.real_name) {
       halign = Gtk.Align.CENTER,
     };
     title.add_css_class ("large-title");
@@ -103,7 +103,7 @@ class Accounts.EditAccount : He.Window {
     administrator_switch.add_css_class ("bg-meson-red");
     administrator_switch.set_parent (administrator_block);
 
-    var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
+    var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
       margin_top = 12,
       homogeneous = true,
       valign = Gtk.Align.END,
@@ -112,7 +112,7 @@ class Accounts.EditAccount : He.Window {
     main_box.append (button_box);
 
     var cancel_button = new He.TextButton (_("Cancel"));
-    cancel_button.set_size_request(200, -1);
+    cancel_button.set_size_request (200, -1);
     cancel_button.clicked.connect (() => {
       this.destroy ();
     });
@@ -125,7 +125,7 @@ class Accounts.EditAccount : He.Window {
       this.update_user ();
       this.destroy ();
     });
-    apply_button.set_size_request(200, -1);
+    apply_button.set_size_request (200, -1);
     button_box.append (apply_button);
 
     this.set_child (main_box);
@@ -141,7 +141,13 @@ class Accounts.EditAccount : He.Window {
     });
 
     avatar_edit_button.clicked.connect (() => {
-      var dialog = new Gtk.FileChooserDialog (_("Select an image"), this, Gtk.FileChooserAction.OPEN, _("Cancel"), Gtk.ResponseType.CANCEL, _("Select"), Gtk.ResponseType.ACCEPT);
+      var dialog = new Gtk.FileChooserDialog (_("Select an image"),
+                                              this,
+                                              Gtk.FileChooserAction.OPEN,
+                                              _("Cancel"),
+                                              Gtk.ResponseType.CANCEL,
+                                              _("Select"),
+                                              Gtk.ResponseType.ACCEPT);
       dialog.set_transient_for (this);
       dialog.set_modal (true);
       dialog.set_select_multiple (false);

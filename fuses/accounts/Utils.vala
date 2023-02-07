@@ -24,7 +24,11 @@ ListStore get_account_list_store () {
   return list;
 }
 
-void create_user (string username, string fullname, string password, Act.UserAccountType user_type, string? avatar_path) {
+void create_user (string username,
+                  string fullname,
+                  string password,
+                  Act.UserAccountType user_type,
+                  string? avatar_path) {
   var user_manager = Act.UserManager.get_default ();
   Act.User user;
   try {
