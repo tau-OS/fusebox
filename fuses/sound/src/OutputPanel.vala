@@ -215,17 +215,17 @@ public class Sound.OutputPanel : Gtk.Grid {
     private void device_notify (ParamSpec pspec) {
         disconnect_signals ();
         switch (pspec.get_name ()) {
-        case "is-muted":
-            if (volume_switch.active == default_device.is_muted) {
-                volume_switch.activate ();
-            }
-            break;
-        case "volume":
-            volume_scale.set_value (default_device.volume);
-            break;
-        case "balance":
-            balance_scale.set_value (default_device.balance);
-            break;
+            case "is-muted":
+                if (volume_switch.active == default_device.is_muted) {
+                    volume_switch.activate ();
+                }
+                break;
+            case "volume":
+                volume_scale.set_value (default_device.volume);
+                break;
+            case "balance":
+                balance_scale.set_value (default_device.balance);
+                break;
         }
 
         connect_signals ();
