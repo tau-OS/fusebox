@@ -43,7 +43,7 @@ namespace Fusebox {
             foreach (var fuse in fusesmanager.get_fuses ()) {
                 var tmp_entries = yield fuse.search ("");
 
-                foreach (var key in tmp_entries.get_keys_as_array()) {
+                foreach (var key in tmp_entries.get_keys_as_array ()) {
                     string [] tmp = key.split (" → ");
                     SearchEntry tmp_entry = SearchEntry ();
                     tmp_entry.fuse_name = tmp[0];

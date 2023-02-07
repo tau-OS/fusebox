@@ -74,8 +74,8 @@ namespace Fusebox {
 
         protected override void startup () {
             Gdk.RGBA accent_color = { 0 };
-            accent_color.parse("#828292");
-            default_accent_color = He.Color.from_gdk_rgba(accent_color);
+            accent_color.parse ("#828292");
+            default_accent_color = He.Color.from_gdk_rgba (accent_color);
 
             resource_base_path = "/co/tauos/Fusebox";
 
@@ -311,7 +311,10 @@ namespace Fusebox {
             });
 
             if (Fusebox.FusesManager.get_default ().has_fuses () == false) {
-                category_view.show_alert (_("No Settings Found"), _("Install some and re-launch Fusebox."), "dialog-warning");
+                category_view.show_alert (_("No Settings Found"),
+                                          _("Install some and re-launch Fusebox."),
+                                          "dialog-warning"
+                                         );
             }
         }
 
