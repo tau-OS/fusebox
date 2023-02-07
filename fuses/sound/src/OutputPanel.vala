@@ -51,6 +51,10 @@ public class Sound.OutputPanel : Gtk.Grid {
         volume_scale.add_mark (70, Gtk.PositionType.BOTTOM, _("Recommended"));
         volume_scale.add_mark (100, Gtk.PositionType.BOTTOM, _("100%"));
 
+        if (settings.get_boolean ("show-audio-dialog")) {
+            audio_alert_dialog_cb ();
+        }
+
         var volume_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         volume_box.append (volume_scale);
         volume_box.append (volume_switch);
@@ -188,55 +192,7 @@ public class Sound.OutputPanel : Gtk.Grid {
 
         var settings = new GLib.Settings ("co.tauos.Fusebox");
         if (settings.get_boolean ("show-audio-dialog")) {
-            if (volume_scale.get_value () > (float)70.0) {
-                var ok_button = new He.FillButton ("Understood");
-
-                var volume_alert_dialog = new He.Dialog (
-                    true,
-                    ((He.ApplicationWindow)He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this)),
-                    (_("Audio Volume Too High!")),
-                    "",
-                    (_("Volume above 70% can progressively damage your eardrums as you listen to audio.")),
-                    "audio-volume-overamplified-symbolic",
-                    ok_button,
-                    null
-                );
-
-                var volume_check = new Gtk.CheckButton () {
-                    label = (_("I understand the risks, don't show this dialog next time."))
-                };
-
-                if (volume_check.active) {
-                    settings.set_boolean ("show-audio-dialog", false);
-                } else {
-                    settings.set_boolean ("show-audio-dialog", true);
-                }
-
-                volume_check.toggled.connect (() => {
-                    if (volume_check.active) {
-                        settings.set_boolean ("show-audio-dialog", false);
-                    } else {
-                        settings.set_boolean ("show-audio-dialog", true);
-                    }
-                });
-
-                volume_alert_dialog.add (volume_check);
-
-                ok_button.clicked.connect (() => {
-                    if (volume_scale.get_value () > (float)70.0) {
-                        volume_scale.set_value ((float)69.0);
-                        pam.change_device_volume (default_device, (float)69.0);
-                    }
-                    volume_alert_dialog.destroy ();
-                });
-
-                volume_alert_dialog.cancel_button.clicked.connect (() => {
-                    pam.change_device_volume (default_device, (float)volume_scale.get_value ());
-                    volume_alert_dialog.destroy ();
-                });
-
-                volume_alert_dialog.present();
-            }
+            audio_alert_dialog_cb ();
         } else {
             pam.change_device_volume (default_device, (float)volume_scale.get_value ());
         }
@@ -290,5 +246,57 @@ public class Sound.OutputPanel : Gtk.Grid {
         device_row.set_as_default.connect (() => {
             pam.set_default_device.begin (device);
         });
+    }
+
+    private void show_alert_dialog () {
+        if (volume_scale.get_value () > (float)70.0) {
+            var ok_button = new He.FillButton ("Understood");
+
+            var volume_alert_dialog = new He.Dialog (
+                true,
+                ((He.ApplicationWindow)He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this)),
+                (_("Audio Volume Too High!")),
+                "",
+                (_("Volume above 70% can progressively damage your eardrums as you listen to audio.")),
+                "audio-volume-overamplified-symbolic",
+                ok_button,
+                null
+            );
+
+            var volume_check = new Gtk.CheckButton () {
+                label = (_("I understand the risks, don't show this dialog next time."))
+            };
+
+            if (volume_check.active) {
+                settings.set_boolean ("show-audio-dialog", false);
+            } else {
+                settings.set_boolean ("show-audio-dialog", true);
+            }
+
+            volume_check.toggled.connect (() => {
+                if (volume_check.active) {
+                    settings.set_boolean ("show-audio-dialog", false);
+                } else {
+                    settings.set_boolean ("show-audio-dialog", true);
+                }
+            });
+
+            volume_alert_dialog.add (volume_check);
+
+            ok_button.clicked.connect (() => {
+                if (volume_scale.get_value () > (float)70.0) {
+                    volume_scale.set_value ((float)69.0);
+                    pam.change_device_volume (default_device, (float)69.0);
+                }
+                volume_alert_dialog.destroy ();
+            });
+
+            volume_alert_dialog.cancel_button.clicked.connect (() => {
+                pam.change_device_volume (default_device, (float)volume_scale.get_value ());
+                volume_alert_dialog.destroy ();
+            });
+
+            volume_alert_dialog.present();
+        }
     }
 }
