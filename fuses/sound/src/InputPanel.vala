@@ -12,8 +12,7 @@ public class Sound.InputPanel : Gtk.Grid {
     construct {
         margin_bottom = 18;
         margin_top = 0;
-        column_spacing = 16;
-        row_spacing = 12;
+        row_spacing = 6;
 
         devices_listbox = new Gtk.ListBox () {
             activate_on_single_click = true
@@ -24,7 +23,7 @@ public class Sound.InputPanel : Gtk.Grid {
         });
 
         var scrolled = new Gtk.ScrolledWindow () {
-            vexpand = true
+            min_content_height = 300
         };
         scrolled.set_child (devices_listbox);
 
@@ -34,9 +33,9 @@ public class Sound.InputPanel : Gtk.Grid {
         };
 
         volume_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 5) {
-            margin_top = 18,
             draw_value = false,
-            hexpand = true
+            hexpand = true,
+            valign = Gtk.Align.CENTER
         };
 
         volume_scale.add_mark (10, Gtk.PositionType.BOTTOM, _("Unamplified"));
@@ -72,8 +71,12 @@ public class Sound.InputPanel : Gtk.Grid {
 
         level_box.set_parent (level_settings_row);
 
-        //var no_device_grid = new Granite.Widgets.AlertView (_("No Connected Audio Devices Detected"), _("Check that all cables are securely attached and audio input devices are powered on."), "audio-input-microphone-symbolic");
-        //devices_listbox.set_placeholder (no_device_grid);
+        var no_device_grid = new He.EmptyPage ();
+        no_device_grid.title = _("No Connected Audio Devices Detected");
+        no_device_grid.description = _("Check that all cables are securely attached and audio input devices are powered on.");
+        no_device_grid.icon = "audio-input-microphone-symbolic";
+        no_device_grid.action_button.visible = false;
+        devices_listbox.set_placeholder (no_device_grid);
 
         attach (scrolled, 0, 0);
         attach (volume_settings_row, 0, 1);

@@ -12,8 +12,9 @@ public class Sound.OutputPanel : Gtk.Grid {
     public bool screen_reader_active { get; set; }
 
     construct {
-        column_spacing = 16;
-        row_spacing = 12;
+        row_spacing = 6;
+        margin_bottom = 18;
+        margin_top = 0;
 
         devices_listbox = new Gtk.ListBox () {
             activate_on_single_click = true
@@ -25,7 +26,7 @@ public class Sound.OutputPanel : Gtk.Grid {
 
         var scrolled = new Gtk.ScrolledWindow () {
             vexpand = true,
-            min_content_height = 245
+            min_content_height = 300
         };
         scrolled.set_child (devices_listbox);
 
@@ -45,6 +46,7 @@ public class Sound.OutputPanel : Gtk.Grid {
             valign = Gtk.Align.CENTER
         };
         volume_scale.adjustment.page_increment = 5;
+        volume_scale.set_range (0, 100);
         volume_scale.add_mark (0, Gtk.PositionType.BOTTOM, _("0%"));
         volume_scale.add_mark (70, Gtk.PositionType.BOTTOM, _("Recommended"));
         volume_scale.add_mark (100, Gtk.PositionType.BOTTOM, _("100%"));
@@ -112,8 +114,12 @@ public class Sound.OutputPanel : Gtk.Grid {
 
         screen_reader_switch.set_parent (screen_reader_settings_row);
 
-        //var no_device_grid = new Granite.Widgets.AlertView (_("No Output Device"), _("There is no output device detected. You might want to add one to start listening to anything."), "audio-volume-muted-symbolic");
-        //devices_listbox.set_placeholder (no_device_grid);
+        var no_device_grid = new He.EmptyPage ();
+        no_device_grid.title = _("No Connected Audio Devices Detected");
+        no_device_grid.description = _("There is no output device detected. You might want to add one to start listening to anything.");
+        no_device_grid.icon = "audio-volume-muted-symbolic";
+        no_device_grid.action_button.visible = false;
+        devices_listbox.set_placeholder (no_device_grid);
 
         attach (scrolled, 0, 0, 1, 2);
         attach (volume_settings_row, 0, 3);
@@ -179,7 +185,62 @@ public class Sound.OutputPanel : Gtk.Grid {
 
     private void volume_scale_value_changed () {
         disconnect_signals ();
-        pam.change_device_volume (default_device, (float)volume_scale.get_value ());
+
+        var settings = new GLib.Settings ("co.tauos.Fusebox");
+        if (settings.get_boolean ("show-audio-dialog")) {
+            if (volume_scale.get_value () > (float)70.0) {
+                var ok_button = new He.FillButton ("Understood");
+
+                var volume_alert_dialog = new He.Dialog (
+                    true,
+                    ((He.ApplicationWindow)He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this)),
+                    (_("Audio Volume Too High!")),
+                    "",
+                    (_("Volume above 70% can progressively damage your eardrums as you listen to audio.")),
+                    "audio-volume-overamplified-symbolic",
+                    ok_button,
+                    null
+                );
+
+                var volume_check = new Gtk.CheckButton () {
+                    label = (_("I understand the risks, don't show this dialog next time."))
+                };
+
+                if (volume_check.active) {
+                    settings.set_boolean ("show-audio-dialog", false);
+                } else {
+                    settings.set_boolean ("show-audio-dialog", true);
+                }
+
+                volume_check.toggled.connect (() => {
+                    if (volume_check.active) {
+                        settings.set_boolean ("show-audio-dialog", false);
+                    } else {
+                        settings.set_boolean ("show-audio-dialog", true);
+                    }
+                });
+
+                volume_alert_dialog.add (volume_check);
+
+                ok_button.clicked.connect (() => {
+                    if (volume_scale.get_value () > (float)70.0) {
+                        volume_scale.set_value ((float)69.0);
+                        pam.change_device_volume (default_device, (float)69.0);
+                    }
+                    volume_alert_dialog.destroy ();
+                });
+
+                volume_alert_dialog.cancel_button.clicked.connect (() => {
+                    pam.change_device_volume (default_device, (float)volume_scale.get_value ());
+                    volume_alert_dialog.destroy ();
+                });
+
+                volume_alert_dialog.present();
+            }
+        } else {
+            pam.change_device_volume (default_device, (float)volume_scale.get_value ());
+        }
+
         connect_signals ();
     }
 

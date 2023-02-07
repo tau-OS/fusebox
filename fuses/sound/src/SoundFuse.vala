@@ -29,7 +29,8 @@ public class Sound.Fuse : Fusebox.Fuse {
             stack = new Gtk.Stack () {
                 margin_bottom = 24,
                 margin_start = 24,
-                margin_end = 24
+                margin_end = 24,
+                vhomogeneous = false
             };
             var stack_switcher = new He.ViewSwitcher () {
                 stack = stack
@@ -44,6 +45,12 @@ public class Sound.Fuse : Fusebox.Fuse {
             var clamp = new Bis.Latch ();
             clamp.set_child (stack);
 
+            var sw = new Gtk.ScrolledWindow () {
+                hscrollbar_policy = Gtk.PolicyType.NEVER,
+                min_content_height = 500
+            };
+            sw.set_child (clamp);
+
             var appbar = new He.AppBar () {
                 viewtitle_widget = stack_switcher,
                 show_back = false
@@ -53,7 +60,7 @@ public class Sound.Fuse : Fusebox.Fuse {
                 orientation = Gtk.Orientation.VERTICAL
             };
             main_grid.attach (appbar, 0, 0);
-            main_grid.attach (clamp, 0, 1);
+            main_grid.attach (sw, 0, 1);
 
             var pam = PulseAudioManager.get_default ();
             pam.start ();

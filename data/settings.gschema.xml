@@ -6,5 +6,10 @@
 			<summary>Saves whether to use the wallpaper to accent or not</summary>
 			<description>Whether to use the wallpaper to construct system accent color</description>
 		</key>
+		<key type="b" name="show-audio-dialog">
+			<default>true</default>
+			<summary>Show audio dialog for eardrum protection</summary>
+			<description>Whether to show the dialog or not</description>
+		</key>
 	</schema>
 </schemalist>
