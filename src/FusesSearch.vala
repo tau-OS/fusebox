@@ -25,7 +25,7 @@ namespace Fusebox {
 
     public class FusesSearch {
         public GLib.List<SearchEntry?> search_entries;
-        public bool ready {get; private set;}
+        public bool ready { get; private set; }
 
         public FusesSearch () {
             ready = false;
@@ -44,12 +44,12 @@ namespace Fusebox {
                 var tmp_entries = yield fuse.search ("");
 
                 foreach (var key in tmp_entries.get_keys_as_array ()) {
-                    string [] tmp = key.split (" → ");
+                    string[] tmp = key.split (" → ");
                     SearchEntry tmp_entry = SearchEntry ();
                     tmp_entry.fuse_name = tmp[0];
                     string ui_elements_name = key;
                     tmp_entry.ui_elements = ui_elements_name;
-                    tmp_entry.open_window = tmp_entries.lookup(key);
+                    tmp_entry.open_window = tmp_entries.lookup (key);
                     search_entries.append (tmp_entry);
                     debug ("FusesSearch: add open window: %s ", tmp_entry.open_window);
                     debug ("FusesSearch: add ui elements: %s ", tmp_entry.ui_elements);

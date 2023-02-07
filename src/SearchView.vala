@@ -61,8 +61,8 @@ public class Fusebox.SearchView : Gtk.Box {
 
         listbox.row_activated.connect ((row) => {
             app.load_setting_path (
-                ((SearchRow) row).uri.replace ("settings://", ""),
-                Fusebox.FusesManager.get_default ()
+                                   ((SearchRow) row).uri.replace ("settings://", ""),
+                                   Fusebox.FusesManager.get_default ()
             );
             search_entry.text = "";
         });
@@ -92,14 +92,15 @@ public class Fusebox.SearchView : Gtk.Box {
             string uri = settings.get_keys_as_array ()[0];
 
             var search_row = new SearchRow (
-                fuse.icon,
-                fuse.display_name,
-                uri
+                                            fuse.icon,
+                                            fuse.display_name,
+                                            uri
             );
             listbox.append (search_row);
 
             // Using search to get sub settings
             var search_results = yield fuse.search ("");
+
             foreach (var key in search_results.get_keys_as_array ()) {
                 unowned string title = key;
                 var view = search_results.lookup (key);
@@ -109,7 +110,7 @@ public class Fusebox.SearchView : Gtk.Box {
                 string sub_uri = uri;
                 if (view != "") {
                     foreach (var setting_key in settings.get_keys_as_array ()) {
-                        if (settings.lookup(setting_key) == view) {
+                        if (settings.lookup (setting_key) == view) {
                             sub_uri = setting_key;
                             break;
                         }
@@ -117,9 +118,9 @@ public class Fusebox.SearchView : Gtk.Box {
                 }
 
                 search_row = new SearchRow (
-                    fuse.icon,
-                    title,
-                    (owned) sub_uri
+                                            fuse.icon,
+                                            title,
+                                            (owned) sub_uri
                 );
                 listbox.append (search_row);
             }
@@ -133,9 +134,9 @@ public class Fusebox.SearchView : Gtk.Box {
 
         public SearchRow (string icon_name, string description, string uri) {
             Object (
-                description: description,
-                icon_name: icon_name,
-                uri: uri
+                    description: description,
+                    icon_name: icon_name,
+                    uri: uri
             );
         }
 

@@ -20,7 +20,7 @@ namespace Fusebox {
     public class FuseboxApp : He.Application {
         public Gtk.SearchEntry search_box { get; private set; }
 
-        private GLib.HashTable <Gtk.Widget, Fusebox.Fuse> fuse_widgets;
+        private GLib.HashTable<Gtk.Widget, Fusebox.Fuse> fuse_widgets;
         private Bis.Album album;
         private Bis.Album halbum;
         private He.AppBar headerbar;
@@ -36,7 +36,7 @@ namespace Fusebox {
         public const string ACTION_ABOUT = "about";
         public SimpleActionGroup actions;
         private const GLib.ActionEntry[] ACTION_ENTRIES = {
-            {ACTION_ABOUT, action_about },
+            { ACTION_ABOUT, action_about },
         };
 
         public FuseboxApp () {
@@ -116,11 +116,11 @@ namespace Fusebox {
                 return;
             }
 
-            fuse_widgets = new GLib.HashTable <Gtk.Widget, Fusebox.Fuse> (null, null);
+            fuse_widgets = new GLib.HashTable<Gtk.Widget, Fusebox.Fuse> (null, null);
 
             var quit_action = new SimpleAction ("quit", null);
             add_action (quit_action);
-            set_accels_for_action ("app.quit", {"<Control>q"});
+            set_accels_for_action ("app.quit", { "<Control>q" });
 
             var search_box_eventcontrollerkey = new Gtk.EventControllerKey ();
 
@@ -145,7 +145,7 @@ namespace Fusebox {
             var about_menu_item = create_button_menu_item (
                                                            _("About Fusebox…"),
                                                            "win.about"
-                                                          );
+            );
             about_menu_item.clicked.connect (() => {
                 menu_popover.popdown ();
             });
@@ -314,7 +314,7 @@ namespace Fusebox {
                 category_view.show_alert (_("No Settings Found"),
                                           _("Install some and re-launch Fusebox."),
                                           "dialog-warning"
-                                         );
+                );
             }
         }
 
@@ -323,19 +323,19 @@ namespace Fusebox {
             string translators = (_(""));
 
             var about = new He.AboutWindow (
-                this.get_active_window (),
-                "Fusebox",
-                "co.tauos.Fusebox",
-                "0.1.0",
-                "co.tauos.Fusebox",
-                "https://github.com/tau-os/fusebox/tree/main/po",
-                "https://github.com/tau-os/fusebox/issues/new",
-                "https://github.com/tau-os/fusebox",
-                {translators},
-                {"The tauOS team"},
-                2023, // Year of first publication.
-                He.AboutWindow.Licenses.GPLv3,
-                He.Colors.DARK
+                                            this.get_active_window (),
+                                            "Fusebox",
+                                            "co.tauos.Fusebox",
+                                            "0.1.0",
+                                            "co.tauos.Fusebox",
+                                            "https://github.com/tau-os/fusebox/tree/main/po",
+                                            "https://github.com/tau-os/fusebox/issues/new",
+                                            "https://github.com/tau-os/fusebox",
+                                            { translators },
+                                            { "The tauOS team" },
+                                            2023, // Year of first publication.
+                                            He.AboutWindow.Licenses.GPLv3,
+                                            He.Colors.DARK
             );
             about.present ();
         }
