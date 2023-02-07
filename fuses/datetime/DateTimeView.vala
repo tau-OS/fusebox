@@ -330,7 +330,7 @@ public class DateTime.DateTimeView : Gtk.Box {
         var tz = _(_tz);
         var english_tz = _tz;
 
-        var location = location_finder.get_selected_location();
+        var location = location_finder.get_selected_location ();
         if (location != null) {
             tz = location.get_timezone_str ();
         }
