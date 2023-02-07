@@ -173,7 +173,7 @@ private class AppEntry : Gtk.Box {
         };
         append (edit_button);
         edit_button.clicked.connect (() => {
-            new StartupAppDialog (keyfile.get_instance (keyfile.path), He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this)).show ();
+            new StartupAppDialog (keyfile.get_instance (keyfile.path), He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this)).show ();
         });
 
 

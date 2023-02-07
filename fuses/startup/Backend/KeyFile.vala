@@ -83,7 +83,7 @@ public class Startup.Backend.KeyFile : GLib.Object {
 
     public KeyFile.from_command (string command) {
         keyfile = new GLib.KeyFile ();
-        keyfile.set_locale_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_NAME, preferred_language, _("Custom Command"));
+        keyfile.set_locale_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_NAME, preferred_language, _("Custom"));
         keyfile.set_locale_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_COMMENT, preferred_language, command);
         keyfile.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_EXEC, command);
         keyfile.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_ICON, FALLBACK_ICON);

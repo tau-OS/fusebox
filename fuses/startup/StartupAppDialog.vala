@@ -1,10 +1,10 @@
 public class StartupAppDialog : He.Window {
-    public Startup.Backend.KeyFile keyFile { get; set construct; }
+    public Startup.Backend.KeyFile key_file { get; set construct; }
     private Startup.Backend.KeyFile kf { get; set; }
     private Gtk.Box mainBox = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
 
     public StartupAppDialog (Startup.Backend.KeyFile keyfile, He.ApplicationWindow parent) {
-        Object (keyFile: keyfile);
+        Object (key_file: keyfile);
         this.parent = parent;
         this.transient_for = parent;
         this.modal = true;
@@ -35,7 +35,7 @@ public class StartupAppDialog : He.Window {
 
         // get icon name
         try {
-            var icon_name = keyFile.keyfile_get_string (KeyFileDesktop.KEY_ICON);
+            var icon_name = key_file.keyfile_get_string (KeyFileDesktop.KEY_ICON);
             btn_content.icon = icon_name;
         } catch (GLib.KeyFileError e) {
             warning (e.message);
@@ -62,13 +62,13 @@ public class StartupAppDialog : He.Window {
 
         // connect to keyfile's name
         try {
-            var name = keyFile.keyfile_get_string (KeyFileDesktop.KEY_NAME);
+            var name = key_file.keyfile_get_string (KeyFileDesktop.KEY_NAME);
             name_entry.text = name;
         } catch (GLib.KeyFileError e) {
             warning (e.message);
         }
         name_entry.notify["text"].connect (() => {
-            keyFile.keyfile.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_NAME, name_entry.text);
+            key_file.keyfile.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_NAME, name_entry.text);
         });
         name_view.append (name_entry);
 
@@ -90,13 +90,13 @@ public class StartupAppDialog : He.Window {
         command_entry.hexpand = true;
         // connect to keyfile's exec
         try {
-            var exec = keyFile.keyfile_get_string (KeyFileDesktop.KEY_EXEC);
+            var exec = key_file.keyfile_get_string (KeyFileDesktop.KEY_EXEC);
             command_entry.text = exec;
         } catch (GLib.KeyFileError e) {
             warning (e.message);
         }
         command_entry.notify["text"].connect (() => {
-            keyFile.keyfile.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_EXEC, command_entry.text);
+            key_file.keyfile.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_EXEC, command_entry.text);
         });
         command_view.append (command_entry);
         mainBox.append (command_view);
@@ -116,13 +116,13 @@ public class StartupAppDialog : He.Window {
         comment_entry.hexpand = true;
         // connect to keyfile's comment
         try {
-            var comment = keyFile.keyfile_get_string (KeyFileDesktop.KEY_COMMENT);
+            var comment = key_file.keyfile_get_string (KeyFileDesktop.KEY_COMMENT);
             comment_entry.text = comment;
         } catch (GLib.KeyFileError e) {
             warning (e.message);
         }
         comment_entry.notify["text"].connect (() => {
-            keyFile.keyfile.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_COMMENT, comment_entry.text);
+            key_file.keyfile.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_COMMENT, comment_entry.text);
         });
         comment_view.append (comment_entry);
         mainBox.append (comment_view);
@@ -144,13 +144,13 @@ public class StartupAppDialog : He.Window {
         categories_entry.hexpand = true;
         // connect to keyfile's categories
         try {
-            var categories = keyFile.keyfile_get_string (KeyFileDesktop.KEY_CATEGORIES);
+            var categories = key_file.keyfile_get_string (KeyFileDesktop.KEY_CATEGORIES);
             categories_entry.text = categories;
         } catch (GLib.KeyFileError e) {
             warning (e.message);
         }
         categories_entry.notify["text"].connect (() => {
-            keyFile.keyfile.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_CATEGORIES, categories_entry.text);
+            key_file.keyfile.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_CATEGORIES, categories_entry.text);
         });
         categories_view.append (categories_entry);
         mainBox.append (categories_view);
@@ -166,14 +166,14 @@ public class StartupAppDialog : He.Window {
         terminal_check.hexpand = true;
         // connect to keyfile's terminal
         try {
-            var terminal = keyFile.keyfile_get_bool (KeyFileDesktop.KEY_TERMINAL);
+            var terminal = key_file.keyfile_get_bool (KeyFileDesktop.KEY_TERMINAL);
             terminal_check.active = terminal;
         } catch (GLib.KeyFileError e) {
             warning (e.message);
         }
 
         terminal_check.notify["active"].connect (() => {
-            keyFile.keyfile.set_boolean (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_TERMINAL, terminal_check.active);
+            key_file.keyfile.set_boolean (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_TERMINAL, terminal_check.active);
         });
         terminal_view.append (terminal_check);
 
@@ -195,7 +195,7 @@ public class StartupAppDialog : He.Window {
         controls.append (cancel_btn);
         var save_btn = new He.FillButton (_("Save"));
         save_btn.clicked.connect (() => {
-            keyFile.write_to_file ();
+            key_file.write_to_file ();
             this.destroy ();
         });
         controls.append (save_btn);

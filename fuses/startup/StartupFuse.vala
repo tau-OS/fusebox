@@ -51,7 +51,7 @@ public class Startup.Fuse : Fusebox.Fuse {
 
     public override Gtk.Widget get_widget () {
         if (main_grid == null) {
-            var startup_view = new StartupView(this);
+            var startup_view = new StartupView (this);
             main_grid = new Gtk.Grid () {
                 row_spacing = 12
             };

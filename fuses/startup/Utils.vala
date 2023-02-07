@@ -40,7 +40,7 @@ namespace Startup.Utils {
         return !name.contains ("~") && name.has_suffix (".desktop");
     }
 
-    public string[] get_autostart_files() {
+    public string[] get_autostart_files () {
         var startup_dir = Utils.get_autostart_dir ();
         var enumerator = new Backend.DesktopFileEnumerator ({ startup_dir });
         return enumerator.get_desktop_files ();
