@@ -36,7 +36,8 @@ public class About.OSView : Gtk.Box {
         );
         var os_sub_name = "<b>%s %s</b>".printf (
                                                  Environment.get_os_info (GLib.OsInfoKey.VERSION_ID) ?? "",
-                                                 Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME) ?? "(Guadalajara)" // Remember to change this with every new GNOME release until we do a new DE
+                                                 Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME) ??
+                                                 "(Guadalajara)" // Remember to change this with every new GNOME release until we do a new DE
         );
         var os_title = new Gtk.Label (os_pretty_name) {
             ellipsize = Pango.EllipsizeMode.END,
@@ -236,7 +237,9 @@ public class About.OSView : Gtk.Box {
                 halign = Gtk.Align.CENTER
             };
             title_label.add_css_class ("view-title");
-            var text_label = new Gtk.Label ("When you rename your computer, it'll reflect on how it is seen by other devices. For example, via bluetooth and secure shells.") {
+            var text_label = new Gtk.Label ("When you rename your computer,
+                                                  it'll reflect on how it is seen by other devices.
+                                                  For example, via bluetooth and secure shells.") {
                 halign = Gtk.Align.START,
                 wrap = true,
                 wrap_mode = Pango.WrapMode.WORD
@@ -295,7 +298,11 @@ public class About.OSView : Gtk.Box {
 
         bug_button.clicked.connect (() => {
             try {
-                var appinfo = GLib.AppInfo.create_from_commandline ("co.tauos.Mondai", "co.tauos.Mondai", GLib.AppInfoCreateFlags.NONE);
+                var appinfo = GLib.AppInfo.create_from_commandline (
+                                                                                 "co.tauos.Mondai",
+                                                                                 "co.tauos.Mondai",
+                                                                                 GLib.AppInfoCreateFlags.NONE
+                                                                                );
                 if (appinfo != null) {
                     try {
                         appinfo.launch (null, null);
@@ -534,7 +541,10 @@ public class About.OSView : Gtk.Box {
                     "/org/gnome/SessionManager");
 
                 // ! really sus
-                return clean_name (session_manager.renderer == "" ? GL.glGetString(GL.GL_RENDERER) : session_manager.renderer);
+                return clean_name (session_manager.renderer == "" ?
+                                   GL.glGetString (GL.GL_RENDERER) :
+                                   session_manager.renderer
+                                  );
             } catch (IOError e) {
                 warning ("Unable to connect to GNOME Session Manager for GPU details: %s", e.message);
                 return _("Unknown Graphics");
