@@ -1,5 +1,5 @@
 [CCode (cheader_filename = "monetary.h", cname = "strfmon")]
-extern ssize_t strfmon([CCode (array_length = false)] uint8[] s, size_t max, string format, ...);
+extern ssize_t strfmon ([CCode (array_length = false)] uint8[] s, size_t max, string format, ...);
 
 namespace Locale {
   private class LocaleModel {
@@ -8,22 +8,22 @@ namespace Locale {
     public string native_name;
     public string language_code;
 
-    public LocaleModel.from_locale(string locale) {
+    public LocaleModel.from_locale (string locale) {
       string language_code;
-      Gnome.Languages.parse_locale(locale, out language_code, null, null, null);
+      Gnome.Languages.parse_locale (locale, out language_code, null, null, null);
       this.locale = locale;
-      this.name = Gnome.Languages.get_language_from_locale(locale, null);
-      this.native_name = Gnome.Languages.get_language_from_locale(locale, locale);
+      this.name = Gnome.Languages.get_language_from_locale (locale, null);
+      this.native_name = Gnome.Languages.get_language_from_locale (locale, locale);
       this.language_code = language_code;
     }
   }
 
-  private GLib.List<LocaleModel?> get_all_locales() {
-    var locales = Gnome.Languages.get_all_locales();
-    var languages = new GLib.List<LocaleModel>();
+  private GLib.List<LocaleModel?> get_all_locales () {
+    var locales = Gnome.Languages.get_all_locales ();
+    var languages = new GLib.List<LocaleModel> ();
 
     foreach (var locale in locales) {
-      languages.append(new LocaleModel.from_locale(locale));
+      languages.append (new LocaleModel.from_locale (locale));
     }
 
     return languages;
@@ -34,28 +34,28 @@ namespace Locale {
     public LocaleModel? format;
   }
 
-  private SystemLocale get_system_locale(Locale1Proxy proxy) {
+  private SystemLocale get_system_locale (Locale1Proxy proxy) {
     LocaleModel? language_locale = null;
     foreach (var l in proxy.locale) {
-      if (l.has_prefix("LANG=")) {
-        language_locale = new LocaleModel.from_locale(l.split("=")[1]);
+      if (l.has_prefix ("LANG=")) {
+        language_locale = new LocaleModel.from_locale (l.split ("=")[1]);
         break;
       }
     }
 
     if (language_locale == null) {
-      critical("Could not get languagelocale from Locale1");
+      critical ("Could not get languagelocale from Locale1");
     }
 
     LocaleModel? format_locale = null;
     foreach (var l in proxy.locale) {
-      if (l.has_prefix("LC_MEASUREMENT=")) {
-        format_locale = new LocaleModel.from_locale(l.split("=")[1]);
+      if (l.has_prefix ("LC_MEASUREMENT=")) {
+        format_locale = new LocaleModel.from_locale (l.split ("=")[1]);
         break;
       }
     }
 
-    return SystemLocale() {
+    return SystemLocale () {
       language = language_locale,
       format = format_locale
     };
@@ -87,40 +87,40 @@ namespace Locale {
     public LocaleModel? format;
   }
 
-  private UserLocale get_user_locale(Act.User current_user) {
-    var locale_settings = new GLib.Settings("org.gnome.system.locale");
+  private UserLocale get_user_locale (Act.User current_user) {
+    var locale_settings = new GLib.Settings ("org.gnome.system.locale");
 
     var language_id = current_user.language;
-    var format_id = locale_settings.get_string("region");
+    var format_id = locale_settings.get_string ("region");
 
     LocaleModel? language_locale = null;
     if (language_id != null && language_id != "") {
-      language_locale = new LocaleModel.from_locale(language_id);
+      language_locale = new LocaleModel.from_locale (language_id);
     }
 
     LocaleModel? format_locale = null;
     if (format_id != null && format_id != "") {
-      format_locale = new LocaleModel.from_locale(format_id);
+      format_locale = new LocaleModel.from_locale (format_id);
     }
 
-    return UserLocale() {
+    return UserLocale () {
       language = language_locale,
       format = format_locale
     };
   }
 
-  private void update_user_locale(Act.User current_user, UserLocale user_locale) {
-    var locale_settings = new GLib.Settings("org.gnome.system.locale");
+  private void update_user_locale (Act.User current_user, UserLocale user_locale) {
+    var locale_settings = new GLib.Settings ("org.gnome.system.locale");
 
     var language_id = user_locale.language?.locale;
     var format_id = user_locale.format?.locale;
 
     if (language_id != null) {
-      current_user.set_language(language_id);
+      current_user.set_language (language_id);
     }
 
     if (format_id != null) {
-      locale_settings.set_string("region", format_id);
+      locale_settings.set_string ("region", format_id);
     }
   }
 
@@ -131,27 +131,27 @@ namespace Locale {
     public string temperature;
   }
 
-  private LocaleExample get_examples_for_locale(LocaleModel locale) {
-    var current_locale = GLib.Intl.setlocale(GLib.LocaleCategory.ALL, null);
+  private LocaleExample get_examples_for_locale (LocaleModel locale) {
+    var current_locale = GLib.Intl.setlocale (GLib.LocaleCategory.ALL, null);
     if (current_locale == null) {
-      critical("Could not get current locale");
+      critical ("Could not get current locale");
     }
-    var example_locale = GLib.Intl.setlocale(GLib.LocaleCategory.ALL, locale.locale);
+    var example_locale = GLib.Intl.setlocale (GLib.LocaleCategory.ALL, locale.locale);
     if (example_locale == null) {
-      critical("Could not set locale to %s", locale.locale);
+      critical ("Could not set locale to %s", locale.locale);
     }
 
-    var date = new GLib.DateTime.now_local().format("%x");
-    var time = new GLib.DateTime.now_local().format("%X");
+    var date = new GLib.DateTime.now_local ().format ("%x");
+    var time = new GLib.DateTime.now_local ().format ("%X");
 
-    var realunit = GWeather.TemperatureUnit.DEFAULT.to_real();
+    var realunit = GWeather.TemperatureUnit.DEFAULT.to_real ();
     var temperature = realunit == GWeather.TemperatureUnit.CENTIGRADE ? "20°C" : "68°F";
 
     var currency = new uint8[100];
-    strfmon(currency, currency.length, "%n", 1234.56);
+    strfmon (currency, currency.length, "%n", 1234.56);
 
-    if (GLib.Intl.setlocale(GLib.LocaleCategory.ALL, current_locale) == null) {
-      critical("Could not reset locale to %s", current_locale);
+    if (GLib.Intl.setlocale (GLib.LocaleCategory.ALL, current_locale) == null) {
+      critical ("Could not reset locale to %s", current_locale);
     }
 
     return LocaleExample() {

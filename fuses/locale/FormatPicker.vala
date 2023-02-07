@@ -27,22 +27,22 @@ class Locale.FormatPicker : He.Window {
       halign = Gtk.Align.START,
     };
     title.add_css_class ("view-title");
-    content.append(title);
+    content.append (title);
 
-    var search_entry = new Gtk.SearchEntry() {
+    var search_entry = new Gtk.SearchEntry () {
       placeholder_text = "Search formats…",
       margin_start = 18,
       halign = Gtk.Align.START
     };
     content.append (search_entry);
 
-    var scrolled = new Gtk.ScrolledWindow() {
+    var scrolled = new Gtk.ScrolledWindow () {
       vexpand = true,
       hscrollbar_policy = Gtk.PolicyType.NEVER,
     };
     content.append (scrolled);
 
-    var listbox = new Gtk.ListBox() {
+    var listbox = new Gtk.ListBox () {
       margin_start = 18,
       margin_end = 18,
     };
@@ -50,10 +50,10 @@ class Locale.FormatPicker : He.Window {
     foreach (var format in format_list) {
       listbox.append (new Locale.LocaleRow (format));
     }
-    listbox.set_filter_func((row) => {
+    listbox.set_filter_func ((row) => {
       return ((Locale.LocaleRow)row).locale.name.down ().contains (search_entry.text.down ());
     });
-    listbox.set_sort_func((row1, row2) => {
+    listbox.set_sort_func ((row1, row2) => {
       return ((Locale.LocaleRow)row1).locale.name.collate (((Locale.LocaleRow)row2).locale.name);
     });
     search_entry.changed.connect (() => {
@@ -61,7 +61,7 @@ class Locale.FormatPicker : He.Window {
     });
     scrolled.set_child (listbox);
 
-    var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
+    var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
       homogeneous = true,
       margin_start = 18,
       margin_end = 18,
@@ -71,7 +71,7 @@ class Locale.FormatPicker : He.Window {
     main.append (button_box);
 
     var cancel_button = new He.TextButton (_("Cancel"));
-    cancel_button.set_size_request(200, -1);
+    cancel_button.set_size_request (200, -1);
     cancel_button.clicked.connect (() => {
       this.destroy ();
     });
@@ -80,7 +80,7 @@ class Locale.FormatPicker : He.Window {
     var apply_button = new He.FillButton (_("Set Format")) {
       sensitive = false,
     };
-    apply_button.set_size_request(200, -1);
+    apply_button.set_size_request (200, -1);
     apply_button.clicked.connect (() => {
       var selected = listbox.get_selected_row () as Locale.LocaleRow;
       if (selected != null) {

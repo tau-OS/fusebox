@@ -23,22 +23,22 @@ class Locale.LanguagePicker : He.Window {
       halign = Gtk.Align.START,
     };
     title.add_css_class ("view-title");
-    content.append(title);
+    content.append (title);
 
-    var search_entry = new Gtk.SearchEntry() {
+    var search_entry = new Gtk.SearchEntry () {
       placeholder_text = "Search languages…",
       margin_start = 18,
       halign = Gtk.Align.START
     };
     content.append (search_entry);
 
-    var scrolled = new Gtk.ScrolledWindow() {
+    var scrolled = new Gtk.ScrolledWindow () {
       vexpand = true,
       hscrollbar_policy = Gtk.PolicyType.NEVER,
     };
     content.append (scrolled);
 
-    var listbox = new Gtk.ListBox() {
+    var listbox = new Gtk.ListBox () {
       margin_start = 18,
       margin_end = 18,
 
@@ -47,10 +47,10 @@ class Locale.LanguagePicker : He.Window {
     foreach (var language in language_list) {
       listbox.append (new Locale.LocaleRow (language));
     }
-    listbox.set_filter_func((row) => {
+    listbox.set_filter_func ((row) => {
       return ((Locale.LocaleRow)row).locale.name.down ().contains (search_entry.text.down ());
     });
-    listbox.set_sort_func((row1, row2) => {
+    listbox.set_sort_func ((row1, row2) => {
       return ((Locale.LocaleRow)row1).locale.name.collate (((Locale.LocaleRow)row2).locale.name);
     });
     search_entry.changed.connect (() => {
@@ -58,7 +58,7 @@ class Locale.LanguagePicker : He.Window {
     });
     scrolled.set_child (listbox);
 
-    var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
+    var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
       homogeneous = true,
       margin_start = 18,
       margin_end = 18,

@@ -4,25 +4,25 @@ class Locale.Preview : He.ContentList {
   construct {
     this.title = "Preview";
 
-    var example = get_examples_for_locale(this.locale);
+    var example = get_examples_for_locale (this.locale);
 
-    var time_block = new He.MiniContentBlock() {
+    var time_block = new He.MiniContentBlock () {
       title = "Time",
     };
     this.add (time_block);
 
-    var date_block = new He.MiniContentBlock() {
+    var date_block = new He.MiniContentBlock () {
       title = "Date",
     };
     this.add (date_block);
 
-    var currency_block = new He.MiniContentBlock() {
+    var currency_block = new He.MiniContentBlock () {
       title = "Currency",
       subtitle = example.currency,
     };
     this.add (currency_block);
 
-    var temperature_block = new He.MiniContentBlock() {
+    var temperature_block = new He.MiniContentBlock () {
       title = "Temperature",
     };
     this.add (temperature_block);
@@ -32,7 +32,7 @@ class Locale.Preview : He.ContentList {
         return;
       }
 
-      var examples = get_examples_for_locale(this.locale);
+      var examples = get_examples_for_locale (this.locale);
 
       time_block.subtitle = examples.time;
       date_block.subtitle = examples.date;

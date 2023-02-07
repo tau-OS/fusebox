@@ -44,7 +44,7 @@ public class Locale.LocaleView : Gtk.Box {
 
         var language_button = new He.DisclosureButton ("document-edit-symbolic");
         language_button.clicked.connect (() => {
-            var dialog = new Locale.LanguagePicker (He.Misc.find_ancestor_of_type<He.ApplicationWindow>(mbox));
+            var dialog = new Locale.LanguagePicker (He.Misc.find_ancestor_of_type<He.ApplicationWindow> (mbox));
             dialog.show ();
             dialog.notify["selected-language"].connect ((lang) => {
                 var language = dialog.selected_language;
@@ -61,7 +61,7 @@ public class Locale.LocaleView : Gtk.Box {
             });
         });
 
-        var language_block = new He.MiniContentBlock.with_details(_("Language"), null, language_button) {
+        var language_block = new He.MiniContentBlock.with_details (_("Language"), null, language_button) {
             hexpand = true,
         };
         print ("%s", this.current_user_locale.language?.name ?? system_locale.language.name);
@@ -69,11 +69,11 @@ public class Locale.LocaleView : Gtk.Box {
         this.current_user_locale_updated.connect (() => {
             language_block.subtitle = this.current_user_locale.language?.name ?? system_locale.language.name;
         });
-        mbox.append(language_block);
+        mbox.append (language_block);
 
         var format_button = new He.DisclosureButton ("document-edit-symbolic");
         format_button.clicked.connect (() => {
-            var dialog = new Locale.FormatPicker (He.Misc.find_ancestor_of_type<He.ApplicationWindow>(mbox));
+            var dialog = new Locale.FormatPicker (He.Misc.find_ancestor_of_type<He.ApplicationWindow> (mbox));
             dialog.show ();
             dialog.notify["selected-format"].connect ((lang) => {
                 var format = dialog.selected_format;
@@ -89,14 +89,20 @@ public class Locale.LocaleView : Gtk.Box {
                 }
             });
         });
-        var format_block = new He.MiniContentBlock.with_details(_("Format"), null, format_button) {
+        var format_block = new He.MiniContentBlock.with_details (_("Format"), null, format_button) {
             hexpand = true,
         };
-        format_block.subtitle = this.current_user_locale.format?.name ?? this.current_user_locale.language?.name ?? system_locale.format?.name ?? system_locale.language.name;
+        format_block.subtitle = this.current_user_locale.format?.name ??
+                                this.current_user_locale.language?.name ??
+                                system_locale.format?.name ??
+                                system_locale.language.name;
         this.current_user_locale_updated.connect (() => {
-            format_block.subtitle = this.current_user_locale.format?.name ?? this.current_user_locale.language?.name ?? system_locale.format?.name ?? system_locale.language.name;
+            format_block.subtitle = this.current_user_locale.format?.name ??
+                                    this.current_user_locale.language?.name ??
+                                    system_locale.format?.name ??
+                                    system_locale.language.name;
         });
-        mbox.append(format_block);
+        mbox.append (format_block);
 
         var clamp = new Bis.Latch ();
         clamp.set_child (mbox);
