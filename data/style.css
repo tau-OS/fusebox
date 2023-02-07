@@ -86,7 +86,7 @@ button.flat label {
 }
 
 .menu-button {
-  border-radius: 0px;
+  border-radius: 8px;
   background: none;
   color: @view_fg_color;
 }
