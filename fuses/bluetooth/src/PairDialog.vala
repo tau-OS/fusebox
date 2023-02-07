@@ -97,13 +97,14 @@ public class PairDialog : He.Dialog {
 
         switch (auth_type) {
             case AuthType.REQUEST_CONFIRMATION:
-                info = _("Make sure the code displayed on “%s” matches the one below.").printf (device_name);
+                info = _("See if the code displayed on “%s” matches below.").printf (device_name);
 
                 var confirm_button = new He.FillButton (_("Pair"));
                 primary_button = confirm_button;
                 break;
             case AuthType.DISPLAY_PASSKEY:
-                info = _("“%s” would like to pair with this device. Make sure the code displayed on “%s” matches the one below.").printf (device_name, device_name);
+                info = _("“%s” wants to pair with this device. See if the code displayed on “%s” matches below.")
+                       .printf (device_name, device_name);
 
                 var confirm_button = new He.FillButton (_("Pair"));
                 primary_button = confirm_button;
@@ -112,7 +113,7 @@ public class PairDialog : He.Dialog {
                 info = _("Type the code displayed below on “%s”, followed by Enter.").printf (device_name);
                 break;
             case AuthType.REQUEST_AUTHORIZATION:
-                info = _("“%s” would like to pair with this device.").printf (device_name);
+                info = _("“%s” wants to pair with this device.").printf (device_name);
 
                 var confirm_button = new He.FillButton (_("Pair"));
                 primary_button = confirm_button;
