@@ -170,7 +170,6 @@
 //              dock_settings.notify["changed::size"].connect (() => {
 //                  dock_size_refresh ();
 //              });
-    
 //              dock_pos_left_check.toggled.connect (() => {
 //                  dock_settings.set_enum ("location", 8);
 //                  dock_img.icon_name = "dock-left-symbolic";
@@ -187,7 +186,6 @@
 //              dock_settings.notify["changed::location"].connect (() => {
 //                  dock_position_refresh ();
 //              });
-    
 //              if (dock_autohide_switch.active) {
 //                  dock_settings.set_enum ("autohide", 4);
 //              } else {
@@ -200,7 +198,6 @@
 //                      dock_settings.set_enum ("autohide", 4);
 //                  }
 //              });
-    
 //              dock_settings.bind ("dock-mode", dock_panel_switch, "active", GLib.SettingsBindFlags.DEFAULT);
 //          }
 //      }
