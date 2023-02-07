@@ -51,6 +51,7 @@ public class Sound.OutputPanel : Gtk.Grid {
         volume_scale.add_mark (70, Gtk.PositionType.BOTTOM, _("Recommended"));
         volume_scale.add_mark (100, Gtk.PositionType.BOTTOM, _("100%"));
 
+        var settings = new GLib.Settings ("co.tauos.Fusebox");
         if (settings.get_boolean ("show-audio-dialog")) {
             audio_alert_dialog_cb ();
         }
