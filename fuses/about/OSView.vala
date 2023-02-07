@@ -237,9 +237,8 @@ public class About.OSView : Gtk.Box {
                 halign = Gtk.Align.CENTER
             };
             title_label.add_css_class ("view-title");
-            var text_label = new Gtk.Label ("When you rename your computer,
-                                                  it'll reflect on how it is seen by other devices.
-                                                  For example, via bluetooth and secure shells.") {
+            var t_label = new Gtk.Label
+                    ("When the computer is renamed, it affects how it is seen via Bluetooth and SSH.") {
                 halign = Gtk.Align.START,
                 wrap = true,
                 wrap_mode = Pango.WrapMode.WORD
@@ -250,6 +249,7 @@ public class About.OSView : Gtk.Box {
             };
 
             var rename_entry = new He.TextField () {
+                text = system_interface.pretty_hostname
             };
 
             rename_entry.notify["is-valid"].connect (() => {
@@ -264,7 +264,7 @@ public class About.OSView : Gtk.Box {
             };
             main_box.append (image);
             main_box.append (title_label);
-            main_box.append (text_label);
+            main_box.append (t_label);
             main_box.append (rename_entry);
 
             var cancel_button = new He.TextButton ("Cancel");
@@ -277,13 +277,18 @@ public class About.OSView : Gtk.Box {
 
             main_box.append (action_box);
 
+            var handle = new Gtk.WindowHandle ();
+            handle.set_child (main_box);
+
             var rename_dialog = new He.Window () {
                 resizable = false,
-                has_title = false
+                has_title = false,
+                parent = He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this),
+                modal = true
             };
             rename_dialog.set_size_request (360, 266);
             rename_dialog.set_default_size (360, 266);
-            rename_dialog.set_child (main_box);
+            rename_dialog.set_child (handle);
             rename_dialog.show ();
 
             rename_button.clicked.connect (() => {
