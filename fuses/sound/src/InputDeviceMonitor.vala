@@ -62,7 +62,11 @@ public class Sound.InputDeviceMonitor : GLib.Object {
             maxlength = uint32.MAX,
             fragsize = (uint32)sizeof (float)
         };
-        steam.connect_record ("%u".printf (device.source_index), a, PulseAudio.Stream.Flags.DONT_MOVE | PulseAudio.Stream.Flags.PEAK_DETECT | PulseAudio.Stream.Flags.ADJUST_LATENCY);
+        steam.connect_record ("%u".printf (device.source_index),
+                                                a,
+                                                PulseAudio.Stream.Flags.DONT_MOVE |
+                                                PulseAudio.Stream.Flags.PEAK_DETECT |
+                                                PulseAudio.Stream.Flags.ADJUST_LATENCY);
     }
 
     public void set_device (Device device) {

@@ -340,6 +340,8 @@ public class Sound.PulseAudioManager : GLib.Object {
                         }
 
                         break;
+                    default:
+                        assert_not_reached ();
                 }
 
                 break;
@@ -363,6 +365,8 @@ public class Sound.PulseAudioManager : GLib.Object {
                         remove_devices_by_card (output_devices, index);
                         remove_devices_by_card (input_devices, index);
                         break;
+                    default:
+                        assert_not_reached ();
                 }
 
                 break;
@@ -400,9 +404,13 @@ public class Sound.PulseAudioManager : GLib.Object {
                         }
 
                         break;
+                    default:
+                        assert_not_reached ();
                 }
 
                 break;
+            default:
+                assert_not_reached ();
         }
     }
 
@@ -671,7 +679,10 @@ public class Sound.PulseAudioManager : GLib.Object {
     }
 
     // remove devices which port has dissappeared
-    private void cleanup_devices (Gee.HashMap<string, Device> devices, PulseAudio.CardInfo card, PulseAudio.CardPortInfo*[] relevant_ports) {
+    private void cleanup_devices (Gee.HashMap<string, Device> devices,
+                                  PulseAudio.CardInfo card,
+                                  PulseAudio.CardPortInfo*[] relevant_ports
+        ) {
         var iter = devices.map_iterator ();
         while (iter.next ()) {
             var device = iter.get_value ();
@@ -776,7 +787,9 @@ public class Sound.PulseAudioManager : GLib.Object {
      * Change the Source
      */
 
-    private void ext_stream_restore_read_sink_callback (PulseAudio.Context c, PulseAudio.ExtStreamRestoreInfo? info, int eol) {
+    private void ext_stream_restore_read_sink_callback (PulseAudio.Context c,
+                                                        PulseAudio.ExtStreamRestoreInfo? info,
+                                                        int eol) {
         if (eol != 0 || !info.name.has_prefix ("sink-input-by")) {
             return;
         }
@@ -795,7 +808,9 @@ public class Sound.PulseAudioManager : GLib.Object {
         });
     }
 
-    private void ext_stream_restore_read_source_callback (PulseAudio.Context c, PulseAudio.ExtStreamRestoreInfo? info, int eol) {
+    private void ext_stream_restore_read_source_callback (PulseAudio.Context c,
+                                                          PulseAudio.ExtStreamRestoreInfo? info,
+                                                          int eol) {
         if (eol != 0 || !info.name.has_prefix ("source-output-by")) {
             return;
         }

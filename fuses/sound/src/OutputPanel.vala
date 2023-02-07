@@ -8,7 +8,6 @@ public class Sound.OutputPanel : Gtk.Grid {
 
     private Device default_device = null;
 
-    uint notify_timeout_id = 0;
     public bool screen_reader_active { get; set; }
 
     construct {
@@ -121,7 +120,7 @@ public class Sound.OutputPanel : Gtk.Grid {
 
         var no_device_grid = new He.EmptyPage ();
         no_device_grid.title = _("No Connected Audio Devices Detected");
-        no_device_grid.description = _("There is no output device detected. You might want to add one to start listening to anything.");
+        no_device_grid.description = _("There is no devices detected. You need to add one to start listening.");
         no_device_grid.icon = "audio-volume-muted-symbolic";
         no_device_grid.action_button.visible = false;
         devices_listbox.set_placeholder (no_device_grid);
@@ -256,7 +255,7 @@ public class Sound.OutputPanel : Gtk.Grid {
 
             var volume_alert_dialog = new He.Dialog (
                 true,
-                ((He.ApplicationWindow)He.Misc.find_ancestor_of_type<He.ApplicationWindow>(this)),
+                ((He.ApplicationWindow)He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this)),
                 (_("Audio Volume Too High!")),
                 "",
                 (_("Volume above 70% can progressively damage your eardrums as you listen to audio.")),
@@ -298,7 +297,7 @@ public class Sound.OutputPanel : Gtk.Grid {
                 volume_alert_dialog.destroy ();
             });
 
-            volume_alert_dialog.present();
+            volume_alert_dialog.present ();
         }
     }
 }
