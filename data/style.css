@@ -88,10 +88,13 @@ button.flat label {
 .menu-button {
   border-radius: 0px;
   background: none;
+  color: @view_fg_color;
 }
 .menu-button:hover {
   background: linear-gradient(0deg, alpha(@accent_bg_color, 0.08), alpha(@accent_bg_color, 0.08)), image(@view_bg_color);
+  color: @accent_color;
 }
 .menu-button:active {
   background: linear-gradient(0deg, alpha(@accent_bg_color, 0.05), alpha(@accent_bg_color, 0.05)), image(@view_bg_color);
+  color: @accent_color;
 }
