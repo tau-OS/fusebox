@@ -98,3 +98,8 @@ button.flat label {
   background: linear-gradient(0deg, alpha(@accent_bg_color, 0.05), alpha(@accent_bg_color, 0.05)), image(@view_bg_color);
   color: @accent_color;
 }
+
+spinbutton.flat {
+  background: none;
+  outline: none;
+}

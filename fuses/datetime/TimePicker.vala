@@ -82,7 +82,9 @@ public class DateTime.TimePicker : Gtk.Entry {
             vexpand = true
         };
 
-        am_pm_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        am_pm_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+            valign = Gtk.Align.START
+        };
         am_pm_box.add_css_class ("linked");
         am_pm_box.append (am_togglebutton);
         am_pm_box.append (pm_togglebutton);
@@ -95,13 +97,16 @@ public class DateTime.TimePicker : Gtk.Entry {
 
         hours_spinbutton.orientation = Gtk.Orientation.VERTICAL;
         hours_spinbutton.wrap = true;
-        hours_spinbutton.value_changed.connect (() => update_time (true));
         hours_spinbutton.add_css_class ("display");
+        hours_spinbutton.add_css_class ("flat");
+        hours_spinbutton.value_changed.connect (() => update_time (true));
 
         minutes_spinbutton = new Gtk.SpinButton.with_range (0, 59, 1);
         minutes_spinbutton.orientation = Gtk.Orientation.VERTICAL;
         minutes_spinbutton.wrap = true;
+        minutes_spinbutton.margin_end = 16;
         minutes_spinbutton.add_css_class ("display");
+        minutes_spinbutton.add_css_class ("flat");
         minutes_spinbutton.value_changed.connect (() => update_time (false));
 
         minutes_spinbutton.output.connect (() => {
@@ -117,18 +122,22 @@ public class DateTime.TimePicker : Gtk.Entry {
         var separation_label = new Gtk.Label (_(":"));
         separation_label.add_css_class ("display");
 
-        var pop_grid = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var pop_grid = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6) {
+            margin_top = 12,
+            margin_bottom = 12,
+            margin_start = 12,
+            margin_end = 12,
+        };
         pop_grid.append (hours_spinbutton);
         pop_grid.append (separation_label);
         pop_grid.append (minutes_spinbutton);
         pop_grid.append (am_pm_box);
 
         popover = new Gtk.Popover () {
-            halign = Gtk.Align.END,
             autohide = true,
             child = pop_grid,
             has_arrow = false,
-            position = Gtk.PositionType.BOTTOM
+            position = Gtk.PositionType.BOTTOM,
         };
         popover.set_parent (this);
 
