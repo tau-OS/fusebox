@@ -249,7 +249,8 @@ public class Sound.OutputPanel : Gtk.Grid {
         });
     }
 
-    private void show_alert_dialog () {
+    private void audio_alert_dialog_cb () {
+        var settings = new GLib.Settings ("co.tauos.Fusebox");
         if (volume_scale.get_value () > (float)70.0) {
             var ok_button = new He.FillButton ("Understood");
 
