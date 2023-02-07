@@ -43,7 +43,10 @@ public class PairDialog : He.Dialog {
         );
     }
 
-    public PairDialog.display_passkey (ObjectPath object_path, uint32 passkey, uint16 entered, Gtk.Window? main_window) {
+    public PairDialog.display_passkey (ObjectPath object_path,
+                                       uint32 passkey,
+                                       uint16 entered,
+                                       Gtk.Window? main_window) {
         Object (
             auth_type: AuthType.DISPLAY_PASSKEY,
             object_path: object_path,
@@ -53,7 +56,9 @@ public class PairDialog : He.Dialog {
         );
     }
 
-    public PairDialog.request_confirmation (ObjectPath object_path, uint32 passkey, Gtk.Window? main_window) {
+    public PairDialog.request_confirmation (ObjectPath object_path,
+                                            uint32 passkey,
+                                            Gtk.Window? main_window) {
         Object (
             auth_type: AuthType.REQUEST_CONFIRMATION,
             object_path: object_path,
@@ -77,7 +82,12 @@ public class PairDialog : He.Dialog {
         Bluetooth.Services.Device device;
         string device_name = _("Unknown Bluetooth Device");
         try {
-            device = Bus.get_proxy_sync (BusType.SYSTEM, "org.bluez", object_path, DBusProxyFlags.GET_INVALIDATED_PROPERTIES);
+            device = Bus.get_proxy_sync (
+                                         BusType.SYSTEM,
+                                         "org.bluez",
+                                         object_path,
+                                         DBusProxyFlags.GET_INVALIDATED_PROPERTIES
+                                        );
             icon = device.icon ?? "settings-bluetooth-symbolic";
             device_name = device.name ?? device.address;
         } catch (IOError e) {

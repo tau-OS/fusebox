@@ -130,7 +130,7 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
         label.add_css_class ("cb-title");
 
         settings_button = new Gtk.LinkButton ("") {
-            child = new Gtk.Image.from_icon_name("view-more-horizontal-symbolic"),
+            child = new Gtk.Image.from_icon_name ("view-more-horizontal-symbolic"),
             valign = Gtk.Align.CENTER,
             visible = false
         };
