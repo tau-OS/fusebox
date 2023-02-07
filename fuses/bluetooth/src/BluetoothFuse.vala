@@ -26,13 +26,13 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
         settings.set ("bluetooth", null);
 
         Object (
-            category: Category.NETWORK,
-            code_name: "co.tauos.Fusebox.Bluetooth",
-            display_name: _("Bluetooth"),
-            description: _("Configure Bluetooth Settings"),
-            icon: "settings-bluetooth-symbolic",
-            supported_settings: settings,
-            index: 0
+                category: Category.NETWORK,
+                code_name: "co.tauos.Fusebox.Bluetooth",
+                display_name: _("Bluetooth"),
+                description: _("Configure Bluetooth Settings"),
+                icon: "settings-bluetooth-symbolic",
+                supported_settings: settings,
+                index: 0
         );
 
         manager = new Bluetooth.Services.ObjectManager ();
@@ -67,7 +67,7 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
 
             status_switch = new Gtk.Switch () {
                 hexpand = true,
-                halign= Gtk.Align.END
+                halign = Gtk.Align.END
             };
             status_switch.active = manager.is_powered;
             status_switch.notify["active"].connect (() => {
@@ -116,12 +116,11 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
     }
 
     public override void search_callback (string location) {
-
     }
 
     public override async GLib.HashTable<string, string> search (string search) {
         var search_results = new GLib.HashTable<string, string> (
-            null, null
+                                                                 null, null
         );
 
         return search_results;
@@ -132,7 +131,7 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
         string? name = manager.get_name ();
         var powered = manager.is_powered;
         if (powered && manager.discoverable) {
-            //TRANSLATORS: \"%s\" represents the name of the adapter
+            // TRANSLATORS: \"%s\" represents the name of the adapter
             appbar.viewsubtitle_label = _("Now discoverable as \"%s\".").printf (name ?? _("Unknown"));
         } else if (!powered) {
             appbar.viewsubtitle_label = _("Not discoverable while Bluetooth is powered off.");

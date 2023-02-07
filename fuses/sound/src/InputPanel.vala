@@ -28,7 +28,7 @@ public class Sound.InputPanel : Gtk.Grid {
         scrolled.set_child (devices_listbox);
 
         var volume_settings_row = new He.MiniContentBlock () {
-            title =_("Volume"),
+            title = _("Volume"),
             hexpand = true
         };
 
@@ -53,7 +53,7 @@ public class Sound.InputPanel : Gtk.Grid {
         volume_box.set_parent (volume_settings_row);
 
         var level_settings_row = new He.MiniContentBlock () {
-            title =_("Level"),
+            title = _("Level"),
             hexpand = true
         };
 
@@ -150,14 +150,14 @@ public class Sound.InputPanel : Gtk.Grid {
     private void device_notify (ParamSpec pspec) {
         disconnect_signals ();
         switch (pspec.get_name ()) {
-            case "is-muted":
-                if (volume_switch.active == default_device.is_muted) {
-                    volume_switch.activate ();
-                }
-                break;
-            case "volume":
-                volume_scale.set_value (default_device.volume);
-                break;
+        case "is-muted":
+            if (volume_switch.active == default_device.is_muted) {
+                volume_switch.activate ();
+            }
+            break;
+        case "volume":
+            volume_scale.set_value (default_device.volume);
+            break;
         }
 
         connect_signals ();

@@ -1,21 +1,21 @@
 /*
-* Copyright (c) 2021-2023 Lains
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation; either
-* version 3 of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301 USA
-*/
+ * Copyright (c) 2021-2023 Lains
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
+ */
 namespace Appearance.Utils {
     public class Palette : Object {
         const double TARGET_DARK_LUMA = 0.22;
@@ -58,9 +58,9 @@ namespace Appearance.Utils {
             public uint8 blue { get; set; }
 
             public Swatch.from_rgb (int rgb) {
-                red = (uint8)((rgb >> 16) & 0xFF);
-                green = (uint8)((rgb >> 8) & 0xFF);
-                blue = (uint8)(rgb & 0xFF);
+                red = (uint8) ((rgb >> 16) & 0xFF);
+                green = (uint8) ((rgb >> 8) & 0xFF);
+                blue = (uint8) (rgb & 0xFF);
             }
 
             public int to_rgb () {
@@ -69,12 +69,12 @@ namespace Appearance.Utils {
 
             public uint8 get_component (SwatchComponent component) {
                 switch (component) {
-                    case SwatchComponent.RED:
-                        return red;
-                    case SwatchComponent.GREEN:
-                        return green;
-                    case SwatchComponent.BLUE:
-                        return blue;
+                case SwatchComponent.RED:
+                    return red;
+                case SwatchComponent.GREEN:
+                    return green;
+                case SwatchComponent.BLUE:
+                    return blue;
                 }
 
                 return 0;
@@ -147,7 +147,6 @@ namespace Appearance.Utils {
         }
 
         public Palette () {
-
         }
 
         public Palette.from_pixbuf (Gdk.Pixbuf pixbuf, uint16 max_colors = DEFAULT_COLORS, uint8 quality = DEFAULT_QUALITY) {
@@ -167,8 +166,9 @@ namespace Appearance.Utils {
                 pixels = convert_pixels_to_rgb (pixel_data.data, has_alpha);
             }
 
-            uint8 max_depth = (uint8)Math.log2 (max_colors);
+            uint8 max_depth = (uint8) Math.log2 (max_colors);
             _swatches = yield quantize (pixels, 0, max_depth);
+
             _swatches.sort ((c1, c2) => {
                 return c2.population - c1.population;
             });
@@ -233,7 +233,6 @@ namespace Appearance.Utils {
             return list;
         }
 
-
         private SwatchComponent find_biggest_range (Gee.List<Swatch> pixels) {
             int r_min = int.MIN;
             int r_max = int.MAX;
@@ -283,12 +282,12 @@ namespace Appearance.Utils {
                     population += color_pop;
                 }
 
-                r = (int)Math.round (red_sum / (float)population);
-                g = (int)Math.round (green_sum / (float)population);
-                b = (int)Math.round (blue_sum / (float)population);
+                r = (int) Math.round (red_sum / (float) population);
+                g = (int) Math.round (green_sum / (float) population);
+                b = (int) Math.round (blue_sum / (float) population);
 
                 var list = new Gee.ArrayList<Swatch> ();
-                var color = new Swatch ((uint8)r, (uint8)g, (uint8)b, population);
+                var color = new Swatch ((uint8) r, (uint8) g, (uint8) b, population);
                 list.add (color);
                 return list;
             }
@@ -303,10 +302,12 @@ namespace Appearance.Utils {
             var swatches = new Gee.ArrayList<Swatch> ();
 
             var first = yield quantize (pixels.slice (0, mid), depth + 1, max_depth);
+
             swatches.add_all (first);
 
             if (mid + 1 < pixels.size - 1) {
                 var second = yield quantize (pixels.slice (mid + 1, pixels.size - 1), depth + 1, max_depth);
+
                 swatches.add_all (second);
             }
 
@@ -320,7 +321,6 @@ namespace Appearance.Utils {
             muted_swatch = find_color_variation (TARGET_NORMAL_LUMA, MIN_NORMAL_LUMA, MAX_NORMAL_LUMA, TARGET_MUTED_SATURATION, 0, MAX_MUTED_SATURATION);
             light_muted_swatch = find_color_variation (TARGET_LIGHT_LUMA, MIN_LIGHT_LUMA, 1, TARGET_MUTED_SATURATION, 0, MAX_MUTED_SATURATION);
             dark_muted_swatch = find_color_variation (TARGET_DARK_LUMA, 0, MAX_DARK_LUMA, TARGET_MUTED_SATURATION, 0, MAX_MUTED_SATURATION);
-
         }
 
         private static double get_saturation (Swatch color) {
@@ -351,7 +351,7 @@ namespace Appearance.Utils {
                 if (l <= 0.5) {
                     s = chroma / (2 * l);
                 } else {
-                    s = chroma / (2 - 2 *l);
+                    s = chroma / (2 - 2 * l);
                 }
             }
 
@@ -380,12 +380,12 @@ namespace Appearance.Utils {
             return (max + min) / 2;
         }
 
-        private Swatch? find_color_variation (double target_luma,
-                                            double min_luma,
-                                            double max_luma,
-                                            double target_saturation,
-                                            double min_saturation,
-                                            double max_saturation) {
+        private Swatch ? find_color_variation (double target_luma,
+                                               double min_luma,
+                                               double max_luma,
+                                               double target_saturation,
+                                               double min_saturation,
+                                               double max_saturation) {
             Swatch? max = null;
             double max_value = double.MIN;
             foreach (var swatch in _swatches) {
@@ -404,11 +404,11 @@ namespace Appearance.Utils {
         }
 
         private static double create_comparison_value (double saturation,
-                                                double target_saturation,
-                                                double luma,
-                                                double target_luma,
-                                                double population,
-                                                double max_population) {
+                                                       double target_saturation,
+                                                       double luma,
+                                                       double target_luma,
+                                                       double population,
+                                                       double max_population) {
             double[] vals = new double[6];
             vals[0] = invert_diff (saturation, target_saturation);
             vals[1] = WEIGHT_SATURATION;
@@ -422,7 +422,7 @@ namespace Appearance.Utils {
 
         private bool is_already_selected_color (Swatch swatch) {
             return swatch == vibrant_swatch || swatch == light_vibrant_swatch ||
-                swatch == dark_vibrant_swatch || swatch == muted_swatch || swatch == light_muted_swatch || swatch == dark_muted_swatch;
+                   swatch == dark_vibrant_swatch || swatch == muted_swatch || swatch == light_muted_swatch || swatch == dark_muted_swatch;
         }
 
         private static double invert_diff (double value, double target_value) {

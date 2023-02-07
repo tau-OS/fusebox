@@ -46,4 +46,3 @@ namespace Startup.Utils {
         return enumerator.get_desktop_files ();
     }
 }
-

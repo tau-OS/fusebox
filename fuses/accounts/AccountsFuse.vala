@@ -7,13 +7,13 @@ public class Accounts.Fuse : Fusebox.Fuse {
         settings.set ("accounts", null);
 
         Object (
-            category: Category.PERSONAL,
-            code_name: "co.tauos.Fusebox.Accounts",
-            display_name: _("Accounts"),
-            description: _("Manage user accounts"),
-            icon: "settings-users-symbolic",
-            supported_settings: settings,
-            index: 2
+                category: Category.PERSONAL,
+                code_name: "co.tauos.Fusebox.Accounts",
+                display_name: _("Accounts"),
+                description: _("Manage user accounts"),
+                icon: "settings-users-symbolic",
+                supported_settings: settings,
+                index: 2
         );
     }
 
@@ -50,13 +50,13 @@ public class Accounts.Fuse : Fusebox.Fuse {
 
     public override void search_callback (string location) {
         switch (location) {
-            //
+        //
         }
     }
 
     public override async GLib.HashTable<string, string> search (string search) {
         var search_results = new GLib.HashTable<string, string> (
-            null, null
+                                                                 null, null
         );
 
         search_results.set ("%s → %s".printf (display_name, _("Locale")), ACCOUNTS);

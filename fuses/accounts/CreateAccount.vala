@@ -143,11 +143,11 @@ class Accounts.CreateAccount : He.Window {
     };
     apply_button.clicked.connect (() => {
       create_user (
-        this.username,
-        this.real_name,
-        this.password,
-        this.administator ? Act.UserAccountType.ADMINISTRATOR : Act.UserAccountType.STANDARD,
-        this.icon_file
+                   this.username,
+                   this.real_name,
+                   this.password,
+                   this.administator ? Act.UserAccountType.ADMINISTRATOR : Act.UserAccountType.STANDARD,
+                   this.icon_file
       );
       this.destroy ();
     });
@@ -179,12 +179,12 @@ class Accounts.CreateAccount : He.Window {
 
     avatar_edit_button.clicked.connect (() => {
       var dialog = new Gtk.FileChooserDialog (_("Select an image"),
-                                      this,
-                                      Gtk.FileChooserAction.OPEN,
-                                      _("Cancel"),
-                                      Gtk.ResponseType.CANCEL,
-                                      _("Select"),
-                                      Gtk.ResponseType.ACCEPT);
+                                              this,
+                                              Gtk.FileChooserAction.OPEN,
+                                              _("Cancel"),
+                                              Gtk.ResponseType.CANCEL,
+                                              _("Select"),
+                                              Gtk.ResponseType.ACCEPT);
       dialog.set_transient_for (this);
       dialog.set_modal (true);
       dialog.set_select_multiple (false);

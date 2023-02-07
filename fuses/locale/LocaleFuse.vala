@@ -7,13 +7,13 @@ public class Locale.Fuse : Fusebox.Fuse {
         settings.set ("locale", null);
 
         Object (
-            category: Category.PERSONAL,
-            code_name: "co.tauos.Fusebox.Locale",
-            display_name: _("Region & Locale"),
-            description: _("Change system locale"),
-            icon: "settings-region-symbolic",
-            supported_settings: settings,
-            index: 2
+                category: Category.PERSONAL,
+                code_name: "co.tauos.Fusebox.Locale",
+                display_name: _("Region & Locale"),
+                description: _("Change system locale"),
+                icon: "settings-region-symbolic",
+                supported_settings: settings,
+                index: 2
         );
     }
 
@@ -50,13 +50,13 @@ public class Locale.Fuse : Fusebox.Fuse {
 
     public override void search_callback (string location) {
         switch (location) {
-            //
+        //
         }
     }
 
     public override async GLib.HashTable<string, string> search (string search) {
         var search_results = new GLib.HashTable<string, string> (
-            null, null
+                                                                 null, null
         );
 
         search_results.set ("%s → %s".printf (display_name, _("Locale")), LOCALE);

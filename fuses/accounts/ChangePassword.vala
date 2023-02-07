@@ -39,7 +39,7 @@ class Accounts.ChangePassword : He.Window {
     password_confirm_entry.placeholder_text = "••••••••";
     password_confirm_entry.set_parent (password_confirm_block);
 
-    var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
+    var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
       homogeneous = true,
       valign = Gtk.Align.END,
       vexpand = true,
@@ -47,7 +47,7 @@ class Accounts.ChangePassword : He.Window {
     main.append (button_box);
 
     var cancel_button = new He.TextButton (_("Cancel"));
-    cancel_button.set_size_request(200, -1);
+    cancel_button.set_size_request (200, -1);
     cancel_button.clicked.connect (() => {
       this.destroy ();
     });

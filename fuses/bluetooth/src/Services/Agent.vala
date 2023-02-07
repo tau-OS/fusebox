@@ -29,30 +29,29 @@ public class Bluetooth.Services.Agent : Object {
 
     private PairDialog pair_dialog;
 
-    [DBus (visible=false)]
+    [DBus (visible = false)]
     public Agent (Gtk.Window? main_window) {
         this.main_window = main_window;
         Bus.own_name (BusType.SYSTEM, "org.bluez.AgentManager1", BusNameOwnerFlags.NONE,
-            (connection, name) => {
-                try {
-                    connection.register_object (PATH, this);
-                    ready = true;
-                } catch (Error e) {
-                    critical (e.message);
-                }
-            },
-            (connection, name) => {},
-            (connection, name) => {}
-        );
+                      (connection, name) => {
+            try {
+                connection.register_object (PATH, this);
+                ready = true;
+            } catch (Error e) {
+                critical (e.message);
+            }
+        },
+                      (connection, name) => {},
+                      (connection, name) => {});
     }
 
-    [DBus (visible=false)]
+    [DBus (visible = false)]
     public bool ready { get; private set; }
 
-    [DBus (visible=false)]
+    [DBus (visible = false)]
     public signal void unregistered ();
 
-    [DBus (visible=false)]
+    [DBus (visible = false)]
     public GLib.ObjectPath get_path () {
         return new GLib.ObjectPath (PATH);
     }
@@ -137,7 +136,7 @@ public class Bluetooth.Services.Agent : Object {
         BluezError? error = null;
 
         dialog.primary_button.clicked.connect (() => {
-            Idle.add ((owned)callback);
+            Idle.add ((owned) callback);
             dialog.destroy ();
         });
 

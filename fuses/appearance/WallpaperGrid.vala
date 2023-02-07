@@ -1,26 +1,26 @@
 /*-
-* Copyright (c) 2022 Fyra Labs
-* Copyright (c) 2015-2016 elementary LLC.
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-*/
+ * Copyright (c) 2022 Fyra Labs
+ * Copyright (c) 2015-2016 elementary LLC.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 public class Appearance.WallpaperGrid : Gtk.Grid {
     public enum ColumnType {
         ICON,
         NAME
     }
 
-    private const string [] REQUIRED_FILE_ATTRS = {
+    private const string[] REQUIRED_FILE_ATTRS = {
         FileAttribute.STANDARD_NAME,
         FileAttribute.STANDARD_TYPE,
         FileAttribute.STANDARD_CONTENT_TYPE,
@@ -87,11 +87,11 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             var wallpaper = (Appearance.WallpaperContainer) wallpaper_view.get_selected_children ().data;
             if (wallpaper != null)
                 wallpaper_for_removal = wallpaper;
-                wallpaper_view.remove (wallpaper_for_removal);
-                var wallpaper_file = File.new_for_uri (wallpaper_for_removal.uri);
-                wallpaper_file.trash_async.begin ();
-                wallpaper_for_removal = null;
-                wallpaper_removal_button.visible = false;
+            wallpaper_view.remove (wallpaper_for_removal);
+            var wallpaper_file = File.new_for_uri (wallpaper_for_removal.uri);
+            wallpaper_file.trash_async.begin ();
+            wallpaper_for_removal = null;
+            wallpaper_removal_button.visible = false;
         });
 
         var wallpaper_title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
@@ -135,11 +135,11 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         filter.add_mime_type ("image/*");
 
         var chooser = new Gtk.FileChooserNative (
-            _("Add Wallpaper"),
-            null,
-            Gtk.FileChooserAction.OPEN,
-            _("Add"),
-            _("Cancel")
+                                                 _("Add Wallpaper"),
+                                                 null,
+                                                 Gtk.FileChooserAction.OPEN,
+                                                 _("Add"),
+                                                 _("Cancel")
         );
         chooser.filter = filter;
         chooser.select_multiple = true;
@@ -166,7 +166,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         current_wallpaper_path = settings.get_string ("picture-uri");
     }
 
-    private static File? copy_for_library (File source) {
+    private static File ? copy_for_library (File source) {
         File? dest = null;
 
         string local_bg_directory = Path.build_filename (Environment.get_user_data_dir (), "backgrounds") + "/";
@@ -247,6 +247,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         try {
             var attrs = string.joinv (",", REQUIRED_FILE_ATTRS);
             var e = yield directory.enumerate_children_async (attrs, 0, Priority.DEFAULT);
+
             FileInfo file_info;
 
             while ((file_info = e.next_file ()) != null) {
@@ -261,6 +262,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                 if (file_info.get_file_type () == FileType.DIRECTORY) {
                     var subdir = directory.resolve_relative_path (file_info.get_name ());
                     yield load_wallpapers (subdir.get_path (), cancellable, false);
+
                     continue;
                 }
 
@@ -484,10 +486,10 @@ interface Appearance.Thumbnailer : Object {
     public signal void ready (uint32 handle, string[] uris);
     public signal void finished (uint32 handle);
     public abstract uint32 queue (string[] uris,
-                                  string [] mime_types,
-                                  string flavor,
-                                  string scheduler,
-                                  uint32 dequeue) throws GLib.Error;
+        string[] mime_types,
+        string flavor,
+        string scheduler,
+        uint32 dequeue) throws GLib.Error;
     public abstract void dequeue (uint32 handle) throws GLib.Error;
 }
 
@@ -496,6 +498,7 @@ public class Appearance.ThumbnailGenerator {
     private const string THUMBNAILER_DBUS_PATH = "/org/freedesktop/thumbnails/Thumbnailer1";
 
     public delegate void ThumbnailReady ();
+
     public class ThumbnailReadyWrapper {
         public unowned ThumbnailReady cb { get; set; }
     }
@@ -503,7 +506,7 @@ public class Appearance.ThumbnailGenerator {
     private static ThumbnailGenerator? instance = null;
     private Thumbnailer? thumbnailer = null;
     private Gee.HashMap<uint32, ThumbnailReadyWrapper> queued_delegates
-            = new Gee.HashMap<uint32, ThumbnailReadyWrapper> ();
+        = new Gee.HashMap<uint32, ThumbnailReadyWrapper> ();
     private Gee.ArrayList<uint32> handles = new Gee.ArrayList<uint32> ();
 
     public static ThumbnailGenerator get_default () {
@@ -519,7 +522,7 @@ public class Appearance.ThumbnailGenerator {
             thumbnailer = Bus.get_proxy_sync (BusType.SESSION, THUMBNAILER_DBUS_ID, THUMBNAILER_DBUS_PATH);
             thumbnailer.ready.connect ((handle, uris) => {
                 if (queued_delegates.has_key (handle)) {
-                    queued_delegates [handle].cb ();
+                    queued_delegates[handle].cb ();
                 }
             });
 

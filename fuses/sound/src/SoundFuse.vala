@@ -18,7 +18,7 @@ public class Sound.Fuse : Fusebox.Fuse {
                 icon: "settings-sound-symbolic",
                 supported_settings: settings,
                 index: 0
-            );
+        );
     }
 
     public override Gtk.Widget get_widget () {
@@ -81,19 +81,19 @@ public class Sound.Fuse : Fusebox.Fuse {
 
     public override void search_callback (string location) {
         switch (location) {
-            case "input":
-                stack.set_visible_child_name ("input");
-                break;
-            case "output":
-                stack.set_visible_child_name ("output");
-                break;
+        case "input":
+            stack.set_visible_child_name ("input");
+            break;
+        case "output":
+            stack.set_visible_child_name ("output");
+            break;
         }
     }
 
     // 'search' returns results like ("Keyboard → Behavior → Duration", "keyboard<sep>behavior")
     public override async GLib.HashTable<string, string> search (string search) {
         var search_results = new GLib.HashTable<string, string> (
-            null, null
+                                                                 null, null
         );
 
         search_results.set ("%s → %s".printf (display_name, _("Output")), "output");

@@ -13,9 +13,9 @@ ListStore get_account_list_store () {
   user_manager.user_removed.connect ((removed_user) => {
     uint position;
     var user_found = list.find_with_equal_func (
-      removed_user,
-      (u1, u2) => ((Act.User)u1).uid == ((Act.User)u2).uid,
-      out position
+                                                removed_user,
+                                                (u1, u2) => ((Act.User) u1).uid == ((Act.User) u2).uid,
+                                                out position
     );
 
     if (user_found) list.remove (position);

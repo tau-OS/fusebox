@@ -48,8 +48,8 @@ public class Appearance.TextView : Gtk.Box {
         };
 
         var dyslexia_font_description_label = new Gtk.Label (
-            _("Bottom-heavy letters and improved spacing can help with legibility and readability.")
-        ) {
+                                                             _("Bottom-heavy letters and improved spacing can help with legibility and readability.")
+            ) {
             wrap = true,
             xalign = 0
         };

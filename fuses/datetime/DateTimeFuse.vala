@@ -6,13 +6,13 @@ public class DateTime.Fuse : Fusebox.Fuse {
         settings.set ("DateTime", null);
 
         Object (
-            category: Category.SYSTEM,
-            code_name: "co.tauos.Fusebox.DateTime",
-            display_name: _("Date & Time"),
-            description: _("Setup time and date"),
-            icon: "settings-time-symbolic",
-            supported_settings: settings,
-            index: 1
+                category: Category.SYSTEM,
+                code_name: "co.tauos.Fusebox.DateTime",
+                display_name: _("Date & Time"),
+                description: _("Setup time and date"),
+                icon: "settings-time-symbolic",
+                supported_settings: settings,
+                index: 1
         );
 
         Bis.init ();
@@ -51,13 +51,13 @@ public class DateTime.Fuse : Fusebox.Fuse {
 
     public override void search_callback (string location) {
         switch (location) {
-            //
+        //
         }
     }
 
     public override async GLib.HashTable<string, string> search (string search) {
         var search_results = new GLib.HashTable<string, string> (
-            null, null
+                                                                 null, null
         );
 
         search_results.set ("%s → %s".printf (display_name, _("Date")), "date");

@@ -1,23 +1,23 @@
 /*
-* Copyright 2013-2020 elementary, Inc. (https://elementary.io)
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation; either
-* version 3 of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301 USA
-*
-* Authored by: Julien Spautz <spautz.julien@gmail.com>
-*/
+ * Copyright 2013-2020 elementary, Inc. (https://elementary.io)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
+ *
+ * Authored by: Julien Spautz <spautz.julien@gmail.com>
+ */
 
 /**
  * Stores information about an app found in it's .desktop file
@@ -66,7 +66,7 @@ public class Startup.Backend.KeyFile : GLib.Object {
 
     static construct {
         languages = Intl.get_language_names ();
-        preferred_language = languages [0];
+        preferred_language = languages[0];
     }
 
     public KeyFile (string path) {
@@ -103,7 +103,6 @@ public class Startup.Backend.KeyFile : GLib.Object {
             if (FileUtils.test (filename, FileTest.EXISTS) == false) {
                 return filename;
             }
-
         }
 
         return "";
@@ -167,17 +166,17 @@ public class Startup.Backend.KeyFile : GLib.Object {
 
     public Entity.AppInfo create_app_info () {
         return Entity.AppInfo () {
-            name = keyfile_get_locale_string (KeyFileDesktop.KEY_NAME),
-            comment = keyfile_get_locale_string (KeyFileDesktop.KEY_COMMENT),
-            icon = keyfile_get_locale_string (KeyFileDesktop.KEY_ICON),
-            active = active,
-            path = path
+                   name = keyfile_get_locale_string (KeyFileDesktop.KEY_NAME),
+                   comment = keyfile_get_locale_string (KeyFileDesktop.KEY_COMMENT),
+                   icon = keyfile_get_locale_string (KeyFileDesktop.KEY_ICON),
+                   active = active,
+                   path = path
         };
     }
 
     public KeyFile get_instance (string? path) {
         // deep clone of current keyfile
-        //  var new_keyfile = new KeyFile (path);
+        // var new_keyfile = new KeyFile (path);
         return new KeyFile (path);
     }
 }

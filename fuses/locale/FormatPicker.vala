@@ -51,10 +51,10 @@ class Locale.FormatPicker : He.Window {
       listbox.append (new Locale.LocaleRow (format));
     }
     listbox.set_filter_func ((row) => {
-      return ((Locale.LocaleRow)row).locale.name.down ().contains (search_entry.text.down ());
+      return ((Locale.LocaleRow) row).locale.name.down ().contains (search_entry.text.down ());
     });
     listbox.set_sort_func ((row1, row2) => {
-      return ((Locale.LocaleRow)row1).locale.name.collate (((Locale.LocaleRow)row2).locale.name);
+      return ((Locale.LocaleRow) row1).locale.name.collate (((Locale.LocaleRow) row2).locale.name);
     });
     search_entry.changed.connect (() => {
       listbox.invalidate_filter ();
@@ -100,7 +100,7 @@ class Locale.FormatPicker : He.Window {
       var selected = listbox.get_selected_row () as Locale.LocaleRow;
       apply_button.sensitive = selected != null;
       preview.visible = selected != null;
-      preview.locale = selected?.locale;
+      preview.locale = selected ? .locale;
     });
 
     this.set_child (main);

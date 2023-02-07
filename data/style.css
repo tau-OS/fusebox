@@ -1,5 +1,5 @@
 entry.search {
-    border-radius: 999px;
+  border-radius: 999px;
 }
 
 .fuse-block {
@@ -8,24 +8,26 @@ entry.search {
   border-radius: 8px;
   color: @view_fg_color;
 }
+
 .fuse-block:hover {
   background: linear-gradient(0deg, alpha(@accent_bg_color, 0.11), alpha(@accent_bg_color, 0.11)), image(@view_bg_color);
 }
+
 row:selected .fuse-block {
   background: linear-gradient(0deg, alpha(@accent_bg_color, 0.14), alpha(@accent_bg_color, 0.14)), image(@view_bg_color);
 }
 
 .main-content-block {
-    background: linear-gradient(0deg, alpha(@accent_bg_color, 0.11), alpha(@accent_bg_color, 0.11)), image(@view_bg_color);
-    padding: 18px;
-    border-radius: 12px;
+  background: linear-gradient(0deg, alpha(@accent_bg_color, 0.11), alpha(@accent_bg_color, 0.11)), image(@view_bg_color);
+  padding: 18px;
+  border-radius: 12px;
 }
 
 .rounded-icon {
-    background: @accent_bg_color;
-    color: @accent_fg_color;
-    border-radius: 999px;
-    padding: 11px;
+  background: @accent_bg_color;
+  color: @accent_fg_color;
+  border-radius: 999px;
+  padding: 11px;
 }
 
 button.flat label {
@@ -39,6 +41,7 @@ button.flat label {
   margin-top: 12px;
   margin-left: 6px;
 }
+
 .wallpaper {
   background: none;
   padding: 0;
@@ -47,42 +50,49 @@ button.flat label {
 .red radio {
   background: #e25480;
 }
+
 .orange radio {
   background: #f99e5c;
 }
+
 .yellow radio {
   background: #febc16;
 }
+
 .green radio {
   background: #72da82;
 }
+
 .mint radio {
   background: #85d1bf;
 }
+
 .blue radio {
   background: #58a8fa;
 }
+
 .purple radio {
   background: #a57bcd;
 }
+
 .pink radio {
   background: #cb76b8;
 }
+
 .mono radio {
   background: #888;
 }
+
 .multi radio {
-  background: linear-gradient(
-        45deg,
-        #e25480 0%,
-        #f99e5c 13%,
-        #febc16 26%,
-        #72da82 39%,
-        #85d1bf 52%,
-        #58a8fa 65%,
-        #a57bcd 78%,
-        #cb76b8 91%
-    );
+  background: linear-gradient(45deg,
+      #e25480 0%,
+      #f99e5c 13%,
+      #febc16 26%,
+      #72da82 39%,
+      #85d1bf 52%,
+      #58a8fa 65%,
+      #a57bcd 78%,
+      #cb76b8 91%);
 }
 
 .menu-button {
@@ -90,10 +100,12 @@ button.flat label {
   background: none;
   color: @view_fg_color;
 }
+
 .menu-button:hover {
   background: linear-gradient(0deg, alpha(@accent_bg_color, 0.08), alpha(@accent_bg_color, 0.08)), image(@view_bg_color);
   color: @accent_color;
 }
+
 .menu-button:active {
   background: linear-gradient(0deg, alpha(@accent_bg_color, 0.05), alpha(@accent_bg_color, 0.05)), image(@view_bg_color);
   color: @accent_color;

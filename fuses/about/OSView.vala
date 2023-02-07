@@ -304,10 +304,10 @@ public class About.OSView : Gtk.Box {
         bug_button.clicked.connect (() => {
             try {
                 var appinfo = GLib.AppInfo.create_from_commandline (
-                                                                                 "co.tauos.Mondai",
-                                                                                 "co.tauos.Mondai",
-                                                                                 GLib.AppInfoCreateFlags.NONE
-                                                                                );
+                                                                    "co.tauos.Mondai",
+                                                                    "co.tauos.Mondai",
+                                                                    GLib.AppInfoCreateFlags.NONE
+                );
                 if (appinfo != null) {
                     try {
                         appinfo.launch (null, null);
@@ -549,7 +549,7 @@ public class About.OSView : Gtk.Box {
                 return clean_name (session_manager.renderer == "" ?
                                    GL.glGetString (GL.GL_RENDERER) :
                                    session_manager.renderer
-                                  );
+                );
             } catch (IOError e) {
                 warning ("Unable to connect to GNOME Session Manager for GPU details: %s", e.message);
                 return _("Unknown Graphics");
@@ -631,9 +631,11 @@ public class About.OSView : Gtk.Box {
 
         try {
             var infos = yield file_root.query_filesystem_info_async (GLib.FileAttribute.FILESYSTEM_SIZE);
+
             storage_capacity = GLib.format_size (infos.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_SIZE));
 
             var infou = yield file_root.query_filesystem_info_async (GLib.FileAttribute.FILESYSTEM_USED);
+
             used = GLib.format_size (infou.get_attribute_uint64 (GLib.FileAttribute.FILESYSTEM_USED));
 
             var fraction = (double.parse (used) * 1.04858) / (double.parse (storage_capacity) * 1.04858);

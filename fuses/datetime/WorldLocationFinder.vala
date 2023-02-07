@@ -1,21 +1,21 @@
 /*
-* Copyright (c) 2022 Fyra Labs
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation; either
-* version 3 of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301 USA
-*/
+ * Copyright (c) 2022 Fyra Labs
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
+ */
 
 public class DateTime.WeatherLocation : Object {
     public GWeather.Location loc { get; construct set; }
@@ -176,6 +176,7 @@ public class DateTime.WorldLocationFinder : Gtk.Box {
     }
 
     public signal void location_added ();
+
     private void add_button_clicked () {
         location_added ();
     }
@@ -184,22 +185,22 @@ public class DateTime.WorldLocationFinder : Gtk.Box {
         if (locations.get_n_items () >= RESULT_COUNT_LIMIT) return;
 
         switch (lc.get_level ()) {
-            case CITY:
-                var contains_name = lc.get_sort_name ().contains (search);
+        case CITY:
+            var contains_name = lc.get_sort_name ().contains (search);
 
-                var country_name = lc.get_country_name ();
-                if (country_name != null) {
-                    country_name = ((string) country_name).normalize ().casefold ();
-                }
-                var contains_country_name = country_name != null && ((string) country_name).contains (search);
+            var country_name = lc.get_country_name ();
+            if (country_name != null) {
+                country_name = ((string) country_name).normalize ().casefold ();
+            }
+            var contains_country_name = country_name != null && ((string) country_name).contains (search);
 
-                if (contains_name || contains_country_name) {
-                    bool selected = location_exists (lc);
-                    locations.append (new DateTime.WeatherLocation (lc, selected));
-                }
-                return;
-            default:
-                break;
+            if (contains_name || contains_country_name) {
+                bool selected = location_exists (lc);
+                locations.append (new DateTime.WeatherLocation (lc, selected));
+            }
+            return;
+        default:
+            break;
         }
 
         var l = lc.next_child (null);

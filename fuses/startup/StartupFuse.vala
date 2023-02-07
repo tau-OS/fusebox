@@ -39,13 +39,13 @@ public class Startup.Fuse : Fusebox.Fuse {
         var settings = new GLib.HashTable<string, string?> (null, null);
         settings.set ("startup", STARTUP);
         Object (
-            category: Category.SYSTEM,
-            code_name: "co.tauos.Fusebox.Startup",
-            display_name: _("App Autostart"),
-            description: _("Manage applications that start automatically"),
-            icon: "settings-applications-symbolic",
-            supported_settings: settings,
-            index: 6
+                category: Category.SYSTEM,
+                code_name: "co.tauos.Fusebox.Startup",
+                display_name: _("App Autostart"),
+                description: _("Manage applications that start automatically"),
+                icon: "settings-applications-symbolic",
+                supported_settings: settings,
+                index: 6
         );
     }
 
@@ -68,28 +68,26 @@ public class Startup.Fuse : Fusebox.Fuse {
 
             main_grid.attach (appbar, 0, 0);
             main_grid.attach (startup_view, 0, 1);
-
-
         }
 
         return main_grid;
     }
 
-    public override void shown() {
+    public override void shown () {
     }
 
-    public override void hidden() {
+    public override void hidden () {
     }
 
     public override void search_callback (string location) {
         switch (location) {
-            //
+        //
         }
     }
 
     public override async GLib.HashTable<string, string> search (string search) {
         var search_results = new GLib.HashTable<string, string> (
-            null, null
+                                                                 null, null
         );
 
         search_results.set ("%s → %s".printf (display_name, _("Startup")), STARTUP);

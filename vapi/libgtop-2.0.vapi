@@ -4,7 +4,7 @@ namespace GLibTop {
     public static void get_mem (out mem buf);
 
     [CCode (cheader_filename = "glibtop.h", cname = "glibtop_get_sysinfo")]
-    public static unowned sysinfo? get_sysinfo ();
+    public static unowned sysinfo ? get_sysinfo ();
 
     [CCode (cheader_filename = "glibtop/mem.h", destroy_function = "")]
     public struct mem {

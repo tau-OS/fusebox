@@ -34,47 +34,47 @@ public class PairDialog : He.Dialog {
         base (true, main_window, "", "", "", "", null, null);
     }
 
-    public PairDialog.request_authorization (ObjectPath object_path, Gtk.Window? main_window) {
+    public PairDialog.request_authorization (ObjectPath object_path, Gtk.Window ? main_window) {
         Object (
-            auth_type: AuthType.REQUEST_AUTHORIZATION,
-            object_path: object_path,
-            title: _("Confirm Bluetooth Pairing"),
-            transient_for: main_window
+                auth_type: AuthType.REQUEST_AUTHORIZATION,
+                object_path: object_path,
+                title: _("Confirm Bluetooth Pairing"),
+                transient_for: main_window
         );
     }
 
     public PairDialog.display_passkey (ObjectPath object_path,
                                        uint32 passkey,
                                        uint16 entered,
-                                       Gtk.Window? main_window) {
+                                       Gtk.Window ? main_window) {
         Object (
-            auth_type: AuthType.DISPLAY_PASSKEY,
-            object_path: object_path,
-            passkey: "%u".printf (passkey),
-            title: _("Confirm Bluetooth Passkey"),
-            transient_for: main_window
+                auth_type: AuthType.DISPLAY_PASSKEY,
+                object_path: object_path,
+                passkey: "%u".printf (passkey),
+                title: _("Confirm Bluetooth Passkey"),
+                transient_for: main_window
         );
     }
 
     public PairDialog.request_confirmation (ObjectPath object_path,
                                             uint32 passkey,
-                                            Gtk.Window? main_window) {
+                                            Gtk.Window ? main_window) {
         Object (
-            auth_type: AuthType.REQUEST_CONFIRMATION,
-            object_path: object_path,
-            passkey: "%u".printf (passkey),
-            title: _("Confirm Bluetooth Passkey"),
-            transient_for: main_window
+                auth_type: AuthType.REQUEST_CONFIRMATION,
+                object_path: object_path,
+                passkey: "%u".printf (passkey),
+                title: _("Confirm Bluetooth Passkey"),
+                transient_for: main_window
         );
     }
 
-    public PairDialog.display_pin_code (ObjectPath object_path, string pincode, Gtk.Window? main_window) {
+    public PairDialog.display_pin_code (ObjectPath object_path, string pincode, Gtk.Window ? main_window) {
         Object (
-            auth_type: AuthType.DISPLAY_PIN_CODE,
-            object_path: object_path,
-            passkey: pincode,
-            title: _("Enter Bluetooth PIN"),
-            transient_for: main_window
+                auth_type: AuthType.DISPLAY_PIN_CODE,
+                object_path: object_path,
+                passkey: pincode,
+                title: _("Enter Bluetooth PIN"),
+                transient_for: main_window
         );
     }
 
@@ -87,7 +87,7 @@ public class PairDialog : He.Dialog {
                                          "org.bluez",
                                          object_path,
                                          DBusProxyFlags.GET_INVALIDATED_PROPERTIES
-                                        );
+            );
             icon = device.icon ?? "settings-bluetooth-symbolic";
             device_name = device.name ?? device.address;
         } catch (IOError e) {
@@ -96,28 +96,28 @@ public class PairDialog : He.Dialog {
         }
 
         switch (auth_type) {
-            case AuthType.REQUEST_CONFIRMATION:
-                info = _("See if the code displayed on “%s” matches below.").printf (device_name);
+        case AuthType.REQUEST_CONFIRMATION:
+            info = _("See if the code displayed on “%s” matches below.").printf (device_name);
 
-                var confirm_button = new He.FillButton (_("Pair"));
-                primary_button = confirm_button;
-                break;
-            case AuthType.DISPLAY_PASSKEY:
-                info = _("“%s” wants to pair with this device. See if the code displayed on “%s” matches below.")
-                       .printf (device_name, device_name);
+            var confirm_button = new He.FillButton (_("Pair"));
+            primary_button = confirm_button;
+            break;
+        case AuthType.DISPLAY_PASSKEY:
+            info = _("“%s” wants to pair with this device. See if the code displayed on “%s” matches below.")
+                 .printf (device_name, device_name);
 
-                var confirm_button = new He.FillButton (_("Pair"));
-                primary_button = confirm_button;
-                break;
-            case AuthType.DISPLAY_PIN_CODE:
-                info = _("Type the code displayed below on “%s”, followed by Enter.").printf (device_name);
-                break;
-            case AuthType.REQUEST_AUTHORIZATION:
-                info = _("“%s” wants to pair with this device.").printf (device_name);
+            var confirm_button = new He.FillButton (_("Pair"));
+            primary_button = confirm_button;
+            break;
+        case AuthType.DISPLAY_PIN_CODE:
+            info = _("Type the code displayed below on “%s”, followed by Enter.").printf (device_name);
+            break;
+        case AuthType.REQUEST_AUTHORIZATION:
+            info = _("“%s” wants to pair with this device.").printf (device_name);
 
-                var confirm_button = new He.FillButton (_("Pair"));
-                primary_button = confirm_button;
-                break;
+            var confirm_button = new He.FillButton (_("Pair"));
+            primary_button = confirm_button;
+            break;
         }
 
         if (passkey != null && passkey != "") {

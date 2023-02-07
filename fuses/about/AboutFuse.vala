@@ -8,13 +8,13 @@ public class About.Fuse : Fusebox.Fuse {
         settings.set ("about/os", OS);
 
         Object (
-            category: Category.SYSTEM,
-            code_name: "co.tauos.Fusebox.About",
-            display_name: _("About"),
-            description: _("View OS information"),
-            icon: "settings-about-symbolic",
-            supported_settings: settings,
-            index: 5
+                category: Category.SYSTEM,
+                code_name: "co.tauos.Fusebox.About",
+                display_name: _("About"),
+                description: _("View OS information"),
+                icon: "settings-about-symbolic",
+                supported_settings: settings,
+                index: 5
         );
     }
 
@@ -50,13 +50,13 @@ public class About.Fuse : Fusebox.Fuse {
 
     public override void search_callback (string location) {
         switch (location) {
-            //
+        //
         }
     }
 
     public override async GLib.HashTable<string, string> search (string search) {
         var search_results = new GLib.HashTable<string, string> (
-            null, null
+                                                                 null, null
         );
 
         search_results.set ("%s → %s".printf (display_name, _("About")), OS);

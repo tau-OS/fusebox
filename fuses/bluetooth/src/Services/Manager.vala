@@ -34,9 +34,9 @@ public class Bluetooth.Services.ObjectManager : Object {
     public bool has_object { get; private set; default = false; }
     public bool retrieve_finished { get; private set; default = false; }
 
-    public bool is_discovering {get; private set; default = false; }
-    public bool is_powered {get; private set; default = false; }
-    public bool is_connected {get; private set; default = false; }
+    public bool is_discovering { get; private set; default = false; }
+    public bool is_powered { get; private set; default = false; }
+    public bool is_connected { get; private set; default = false; }
 
     private bool is_registered = false;
 
@@ -60,12 +60,12 @@ public class Bluetooth.Services.ObjectManager : Object {
     private async void create_manager () {
         try {
             object_manager = yield new GLib.DBusObjectManagerClient.for_bus (
-                BusType.SYSTEM,
-                GLib.DBusObjectManagerClientFlags.NONE,
-                "org.bluez",
-                "/",
-                object_manager_proxy_get_type,
-                null
+                                                                             BusType.SYSTEM,
+                                                                             GLib.DBusObjectManagerClientFlags.NONE,
+                                                                             "org.bluez",
+                                                                             "/",
+                                                                             object_manager_proxy_get_type,
+                                                                             null
             );
             if (object_manager == null) {
                 return;
@@ -88,14 +88,14 @@ public class Bluetooth.Services.ObjectManager : Object {
         retrieve_finished = true;
     }
 
-    //TODO: Do not rely on this when it is possible to do it natively in Vala
-    [CCode (cname="bluetooth_services_device_proxy_get_type")]
+    // TODO: Do not rely on this when it is possible to do it natively in Vala
+    [CCode (cname = "bluetooth_services_device_proxy_get_type")]
     extern static GLib.Type get_device_proxy_type ();
 
-    [CCode (cname="bluetooth_services_adapter_proxy_get_type")]
+    [CCode (cname = "bluetooth_services_adapter_proxy_get_type")]
     extern static GLib.Type get_adapter_proxy_type ();
 
-    [CCode (cname="bluetooth_services_agent_manager_proxy_get_type")]
+    [CCode (cname = "bluetooth_services_agent_manager_proxy_get_type")]
     extern static GLib.Type get_agent_manager_proxy_type ();
 
     private GLib.Type object_manager_proxy_get_type (DBusObjectManagerClient manager, string object_path, string? interface_name) {
@@ -103,14 +103,14 @@ public class Bluetooth.Services.ObjectManager : Object {
             return typeof (GLib.DBusObjectProxy);
 
         switch (interface_name) {
-            case "org.bluez.Device1":
-                return get_device_proxy_type ();
-            case "org.bluez.Adapter1":
-                return get_adapter_proxy_type ();
-            case "org.bluez.AgentManager1":
-                return get_agent_manager_proxy_type ();
-            default:
-                return typeof (GLib.DBusProxy);
+        case "org.bluez.Device1":
+            return get_device_proxy_type ();
+        case "org.bluez.Adapter1":
+            return get_adapter_proxy_type ();
+        case "org.bluez.AgentManager1":
+            return get_agent_manager_proxy_type ();
+        default:
+            return typeof (GLib.DBusProxy);
         }
     }
 
@@ -189,7 +189,7 @@ public class Bluetooth.Services.ObjectManager : Object {
         }
     }
 
-    public string? get_name () {
+    public string ? get_name () {
         var adapters = get_adapters ();
         if (adapters.is_empty ()) {
             return null;
@@ -312,6 +312,7 @@ public class Bluetooth.Services.ObjectManager : Object {
         foreach (var adapter in adapters) {
             try {
                 yield adapter.start_discovery ();
+
                 debug ("Adapter %s started", adapter.name);
             } catch (Error e) {
                 critical (e.message);
@@ -326,6 +327,7 @@ public class Bluetooth.Services.ObjectManager : Object {
             try {
                 if (adapter.powered && adapter.discovering) {
                     yield adapter.stop_discovery ();
+
                     debug ("Adapter %s stopped", adapter.name);
                 }
             } catch (Error e) {

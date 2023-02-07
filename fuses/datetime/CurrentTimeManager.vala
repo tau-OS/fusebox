@@ -19,6 +19,7 @@
 
 public class DateTime.CurrentTimeManager : GLib.Object {
     public signal void time_has_changed (GLib.DateTime dt);
+
     private uint timeout = 0;
     private GLib.DateTime very_next_minute;
     public CurrentTimeManager () {

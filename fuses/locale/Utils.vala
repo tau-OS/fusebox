@@ -56,30 +56,30 @@ namespace Locale {
     }
 
     return SystemLocale () {
-      language = language_locale,
-      format = format_locale
+             language = language_locale,
+             format = format_locale
     };
   }
 
-  //  private void update_system_locale(Locale1Proxy proxy, SystemLocale system_locale) {
-  //    var locales = new GLib.Array<string>();
-  //    locales.append_val("LANG=%s".printf(system_locale.language.locale));
+  // private void update_system_locale(Locale1Proxy proxy, SystemLocale system_locale) {
+  // var locales = new GLib.Array<string>();
+  // locales.append_val("LANG=%s".printf(system_locale.language.locale));
 
-  //    var format = system_locale.format?.locale;
-  //    if (format != null) {
-  //      locales.append_val("LC_MEASUREMENT=%s".printf(format));
-  //      locales.append_val("LC_MONETARY=%s".printf(format));
-  //      locales.append_val("LC_NUMERIC=%s".printf(format));
-  //      locales.append_val("LC_PAPER=%s".printf(format));
-  //      locales.append_val("LC_TIME=%s".printf(format));
-  //    }
+  // var format = system_locale.format?.locale;
+  // if (format != null) {
+  // locales.append_val("LC_MEASUREMENT=%s".printf(format));
+  // locales.append_val("LC_MONETARY=%s".printf(format));
+  // locales.append_val("LC_NUMERIC=%s".printf(format));
+  // locales.append_val("LC_PAPER=%s".printf(format));
+  // locales.append_val("LC_TIME=%s".printf(format));
+  // }
 
-  //    try {
-  //      proxy.set_locale(locales.data, true);
-  //    } catch (GLib.Error e) {
-  //      critical("Could not set system locale: %s", e.message);
-  //    }
-  //  }
+  // try {
+  // proxy.set_locale(locales.data, true);
+  // } catch (GLib.Error e) {
+  // critical("Could not set system locale: %s", e.message);
+  // }
+  // }
 
   // ? Note that the system locale is the default when user language/format is not set
   private struct UserLocale {
@@ -104,16 +104,16 @@ namespace Locale {
     }
 
     return UserLocale () {
-      language = language_locale,
-      format = format_locale
+             language = language_locale,
+             format = format_locale
     };
   }
 
   private void update_user_locale (Act.User current_user, UserLocale user_locale) {
     var locale_settings = new GLib.Settings ("org.gnome.system.locale");
 
-    var language_id = user_locale.language?.locale;
-    var format_id = user_locale.format?.locale;
+    var language_id = user_locale.language ? .locale;
+    var format_id = user_locale.format ? .locale;
 
     if (language_id != null) {
       current_user.set_language (language_id);
@@ -154,11 +154,11 @@ namespace Locale {
       critical ("Could not reset locale to %s", current_locale);
     }
 
-    return LocaleExample() {
-      date = date,
-      time = time,
-      currency = (string)currency,
-      temperature = temperature
+    return LocaleExample () {
+             date = date,
+             time = time,
+             currency = (string) currency,
+             temperature = temperature
     };
   }
 }

@@ -43,11 +43,11 @@ public class Accounts.AccountsView : Gtk.Box {
         }
 
         var autologin_dropdown = new Gtk.DropDown (this.account_list,
-                                        new Gtk.PropertyExpression (typeof (Act.User),
-                                                                                null,
-                                                                                "real_name"
-                                                                               )
-                                                  )
+                                                   new Gtk.PropertyExpression (typeof (Act.User),
+                                                                               null,
+                                                                               "real_name"
+                                                   )
+        )
         {
             valign = Gtk.Align.CENTER
         };

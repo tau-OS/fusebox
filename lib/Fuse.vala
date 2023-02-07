@@ -39,7 +39,7 @@ public abstract class Fusebox.Fuse : GLib.Object {
     /**
      * The placement index of the fuse; starts at 0.
      */
-     public int index { get; construct; }
+    public int index { get; construct; }
 
     /**
      * The unique name representing the Fuse.
@@ -73,7 +73,7 @@ public abstract class Fusebox.Fuse : GLib.Object {
     /**
      * Inform if the Fuse should be shown or not
      */
-    public bool can_show { get; set; default=true; }
+    public bool can_show { get; set; default = true; }
 
     /**
      * Returns the widget that contain the whole interface.

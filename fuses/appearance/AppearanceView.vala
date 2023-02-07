@@ -436,7 +436,7 @@ public class AppearanceView : Gtk.Box {
 
     public async void accent_set () {
         try {
-            var file = File.new_for_uri (bg_settings.get_string("picture-uri"));
+            var file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
             var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
             pixbuf = pixbuf.scale_simple (400, 400, Gdk.InterpType.BILINEAR);
 
@@ -445,19 +445,19 @@ public class AppearanceView : Gtk.Box {
                 this.palette = palette;
 
                 if (palette.dominant_swatch != null) {
-                    Gdk.RGBA color = {palette.dominant_swatch.red, palette.dominant_swatch.green, palette.dominant_swatch.blue, 1};
-                    desktop.accent_color = {color.red, color.green, color.blue};
+                    Gdk.RGBA color = { palette.dominant_swatch.red, palette.dominant_swatch.green, palette.dominant_swatch.blue, 1 };
+                    desktop.accent_color = { color.red, color.green, color.blue };
                 } else {
-                    desktop.accent_color = {0.0, 0.0, 0.0};
+                    desktop.accent_color = { 0.0, 0.0, 0.0 };
                 }
 
-                tau_appearance_settings.set_string ("accent-color", makehex(desktop.accent_color.r, desktop.accent_color.g, desktop.accent_color.b));
+                tau_appearance_settings.set_string ("accent-color", makehex (desktop.accent_color.r, desktop.accent_color.g, desktop.accent_color.b));
             });
         } catch (Error e) {}
     }
 
     public string makehex (double red, double green, double blue) {
-        return "#" + "%02x%02x%02x".printf ((uint)red, (uint)green, (uint)blue);
+        return "#" + "%02x%02x%02x".printf ((uint) red, (uint) green, (uint) blue);
     }
 
     private class PrefersAccentColorButton : Gtk.CheckButton {
@@ -465,8 +465,8 @@ public class AppearanceView : Gtk.Box {
 
         public PrefersAccentColorButton (string color, Gtk.CheckButton? group_member = null) {
             Object (
-                color: color,
-                group: group_member
+                    color: color,
+                    group: group_member
             );
         }
 
@@ -480,28 +480,27 @@ public class AppearanceView : Gtk.Box {
                 toggled.connect (() => {
                     if (color == "purple") {
                         tau_appearance_settings.set_string ("accent-color", "purple");
-                     } else if (color == "pink") {
+                    } else if (color == "pink") {
                         tau_appearance_settings.set_string ("accent-color", "pink");
-                     } else if (color == "red") {
+                    } else if (color == "red") {
                         tau_appearance_settings.set_string ("accent-color", "red");
-                     } else if (color == "orange") {
+                    } else if (color == "orange") {
                         tau_appearance_settings.set_string ("accent-color", "orange");
-                     } else if (color == "yellow") {
+                    } else if (color == "yellow") {
                         tau_appearance_settings.set_string ("accent-color", "yellow");
-                     } else if (color == "green") {
+                    } else if (color == "green") {
                         tau_appearance_settings.set_string ("accent-color", "green");
-                     } else if (color == "mint") {
+                    } else if (color == "mint") {
                         tau_appearance_settings.set_string ("accent-color", "mint");
-                     } else if (color == "blue") {
+                    } else if (color == "blue") {
                         tau_appearance_settings.set_string ("accent-color", "blue");
-                     } else if (color == "mono") {
+                    } else if (color == "mono") {
                         tau_appearance_settings.set_string ("accent-color", "mono");
-                     } else if (color == "multi") {
+                    } else if (color == "multi") {
                         tau_appearance_settings.set_string ("accent-color", "multi");
-                     }
+                    }
                 });
             });
         }
     }
 }
-

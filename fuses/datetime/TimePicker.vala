@@ -18,6 +18,7 @@
  */
 public class DateTime.TimePicker : Gtk.Entry {
     public signal void time_changed ();
+
     public string format_12 { get; construct; }
     public string format_24 { get; construct; }
 
@@ -44,7 +45,6 @@ public class DateTime.TimePicker : Gtk.Entry {
             update_text (true);
             changing_time = false;
         }
-
     }
 
     private bool changing_time = false;
@@ -143,8 +143,8 @@ public class DateTime.TimePicker : Gtk.Entry {
 
         var focus_controller = new Gtk.EventControllerFocus ();
         var scroll_controller = new Gtk.EventControllerScroll (
-            Gtk.EventControllerScrollFlags.BOTH_AXES |
-            Gtk.EventControllerScrollFlags.DISCRETE
+                                                               Gtk.EventControllerScrollFlags.BOTH_AXES
+                                                               | Gtk.EventControllerScrollFlags.DISCRETE
         );
 
         add_controller (focus_controller);

@@ -98,7 +98,7 @@ public class Fusebox.FusesManager : GLib.Object {
     }
 
     public bool has_fuses () {
-        return fuses.length() != 0;
+        return fuses.length () != 0;
     }
 
     public unowned GLib.List<Fusebox.Fuse> get_fuses () {

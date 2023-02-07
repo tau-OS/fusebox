@@ -22,7 +22,7 @@ public class Bluetooth.MainView : He.Bin {
 
     public MainView (Services.ObjectManager manager) {
         Object (
-            manager: manager
+                manager: manager
         );
     }
 
@@ -79,7 +79,7 @@ public class Bluetooth.MainView : He.Bin {
         }
 
         /* Now retrieve finished, we can connect manager signals */
-       manager.device_added.connect ((device) => {
+        manager.device_added.connect ((device) => {
             var adapter = manager.get_adapter_from_path (device.adapter);
             var row = new DeviceRow (device, adapter);
             list_box.append (row);

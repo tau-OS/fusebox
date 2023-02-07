@@ -41,17 +41,16 @@ class Locale.LanguagePicker : He.Window {
     var listbox = new Gtk.ListBox () {
       margin_start = 18,
       margin_end = 18,
-
     };
     listbox.add_css_class ("content-list");
     foreach (var language in language_list) {
       listbox.append (new Locale.LocaleRow (language));
     }
     listbox.set_filter_func ((row) => {
-      return ((Locale.LocaleRow)row).locale.name.down ().contains (search_entry.text.down ());
+      return ((Locale.LocaleRow) row).locale.name.down ().contains (search_entry.text.down ());
     });
     listbox.set_sort_func ((row1, row2) => {
-      return ((Locale.LocaleRow)row1).locale.name.collate (((Locale.LocaleRow)row2).locale.name);
+      return ((Locale.LocaleRow) row1).locale.name.collate (((Locale.LocaleRow) row2).locale.name);
     });
     search_entry.changed.connect (() => {
       listbox.invalidate_filter ();

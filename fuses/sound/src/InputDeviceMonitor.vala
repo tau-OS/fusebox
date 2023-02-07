@@ -1,11 +1,11 @@
 public class Sound.InputDeviceMonitor : GLib.Object {
     public signal void update_fraction (float fraction);
+
     private PulseAudio.Stream steam;
     private unowned Device device;
     private bool allow_record = false;
 
     public InputDeviceMonitor () {
-
     }
 
     ~InputDeviceMonitor () {
@@ -60,13 +60,13 @@ public class Sound.InputDeviceMonitor : GLib.Object {
 
         var a = PulseAudio.Stream.BufferAttr () {
             maxlength = uint32.MAX,
-            fragsize = (uint32)sizeof (float)
+            fragsize = (uint32) sizeof (float)
         };
         steam.connect_record ("%u".printf (device.source_index),
-                                                a,
-                                                PulseAudio.Stream.Flags.DONT_MOVE |
-                                                PulseAudio.Stream.Flags.PEAK_DETECT |
-                                                PulseAudio.Stream.Flags.ADJUST_LATENCY);
+                              a,
+                              PulseAudio.Stream.Flags.DONT_MOVE
+                              | PulseAudio.Stream.Flags.PEAK_DETECT
+                              | PulseAudio.Stream.Flags.ADJUST_LATENCY);
     }
 
     public void set_device (Device device) {
@@ -79,7 +79,7 @@ public class Sound.InputDeviceMonitor : GLib.Object {
     }
 
     private void steam_read_callback (PulseAudio.Stream s, size_t nbytes) {
-        void *data;
+        void* data;
         if (s.peek (out data, out nbytes) < 0) {
             warning ("Failed to read data from stream");
             return;
