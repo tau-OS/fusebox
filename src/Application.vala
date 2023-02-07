@@ -40,7 +40,7 @@ namespace Fusebox {
         };
 
         public FuseboxApp () {
-            Object (application_id: "co.tauos.Fusebox");
+            Object (application_id: "com.fyralabs.Fusebox");
         }
 
         construct {
@@ -77,7 +77,7 @@ namespace Fusebox {
             accent_color.parse ("#828292");
             default_accent_color = He.Color.from_gdk_rgba (accent_color);
 
-            resource_base_path = "/co/tauos/Fusebox";
+            resource_base_path = "/com/fyralabs/Fusebox";
 
             base.startup ();
 
@@ -325,9 +325,9 @@ namespace Fusebox {
             var about = new He.AboutWindow (
                                             this.get_active_window (),
                                             "Fusebox",
-                                            "co.tauos.Fusebox",
+                                            "com.fyralabs.Fusebox",
                                             "0.1.0",
-                                            "co.tauos.Fusebox",
+                                            "com.fyralabs.Fusebox",
                                             "https://github.com/tau-os/fusebox/tree/main/po",
                                             "https://github.com/tau-os/fusebox/issues/new",
                                             "https://github.com/tau-os/fusebox",

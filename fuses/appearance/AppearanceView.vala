@@ -45,7 +45,7 @@ public class AppearanceView : Gtk.Box {
         };
         prefer_label.add_css_class ("cb-title");
 
-        var prefer_default_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/by-apps.svg") {
+        var prefer_default_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/by-apps.svg") {
             pixel_size = 64,
             hexpand = true,
             halign = Gtk.Align.CENTER
@@ -68,7 +68,7 @@ public class AppearanceView : Gtk.Box {
         prefer_default_radio.add_css_class ("image-button");
         prefer_default_radio.child = (prefer_default_grid);
 
-        var prefer_light_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/light.svg") {
+        var prefer_light_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/light.svg") {
             pixel_size = 64
         };
 
@@ -90,7 +90,7 @@ public class AppearanceView : Gtk.Box {
         prefer_light_radio.add_css_class ("image-button");
         prefer_light_radio.child = (prefer_light_grid);
 
-        var dark_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/dark.svg") {
+        var dark_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/dark.svg") {
             pixel_size = 64
         };
 
@@ -130,7 +130,7 @@ public class AppearanceView : Gtk.Box {
         };
         prefer_dm_label.add_css_class ("cb-title");
 
-        var prefer_soft_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/soft.svg") {
+        var prefer_soft_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/soft.svg") {
             pixel_size = 64
         };
         prefer_soft_image.add_css_class ("icon-dropshadow");
@@ -153,7 +153,7 @@ public class AppearanceView : Gtk.Box {
         prefer_soft_radio.add_css_class ("image-button");
         prefer_soft_radio.child = (prefer_soft_grid);
 
-        var prefer_medium_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/medium.svg") {
+        var prefer_medium_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/medium.svg") {
             pixel_size = 64
         };
         prefer_medium_image.add_css_class ("icon-dropshadow");
@@ -177,7 +177,7 @@ public class AppearanceView : Gtk.Box {
         prefer_medium_radio.add_css_class ("image-button");
         prefer_medium_radio.child = (prefer_medium_grid);
 
-        var prefer_harsh_image = new Gtk.Image.from_resource ("/co/tauos/Fusebox/Appearance/harsh.svg") {
+        var prefer_harsh_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/harsh.svg") {
             pixel_size = 64
         };
         prefer_harsh_image.add_css_class ("icon-dropshadow");

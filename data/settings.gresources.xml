@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/co/tauos/Fusebox">
+  <gresource prefix="/com/fyralabs/Fusebox">
     <file alias="style.css">style.css</file>
     <file alias="style-dark.css">style-dark.css</file>
   </gresource>
-  <gresource prefix="/co/tauos/Fusebox/Appearance">
+  <gresource prefix="/com/fyralabs/Fusebox/Appearance">
     <file alias="soft.svg">assets/soft.svg</file>
     <file alias="medium.svg">assets/medium.svg</file>
     <file alias="harsh.svg">assets/harsh.svg</file>
