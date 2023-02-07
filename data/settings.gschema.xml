@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-	<schema path="/co/tauos/Fusebox/" id="co.tauos.Fusebox">
+	<schema path="/com/fyralabs/Fusebox/" id="com.fyralabs.Fusebox">
 		<key type="b" name="wallpaper-accent">
 			<default>false</default>
 			<summary>Saves whether to use the wallpaper to accent or not</summary>

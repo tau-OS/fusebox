@@ -7,7 +7,7 @@ public class DateTime.Fuse : Fusebox.Fuse {
 
         Object (
                 category: Category.SYSTEM,
-                code_name: "co.tauos.Fusebox.DateTime",
+                code_name: "com.fyralabs.Fusebox.DateTime",
                 display_name: _("Date & Time"),
                 description: _("Setup time and date"),
                 icon: "settings-time-symbolic",

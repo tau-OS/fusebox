@@ -91,10 +91,10 @@ git submodule update --init --recursive
 %meson_install
 
 %files
-%{_bindir}/co.tauos.Fusebox
-%{_datadir}/applications/co.tauos.Fusebox.desktop
-%{_datadir}/glib-2.0/schemas/co.tauos.Fusebox.gschema.xml
-%{_datadir}/metainfo/co.tauos.Fusebox.appdata.xml
+%{_bindir}/com.fyralabs.Fusebox
+%{_datadir}/applications/com.fyralabs.Fusebox.desktop
+%{_datadir}/glib-2.0/schemas/com.fyralabs.Fusebox.gschema.xml
+%{_datadir}/metainfo/com.fyralabs.Fusebox.appdata.xml
 %{_libdir}/fusebox-1/personal/libfuse-appearance.so
 %{_libdir}/fusebox-1/system/libfuse-about.so
 %{_libdir}/fusebox-1/system/libfuse-accounts.so
@@ -106,8 +106,8 @@ git submodule update --init --recursive
 %{_libdir}/girepository-1.0/fusebox-1.typelib
 %{_libdir}/libfusebox-1.so
 %{_libdir}/libfusebox-1.so.1
-%{_datadir}/icons/hicolor/128x128/apps/co.tauos.Fusebox.svg
-%{_datadir}/icons/hicolor/128x128@2/apps/co.tauos.Fusebox.svg
+%{_datadir}/icons/hicolor/128x128/apps/com.fyralabs.Fusebox.svg
+%{_datadir}/icons/hicolor/128x128@2/apps/com.fyralabs.Fusebox.svg
 
 %files devel
 %{_datadir}/vala/vapi/fusebox-1.deps

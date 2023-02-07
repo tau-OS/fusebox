@@ -35,7 +35,7 @@ public class Sound.OutputPanel : Gtk.Grid {
         };
 
         var volume_settings_row = new He.MiniContentBlock () {
-            title =_("Volume"),
+            title = _("Volume"),
             hexpand = true
         };
 
@@ -50,7 +50,7 @@ public class Sound.OutputPanel : Gtk.Grid {
         volume_scale.add_mark (70, Gtk.PositionType.BOTTOM, _("Recommended"));
         volume_scale.add_mark (100, Gtk.PositionType.BOTTOM, _("100%"));
 
-        var settings = new GLib.Settings ("co.tauos.Fusebox");
+        var settings = new GLib.Settings ("com.fyralabs.Fusebox");
         if (settings.get_boolean ("show-audio-dialog")) {
             audio_alert_dialog_cb ();
         }
@@ -62,7 +62,7 @@ public class Sound.OutputPanel : Gtk.Grid {
         volume_box.set_parent (volume_settings_row);
 
         var balance_settings_row = new He.MiniContentBlock () {
-            title =_("Balance"),
+            title = _("Balance"),
             hexpand = true
         };
 
@@ -84,7 +84,7 @@ public class Sound.OutputPanel : Gtk.Grid {
         balance_box.set_parent (balance_settings_row);
 
         var alerts_settings_row = new He.MiniContentBlock () {
-            title =_("Event Alerts"),
+            title = _("Event Alerts"),
             subtitle = _("Event alerts occur when the system gives an alert"),
             hexpand = true
         };
@@ -105,7 +105,7 @@ public class Sound.OutputPanel : Gtk.Grid {
         alerts_box.set_parent (alerts_settings_row);
 
         var screen_reader_settings_row = new He.MiniContentBlock () {
-            title =_("Screen Reader"),
+            title = _("Screen Reader"),
             subtitle = _("Provide audio descriptions for items on the screen"),
             hexpand = true
         };
@@ -190,11 +190,11 @@ public class Sound.OutputPanel : Gtk.Grid {
     private void volume_scale_value_changed () {
         disconnect_signals ();
 
-        var settings = new GLib.Settings ("co.tauos.Fusebox");
+        var settings = new GLib.Settings ("com.fyralabs.Fusebox");
         if (settings.get_boolean ("show-audio-dialog")) {
             audio_alert_dialog_cb ();
         } else {
-            pam.change_device_volume (default_device, (float)volume_scale.get_value ());
+            pam.change_device_volume (default_device, (float) volume_scale.get_value ());
         }
 
         connect_signals ();
@@ -202,7 +202,7 @@ public class Sound.OutputPanel : Gtk.Grid {
 
     private void balance_scale_value_changed () {
         disconnect_signals ();
-        pam.change_device_balance (default_device, (float)balance_scale.get_value ());
+        pam.change_device_balance (default_device, (float) balance_scale.get_value ());
         connect_signals ();
     }
 
@@ -215,17 +215,17 @@ public class Sound.OutputPanel : Gtk.Grid {
     private void device_notify (ParamSpec pspec) {
         disconnect_signals ();
         switch (pspec.get_name ()) {
-            case "is-muted":
-                if (volume_switch.active == default_device.is_muted) {
-                    volume_switch.activate ();
-                }
-                break;
-            case "volume":
-                volume_scale.set_value (default_device.volume);
-                break;
-            case "balance":
-                balance_scale.set_value (default_device.balance);
-                break;
+        case "is-muted":
+            if (volume_switch.active == default_device.is_muted) {
+                volume_switch.activate ();
+            }
+            break;
+        case "volume":
+            volume_scale.set_value (default_device.volume);
+            break;
+        case "balance":
+            balance_scale.set_value (default_device.balance);
+            break;
         }
 
         connect_signals ();
@@ -249,19 +249,19 @@ public class Sound.OutputPanel : Gtk.Grid {
     }
 
     private void audio_alert_dialog_cb () {
-        var settings = new GLib.Settings ("co.tauos.Fusebox");
-        if (volume_scale.get_value () > (float)70.0) {
+        var settings = new GLib.Settings ("com.fyralabs.Fusebox");
+        if (volume_scale.get_value () > (float) 70.0) {
             var ok_button = new He.FillButton ("Understood");
 
             var volume_alert_dialog = new He.Dialog (
-                true,
-                ((He.ApplicationWindow)He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this)),
-                (_("Audio Volume Too High!")),
-                "",
-                (_("Volume above 70% can progressively damage your eardrums as you listen to audio.")),
-                "audio-volume-overamplified-symbolic",
-                ok_button,
-                null
+                                                     true,
+                                                     ((He.ApplicationWindow) He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this)),
+                                                     (_("Audio Volume Too High!")),
+                                                     "",
+                                                     (_("Volume above 70% can progressively damage your eardrums as you listen to audio.")),
+                                                     "audio-volume-overamplified-symbolic",
+                                                     ok_button,
+                                                     null
             );
 
             var volume_check = new Gtk.CheckButton () {
@@ -285,15 +285,15 @@ public class Sound.OutputPanel : Gtk.Grid {
             volume_alert_dialog.add (volume_check);
 
             ok_button.clicked.connect (() => {
-                if (volume_scale.get_value () > (float)70.0) {
-                    volume_scale.set_value ((float)69.0);
-                    pam.change_device_volume (default_device, (float)69.0);
+                if (volume_scale.get_value () > (float) 70.0) {
+                    volume_scale.set_value ((float) 69.0);
+                    pam.change_device_volume (default_device, (float) 69.0);
                 }
                 volume_alert_dialog.destroy ();
             });
 
             volume_alert_dialog.cancel_button.clicked.connect (() => {
-                pam.change_device_volume (default_device, (float)volume_scale.get_value ());
+                pam.change_device_volume (default_device, (float) volume_scale.get_value ());
                 volume_alert_dialog.destroy ();
             });
 

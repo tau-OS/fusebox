@@ -304,8 +304,8 @@ public class About.OSView : Gtk.Box {
         bug_button.clicked.connect (() => {
             try {
                 var appinfo = GLib.AppInfo.create_from_commandline (
-                                                                    "co.tauos.Mondai",
-                                                                    "co.tauos.Mondai",
+                                                                    "com.fyralabs.Mondai",
+                                                                    "com.fyralabs.Mondai",
                                                                     GLib.AppInfoCreateFlags.NONE
                 );
                 if (appinfo != null) {

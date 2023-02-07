@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>co.tauos.Fusebox</id>
-  <launchable type="desktop-id">co.tauos.Fusebox.desktop</launchable>
+  <id>com.fyralabs.Fusebox</id>
+  <launchable type="desktop-id">com.fyralabs.Fusebox.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <name>Fusebox</name>
@@ -16,7 +16,7 @@
   </screenshots>
   <content_rating type="oars-1.1" />
   <provides>
-    <binary>co.tauos.Fusebox</binary>
+    <binary>com.fyralabs.Fusebox</binary>
   </provides>
   <url type="homepage">https://tauos.co/</url>
   <url type="bugtracker">https://github.com/tau-os/fusebox/issues</url>

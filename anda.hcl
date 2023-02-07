@@ -4,6 +4,6 @@ project "fusebox" {
     }
 
     flatpak {
-        manifest = "co.tauos.Fusebox.json"
+        manifest = "com.fyralabs.Fusebox.json"
     }
 }

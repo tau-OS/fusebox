@@ -2,8 +2,8 @@
 Type=Application
 Name=Fusebox
 Comment=Change system and user settings
-Exec=co.tauos.Fusebox %u
-Icon=co.tauos.Fusebox
+Exec=com.fyralabs.Fusebox %u
+Icon=com.fyralabs.Fusebox
 Terminal=false
 StartupNotify=true
 Categories=GNOME;GTK;System;

@@ -40,7 +40,7 @@ public class Startup.Fuse : Fusebox.Fuse {
         settings.set ("startup", STARTUP);
         Object (
                 category: Category.SYSTEM,
-                code_name: "co.tauos.Fusebox.Startup",
+                code_name: "com.fyralabs.Fusebox.Startup",
                 display_name: _("App Autostart"),
                 description: _("Manage applications that start automatically"),
                 icon: "settings-applications-symbolic",

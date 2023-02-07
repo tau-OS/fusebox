@@ -9,7 +9,7 @@ public class About.Fuse : Fusebox.Fuse {
 
         Object (
                 category: Category.SYSTEM,
-                code_name: "co.tauos.Fusebox.About",
+                code_name: "com.fyralabs.Fusebox.About",
                 display_name: _("About"),
                 description: _("View OS information"),
                 icon: "settings-about-symbolic",

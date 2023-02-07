@@ -8,7 +8,7 @@ public class Locale.Fuse : Fusebox.Fuse {
 
         Object (
                 category: Category.PERSONAL,
-                code_name: "co.tauos.Fusebox.Locale",
+                code_name: "com.fyralabs.Fusebox.Locale",
                 display_name: _("Region & Locale"),
                 description: _("Change system locale"),
                 icon: "settings-region-symbolic",

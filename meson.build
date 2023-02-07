@@ -1,5 +1,5 @@
 project(
-    'co.tauos.Fusebox',
+    'com.fyralabs.Fusebox',
     'c', 'vala',
     version: '1.0.0',
 )
@@ -8,7 +8,7 @@ gnome = import('gnome')
 
 add_project_arguments([
         '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
-        '-DG_LOG_DOMAIN="co.tauos.Fusebox"',
+        '-DG_LOG_DOMAIN="com.fyralabs.Fusebox"',
         '-DGNOME_DESKTOP_USE_UNSTABLE_API',
     ],
     language: 'c'

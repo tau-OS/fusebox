@@ -16,7 +16,7 @@ public class Appearance.Fuse : Fusebox.Fuse {
 
         Object (
                 category: Category.PERSONAL,
-                code_name: "co.tauos.Fusebox.Appearance",
+                code_name: "com.fyralabs.Fusebox.Appearance",
                 display_name: _("Appearance"),
                 description: _("Choose an accent color and change wallpaper"),
                 icon: "settings-appearance-symbolic",

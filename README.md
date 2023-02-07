@@ -25,9 +25,9 @@ cd build
 ninja
 ```
 
-To install, use `ninja install` then execute with `co.tauos.Fusebox`
+To install, use `ninja install` then execute with `com.fyralabs.Fusebox`
 
 ```sh
 sudo ninja install
-co.tauos.Fusebox
+com.fyralabs.Fusebox
 ```

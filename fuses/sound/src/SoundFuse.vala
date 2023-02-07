@@ -12,7 +12,7 @@ public class Sound.Fuse : Fusebox.Fuse {
 
         Object (
                 category: Category.SYSTEM,
-                code_name: "co.tauos.Fusebox.Sound",
+                code_name: "com.fyralabs.Fusebox.Sound",
                 display_name: _("Sound"),
                 description: _("Change sound and microphone volume"),
                 icon: "settings-sound-symbolic",
