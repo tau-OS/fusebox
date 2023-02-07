@@ -56,7 +56,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     }
 
     static construct {
-        tau_appearance_settings = new GLib.Settings ("com.fyralabs.desktop.appearance");
+        tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
         settings = new GLib.Settings ("org.gnome.desktop.background");
     }
 
