@@ -442,18 +442,19 @@ public class AppearanceView : Gtk.Box {
 
             var celebi = new He.Ensor.Quantize.QuantizerCelebi ();
             var result = celebi.quantize (pixels, 128);
-            var ranked = He.Ensor.Score.score(result);
+            var score = new He.Ensor.Score ();
+            var ranked = score.score(result);
             var top = ranked.index (2);
 
-            print ("\n+--------------------------+\n");
-            print ("|THE FIRST FIVE COLORS ARE |\n");
-            print ("+--------------------------+\n");
-            print ("| #1 = #%x           |\n".printf (ranked.first ().data));
-            print ("| #2 = #%x           |\n".printf (top));
-            print ("| #3 = #%x           |\n".printf (ranked.index (3)));
-            print ("| #4 = #%x           |\n".printf (ranked.index (4)));
-            print ("| #5 = #%x           |\n".printf (ranked.index (5)));
-            print ("+--------------------------+\n");
+            print ("\n+---------------------------+\n");
+            print ("| THE FIRST FIVE COLORS ARE |\n");
+            print ("+---------------------------+\n");
+            print ("| #1 = #%x            |\n".printf (ranked.first ().data));
+            print ("| #2 = #%x            |\n".printf (top));
+            print ("| #3 = #%x            |\n".printf (ranked.index (3)));
+            print ("| #4 = #%x            |\n".printf (ranked.index (4)));
+            print ("| #5 = #%x            |\n".printf (ranked.index (5)));
+            print ("+---------------------------+\n");
 
             if (top != 0) {
                 He.Color.RGBColor color = He.Color.from_hex ("#" + "%x".printf (top).substring (2, 6));
