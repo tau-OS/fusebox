@@ -440,9 +440,9 @@ public class AppearanceView : Gtk.Box {
 
             var pixels = pixels_to_ints (pixbuf.get_pixels (), pixbuf.has_alpha);
 
-            var celebi = new He.Ensor.Quantize.QuantizerCelebi ();
+            var celebi = new He.QuantizerCelebi ();
             var result = celebi.quantize (pixels, 128);
-            var score = new He.Ensor.Score ();
+            var score = new He.Score ();
             var ranked = score.score(result);
             var top = ranked.index (2);
 
