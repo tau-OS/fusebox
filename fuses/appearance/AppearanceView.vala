@@ -438,11 +438,27 @@ public class AppearanceView : Gtk.Box {
             var file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
             var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
 
-            var pixels = pixels_to_ints (pixbuf.get_pixels (), pixbuf.has_alpha);
+            int[] colors = {};
+            He.Color.RGBColor[] list = {};
+            int i = 0;
+            int count = pixbuf.get_pixels ().length;
+            while (i < count) {
+                int offset = i;
+                uint8 red = pixbuf.get_pixels ()[offset];
+                uint8 green = pixbuf.get_pixels ()[offset + 1];
+                uint8 blue = pixbuf.get_pixels ()[offset + 2];
 
-            var celebi = new He.Ensor.Quantize.QuantizerCelebi ();
-            var result = celebi.quantize (pixels, 128);
-            var score = new He.Ensor.Score ();
+                list += He.Color.from_hex(makehex (red, green, blue));
+                i++ ;
+            }
+
+            foreach (var c in list) {
+                colors += He.Color.to_argb_int (c);
+            }
+
+            var celebi = new He.QuantizerCelebi ();
+            var result = celebi.quantize (colors, 128);
+            var score = new He.Score ();
             var ranked = score.score(result);
             var top = ranked.index (2);
 
@@ -473,33 +489,8 @@ public class AppearanceView : Gtk.Box {
         } catch (Error e) {}
     }
 
-    private int[] pixels_to_ints (uint8[] pixels, bool has_alpha) {
-        int[] list = {};
-
-        int factor;
-        if (has_alpha) {
-            factor = 4;
-        } else {
-            factor = 3;
-        }
-
-        int i = 0;
-        int count = pixels.length / factor;
-        while (i < count) {
-            int offset = i * factor;
-            uint8 red = pixels[offset];
-            uint8 green = pixels[offset + 1];
-            uint8 blue = pixels[offset + 2];
-
-            He.Color.RGBColor color = {red, green, blue};
-            list += (He.Color.to_argb_int (color));
-            i += 6;
-        }
-        return list;
-    }
-
     public string makehex (double red, double green, double blue) {
-        return "#" + "%02x%02x%02x".printf ((uint) red, (uint) green, (uint) blue);
+        return "#%02x%02x%02x".printf ((uint) red, (uint) green, (uint) blue);
     }
 
     private class PrefersAccentColorButton : Gtk.CheckButton {
