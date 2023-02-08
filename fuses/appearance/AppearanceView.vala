@@ -438,7 +438,7 @@ public class AppearanceView : Gtk.Box {
             var file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
             var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
 
-            var pixels = pixels_to_ints (pixbuf.get_pixels (), pixbuf.has_alpha);
+            var pixels = pixels_to_ints (pixbuf.get_pixels_with_length (), pixbuf.has_alpha);
 
             var celebi = new He.QuantizerCelebi ();
             var result = celebi.quantize (pixels, 128);
@@ -463,7 +463,7 @@ public class AppearanceView : Gtk.Box {
                 desktop.accent_color = { 0.0, 0.0, 0.0 };
             }
 
-            tau_appearance_settings.set_string ("accent-color", 
+            tau_appearance_settings.set_string ("accent-color",
                                                 makehex (desktop.accent_color.r,
                                                                              desktop.accent_color.g,
                                                                              desktop.accent_color.b
