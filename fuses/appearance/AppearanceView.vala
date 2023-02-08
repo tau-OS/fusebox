@@ -20,7 +20,6 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton prefer_medium_radio;
     private Gtk.ToggleButton prefer_harsh_radio;
     private Gtk.Box accent_box;
-    private Appearance.Utils.Palette palette;
     private He.Desktop desktop = new He.Desktop ();
 
     public Fusebox.Fuse fuse { get; construct set; }
@@ -438,22 +437,64 @@ public class AppearanceView : Gtk.Box {
         try {
             var file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
             var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
-            pixbuf = pixbuf.scale_simple (400, 400, Gdk.InterpType.BILINEAR);
 
-            var palette = new Appearance.Utils.Palette.from_pixbuf (pixbuf);
-            palette.generate_async.begin (() => {
-                this.palette = palette;
+            var pixels = pixels_to_ints (pixbuf.get_pixels (), pixbuf.has_alpha);
 
-                if (palette.dominant_swatch != null) {
-                    Gdk.RGBA color = { palette.dominant_swatch.red, palette.dominant_swatch.green, palette.dominant_swatch.blue, 1 };
-                    desktop.accent_color = { color.red, color.green, color.blue };
-                } else {
-                    desktop.accent_color = { 0.0, 0.0, 0.0 };
-                }
+            var celebi = new He.Ensor.Quantize.QuantizerCelebi ();
+            var result = celebi.quantize (pixels, 128);
+            var ranked = He.Ensor.Score.score(result);
+            var top = ranked.index (2);
 
-                tau_appearance_settings.set_string ("accent-color", makehex (desktop.accent_color.r, desktop.accent_color.g, desktop.accent_color.b));
-            });
+            print ("\n+--------------------------+\n");
+            print ("|THE FIRST FIVE COLORS ARE |\n");
+            print ("+--------------------------+\n");
+            print ("| #1 = #%x           |\n".printf (ranked.first ().data));
+            print ("| #2 = #%x           |\n".printf (top));
+            print ("| #3 = #%x           |\n".printf (ranked.index (3)));
+            print ("| #4 = #%x           |\n".printf (ranked.index (4)));
+            print ("| #5 = #%x           |\n".printf (ranked.index (5)));
+            print ("+--------------------------+\n");
+
+            if (top != 0) {
+                He.Color.RGBColor color = He.Color.from_hex ("#" + "%x".printf (top).substring (2, 6));
+                desktop.accent_color = { color.r, color.g, color.b };
+            } else {
+                desktop.accent_color = { 0.0, 0.0, 0.0 };
+            }
+
+            tau_appearance_settings.set_string ("accent-color", 
+                                                makehex (desktop.accent_color.r,
+                                                                             desktop.accent_color.g,
+                                                                             desktop.accent_color.b
+                                                               )
+                                               );
+
         } catch (Error e) {}
+    }
+
+    private int[] pixels_to_ints (uint8[] pixels, bool has_alpha) {
+        int[] list = {};
+
+        int factor;
+        if (has_alpha) {
+            factor = 4;
+        } else {
+            factor = 3;
+        }
+
+        int i = 0;
+        int count = pixels.length / factor;
+        while (i < count) {
+            int offset = i * factor;
+            uint8 red = pixels[offset];
+            uint8 green = pixels[offset + 1];
+            uint8 blue = pixels[offset + 2];
+
+            He.Color.RGBColor color = {red, green, blue};
+            list += (He.Color.to_argb_int (color));
+            i += 6;
+        }
+        return list;
     }
 
     public string makehex (double red, double green, double blue) {
