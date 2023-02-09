@@ -491,8 +491,8 @@ public class AppearanceView : Gtk.Box {
             uint8 green = pixels[offset + 1];
             uint8 blue = pixels[offset + 2];
 
-            He.Color.RGBColor color = {red, green, blue};
-            list += (He.Color.to_argb_int (color));
+            int a =  He.Color.to_argb_int(He.Color.from_hex ("#ff%x%x%x".printf (red, green,blue)));
+            list += a;
             i += 6;
         }
         return list;
