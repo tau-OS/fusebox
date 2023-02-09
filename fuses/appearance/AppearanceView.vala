@@ -441,7 +441,7 @@ public class AppearanceView : Gtk.Box {
             var pixels = pixels_to_ints (pixbuf.get_pixels_with_length ());
 
             var celebi = new He.QuantizerCelebi ();
-            var result = celebi.quantize ((int[])pixels, 128);
+            var result = celebi.quantize (pixels, 128);
             var score = new He.Score ();
             var ranked = score.score(result);
             var top = ranked.first ().data;
@@ -473,11 +473,11 @@ public class AppearanceView : Gtk.Box {
         } catch (Error e) {}
     }
 
-    private int64[] pixels_to_ints (uint8[] pixels) {
-        int64[] list = {};
+    private int[] pixels_to_ints (uint8[] pixels) {
+        int[] list = {};
 
         for (int i = 0; i < pixels.length; i += 4) {
-            var opaqueBlack = 0xff000000;
+            var opaqueBlack = (int)0xff000000;
             var color = opaqueBlack | (pixels[i] << 16) | (pixels[i + 1] << 8) | pixels[i + 2];
             list += color;
         }
