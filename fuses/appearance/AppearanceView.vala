@@ -438,10 +438,10 @@ public class AppearanceView : Gtk.Box {
             var file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
             var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
 
-            var pixels = pixels_to_ints (pixbuf.get_pixels_with_length (), pixbuf.has_alpha);
+            var pixels = pixels_to_ints (pixbuf.get_pixels_with_length ());
 
             var celebi = new He.QuantizerCelebi ();
-            var result = celebi.quantize (pixels, 128);
+            var result = celebi.quantize ((int[])pixels, 128);
             var score = new He.Score ();
             var ranked = score.score(result);
             var top = ranked.index (2);
@@ -457,7 +457,7 @@ public class AppearanceView : Gtk.Box {
             print ("+---------------------------+\n");
 
             if (top != 0) {
-                He.Color.RGBColor color = He.Color.from_hex ("#" + "%x".printf (top).substring (2, 6));
+                He.Color.RGBColor color = He.Color.from_argb_int (top);
                 desktop.accent_color = { color.r, color.g, color.b };
             } else {
                 desktop.accent_color = { 0.0, 0.0, 0.0 };
@@ -473,28 +473,15 @@ public class AppearanceView : Gtk.Box {
         } catch (Error e) {}
     }
 
-    private int[] pixels_to_ints (uint8[] pixels, bool has_alpha) {
-        int[] list = {};
+    private int64[] pixels_to_ints (uint8[] pixels) {
+        int64[] list = {};
 
-        int factor;
-        if (has_alpha) {
-            factor = 4;
-        } else {
-            factor = 3;
+        for (int i = 0; i < pixels.length; i += 4) {
+            var opaqueBlack = 0xff000000;
+            var color = opaqueBlack | (pixels[i] << 16) | (pixels[i + 1] << 8) | pixels[i + 2];
+            list += color;
         }
 
-        int i = 0;
-        int count = pixels.length / factor;
-        while (i < count) {
-            int offset = i * factor;
-            uint8 red = pixels[offset];
-            uint8 green = pixels[offset + 1];
-            uint8 blue = pixels[offset + 2];
-
-            int a =  He.Color.to_argb_int(He.Color.from_hex ("#%x%x%x".printf (red, green, blue)));
-            list += a;
-            i += 6;
-        }
         return list;
     }
 
