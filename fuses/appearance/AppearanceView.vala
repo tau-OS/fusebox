@@ -444,13 +444,13 @@ public class AppearanceView : Gtk.Box {
             var result = celebi.quantize ((int[])pixels, 128);
             var score = new He.Score ();
             var ranked = score.score(result);
-            var top = ranked.index (2);
+            var top = ranked.first ().data);
 
             print ("\n+---------------------------+\n");
             print ("| THE FIRST FIVE COLORS ARE |\n");
             print ("+---------------------------+\n");
-            print ("| #1 = #%x            |\n".printf (ranked.first ().data));
-            print ("| #2 = #%x            |\n".printf (top));
+            print ("| #1 = #%x            |\n".printf (top);
+            print ("| #2 = #%x            |\n".printf (ranked.index (2)));
             print ("| #3 = #%x            |\n".printf (ranked.index (3)));
             print ("| #4 = #%x            |\n".printf (ranked.index (4)));
             print ("| #5 = #%x            |\n".printf (ranked.index (5)));
