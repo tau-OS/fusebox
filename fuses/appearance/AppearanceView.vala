@@ -449,7 +449,7 @@ public class AppearanceView : Gtk.Box {
             print ("\n+---------------------------+\n");
             print ("| THE FIRST FIVE COLORS ARE |\n");
             print ("+---------------------------+\n");
-            print ("| #1 = #%x            |\n".printf (top);
+            print ("| #1 = #%x            |\n".printf (top));
             print ("| #2 = #%x            |\n".printf (ranked.index (2)));
             print ("| #3 = #%x            |\n".printf (ranked.index (3)));
             print ("| #4 = #%x            |\n".printf (ranked.index (4)));
