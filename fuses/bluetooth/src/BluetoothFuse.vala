@@ -27,7 +27,7 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
 
         Object (
                 category: Category.NETWORK,
-                code_name: "co.tauos.Fusebox.Bluetooth",
+                code_name: "com.fyralabs.Fusebox.Bluetooth",
                 display_name: _("Bluetooth"),
                 description: _("Configure Bluetooth Settings"),
                 icon: "settings-bluetooth-symbolic",

@@ -32,7 +32,7 @@ public class AppearanceView : Gtk.Box {
     }
 
     static construct {
-        tau_appearance_settings = new GLib.Settings ("co.tauos.desktop.appearance");
+        tau_appearance_settings = new GLib.Settings ("com.fyralabs.desktop.appearance");
         fusebox_appearance_settings = new GLib.Settings ("com.fyralabs.Fusebox");
         interface_settings = new GLib.Settings ("org.gnome.desktop.interface");
         bg_settings = new GLib.Settings ("org.gnome.desktop.background");

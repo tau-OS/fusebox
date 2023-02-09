@@ -8,7 +8,7 @@ public class Accounts.Fuse : Fusebox.Fuse {
 
         Object (
                 category: Category.PERSONAL,
-                code_name: "co.tauos.Fusebox.Accounts",
+                code_name: "com.fyralabs.Fusebox.Accounts",
                 display_name: _("Accounts"),
                 description: _("Manage user accounts"),
                 icon: "settings-users-symbolic",
