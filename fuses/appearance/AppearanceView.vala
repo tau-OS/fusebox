@@ -444,7 +444,7 @@ public class AppearanceView : Gtk.Box {
             var result = celebi.quantize ((int[])pixels, 128);
             var score = new He.Score ();
             var ranked = score.score(result);
-            var top = ranked.first ().data);
+            var top = ranked.first ().data;
 
             print ("\n+---------------------------+\n");
             print ("| THE FIRST FIVE COLORS ARE |\n");
