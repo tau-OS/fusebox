@@ -446,13 +446,9 @@ public class AppearanceView : Gtk.Box {
             var top = ranked.first ().data;
 
             print ("\n+---------------------------+\n");
-            print ("| THE FIRST FIVE COLORS ARE |\n");
+            print ("| THE CHOSEN ACCENTCOLOR IS |\n");
             print ("+---------------------------+\n");
             print ("| #1 = #%x            |\n".printf (top));
-            print ("| #2 = #%x            |\n".printf (ranked.index (2)));
-            print ("| #3 = #%x            |\n".printf (ranked.index (3)));
-            print ("| #4 = #%x            |\n".printf (ranked.index (4)));
-            print ("| #5 = #%x            |\n".printf (ranked.index (5)));
             print ("+---------------------------+\n");
 
             if (top != 0) {
@@ -476,7 +472,7 @@ public class AppearanceView : Gtk.Box {
         int[] list = {};
 
         for (int i = 0; i < pixels.length; i += 4) {
-            var opaqueBlack = (255 << 24);
+            var opaqueBlack = (0x0ff << 24);
             var color = opaqueBlack | (pixels[i] << 16) | (pixels[i + 1] << 8) | pixels[i + 2];
             list += color;
         }
