@@ -439,7 +439,6 @@ public class AppearanceView : Gtk.Box {
             var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
 
             var pixels = pixels_to_ints (pixbuf.get_pixels_with_length ());
-
             var celebi = new He.QuantizerCelebi ();
             var result = celebi.quantize (pixels, 128);
             var score = new He.Score ();
