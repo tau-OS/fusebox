@@ -472,7 +472,7 @@ public class AppearanceView : Gtk.Box {
         int[] list = {};
 
         for (int i = 0; i < pixels.length; i += 4) {
-            var opaqueBlack = (0x0ff << 24);
+            var opaqueBlack = (255 << 24);
             var color = opaqueBlack | (pixels[i] << 16) | (pixels[i + 1] << 8) | pixels[i + 2];
             list += color;
         }
