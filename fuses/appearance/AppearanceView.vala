@@ -445,8 +445,18 @@ public class AppearanceView : Gtk.Box {
             var ranked = score.score(result);
             var top = ranked.first ().data;
 
+            print ("\n+---------------------------+\n");
+            print ("| THE FIRST FIVE COLORS ARE |\n");
+            print ("+---------------------------+\n");
+            print ("| #1 = #%x            |\n".printf (top));
+            print ("| #2 = #%x            |\n".printf (ranked.index (2)));
+            print ("| #3 = #%x            |\n".printf (ranked.index (3)));
+            print ("| #4 = #%x            |\n".printf (ranked.index (4)));
+            print ("| #5 = #%x            |\n".printf (ranked.index (5)));
+            print ("+---------------------------+\n");
+
             if (top != 0) {
-                He.Color.RGBColor color = He.Color.from_argb_int (top);
+                He.Color.RGBColor color = He.Color.from_hex ("#" + "%x".printf (top));
                 desktop.accent_color = { color.r, color.g, color.b };
             } else {
                 desktop.accent_color = { 0.0, 0.0, 0.0 };
