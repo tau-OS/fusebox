@@ -34,14 +34,14 @@ public class Bluetooth.MainView : He.Bin {
         };
         empty_alert.action_button.visible = false;
 
-        list_box = new Gtk.ListBox ();
+        list_box = new Gtk.ListBox () {
+            hexpand = true
+        };
         list_box.add_css_class ("content-list");
         list_box.set_sort_func ((Gtk.ListBoxSortFunc) compare_rows);
         list_box.set_header_func ((Gtk.ListBoxUpdateHeaderFunc) title_rows);
         list_box.set_placeholder (empty_alert);
         list_box.selection_mode = Gtk.SelectionMode.NONE;
-        list_box.margin_start = 18;
-        list_box.margin_end = 18;
 
         var scrolled = new Gtk.ScrolledWindow () {
             child = list_box,

@@ -17,7 +17,7 @@
  */
 public class Bluetooth.Fuse : Fusebox.Fuse {
     private Gtk.Grid main_grid;
-    private Gtk.Switch status_switch;
+    private He.SwitchBar status_switch;
     private He.AppBar appbar;
     private Services.ObjectManager manager;
 
@@ -65,26 +65,17 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
             var main_view = new MainView (manager);
             main_view.quit_fuse.connect (() => hidden ());
 
-            status_switch = new Gtk.Switch () {
+            status_switch = new He.SwitchBar () {
                 hexpand = true,
-                halign = Gtk.Align.END
+                title = (_("Bluetooth"))
             };
-            status_switch.active = manager.is_powered;
-            status_switch.notify["active"].connect (() => {
-                manager.set_global_state.begin (status_switch.active);
+            status_switch.main_switch.active = manager.is_powered;
+            status_switch.main_switch.notify["active"].connect (() => {
+                manager.set_global_state.begin (status_switch.main_switch.active);
             });
 
-            var view_label = new Gtk.Label ("Bluetooth") {
-                halign = Gtk.Align.START
-            };
-            view_label.add_css_class ("view-title");
-
-            var view_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-            view_box.append (view_label);
-            view_box.append (status_switch);
-
             appbar = new He.AppBar () {
-                viewtitle_widget = view_box,
+                viewtitle_widget = status_switch,
                 show_back = false,
                 hexpand = true,
             };
@@ -132,11 +123,11 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
         var powered = manager.is_powered;
         if (powered && manager.discoverable) {
             // TRANSLATORS: \"%s\" represents the name of the adapter
-            appbar.viewsubtitle_label = _("Now discoverable as \"%s\".").printf (name ?? _("Unknown"));
+            status_switch.subtitle = _("Now discoverable as \"%s\".").printf (name ?? _("Unknown"));
         } else if (!powered) {
-            appbar.viewsubtitle_label = _("Not discoverable while Bluetooth is powered off.");
+            status_switch.subtitle = _("Not discoverable while Bluetooth is powered off.");
         } else {
-            appbar.viewsubtitle_label = _("Not discoverable.");
+            status_switch.subtitle = _("Not discoverable.");
         }
     }
 }
