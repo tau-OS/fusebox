@@ -115,3 +115,58 @@ spinbutton.flat {
   background: none;
   outline: none;
 }
+
+.card-option {
+  border-radius: 8px;
+  background: none;
+  color: alpha(@view_fg_color, 0.87);
+  box-shadow: inset 0 0 0 1px @borders;
+  padding: 18px;
+}
+
+.card-option image {
+  color: alpha(@view_fg_color, 0.87);
+}
+
+.card-option label:not(.cb-title) {
+  font-weight: 500;
+}
+
+.card-option:hover {
+  background: linear-gradient(0deg, alpha(@success_bg_color, 0.08), alpha(@success_bg_color, 0.08)), image(@view_bg_color);
+  color: @success_color;
+  box-shadow: inset 0 0 0 1px @success_color;
+}
+
+.card-option:hover image {
+  color: @success_color;
+}
+
+.card-option:active {
+  background: linear-gradient(0deg, alpha(@success_bg_color, 0.05), alpha(@success_bg_color, 0.05)), image(@view_bg_color);
+  color: @success_color;
+  box-shadow: inset 0 0 0 1px @success_color;
+}
+
+.card-option:active image {
+  color: @success_color;
+}
+
+.card-option:active radio {
+  background: @success_color;
+}
+
+
+.card-option:checked {
+  background: linear-gradient(0deg, alpha(@success_bg_color, 0.11), alpha(@success_bg_color, 0.11)), image(@view_bg_color);
+  color: @success_color;
+  box-shadow: inset 0 0 0 1px @success_color;
+}
+
+.card-option:checked image {
+  color: @success_color;
+}
+
+.card-option:checked radio {
+  background: @success_color;
+}

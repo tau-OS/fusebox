@@ -12,4 +12,8 @@
     <file alias="dark.svg">assets/dark.svg</file>
     <file alias="by-apps.svg">assets/by-apps.svg</file>
   </gresource>
+  <gresource prefix="/com/fyralabs/Fusebox/icons">
+    <file alias="scalable/actions/default-scrolling-symbolic.svg">icons/hicolor/scalable/actions/default-scrolling-symbolic.svg</file>
+    <file alias="scalable/actions/natural-scrolling-symbolic.svg">icons/hicolor/scalable/actions/natural-scrolling-symbolic.svg</file>
+  </gresource>
 </gresources>
