@@ -36,6 +36,7 @@ public class Mouse.Fuse : Fusebox.Fuse {
     public override Gtk.Widget get_widget () {
         if (main_grid == null) {
             var mouse_view = new MouseView ();
+            var touchpad_view = new TouchpadView ();
 
             stack = new Gtk.Stack () {
                 margin_bottom = 24,
@@ -47,6 +48,7 @@ public class Mouse.Fuse : Fusebox.Fuse {
                 stack = stack
             };
             stack.add_titled (mouse_view, "mouse", _("Mouse"));
+            stack.add_titled (touchpad_view, "touchpad", _("Touchpad"));
 
             var appbar = new He.AppBar () {
                 viewtitle_widget = stack_switcher,
@@ -74,6 +76,9 @@ public class Mouse.Fuse : Fusebox.Fuse {
 
     public override void search_callback (string location) {
         switch (location) {
+            case "touchpad":
+                stack.set_visible_child_name ("touchpad");
+                break;
             case "mouse":
             default:
                 stack.set_visible_child_name ("mouse");

@@ -13,7 +13,9 @@
     <file alias="by-apps.svg">assets/by-apps.svg</file>
   </gresource>
   <gresource prefix="/com/fyralabs/Fusebox/icons">
-    <file alias="scalable/actions/default-scrolling-symbolic.svg">icons/hicolor/scalable/actions/default-scrolling-symbolic.svg</file>
-    <file alias="scalable/actions/natural-scrolling-symbolic.svg">icons/hicolor/scalable/actions/natural-scrolling-symbolic.svg</file>
+    <file alias="scalable/actions/default-scroll-symbolic.svg">icons/hicolor/scalable/actions/default-scroll-symbolic.svg</file>
+    <file alias="scalable/actions/natural-scroll-symbolic.svg">icons/hicolor/scalable/actions/natural-scroll-symbolic.svg</file>
+    <file alias="scalable/actions/default-touch-scroll-symbolic.svg">icons/hicolor/scalable/actions/default-touch-scroll-symbolic.svg</file>
+    <file alias="scalable/actions/natural-touch-scroll-symbolic.svg">icons/hicolor/scalable/actions/natural-touch-scroll-symbolic.svg</file>
   </gresource>
 </gresources>

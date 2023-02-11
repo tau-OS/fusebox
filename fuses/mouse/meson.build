@@ -1,6 +1,7 @@
 shared_module('fuse-mouse',
     'MouseFuse.vala',
     'MouseView.vala',
+    'TouchpadView.vala',
 
     dependencies: [
         meson.get_compiler('vala').find_library('posix'),
