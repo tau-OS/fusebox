@@ -1,35 +1,16 @@
 public class Mouse.TouchpadView : Gtk.Box {
     private static GLib.Settings touchpad_settings;
+    private Gtk.Box main_box;
 
     static construct {
         touchpad_settings = new GLib.Settings ("org.gnome.desktop.peripherals.touchpad");
     }
 
     construct {
-        var touchpad_left = new Gtk.ToggleButton () {
-            label = (_("Left"))
+        var touchpad_enable_box = new He.SwitchBar () {
+            title = (_("Touchpad")),
+            sensitive_widget = main_box
         };
-        var touchpad_right = new Gtk.ToggleButton () {
-            label = (_("Right")),
-            group = touchpad_left
-        };
-
-        var primary_button_choice = new He.SegmentedButton () {
-            valign = Gtk.Align.CENTER
-        };
-
-        if (Gtk.StateFlags.DIR_LTR in get_state_flags ()) {
-            primary_button_choice.append (touchpad_left);
-            primary_button_choice.append (touchpad_right);
-        } else {
-            primary_button_choice.append (touchpad_right);
-            primary_button_choice.append (touchpad_left);
-        }
-
-        var primary_button_box = new He.SettingsRow () {
-            title = (_("Primary Button"))
-        };
-        primary_button_box.primary_button = (He.Button)primary_button_choice;
 
         var pointer_speed_adjustment = new Gtk.Adjustment (0, -1, 1, 0.1, 0, 0);
 
@@ -144,36 +125,33 @@ public class Mouse.TouchpadView : Gtk.Box {
         main_scrolling_box.append (scrolling_box);
         main_scrolling_box.add_css_class ("mini-content-block");
 
-        var touchpad_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        touchpad_box.append (primary_button_box);
-        touchpad_box.append (pointer_speed_box);
-        touchpad_box.append (pointer_acceleration_box);
-        touchpad_box.append (main_scrolling_box);
+        main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+            sensitive = touchpad_enable_box.main_switch.active
+        };
+        main_box.append (pointer_speed_box);
+        main_box.append (pointer_acceleration_box);
+        main_box.append (main_scrolling_box);
+
+        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        box.append (touchpad_enable_box);
+        box.append (main_box);
 
         var clamp = new Bis.Latch () {
             hexpand = true
         };
 
-        clamp.set_child (touchpad_box);
+        clamp.set_child (box);
         this.append (clamp);
         orientation = Gtk.Orientation.VERTICAL;
 
-        if (touchpad_settings.get_boolean ("left-handed")) {
-            touchpad_right.active = true;
-        } else {
-            touchpad_left.active = true;
-        }
-
-        touchpad_left.toggled.connect (() => {
-            touchpad_settings.set_boolean ("left-handed", false);
-            touchpad_right.active = false;
+        touchpad_enable_box.main_switch.notify["active"].connect (() => {
+            if (touchpad_enable_box.main_switch.active) {
+                main_box.sensitive = true;
+            } else {
+                main_box.sensitive = false;
+            }
         });
-
-        touchpad_right.toggled.connect (() => {
-            touchpad_settings.set_boolean ("left-handed", true);
-            touchpad_left.active = false;
-        });
-
+        touchpad_settings.bind ("send-events", touchpad_enable_box.main_switch, "active", GLib.SettingsBindFlags.DEFAULT);
         touchpad_settings.bind ("speed", pointer_speed_scale, "value", GLib.SettingsBindFlags.DEFAULT);
 
         switch (touchpad_settings.get_enum ("accel-profile")) {

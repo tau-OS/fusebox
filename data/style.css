@@ -172,5 +172,32 @@ spinbutton.flat {
 .card-option:checked radio:checked {
   background: @success_color;
   color: @success_fg_color;
-  box-shadow: none;
+  box-shadow: inset 0 0 0 1px @success_color;
+}
+
+.card-option:disabled {
+  background: alpha(@view_fg_color, 0.12);
+  color: alpha(@view_fg_color, 0.38);
+  box-shadow: inset 0 0 0 1px alpha(@view_fg_color, 0.38);
+}
+.mini-content-block switch:disabled {
+  border: 2px solid alpha(@view_fg_color, 0.38);
+}
+
+.mini-content-block switch:checked > slider:disabled {
+  border: 5px solid alpha(@view_fg_color, 0.38);
+  background: alpha(@view_fg_color, 0.38);
+}
+.card-option:disabled image {
+  color: alpha(@view_fg_color, 0.38);
+}
+.card-option:disabled radio {
+  background: alpha(@view_fg_color, 0.12);
+  color: alpha(@view_fg_color, 0.38);
+  box-shadow: inset 0 0 0 1px alpha(@view_fg_color, 0.38);
+}
+.card-option:checked:disabled radio:checked {
+  background: alpha(@view_fg_color, 0.12);
+  color: alpha(@view_fg_color, 0.38);
+  box-shadow: inset 0 0 0 1px alpha(@view_fg_color, 0.38);
 }
