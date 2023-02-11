@@ -152,8 +152,10 @@ spinbutton.flat {
   color: @success_color;
 }
 
-.card-option:active radio {
+.card-option:active radio:checked {
   background: @success_color;
+  color: @success_fg_color;
+  box-shadow: none;
 }
 
 
@@ -167,6 +169,8 @@ spinbutton.flat {
   color: @success_color;
 }
 
-.card-option:checked radio {
+.card-option:checked radio:checked {
   background: @success_color;
+  color: @success_fg_color;
+  box-shadow: none;
 }
