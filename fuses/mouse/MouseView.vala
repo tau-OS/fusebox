@@ -204,13 +204,13 @@ public class Mouse.MouseView : Gtk.Box {
         }
 
         natural_scroll.toggled.connect (() => {
-            mouse_settings.set_boolean ("natural-scroll", false);
+            mouse_settings.set_boolean ("natural-scroll", true);
             default_scroll.active = false;
             default_check.active = false;
         });
 
         default_scroll.toggled.connect (() => {
-            mouse_settings.set_boolean ("natural-scroll", true);
+            mouse_settings.set_boolean ("natural-scroll", false);
             natural_scroll.active = false;
             natural_check.active = false;
         });
