@@ -438,11 +438,11 @@ public class AppearanceView : Gtk.Box {
             var file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
             var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
 
-            var pixels = pixels_to_ints (pixbuf.get_pixels_with_length ());
+            var pixels = yield pixels_to_ints (pixbuf.get_pixels_with_length ());
             var celebi = new He.QuantizerCelebi ();
-            var result = celebi.quantize.begin (pixels, 128);
+            var result = yield celebi.quantize (pixels, 128);
             var score = new He.Score ();
-            var ranked = score.score.begin (result);
+            var ranked = yield score.score (result);
             var top = ranked.first ().data;
 
             print ("\n+---------------------------+\n");
