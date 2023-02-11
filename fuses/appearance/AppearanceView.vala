@@ -438,11 +438,11 @@ public class AppearanceView : Gtk.Box {
             var file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
             var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
 
-            var pixels = yield pixels_to_ints (pixbuf.get_pixels_with_length ());
+            var pixels = pixels_to_ints (pixbuf.get_pixels_with_length ());
             var celebi = new He.QuantizerCelebi ();
-            var result = yield celebi.quantize (pixels, 128);
+            var result = celebi.quantize (pixels, 128);
             var score = new He.Score ();
-            var ranked = yield score.score (result);
+            var ranked = score.score (result);
             var top = ranked.first ().data;
 
             print ("\n+---------------------------+\n");
@@ -468,7 +468,7 @@ public class AppearanceView : Gtk.Box {
         } catch (Error e) {}
     }
 
-    private async int[] pixels_to_ints (uint8[] pixels) {
+    private int[] pixels_to_ints (uint8[] pixels) {
         int[] list = {};
 
         for (int i = 0; i < pixels.length; i += 4) {
