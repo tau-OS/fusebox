@@ -184,6 +184,10 @@ spinbutton.flat {
   border: 2px solid alpha(@view_fg_color, 0.38);
 }
 
+.mini-content-block switch:disabled > slider:disabled {
+  border: 5px solid alpha(@view_fg_color, 0.38);
+}
+
 .mini-content-block switch:checked > slider:disabled {
   border: 5px solid alpha(@view_fg_color, 0.38);
   background: alpha(@view_fg_color, 0.38);

@@ -125,11 +125,23 @@ public class Mouse.TouchpadView : Gtk.Box {
         main_scrolling_box.append (scrolling_box);
         main_scrolling_box.add_css_class ("mini-content-block");
 
+        var tap_click_switch = new Gtk.Switch () {
+            valign = Gtk.Align.CENTER
+        };
+
+        var tap_click_box = new He.SettingsRow () {
+            title = (_("Tap To Click")),
+            subtitle = (_("Quick tap to do clicks")),
+            activatable_widget = tap_click_switch
+        };
+        tap_click_box.primary_button = (He.Button)tap_click_switch;
+
         main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
             sensitive = touchpad_enable_box.main_switch.active
         };
         main_box.append (pointer_speed_box);
         main_box.append (pointer_acceleration_box);
+        main_box.append (tap_click_box);
         main_box.append (main_scrolling_box);
 
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
@@ -153,6 +165,8 @@ public class Mouse.TouchpadView : Gtk.Box {
         });
         touchpad_settings.bind ("send-events", touchpad_enable_box.main_switch, "active", GLib.SettingsBindFlags.DEFAULT);
         touchpad_settings.bind ("speed", pointer_speed_scale, "value", GLib.SettingsBindFlags.DEFAULT);
+
+        touchpad_settings.bind ("tap-to-click", tap_click_switch, "active", GLib.SettingsBindFlags.DEFAULT);
 
         switch (touchpad_settings.get_enum ("accel-profile")) {
             case 1:
