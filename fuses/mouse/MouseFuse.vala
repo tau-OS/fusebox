@@ -20,6 +20,11 @@ public class Mouse.Fuse : Fusebox.Fuse {
     private Gtk.Grid main_grid;
     private Gtk.Stack stack;
 
+    public static GLib.Settings ibus_general_settings;
+    static construct {
+        ibus_general_settings = new GLib.Settings ("org.freedesktop.ibus.general");
+    }
+
     public Fuse () {
         Object (
             category: Category.SYSTEM,
@@ -37,6 +42,7 @@ public class Mouse.Fuse : Fusebox.Fuse {
         if (main_grid == null) {
             var mouse_view = new MouseView ();
             var touchpad_view = new TouchpadView ();
+            var keyboard_view = new KeyboardView ();
 
             stack = new Gtk.Stack () {
                 margin_bottom = 24,
@@ -49,6 +55,7 @@ public class Mouse.Fuse : Fusebox.Fuse {
             };
             stack.add_titled (mouse_view, "mouse", _("Mouse"));
             stack.add_titled (touchpad_view, "touchpad", _("Touchpad"));
+            stack.add_titled (keyboard_view, "keyboard", _("Keyboard"));
 
             var appbar = new He.AppBar () {
                 viewtitle_widget = stack_switcher,
