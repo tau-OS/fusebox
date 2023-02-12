@@ -42,12 +42,10 @@ public class Mouse.LayoutPageDisplay : Gtk.Frame {
         };
 
         tree = new Gtk.TreeView () {
-            headers_visible = false,
-            hexpand = true,
             vexpand = true,
             tooltip_column = 0
         };
-        tree.insert_column_with_attributes (-1, null, cell, "text", 0);
+        tree.insert_column_with_attributes (-1, "Layouts", cell, "text", 0);
 
         var scroll = new Gtk.ScrolledWindow () {
             hscrollbar_policy = Gtk.PolicyType.NEVER,
