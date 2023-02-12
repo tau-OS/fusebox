@@ -50,37 +50,64 @@ button.flat label {
 .red radio {
   background: #e25480;
 }
+.red:disabled radio {
+  background: alpha(#e25480, 0.18);
+}
 
 .orange radio {
   background: #f99e5c;
+}
+.orange:disabled radio {
+  background: alpha(#f99e5c, 0.18);
 }
 
 .yellow radio {
   background: #febc16;
 }
+.yellow:disabled radio {
+  background: alpha(#febc16, 0.18);
+}
 
 .green radio {
   background: #72da82;
+}
+.green:disabled radio {
+  background: alpha(#72da82, 0.18);
 }
 
 .mint radio {
   background: #85d1bf;
 }
+.mint:disabled radio {
+  background: alpha(#85d1bf, 0.18);
+}
 
 .blue radio {
   background: #58a8fa;
+}
+.blue:disabled radio {
+  background: alpha(#58a8fa, 0.18);
 }
 
 .purple radio {
   background: #a57bcd;
 }
+.purple:disabled radio {
+  background: alpha(#a57bcd, 0.18);
+}
 
 .pink radio {
   background: #cb76b8;
 }
+.pink:disabled radio {
+  background: alpha(#cb76b8, 0.18);
+}
 
 .mono radio {
   background: #888;
+}
+.mono:disabled radio {
+  background: alpha(#888, 0.18);
 }
 
 .multi radio {
@@ -93,6 +120,9 @@ button.flat label {
       #58a8fa 65%,
       #a57bcd 78%,
       #cb76b8 91%);
+}
+.multi:disabled radio {
+  filter: opacity(0.66);
 }
 
 .menu-button {
