@@ -438,32 +438,38 @@ public class AppearanceView : Gtk.Box {
             var file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
             var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
 
-            var pixels = new He.Ensor.Accent ();
-            var ranked = yield pixels.accent_from_pixels_async (pixbuf);
+            var loop = new MainLoop ();
+            He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), (obj, res) => {
+                try {
+                    GLib.List<int> result = He.Ensor.accent_from_pixels_async.end (res);
 
-            var top = ranked.first ().data;
+                    var top = result.first ().data;
 
-            print ("\n+---------------------------+\n");
-            print ("| THE CHOSEN ACCENTCOLOR IS |\n");
-            print ("+---------------------------+\n");
-            print ("| #1 = #%x            |\n".printf (top));
-            print ("+---------------------------+\n");
+                    print ("ACCENTCOLOR IS: #%x\n".printf (top));
+        
+                    if (top != 0) {
+                        He.Color.RGBColor color = He.Color.from_hex ("#" + "%x".printf (top));
+                        desktop.accent_color = { color.r, color.g, color.b };
+                    } else {
+                        desktop.accent_color = { 0.0, 0.0, 0.0 };
+                    }
+        
+                    tau_appearance_settings.set_string ("accent-color",
+                                                        makehex (desktop.accent_color.r,
+                                                                                     desktop.accent_color.g,
+                                                                                     desktop.accent_color.b
+                                                                       )
+                                                       );
+                } catch (ThreadError e) {
+                    print (e.message);
+                }
+                loop.quit ();
+            });
+            loop.run ();
 
-            if (top != 0) {
-                He.Color.RGBColor color = He.Color.from_hex ("#" + "%x".printf (top));
-                desktop.accent_color = { color.r, color.g, color.b };
-            } else {
-                desktop.accent_color = { 0.0, 0.0, 0.0 };
-            }
-
-            tau_appearance_settings.set_string ("accent-color",
-                                                makehex (desktop.accent_color.r,
-                                                                             desktop.accent_color.g,
-                                                                             desktop.accent_color.b
-                                                               )
-                                               );
-
-        } catch (Error e) {}
+        } catch (Error e) {
+            print (e.message);
+        }
     }
 
     public string makehex (double red, double green, double blue) {
