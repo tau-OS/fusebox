@@ -1,0 +1,14 @@
+file created by vala-code
+EXT ERR initTerminal: err:n.window.registerTerminalLinkHandler is not a function
+EXT starting server
+...bin:/usr/bin/vala-language-server
+...args:--log=/home/lains/Projects/tau-OS/fusebox/vala-code.log, --verbose=med, --port=8787, --stx=, --etx=, --path=/home/lains/Projects/tau-OS/fusebox, --theme=light
+EXT WARN [Analyzer] valacodesettings...
+...analyzerPath[/usr/bin/vala-language-server]
+...analyzerLogFile:/home/lains/Projects/tau-OS/fusebox/vala-code.log
+...analyzerAdditionalArgs:--theme=light
+...debugmode:true isDevelopment:true maxConsoleDebugMsgChars:5000
+INP ERR ERR Unknown option --log=/home/lains/Projects/tau-OS/fusebox/vala-code.log
+Run '/usr/bin/vala-language-server --version' to print version, or no arguments to run the language server.
+
+EXT ERR child child_process exited with code:1 and signal:null
