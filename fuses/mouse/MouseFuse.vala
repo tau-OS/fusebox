@@ -48,7 +48,9 @@ public class Mouse.Fuse : Fusebox.Fuse {
                 margin_bottom = 24,
                 margin_start = 24,
                 margin_end = 24,
-                vhomogeneous = false
+                vhomogeneous = false,
+                transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
+                transition_duration = 400
             };
             var stack_switcher = new He.ViewSwitcher () {
                 stack = stack
