@@ -20,11 +20,10 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton prefer_medium_radio;
     private Gtk.ToggleButton prefer_harsh_radio;
     private Gtk.Box accent_box;
-    private He.Desktop desktop = new He.Desktop ();
 
     public Fusebox.Fuse fuse { get; construct set; }
     public Appearance.WallpaperGrid wallpaper_view;
-    public Gtk.Switch wallpaper_accent_switch;
+    public Gtk.Switch accent_switch;
     public Gtk.ScrolledWindow sw;
 
     public AppearanceView (Fusebox.Fuse _fuse) {
@@ -267,21 +266,21 @@ public class AppearanceView : Gtk.Box {
         multi = new PrefersAccentColorButton ("multi", purple);
         multi.tooltip_text = _("Set By Apps");
 
-        var wallpaper_accent_label = new Gtk.Label (_("Accent Color From Wallpaper")) {
+        var accentw_label = new Gtk.Label (_("Accent Color From Wallpaper")) {
             halign = Gtk.Align.START,
             valign = Gtk.Align.CENTER
         };
-        wallpaper_accent_label.add_css_class ("cb-subtitle");
+        accentw_label.add_css_class ("cb-subtitle");
 
-        wallpaper_accent_switch = new Gtk.Switch () {
+        accent_switch = new Gtk.Switch () {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
             hexpand = true
         };
 
         var wallpaper_accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
-        wallpaper_accent_box.append (wallpaper_accent_label);
-        wallpaper_accent_box.append (wallpaper_accent_switch);
+        wallpaper_accent_box.append (accentw_label);
+        wallpaper_accent_box.append (accent_switch);
 
         accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 23);
         accent_box.append (purple);
@@ -312,11 +311,11 @@ public class AppearanceView : Gtk.Box {
         wallpaper_view = new Appearance.WallpaperGrid (fuse, this);
         grid.attach (wallpaper_view, 0, 4);
 
-        fusebox_appearance_settings.bind ("wallpaper-accent", wallpaper_accent_switch, "active", SettingsBindFlags.DEFAULT);
+        fusebox_appearance_settings.bind ("wallpaper-accent", accent_switch, "active", SettingsBindFlags.DEFAULT);
         fusebox_appearance_settings.bind ("wallpaper-accent", accent_box, "sensitive", SettingsBindFlags.INVERT_BOOLEAN);
 
-        wallpaper_accent_switch.state_set.connect (() => {
-            if (wallpaper_accent_switch.active) {
+        accent_switch.state_set.connect (() => {
+            if (accent_switch.active) {
                 accent_box.sensitive = false;
 
                 multi.set_active (false);
@@ -330,10 +329,8 @@ public class AppearanceView : Gtk.Box {
                 pink.set_active (false);
                 mono.set_active (false);
 
-                desktop.accent_color = null;
                 accent_set.begin ();
             } else {
-                desktop.accent_color = null;
                 multi.set_active (true);
                 accent_box.sensitive = true;
             }
@@ -435,33 +432,19 @@ public class AppearanceView : Gtk.Box {
 
     public async void accent_set () {
         try {
-            var file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
-            var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
+            GLib.File file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
+            Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
 
             var loop = new MainLoop ();
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), (obj, res) => {
-                try {
-                    GLib.List<int> result = He.Ensor.accent_from_pixels_async.end (res);
-
-                    var top = result.first ().data;
-
-                    print ("ACCENTCOLOR IS: #%x\n".printf (top));
-        
-                    if (top != 0) {
-                        He.Color.RGBColor color = He.Color.from_hex ("#" + "%x".printf (top));
-                        desktop.accent_color = { color.r, color.g, color.b };
-                    } else {
-                        desktop.accent_color = { 0.0, 0.0, 0.0 };
-                    }
-        
-                    tau_appearance_settings.set_string ("accent-color",
-                                                        makehex (desktop.accent_color.r,
-                                                                                     desktop.accent_color.g,
-                                                                                     desktop.accent_color.b
-                                                                       )
-                                                       );
-                } catch (ThreadError e) {
-                    print (e.message);
+                GLib.List<int> result = He.Ensor.accent_from_pixels_async.end (res);
+                int top = result.first ().data;
+                print ("ACCENT COLOR IS: #%x\n".printf (top));
+    
+                if (top != 0) {
+                    tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (top));
+                } else {
+                    tau_appearance_settings.set_string ("accent-color", "#000000");
                 }
                 loop.quit ();
             });
@@ -470,10 +453,6 @@ public class AppearanceView : Gtk.Box {
         } catch (Error e) {
             print (e.message);
         }
-    }
-
-    public string makehex (double red, double green, double blue) {
-        return "#" + "%02x%02x%02x".printf ((uint) red, (uint) green, (uint) blue);
     }
 
     private class PrefersAccentColorButton : Gtk.CheckButton {

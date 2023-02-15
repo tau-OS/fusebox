@@ -126,7 +126,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         string furi = file.get_uri ();
         settings.set_string ("picture-uri", furi);
         settings.set_string ("picture-uri-dark", furi);
-        if (appearance_view.wallpaper_accent_switch.active)
+        if (appearance_view.accent_switch.active)
             appearance_view.accent_set.begin ();
     }
 
