@@ -439,7 +439,7 @@ public class AppearanceView : Gtk.Box {
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), (obj, res) => {
                 GLib.List<int> result = He.Ensor.accent_from_pixels_async.end (res);
                 int top = result.first ().data;
-                print ("ACCENT COLOR IS: #%x\n".printf (top));
+                print ("ACCENT COLOR IS: #%X\n".printf (top));
     
                 if (top != 0) {
                     tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (top));
