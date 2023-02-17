@@ -189,12 +189,6 @@ public class About.OSView : Gtk.Box {
         gpu_box.append (gpu_subtitle);
         gpu_box.add_css_class ("mini-content-block");
 
-        var bug_button = new He.PillButton (_("Report A Problem…")) {
-            hexpand = true,
-            margin_bottom = 12,
-            halign = Gtk.Align.CENTER
-        };
-
         var stor_host_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             margin_bottom = 6,
             vexpand = false,
@@ -219,15 +213,48 @@ public class About.OSView : Gtk.Box {
         };
         scroller.set_child (info_box);
 
-        var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        mbox.append (scroller);
-        mbox.append (bug_button);
+        var bug_button = new He.OverlayButton ("emblem-important-symbolic",_("Report Problem…"), null);
+        bug_button.child = (scroller);
+        bug_button.typeb = He.OverlayButton.TypeButton.PRIMARY;
 
         var clamp = new Bis.Latch ();
-        clamp.set_child (mbox);
+        clamp.set_child (bug_button);
 
         append (clamp);
         orientation = Gtk.Orientation.VERTICAL;
+
+        bug_button.clicked.connect (() => {
+            try {
+                var appinfo = GLib.AppInfo.create_from_commandline (
+                                                                    "com.fyralabs.Mondai",
+                                                                    "com.fyralabs.Mondai",
+                                                                    GLib.AppInfoCreateFlags.NONE
+                );
+                if (appinfo != null) {
+                    try {
+                        appinfo.launch (null, null);
+                    } catch (Error e) {
+                        critical (e.message);
+                    }
+                } else {
+                    warning ("Could not find Mondai, falling back to bugurl");
+                    // get bugurl from /etc/os-release
+                    var bugurl = Environment.get_os_info ("BUG_REPORT_URL");
+
+                    if (bugurl != null) {
+                        try {
+                            AppInfo.launch_default_for_uri (bugurl, null);
+                        } catch (Error e) {
+                            critical (e.message);
+                        }
+                    } else {
+                        warning ("Could not find bugurl");
+                    }
+                }
+            } catch (Error e) {
+                critical (e.message);
+            }
+        });
 
         hostname_button.clicked.connect (() => {
             var rename_button = new He.FillButton (_("Rename")) {
@@ -299,39 +326,6 @@ public class About.OSView : Gtk.Box {
             cancel_button.clicked.connect (() => {
                 rename_dialog.close ();
             });
-        });
-
-        bug_button.clicked.connect (() => {
-            try {
-                var appinfo = GLib.AppInfo.create_from_commandline (
-                                                                    "com.fyralabs.Mondai",
-                                                                    "com.fyralabs.Mondai",
-                                                                    GLib.AppInfoCreateFlags.NONE
-                );
-                if (appinfo != null) {
-                    try {
-                        appinfo.launch (null, null);
-                    } catch (Error e) {
-                        critical (e.message);
-                    }
-                } else {
-                    warning ("Could not find Mondai, falling back to bugurl");
-                    // get bugurl from /etc/os-release
-                    var bugurl = Environment.get_os_info ("BUG_REPORT_URL");
-
-                    if (bugurl != null) {
-                        try {
-                            AppInfo.launch_default_for_uri (bugurl, null);
-                        } catch (Error e) {
-                            critical (e.message);
-                        }
-                    } else {
-                        warning ("Could not find bugurl");
-                    }
-                }
-            } catch (Error e) {
-                critical (e.message);
-            }
         });
     }
 
