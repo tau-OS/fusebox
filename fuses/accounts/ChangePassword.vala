@@ -4,13 +4,12 @@ class Accounts.ChangePassword : He.Window {
     this.modal = true;
     this.resizable = false;
 
-    var main = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
-      margin_top = 12,
-      margin_bottom = 12,
-      margin_start = 12,
-      margin_end = 12,
-    };
-    this.set_child (main);
+    var main = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+    var winhandle = new Gtk.WindowHandle ();
+    winhandle.add_css_class ("dialog-content");
+    winhandle.set_child (main);
+
+    this.set_child (winhandle);
 
     var title = new Gtk.Label (_("Change Password")) {
       margin_top = 22,
@@ -38,6 +37,7 @@ class Accounts.ChangePassword : He.Window {
     password_confirm_entry.visibility = false;
     password_confirm_entry.placeholder_text = "••••••••";
     password_confirm_entry.set_parent (password_confirm_block);
+    password_confirm_entry.support_text = (_("Remember your password."));
 
     var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
       homogeneous = true,

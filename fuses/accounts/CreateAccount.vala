@@ -1,11 +1,9 @@
 class Accounts.CreateAccount : He.Window {
   private static Regex username_regex;
-  private static Regex allowed_username_chars_regex;
 
   static construct {
     try {
-      username_regex = new Regex ("^[a-z][a-z0-9_-]*$");
-      allowed_username_chars_regex = new Regex ("^[a-z0-9_-]$");
+      username_regex = new Regex ("^[a-z0-9]*$");
     } catch (Error e) {
       critical ("Failed to compile regex: %s", e.message);
     }
@@ -33,12 +31,7 @@ class Accounts.CreateAccount : He.Window {
     this.modal = true;
     this.resizable = false;
 
-    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
-      margin_bottom = 12,
-      margin_top = 12,
-      margin_start = 12,
-      margin_end = 12,
-    };
+    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
 
     var avatar_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
       margin_bottom = 12,
@@ -73,12 +66,13 @@ class Accounts.CreateAccount : He.Window {
     };
     main_box.append (username_block);
 
-    var username_entry = new He.TextField.from_regex (allowed_username_chars_regex);
+    var username_entry = new He.TextField.from_regex (username_regex);
     username_entry.set_parent (username_block);
     username_entry.placeholder_text = "efuentes";
+    username_entry.min_length = 1;
     username_entry.max_length = 32;
     username_entry.needs_validation = true;
-    username_entry.support_text = (_("8—32 non-capitalized letters/numbers."));
+    username_entry.support_text = (_("4—32 non-capitalized letters/numbers."));
 
     var name_block = new He.MiniContentBlock () {
       title = "Name",
@@ -154,7 +148,11 @@ class Accounts.CreateAccount : He.Window {
     apply_button.set_size_request (200, -1);
     button_box.append (apply_button);
 
-    this.set_child (main_box);
+    var winhandle = new Gtk.WindowHandle ();
+    winhandle.add_css_class ("dialog-content");
+    winhandle.set_child (main_box);
+
+    this.set_child (winhandle);
 
     username_entry.changed.connect (() => {
       this.username = username_entry.text;

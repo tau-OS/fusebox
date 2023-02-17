@@ -4,6 +4,15 @@ class Accounts.EditAccount : He.Window {
   private string real_name;
   private bool administator;
   private string icon_file;
+  private static Regex username_regex;
+
+  static construct {
+    try {
+      username_regex = new Regex ("^[a-z0-9]*$");
+    } catch (Error e) {
+      critical ("Failed to compile regex: %s", e.message);
+    }
+  }
 
   bool fields_changed () {
     return this.real_name != this.user.get_real_name () ||
@@ -32,12 +41,7 @@ class Accounts.EditAccount : He.Window {
     this.administator = user.get_account_type () == Act.UserAccountType.ADMINISTRATOR;
     this.icon_file = user.icon_file;
 
-    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
-      margin_bottom = 12,
-      margin_top = 12,
-      margin_start = 12,
-      margin_end = 12,
-    };
+    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
 
     var avatar_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
       margin_bottom = 12,
@@ -72,11 +76,12 @@ class Accounts.EditAccount : He.Window {
     };
     main_box.append (username_block);
 
-    var username_entry = new He.TextField () {
+    var username_entry = new He.TextField.from_regex (username_regex) {
       text = user.get_user_name (),
       sensitive = false,
     };
     username_entry.set_parent (username_block);
+    username_entry.support_text = (_("4—32 non-capitalized letters/numbers."));
 
     var name_block = new He.MiniContentBlock () {
       title = "Name",
@@ -128,7 +133,11 @@ class Accounts.EditAccount : He.Window {
     apply_button.set_size_request (200, -1);
     button_box.append (apply_button);
 
-    this.set_child (main_box);
+    var winhandle = new Gtk.WindowHandle ();
+    winhandle.add_css_class ("dialog-content");
+    winhandle.set_child (main_box);
+
+    this.set_child (winhandle);
 
     name_entry.changed.connect (() => {
       this.real_name = name_entry.text;
