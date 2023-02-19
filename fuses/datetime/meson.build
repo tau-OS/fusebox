@@ -5,8 +5,6 @@ fuse_files = files(
     # Helpers
     'WorldLocationFinder.vala',
     'CurrentTimeManager.vala',
-    'DatePicker.vala',
-    'TimePicker.vala',
 )
 
 shared_module(
