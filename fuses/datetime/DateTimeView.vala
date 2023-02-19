@@ -54,11 +54,11 @@ public class DateTime.DateTimeView : Gtk.Box {
         };
         date_time_manual_label.add_css_class ("cb-title");
 
-        var date_time_time_picker = new DateTime.TimePicker () {
+        var date_time_time_picker = new He.TimePicker () {
             halign = Gtk.Align.END,
             hexpand = true
         };
-        var date_time_date_picker = new DateTime.DatePicker ();
+        var date_time_date_picker = new He.DatePicker ();
 
         var date_time_manual_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             visible = false
