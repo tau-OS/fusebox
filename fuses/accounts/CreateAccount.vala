@@ -31,17 +31,17 @@ class Accounts.CreateAccount : He.Window {
     this.modal = true;
     this.resizable = false;
 
-    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
       margin_bottom = 24,
       margin_top = 24,
       margin_start = 24,
       margin_end = 24,
     };
 
-    var avatar_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
+    var avatar_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 16) {
       margin_bottom = 12,
       valign = Gtk.Align.CENTER,
-      halign = Gtk.Align.CENTER,
+      halign = Gtk.Align.START,
     };
     main_box.append (avatar_box);
 
@@ -53,7 +53,7 @@ class Accounts.CreateAccount : He.Window {
 
     var avatar_overlay = new Gtk.Overlay () {
       valign = Gtk.Align.CENTER,
-      halign = Gtk.Align.CENTER,
+      halign = Gtk.Align.START,
     };
     avatar_overlay.set_child (avatar);
     avatar_overlay.add_overlay (avatar_edit_button);
@@ -62,51 +62,38 @@ class Accounts.CreateAccount : He.Window {
     var title = new Gtk.Label ("New User") {
       halign = Gtk.Align.CENTER,
     };
-    title.add_css_class ("large-title");
+    title.add_css_class ("display");
     avatar_box.append (title);
 
-    var username_block = new He.MiniContentBlock () {
-      title = "Username",
+    var username_entry = new He.TextField.from_regex (username_regex) {
+      placeholder_text = "Username",
+      min_length = 1,
+      max_length = 32,
+      needs_validation = true,
+      support_text = (_("4—32 non-capitalized letters/numbers.")),
+      hexpand = true
     };
-    main_box.append (username_block);
-
-    var username_entry = new He.TextField.from_regex (username_regex);
-    username_entry.set_parent (username_block);
-    username_entry.placeholder_text = "efuentes";
-    username_entry.min_length = 1;
-    username_entry.max_length = 32;
-    username_entry.needs_validation = true;
-    username_entry.support_text = (_("4—32 non-capitalized letters/numbers."));
-
-    var name_block = new He.MiniContentBlock () {
-      title = "Name",
-    };
-    main_box.append (name_block);
+    main_box.append (username_entry);
 
     var name_entry = new He.TextField () {
+      hexpand = true,
+      placeholder_text = "Name"
     };
-    name_entry.set_parent (name_block);
-    name_entry.placeholder_text = "Emily Fuentes";
+    main_box.append (name_entry);
 
-    var password_block = new He.MiniContentBlock () {
-      title = "Password",
+    var password_entry = new He.TextField () {
+      visibility = false,
+      hexpand = true,
+      placeholder_text = "Password"
     };
-    main_box.append (password_block);
+    main_box.append (password_entry);
 
-    var password_entry = new He.TextField ();
-    password_entry.set_parent (password_block);
-    password_entry.visibility = false;
-    password_entry.placeholder_text = "••••••••";
-
-    var password_confirm_block = new He.MiniContentBlock () {
-      title = "Confirm Password",
+    var password_confirm_entry = new He.TextField () {
+      hexpand = true,
+      visibility = false,
+      placeholder_text = "Confirm Password"
     };
-    main_box.append (password_confirm_block);
-
-    var password_confirm_entry = new He.TextField ();
-    password_confirm_entry.visibility = false;
-    password_confirm_entry.placeholder_text = "••••••••";
-    password_confirm_entry.set_parent (password_confirm_block);
+    main_box.append (password_confirm_entry);
 
     var administrator_block = new He.MiniContentBlock () {
       title = "Administrator",
@@ -159,18 +146,19 @@ class Accounts.CreateAccount : He.Window {
     this.add_css_class ("dialog-content");
 
     username_entry.get_entry ().changed.connect (() => {
-      this.username = username_entry.text;
+      this.username = username_entry.get_entry ().text;
       apply_button.sensitive = this.fields_changed ();
     });
 
     name_entry.get_entry ().changed.connect (() => {
-      this.real_name = name_entry.text;
+      this.real_name = name_entry.get_entry ().text;
       title.set_text (this.real_name);
+      avatar.text = this.real_name;
       apply_button.sensitive = this.fields_changed ();
     });
 
     password_confirm_entry.notify["is-valid"].connect (() => {
-      this.password_confirm = password_confirm_entry.text;
+      this.password_confirm = password_confirm_entry.get_entry ().text;
       apply_button.sensitive = this.fields_changed ();
     });
 
