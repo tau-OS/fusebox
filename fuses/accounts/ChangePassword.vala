@@ -4,12 +4,17 @@ class Accounts.ChangePassword : He.Window {
     this.modal = true;
     this.resizable = false;
 
-    var main = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+    var main = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+      margin_bottom = 24,
+      margin_top = 24,
+      margin_start = 24,
+      margin_end = 24,
+    };
     var winhandle = new Gtk.WindowHandle ();
-    winhandle.add_css_class ("dialog-content");
     winhandle.set_child (main);
 
     this.set_child (winhandle);
+    this.add_css_class ("dialog-content");
 
     var title = new Gtk.Label (_("Change Password")) {
       margin_top = 22,

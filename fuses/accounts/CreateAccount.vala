@@ -31,11 +31,15 @@ class Accounts.CreateAccount : He.Window {
     this.modal = true;
     this.resizable = false;
 
-    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+      margin_bottom = 24,
+      margin_top = 24,
+      margin_start = 24,
+      margin_end = 24,
+    };
 
     var avatar_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
       margin_bottom = 12,
-      margin_top = 12,
       valign = Gtk.Align.CENTER,
       halign = Gtk.Align.CENTER,
     };
@@ -149,17 +153,17 @@ class Accounts.CreateAccount : He.Window {
     button_box.append (apply_button);
 
     var winhandle = new Gtk.WindowHandle ();
-    winhandle.add_css_class ("dialog-content");
     winhandle.set_child (main_box);
 
     this.set_child (winhandle);
+    this.add_css_class ("dialog-content");
 
-    username_entry.changed.connect (() => {
+    username_entry.get_entry ().changed.connect (() => {
       this.username = username_entry.text;
       apply_button.sensitive = this.fields_changed ();
     });
 
-    name_entry.changed.connect (() => {
+    name_entry.get_entry ().changed.connect (() => {
       this.real_name = name_entry.text;
       title.set_text (this.real_name);
       apply_button.sensitive = this.fields_changed ();

@@ -41,7 +41,12 @@ class Accounts.EditAccount : He.Window {
     this.administator = user.get_account_type () == Act.UserAccountType.ADMINISTRATOR;
     this.icon_file = user.icon_file;
 
-    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+      margin_bottom = 24,
+      margin_top = 24,
+      margin_start = 24,
+      margin_end = 24,
+    };
 
     var avatar_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
       margin_bottom = 12,
@@ -134,12 +139,12 @@ class Accounts.EditAccount : He.Window {
     button_box.append (apply_button);
 
     var winhandle = new Gtk.WindowHandle ();
-    winhandle.add_css_class ("dialog-content");
     winhandle.set_child (main_box);
 
     this.set_child (winhandle);
+    this.add_css_class ("dialog-content");
 
-    name_entry.changed.connect (() => {
+    name_entry.get_entry ().changed.connect (() => {
       this.real_name = name_entry.text;
       apply_button.sensitive = this.fields_changed ();
     });
