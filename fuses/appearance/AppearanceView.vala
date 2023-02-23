@@ -438,7 +438,7 @@ public class AppearanceView : Gtk.Box {
             var loop = new MainLoop ();
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), (obj, res) => {
                 GLib.Array<int> result = He.Ensor.accent_from_pixels_async.end (res);
-                int top = result.data[0];
+                int top = result.index (0);
                 print ("ACCENT COLOR IS: %s\n".printf (He.Color.hexcode_argb(top)));
     
                 if (top != 0) {
