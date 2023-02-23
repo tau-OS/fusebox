@@ -442,7 +442,7 @@ public class AppearanceView : Gtk.Box {
                 print ("ACCENT COLOR IS: #%X\n".printf (top));
     
                 if (top != 0) {
-                    tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (top));
+                    tau_appearance_settings.set_string ("accent-color", "#%X\n".printf (top));
                 } else {
                     tau_appearance_settings.set_string ("accent-color", "#000000");
                 }
