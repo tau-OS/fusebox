@@ -436,7 +436,7 @@ public class AppearanceView : Gtk.Box {
             Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
 
             var loop = new MainLoop ();
-            He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), (obj, res) => {
+            He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.has_alpha (), (obj, res) => {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
                 int top = result.index (0);
                 print ("FIRST FUSEBOX ARGB RESULT (should be the same as Ensor's): %d\n".printf (top));
