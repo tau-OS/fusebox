@@ -307,7 +307,7 @@ public class AppearanceView : Gtk.Box {
 
         var ensor_info = new Gtk.Image () {
             icon_name = "dialog-information-symbolic",
-            tooltip_text = _("The accent color engine sets the tones for the user interface based on the primary accent color based on your choice.")
+            tooltip_text = _("The accent color engine sets user interface color tones based on scheme choice.")
         };
 
         defavlt = new EnsorModeButton ("default");
