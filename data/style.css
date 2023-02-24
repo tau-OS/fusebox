@@ -118,6 +118,20 @@ button.flat label {
   background: alpha(#888, 0.18);
 }
 
+.default radio {
+  background: #8C56BF;
+}
+
+.vibrant radio {
+  background: #8C56BF;
+  filter: saturate(3);
+}
+
+.muted radio {
+  background: #8C56BF;
+  filter: saturate(0.5);
+}
+
 .multi radio {
   background: linear-gradient(45deg,
       #e25480 0%,

@@ -13,6 +13,10 @@ public class AppearanceView : Gtk.Box {
     private PrefersAccentColorButton pink;
     private PrefersAccentColorButton mono;
     private PrefersAccentColorButton multi;
+    private EnsorModeButton defavlt; // default is a Vala keyword, deal with it
+    private EnsorModeButton muted;
+    private EnsorModeButton vibrant;
+    private EnsorModeButton monochrome;
     private Gtk.ToggleButton prefer_light_radio;
     private Gtk.ToggleButton prefer_default_radio;
     private Gtk.ToggleButton prefer_dark_radio;
@@ -25,6 +29,7 @@ public class AppearanceView : Gtk.Box {
     public Appearance.WallpaperGrid wallpaper_view;
     public Gtk.Switch accent_switch;
     public Gtk.ScrolledWindow sw;
+    private Gtk.Box ensor_box;
 
     public AppearanceView (Fusebox.Fuse _fuse) {
         Object (fuse: _fuse);
@@ -294,6 +299,39 @@ public class AppearanceView : Gtk.Box {
         accent_box.append (mono);
         accent_box.append (multi);
 
+        var ensor_label = new Gtk.Label (_("Accent Color Scheme")) {
+            halign = Gtk.Align.START,
+            valign = Gtk.Align.CENTER
+        };
+        ensor_label.add_css_class ("cb-subtitle");
+
+        var ensor_info = new Gtk.Image () {
+            icon_name = "dialog-information-symbolic",
+            tooltip_text = _("The accent color engine sets the tones for the user interface based on the primary accent color based on your choice.")
+        };
+
+        defavlt = new EnsorModeButton ("default");
+        defavlt.tooltip_text = _("Default Scheme");
+        muted = new EnsorModeButton ("muted", defavlt);
+        muted.tooltip_text = _("Muted Scheme");
+        vibrant = new EnsorModeButton ("vibrant", defavlt);
+        vibrant.tooltip_text = _("Vibrant Scheme");
+        monochrome = new EnsorModeButton ("mono", defavlt);
+        monochrome.tooltip_text = _("Monochromatic Scheme");
+
+        ensor_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 23);
+        ensor_box.hexpand = true;
+        ensor_box.halign = Gtk.Align.END;
+        ensor_box.append (defavlt);
+        ensor_box.append (muted);
+        ensor_box.append (vibrant);
+        ensor_box.append (monochrome);
+
+        var ensor_main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+        ensor_main_box.append (ensor_label);
+        ensor_main_box.append (ensor_info);
+        ensor_main_box.append (ensor_box);
+
         var accent_grid = new Gtk.Grid () {
             row_spacing = 12,
             column_homogeneous = true,
@@ -304,6 +342,7 @@ public class AppearanceView : Gtk.Box {
         accent_grid.attach (accent_label, 0, 0);
         accent_grid.attach (accent_box, 0, 1);
         accent_grid.attach (wallpaper_accent_box, 0, 2);
+        accent_grid.attach (ensor_main_box, 0, 3);
         accent_grid.add_css_class ("mini-content-block");
 
         grid.attach (accent_grid, 0, 3);
@@ -452,6 +491,38 @@ public class AppearanceView : Gtk.Box {
 
         } catch (Error e) {
             print (e.message);
+        }
+    }
+
+    private class EnsorModeButton : Gtk.CheckButton {
+        public string mode { get; construct; }
+
+        public EnsorModeButton (string mode, Gtk.CheckButton? group_member = null) {
+            Object (
+                    mode: mode,
+                    group: group_member
+            );
+        }
+
+        construct {
+            add_css_class (mode.to_string ());
+            add_css_class ("selection-mode");
+
+            active = mode == tau_appearance_settings.get_string ("ensor-scheme");
+
+            realize.connect (() => {
+                toggled.connect (() => {
+                    if (mode == "default") {
+                        tau_appearance_settings.set_string ("ensor-scheme", "default");
+                    } else if (mode == "muted") {
+                        tau_appearance_settings.set_string ("ensor-scheme", "muted");
+                    } else if (mode == "vibrant") {
+                        tau_appearance_settings.set_string ("ensor-scheme", "vibrant");
+                    } else if (mode == "mono") {
+                        tau_appearance_settings.set_string ("ensor-scheme", "mono");
+                    }
+                });
+            });
         }
     }
 
