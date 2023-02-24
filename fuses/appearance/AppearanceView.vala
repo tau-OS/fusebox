@@ -505,7 +505,12 @@ public class AppearanceView : Gtk.Box {
         }
 
         construct {
-            add_css_class (mode.to_string ());
+            if (mode == "mono") {
+                add_css_class ("mono2");
+            } else {
+                add_css_class (mode.to_string ());
+            }
+
             add_css_class ("selection-mode");
 
             active = mode == tau_appearance_settings.get_string ("ensor-scheme");

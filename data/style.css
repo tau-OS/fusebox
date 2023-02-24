@@ -118,6 +118,11 @@ button.flat label {
   background: alpha(#888, 0.18);
 }
 
+.mono2 radio {
+  background: #8C56BF;
+  filter: saturate(0.1);
+}
+
 .default radio {
   background: #8C56BF;
 }
