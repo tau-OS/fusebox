@@ -36,6 +36,34 @@ public class Appearance.TextView : Gtk.Box {
         size_box.append (size_control_box);
         size_box.add_css_class ("mini-content-block");
 
+        var font_weight_label = new Gtk.Label (_("Weight")) {
+            halign = Gtk.Align.START
+        };
+        font_weight_label.add_css_class ("cb-title");
+
+        var font_weight_adjustment = new Gtk.Adjustment (-1, 0.75, 1.144, 0.05, 0, 0);
+
+        var font_weight_scale = new Gtk.Scale (Gtk.Orientation.HORIZONTAL, font_weight_adjustment) {
+            draw_value = false,
+            hexpand = true
+        };
+        font_weight_scale.add_mark (0.75, Gtk.PositionType.TOP, null);
+        font_weight_scale.add_mark (1.0, Gtk.PositionType.TOP, null);
+        font_weight_scale.add_mark (1.144, Gtk.PositionType.TOP, null);
+
+        var font_weight_spinbutton = new Gtk.SpinButton (font_weight_adjustment, 0.25, 2) {
+            valign = Gtk.Align.CENTER
+        };
+
+        var font_weight_control_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+        font_weight_control_box.append (font_weight_scale);
+        font_weight_control_box.append (font_weight_spinbutton);
+
+        var font_weight_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        font_weight_box.append (font_weight_label);
+        font_weight_box.append (font_weight_control_box);
+        font_weight_box.add_css_class ("mini-content-block");
+
         var dyslexia_font_label = new Gtk.Label (_("Dyslexia-friendly")) {
             halign = Gtk.Align.START
         };
@@ -66,6 +94,7 @@ public class Appearance.TextView : Gtk.Box {
 
         var grid = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         grid.append (size_box);
+        grid.append (font_weight_box);
         grid.append (dyslexia_box);
 
         var clamp = new Bis.Latch ();
