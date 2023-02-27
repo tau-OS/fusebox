@@ -53,9 +53,8 @@ public class Appearance.TextView : Gtk.Box {
             draw_value = false,
             hexpand = true
         };
-        font_weight_scale.add_mark (0.75, Gtk.PositionType.TOP, null);
         font_weight_scale.add_mark (1.0, Gtk.PositionType.TOP, null);
-        font_weight_scale.add_mark (1.144, Gtk.PositionType.TOP, null);
+        font_weight_scale.add_mark (1.25, Gtk.PositionType.TOP, null);
 
         var font_weight_spinbutton = new Gtk.SpinButton (font_weight_adjustment, 0.25, 2) {
             valign = Gtk.Align.CENTER
