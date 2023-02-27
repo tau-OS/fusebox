@@ -5,8 +5,14 @@ public class Appearance.TextView : Gtk.Box {
     private const string DOC_FONT = "Manrope 10";
     private const string OD_REG_FONT = "OpenDyslexic Regular 9";
     private const string OD_DOC_FONT = "OpenDyslexic Regular 10";
+    private static GLib.Settings tau_appearance_settings;
 
     private uint scale_timeout;
+    private uint fwscale_timeout;
+
+    static construct {
+        tau_appearance_settings = new GLib.Settings ("com.fyralabs.desktop.appearance");
+    }
 
     construct {
         var size_label = new Gtk.Label (_("Size")) {
@@ -114,6 +120,21 @@ public class Appearance.TextView : Gtk.Box {
             scale_timeout = Timeout.add (300, () => {
                 scale_timeout = 0;
                 interface_settings.set_double ("text-scaling-factor", size_adjustment.value);
+                return false;
+            });
+        });
+
+        tau_appearance_settings.bind ("font-weight", font_weight_adjustment, "value", SettingsBindFlags.GET);
+
+        // Setting scale is slow, so we wait while pressed to keep UI responsive
+        font_weight_adjustment.value_changed.connect (() => {
+            if (fwscale_timeout != 0) {
+                GLib.Source.remove (fwscale_timeout);
+            }
+
+            fwscale_timeout = Timeout.add (300, () => {
+                fwscale_timeout = 0;
+                tau_appearance_settings.set_double ("font-weight", font_weight_adjustment.value);
                 return false;
             });
         });
