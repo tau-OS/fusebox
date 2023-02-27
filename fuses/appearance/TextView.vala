@@ -41,7 +41,7 @@ public class Appearance.TextView : Gtk.Box {
         };
         font_weight_label.add_css_class ("cb-title");
 
-        var font_weight_adjustment = new Gtk.Adjustment (-1, 0.75, 1.144, 0.05, 0, 0);
+        var font_weight_adjustment = new Gtk.Adjustment (-1, 0.75, 1.144, 0.0858, 0, 0);
 
         var font_weight_scale = new Gtk.Scale (Gtk.Orientation.HORIZONTAL, font_weight_adjustment) {
             draw_value = false,
