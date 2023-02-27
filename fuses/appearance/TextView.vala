@@ -47,14 +47,15 @@ public class Appearance.TextView : Gtk.Box {
         };
         font_weight_label.add_css_class ("cb-title");
 
-        var font_weight_adjustment = new Gtk.Adjustment (-1, 0.75, 2.5, 0.0858, 0, 0);
+        var font_weight_adjustment = new Gtk.Adjustment (-1, 0.75, 2.0, 0.0858, 0, 0);
 
         var font_weight_scale = new Gtk.Scale (Gtk.Orientation.HORIZONTAL, font_weight_adjustment) {
             draw_value = false,
             hexpand = true
         };
         font_weight_scale.add_mark (1.0, Gtk.PositionType.TOP, null);
-        font_weight_scale.add_mark (1.25, Gtk.PositionType.TOP, null);
+        font_weight_scale.add_mark (1.5, Gtk.PositionType.TOP, null);
+        font_weight_scale.add_mark (2.0, Gtk.PositionType.TOP, null);
 
         var font_weight_spinbutton = new Gtk.SpinButton (font_weight_adjustment, 0.25, 2) {
             valign = Gtk.Align.CENTER
