@@ -119,8 +119,7 @@ button.flat label {
 }
 
 .mono2 radio {
-  background: #8C56BF;
-  filter: saturate(0.2) contrast(1);
+  background: #888;
 }
 
 .default radio {
@@ -129,7 +128,7 @@ button.flat label {
 
 .vibrant radio {
   background: #8C56BF;
-  filter: saturate(3);
+  filter: saturate(5);
 }
 
 .muted radio {
