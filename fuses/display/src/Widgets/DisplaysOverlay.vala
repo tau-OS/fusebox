@@ -40,7 +40,12 @@ public class Display.DisplaysOverlay : He.Bin {
         overlay = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         overlay.notify["get-child-position"].connect (() => get_child_position);
 
-        var sw = new Gtk.ScrolledWindow ();
+        var sw = new Gtk.ScrolledWindow () {
+            max_content_height = 360,
+            min_content_height = 360,
+            vscrollbar_policy = Gtk.PolicyType.NEVER,
+            valign = Gtk.Align.CENTER
+        };
         sw.set_child (overlay);
 
         this.child = (sw);
