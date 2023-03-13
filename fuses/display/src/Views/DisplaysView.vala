@@ -58,7 +58,7 @@ public class Display.DisplaysView : Gtk.Grid {
             }
 
             orientation = Gtk.Orientation.VERTICAL;
-            margin_bottom = 18;
+            margin_end = margin_bottom = margin_start = 18;
             attach (detect_button, 0,0);
             attach (action_bar, 0,1);
 

@@ -40,8 +40,11 @@ public class Display.DisplaysOverlay : He.Bin {
         var grid = new Gtk.Grid ();
 
         overlay = new Gtk.Overlay () {
-            margin_top = margin_end = margin_bottom = margin_start = 18
+            margin_top = margin_end = margin_bottom = margin_start = 18,
+            hexpand = true,
+            vexpand = true
         };
+        overlay.notify["get-child-position"].connect (() => get_child_position);
         grid.attach (overlay, 0,0);
 
         this.child = (grid);
@@ -53,7 +56,7 @@ public class Display.DisplaysOverlay : He.Bin {
         rescan_displays ();
     }
 
-    public new bool get_child_position (Gtk.Widget widget, out Gdk.Rectangle allocation) {
+    private bool get_child_position (Gtk.Widget widget, out Gdk.Rectangle allocation) {
         allocation = Gdk.Rectangle ();
         if (current_allocated_width != get_allocated_width () || current_allocated_height != get_allocated_height ()) {
             calculate_ratio ();
@@ -74,6 +77,7 @@ public class Display.DisplaysOverlay : He.Bin {
             allocation.y = default_y_margin + y_start;
             allocation.width = x_end - x_start;
             allocation.height = y_end - y_start;
+
             return true;
         }
 
