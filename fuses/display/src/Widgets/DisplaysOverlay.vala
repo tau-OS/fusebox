@@ -40,9 +40,7 @@ public class Display.DisplaysOverlay : He.Bin {
         var grid = new Gtk.Grid ();
 
         overlay = new Gtk.Overlay () {
-            margin_top = margin_end = margin_bottom = margin_start = 6,
-            hexpand = true,
-            vexpand = true
+            margin_top = margin_end = margin_bottom = margin_start = 18
         };
         grid.attach (overlay, 0,0);
 
@@ -130,16 +128,16 @@ public class Display.DisplaysOverlay : He.Bin {
             added_height += height;
             max_width = int.max (max_width, x + width);
             max_height = int.max (max_height, y + height);
-
-            current_allocated_width = get_allocated_width ();
-            current_allocated_height = get_allocated_height ();
-            current_ratio = double.min (
-                (double) (get_allocated_width () - 24) / (double) added_width,
-                (double) (get_allocated_height () - 24) / (double) added_height
-            );
-            default_x_margin = (int) ((get_allocated_width () - max_width * current_ratio) / 2);
-            default_y_margin = (int) ((get_allocated_height () - max_height * current_ratio) / 2);
         }
+
+        current_allocated_width = get_allocated_width ();
+        current_allocated_height = get_allocated_height ();
+        current_ratio = double.min (
+            (double) (get_allocated_width () - 24) / (double) added_width,
+            (double) (get_allocated_height () - 24) / (double) added_height
+        );
+        default_x_margin = (int) ((get_allocated_width () - max_width * current_ratio) / 2);
+        default_y_margin = (int) ((get_allocated_height () - max_height * current_ratio) / 2);
     }
 
     private void add_output (Display.VirtualMonitor virtual_monitor) {
