@@ -261,3 +261,16 @@ spinbutton.flat {
   color: alpha(@view_fg_color, 0.38);
   box-shadow: inset 0 0 0 1px alpha(@view_fg_color, 0.38);
 }
+
+.colored {
+    background-color: alpha(@accent_bg_color, 0.15);
+    color: @view_fg_color;
+    border-radius: 26px;
+    padding: 12px;
+    border: 1px solid mix(alpha(@accent_bg_color, 0.15), @view_fg_color, 0.3);
+}
+
+.colored.disabled {
+    background-color: alpha(@view_fg_color, 0.16);
+    color: alpha(@view_fg_color, 0.38);
+}

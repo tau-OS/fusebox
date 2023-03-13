@@ -1,12 +1,18 @@
-# Add each fuse subdir here.
+# Add each fuse subdir here, order matters!
 
-subdir('appearance')
+# Network
 subdir('bluetooth')
-subdir('datetime')
+
+# Personal
+subdir('appearance')
 subdir('locale')
-subdir('about')
-subdir('startup')
 subdir('accounts')
+
+# System
 subdir('sound')
+subdir('datetime')
+subdir('display')
 subdir('mouse')
 #subdir('apps')
+subdir('startup')
+subdir('about')

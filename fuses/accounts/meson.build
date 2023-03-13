@@ -18,5 +18,5 @@ shared_module('fuse-accounts',
         dependency('accountsservice')
     ],
     install: true,
-    install_dir: join_paths(fuses_dir, 'system')
+    install_dir: join_paths(fuses_dir, 'personal')
 )

@@ -13,7 +13,7 @@ public class Locale.Fuse : Fusebox.Fuse {
                 description: _("Change system locale"),
                 icon: "settings-region-symbolic",
                 supported_settings: settings,
-                index: 2
+                index: 1
         );
     }
 
