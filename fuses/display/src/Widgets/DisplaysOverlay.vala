@@ -40,7 +40,6 @@ public class Display.DisplaysOverlay : He.Bin {
         var grid = new Gtk.Grid ();
 
         overlay = new Gtk.Overlay () {
-            margin_top = margin_end = margin_bottom = margin_start = 18,
             hexpand = true,
             vexpand = true
         };
