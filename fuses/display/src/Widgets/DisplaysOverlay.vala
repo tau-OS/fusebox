@@ -34,19 +34,16 @@ public class Display.DisplaysOverlay : He.Bin {
     private unowned Display.MonitorManager monitor_manager;
     public int active_displays { get; set; default = 0; }
 
-    private Gtk.Overlay overlay;
+    private Gtk.Box overlay;
 
     public DisplaysOverlay () {
-        var grid = new Gtk.Grid ();
-
-        overlay = new Gtk.Overlay () {
-            hexpand = true,
-            vexpand = true
-        };
+        overlay = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         overlay.notify["get-child-position"].connect (() => get_child_position);
-        grid.attach (overlay, 0,0);
 
-        this.child = (grid);
+        var sw = new Gtk.ScrolledWindow ();
+        sw.set_child (overlay);
+
+        this.child = (sw);
         hexpand = true;
         vexpand = true;
 
@@ -147,7 +144,7 @@ public class Display.DisplaysOverlay : He.Bin {
         var display_widget = new DisplayWidget (virtual_monitor);
         current_allocated_width = 0;
         current_allocated_height = 0;
-        overlay.add_overlay (display_widget);
+        overlay.append (display_widget);
 
         display_widget.add_css_class ("colored");
 
