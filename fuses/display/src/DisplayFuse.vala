@@ -48,9 +48,6 @@ public class Display.Fuse : Fusebox.Fuse {
             };
             var displays_view = new DisplaysView ();
 
-            var latch = new Bis.Latch ();
-            latch.set_child (displays_view);
-
             var nightlight_view = new NightLightView ();
 
             var latch2 = new Bis.Latch ();
@@ -60,7 +57,7 @@ public class Display.Fuse : Fusebox.Fuse {
             var stack_switcher = new He.ViewSwitcher ();
             stack_switcher.stack = stack;
 
-            stack.add_titled (latch, "displays", _("Displays"));
+            stack.add_titled (displays_view, "displays", _("Displays"));
             stack.add_titled (latch2, "night-light", _("Night Light"));
 
             var appbar = new He.AppBar () {
