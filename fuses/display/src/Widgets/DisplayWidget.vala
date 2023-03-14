@@ -252,6 +252,8 @@ public class Display.DisplayWidget : Gtk.Box {
         set_primary (virtual_monitor.primary);
         height_request = 300;
         width_request = 540;
+        valign = Gtk.Align.CENTER;
+        halign = Gtk.Align.CENTER;
         append (grid);
 
         use_switch.bind_property ("active", resolution_combobox, "sensitive");
