@@ -11,7 +11,6 @@ public class AppearanceView : Gtk.Box {
     private PrefersAccentColorButton blue;
     private PrefersAccentColorButton purple;
     private PrefersAccentColorButton pink;
-    private PrefersAccentColorButton mono;
     private PrefersAccentColorButton multi;
     private EnsorModeButton defavlt; // default is a Vala keyword, deal with it
     private EnsorModeButton muted;
@@ -265,9 +264,6 @@ public class AppearanceView : Gtk.Box {
         mint = new PrefersAccentColorButton ("mint", purple);
         mint.tooltip_text = _("Mint");
 
-        mono = new PrefersAccentColorButton ("mono", purple);
-        mono.tooltip_text = _("Mono");
-
         multi = new PrefersAccentColorButton ("multi", purple);
         multi.tooltip_text = _("Set By Apps");
 
@@ -296,7 +292,6 @@ public class AppearanceView : Gtk.Box {
         accent_box.append (green);
         accent_box.append (mint);
         accent_box.append (blue);
-        accent_box.append (mono);
         accent_box.append (multi);
 
         var ensor_label = new Gtk.Label (_("Accent Color Scheme")) {
@@ -366,7 +361,6 @@ public class AppearanceView : Gtk.Box {
                 blue.set_active (false);
                 purple.set_active (false);
                 pink.set_active (false);
-                mono.set_active (false);
 
                 accent_set.begin ();
             } else {
@@ -565,8 +559,6 @@ public class AppearanceView : Gtk.Box {
                         tau_appearance_settings.set_string ("accent-color", "mint");
                     } else if (color == "blue") {
                         tau_appearance_settings.set_string ("accent-color", "blue");
-                    } else if (color == "mono") {
-                        tau_appearance_settings.set_string ("accent-color", "mono");
                     } else if (color == "multi") {
                         tau_appearance_settings.set_string ("accent-color", "multi");
                     }
