@@ -291,7 +291,7 @@ public class AppearanceView : Gtk.Box {
         wallpaper_accent_box.append (accentw_label);
         wallpaper_accent_box.append (accent_switch);
 
-        accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 23);
+        accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 11);
         accent_box.append (purple);
         accent_box.append (pink);
         accent_box.append (red);
@@ -324,7 +324,7 @@ public class AppearanceView : Gtk.Box {
         monochrome = new EnsorModeButton ("mono", defavlt);
         monochrome.tooltip_text = _("Monochromatic Scheme");
 
-        ensor_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 23);
+        ensor_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 11);
         ensor_box.hexpand = true;
         ensor_box.halign = Gtk.Align.END;
         ensor_box.append (defavlt);
