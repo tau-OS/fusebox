@@ -576,6 +576,7 @@ public class AppearanceView : Gtk.Box {
                         tau_appearance_settings.set_string ("accent-color", "multi");
                     } else if (color == "mono") {
                         tau_appearance_settings.set_string ("accent-color", "mono");
+                        tau_appearance_settings.set_string ("ensor-scheme", "mono");
                     }
                 });
             });
