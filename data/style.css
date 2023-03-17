@@ -104,6 +104,13 @@ button.flat label {
   background: alpha(#a57bcd, 0.18);
 }
 
+.brown radio {
+  background: #bf8856;
+}
+.brown:disabled radio {
+  background: alpha(#bf8856, 0.18);
+}
+
 .pink radio {
   background: #cb76b8;
 }

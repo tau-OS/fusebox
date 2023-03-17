@@ -5,6 +5,7 @@ public class AppearanceView : Gtk.Box {
     private static GLib.Settings bg_settings;
     private PrefersAccentColorButton red;
     private PrefersAccentColorButton orange;
+    private PrefersAccentColorButton brown;
     private PrefersAccentColorButton yellow;
     private PrefersAccentColorButton green;
     private PrefersAccentColorButton mint;
@@ -252,6 +253,9 @@ public class AppearanceView : Gtk.Box {
         orange = new PrefersAccentColorButton ("orange", purple);
         orange.tooltip_text = _("Orange");
 
+        brown = new PrefersAccentColorButton ("brown", purple);
+        brown.tooltip_text = _("Brown");
+
         yellow = new PrefersAccentColorButton ("yellow", purple);
         yellow.tooltip_text = _("Yellow");
 
@@ -287,6 +291,7 @@ public class AppearanceView : Gtk.Box {
         accent_box.append (purple);
         accent_box.append (pink);
         accent_box.append (red);
+        accent_box.append (brown);
         accent_box.append (orange);
         accent_box.append (yellow);
         accent_box.append (green);
@@ -361,6 +366,7 @@ public class AppearanceView : Gtk.Box {
                 blue.set_active (false);
                 purple.set_active (false);
                 pink.set_active (false);
+                brown.set_active (false);
 
                 accent_set.begin ();
             } else {
@@ -551,6 +557,8 @@ public class AppearanceView : Gtk.Box {
                         tau_appearance_settings.set_string ("accent-color", "red");
                     } else if (color == "orange") {
                         tau_appearance_settings.set_string ("accent-color", "orange");
+                    } else if (color == "brown") {
+                        tau_appearance_settings.set_string ("accent-color", "brown");
                     } else if (color == "yellow") {
                         tau_appearance_settings.set_string ("accent-color", "yellow");
                     } else if (color == "green") {
