@@ -334,7 +334,7 @@ namespace Fusebox {
                                             { translators },
                                             { "The tauOS team" },
                                             2023, // Year of first publication.
-                                            He.AboutWindow.Licenses.GPLv3,
+                                            He.AboutWindow.Licenses.GPLV3,
                                             He.Colors.DARK
             );
             about.present ();
