@@ -23,7 +23,7 @@ jobs:
           - tau1
     runs-on: ${{ matrix.arch == 'aarch64' && 'ARM64' || 'ubuntu-latest' }}
     container:
-      image: registry.fedoraproject.org/fedora:37
+      image: registry.fedoraproject.org/fedora:38
       options: --cap-add=SYS_ADMIN --privileged
 
     steps:
