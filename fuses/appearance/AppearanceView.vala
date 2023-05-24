@@ -415,13 +415,13 @@ public class AppearanceView : Gtk.Box {
         });
 
         prefer_soft_radio.toggled.connect (() => {
-            set_dark_mode_strength (He.Desktop.DarkModeStrength.SOFT);
+            set_dark_mode_strength (He.DarkModeStrength.SOFT);
         });
         prefer_medium_radio.toggled.connect (() => {
-            set_dark_mode_strength (He.Desktop.DarkModeStrength.MEDIUM);
+            set_dark_mode_strength (He.DarkModeStrength.MEDIUM);
         });
         prefer_harsh_radio.toggled.connect (() => {
-            set_dark_mode_strength (He.Desktop.DarkModeStrength.HARSH);
+            set_dark_mode_strength (He.DarkModeStrength.HARSH);
         });
 
         dark_mode_strength_refresh ();
@@ -452,22 +452,22 @@ public class AppearanceView : Gtk.Box {
         }
     }
 
-    private void set_dark_mode_strength (He.Desktop.DarkModeStrength strength) {
+    private void set_dark_mode_strength (He.DarkModeStrength strength) {
         tau_appearance_settings.set_enum ("dark-mode-strength", strength);
     }
 
     private void dark_mode_strength_refresh () {
         int value = tau_appearance_settings.get_enum ("dark-mode-strength");
 
-        if (value == He.Desktop.DarkModeStrength.SOFT) {
+        if (value == He.DarkModeStrength.SOFT) {
             prefer_soft_radio.set_active (true);
             prefer_medium_radio.set_active (false);
             prefer_harsh_radio.set_active (false);
-        } else if (value == He.Desktop.DarkModeStrength.MEDIUM) {
+        } else if (value == He.DarkModeStrength.MEDIUM) {
             prefer_soft_radio.set_active (false);
             prefer_medium_radio.set_active (true);
             prefer_harsh_radio.set_active (false);
-        } else if (value == He.Desktop.DarkModeStrength.HARSH) {
+        } else if (value == He.DarkModeStrength.HARSH) {
             prefer_soft_radio.set_active (false);
             prefer_medium_radio.set_active (false);
             prefer_harsh_radio.set_active (true);
@@ -484,7 +484,7 @@ public class AppearanceView : Gtk.Box {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
                 int top = result.index (0);
                 print ("FIRST FUSEBOX ARGB RESULT (should be the same as Ensor's): %d\n".printf (top));
-    
+
                 if (top != 0) {
                     tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (top));
                 } else {
