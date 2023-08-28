@@ -33,7 +33,6 @@ class Accounts.EditAccount : He.Window {
 
   public EditAccount (Act.User user, He.ApplicationWindow parent) {
     this.parent = parent;
-    this.modal = true;
     this.resizable = false;
 
     this.user = user;
