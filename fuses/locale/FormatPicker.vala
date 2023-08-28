@@ -13,6 +13,7 @@ class Locale.FormatPicker : He.Window {
   construct {
     this.resizable = false;
     this.set_size_request (440, 550);
+    this.add_css_class ("dialog-content");
 
     var main = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
     var side = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
