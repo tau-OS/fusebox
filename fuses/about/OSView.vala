@@ -315,6 +315,7 @@ public class About.OSView : Gtk.Box {
             rename_dialog.set_size_request (360, 266);
             rename_dialog.set_default_size (360, 266);
             rename_dialog.set_child (handle);
+            rename_dialog.add_css_class ("dialog-content");
             rename_dialog.show ();
 
             rename_button.clicked.connect (() => {
