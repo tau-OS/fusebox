@@ -11,9 +11,9 @@ class Locale.LanguagePicker : He.Window {
   }
 
   construct {
-    this.modal = true;
     this.resizable = false;
     this.set_size_request (440, 550);
+    this.add_css_class ("dialog-content");
 
     var content = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
 
