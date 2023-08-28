@@ -28,7 +28,6 @@ class Accounts.CreateAccount : He.Window {
 
   public CreateAccount (He.ApplicationWindow parent) {
     this.parent = parent;
-    this.modal = true;
     this.resizable = false;
 
     var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
