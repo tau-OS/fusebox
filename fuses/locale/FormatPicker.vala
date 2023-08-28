@@ -11,7 +11,6 @@ class Locale.FormatPicker : He.Window {
   }
 
   construct {
-    this.modal = true;
     this.resizable = false;
     this.set_size_request (440, 550);
 
