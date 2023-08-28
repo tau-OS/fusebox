@@ -1,7 +1,6 @@
 class Accounts.ChangePassword : He.Window {
   public ChangePassword (Act.User user, He.ApplicationWindow parent) {
     this.parent = parent;
-    this.modal = true;
     this.resizable = false;
 
     var main = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
