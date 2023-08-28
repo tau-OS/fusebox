@@ -310,8 +310,7 @@ public class About.OSView : Gtk.Box {
             var rename_dialog = new He.Window () {
                 resizable = false,
                 has_title = false,
-                parent = He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this),
-                modal = true
+                parent = He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this)
             };
             rename_dialog.set_size_request (360, 266);
             rename_dialog.set_default_size (360, 266);
