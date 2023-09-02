@@ -54,7 +54,7 @@ namespace Fusebox {
                 }
 
                 if (name2 != null) {
-                    if (name2 == header_string) {
+                    if ((name2[0].to_string ().up () + name2.substring (1, name2.length)) == header_string) {
                         return;
                     }
                 }
