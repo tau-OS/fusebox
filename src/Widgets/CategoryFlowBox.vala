@@ -48,13 +48,13 @@ namespace Fusebox {
                 string header_string = null;
 
                 if (name1 != "") {
-                    header_string = name1[0].to_string ().up () + name1.substring (1, name1.length);
+                    header_string = name1[0].to_string ().up () + name1.substring (1);
                 } else {
                     header_string = "";
                 }
 
                 if (name2 != null) {
-                    if ((name2[0].to_string ().up () + name2.substring (1, name2.length)) == header_string) {
+                    if ((name2[0].to_string ().up () + name2.substring (1)) == header_string) {
                         return;
                     }
                 }
