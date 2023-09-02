@@ -43,13 +43,12 @@ namespace Fusebox {
         private void header_function (Gtk.ListBoxRow row1, Gtk.ListBoxRow? row2) {
             // Type-check Rows
             if (row1 is CategoryIcon && (row2 == null || row2 is CategoryIcon)) {
-                var name1 = ((CategoryIcon) row1).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_", "");
-                var name2 = row2 != null ? (
-                    (CategoryIcon) row2).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_", "") : null;
+                var name1 = ((CategoryIcon) row1).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_", "").down ();
+                var name2 = row2 != null ? ((CategoryIcon) row2).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_", "").down () : null;
                 string header_string = null;
 
                 if (name1 != "") {
-                    header_string = name1;
+                    header_string = name1[0].up () + name1.substring (1,name1.len);
                 } else {
                     header_string = "";
                 }
