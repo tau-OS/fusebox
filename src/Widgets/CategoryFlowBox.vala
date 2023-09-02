@@ -46,15 +46,17 @@ namespace Fusebox {
                 var name1 = ((CategoryIcon) row1).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_", "").down ();
                 var name2 = row2 != null ? ((CategoryIcon) row2).fuse.category.to_string ().replace ("FUSEBOX_FUSE_CATEGORY_", "").down () : null;
                 string header_string = null;
+                string name1_without_first_letter = name1.substring (1);
+                string name2_without_first_letter = name2.substring (1);
 
                 if (name1 != "") {
-                    header_string = name1[0].to_string ().up () + name1.substring (1);
+                    header_string = name1[0].to_string ().up () + name1_without_first_letter;
                 } else {
                     header_string = "";
                 }
 
                 if (name2 != null) {
-                    if ((name2[0].to_string ().up () + name2.substring (1)) == header_string) {
+                    if ((name2[0].to_string ().up () + name2_without_first_letter) == header_string) {
                         return;
                     }
                 }
