@@ -48,7 +48,7 @@ namespace Fusebox {
                 string header_string = null;
 
                 if (name1 != "") {
-                    header_string = name1[0].up () + name1.substring (1,name1.len);
+                    header_string = name1[0].to_string ().up () + name1.substring (1, name1.length);
                 } else {
                     header_string = "";
                 }
