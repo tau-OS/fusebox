@@ -380,7 +380,7 @@ public class AppearanceView : Gtk.Box {
         ensor_main_box.add_css_class ("ensor-box");
 
         var accent_grid = new Gtk.Grid () {
-            row_spacing = 12,
+            row_spacing = 18,
             column_homogeneous = true,
             hexpand = true,
             row_homogeneous = true,
@@ -580,24 +580,24 @@ public class AppearanceView : Gtk.Box {
 
         construct {
             if (mode == "default") {
-                colors = {0x7a44ac, 0x805157, 0xFFF7FE, 0x1D1B1E};
+                colors = {0x7a44ac, 0x805157, 0xFFF7FE, 0x665A6F};
             } else if (mode == "muted") {
-                colors = {0x685974, 0x70585B, 0xFDF8FA, 0x1D1B1D};
+                colors = {0x685974, 0x70585B, 0xFDF8FA, 0x635C65};
             } else if (mode == "vibrant") {
-                colors = {0x8623D9, 0x855400, 0xFFF7FE, 0x201925};
+                colors = {0x8623D9, 0x855400, 0xFFF7FE, 0x864D64};
             } else if (mode == "mono") {
-                colors = {0x5E5E5E, 0x5E5E5E, 0xFFFFFF, 0x0E0E0E};
+                colors = {0x5E5E5E, 0x5E5E5E, 0xFFFFFF, 0x5E5E5E};
             }
         }
 
         public override void snapshot (Gtk.Snapshot snapshot) {
             int w = get_width ();
             int h = get_height ();
-    
+
             float r = 999;
     
             snapshot.translate ({ w / 2, h / 2 });
-    
+
             Gsk.RoundedRect rect = {};
             rect.init_from_rect ({{ -r, -r }, { r * 2, r * 2 }}, r);
             snapshot.push_rounded_clip (rect);
@@ -615,10 +615,7 @@ public class AppearanceView : Gtk.Box {
             float b = (rgb & 0xFF) / 255.0f;
     
             return { r, g, b, 1.0f };
-        }
-        public int[] get_colors () {
-            return colors;
-        }    
+        } 
     }
 
     private class PrefersAccentColorButton : Gtk.CheckButton {
