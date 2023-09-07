@@ -321,7 +321,9 @@ public class AppearanceView : Gtk.Box {
         wallpaper_accent_box.append (accentw_label);
         wallpaper_accent_box.append (accent_switch);
 
-        accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 11);
+        accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
+            homogeneous = true
+        };
         accent_box.append (purple);
         accent_box.append (pink);
         accent_box.append (red);
