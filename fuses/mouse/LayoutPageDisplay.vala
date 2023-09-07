@@ -453,7 +453,6 @@ public class Mouse.AddLayoutDialog : He.Window {
         var window_handle = new Gtk.WindowHandle ();
         window_handle.set_child (box);
 
-        modal = true;
         has_title = true;
         resizable = false;
         set_child (window_handle);

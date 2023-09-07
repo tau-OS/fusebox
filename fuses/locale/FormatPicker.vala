@@ -16,14 +16,13 @@ class Locale.FormatPicker : He.Window {
     this.add_css_class ("dialog-content");
 
     var main = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+    main.add_css_class ("dialog-content");
     var side = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
     main.append (side);
     var content = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
     side.append (content);
 
     var title = new Gtk.Label (_("Format")) {
-      margin_top = 34,
-      margin_start = 18,
       halign = Gtk.Align.START,
     };
     title.add_css_class ("view-title");
@@ -31,7 +30,6 @@ class Locale.FormatPicker : He.Window {
 
     var search_entry = new Gtk.SearchEntry () {
       placeholder_text = "Search formats…",
-      margin_start = 18,
       halign = Gtk.Align.START
     };
     content.append (search_entry);
@@ -43,8 +41,6 @@ class Locale.FormatPicker : He.Window {
     content.append (scrolled);
 
     var listbox = new Gtk.ListBox () {
-      margin_start = 18,
-      margin_end = 18,
     };
     listbox.add_css_class ("content-list");
     foreach (var format in format_list) {
@@ -63,9 +59,6 @@ class Locale.FormatPicker : He.Window {
 
     var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
       homogeneous = true,
-      margin_start = 18,
-      margin_end = 18,
-      margin_bottom = 18,
       halign = Gtk.Align.END
     };
     main.append (button_box);
@@ -90,8 +83,7 @@ class Locale.FormatPicker : He.Window {
     button_box.append (apply_button);
 
     var preview = new Preview () {
-      visible = false,
-      margin_end = 18
+      visible = false
     };
     preview.set_size_request (250, -1);
     side.append (preview);

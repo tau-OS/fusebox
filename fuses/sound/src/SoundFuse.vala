@@ -27,9 +27,8 @@ public class Sound.Fuse : Fusebox.Fuse {
             input_panel = new InputPanel ();
 
             stack = new Gtk.Stack () {
-                margin_bottom = 24,
-                margin_start = 24,
-                margin_end = 24,
+                margin_start = 18,
+                margin_end = 18,
                 vhomogeneous = false,
                 transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
                 transition_duration = 400

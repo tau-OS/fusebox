@@ -16,10 +16,9 @@ class Locale.LanguagePicker : He.Window {
     this.add_css_class ("dialog-content");
 
     var content = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+    content.add_css_class ("dialog-content");
 
     var title = new Gtk.Label (_("Language")) {
-      margin_top = 34,
-      margin_start = 18,
       halign = Gtk.Align.START,
     };
     title.add_css_class ("view-title");
@@ -27,7 +26,6 @@ class Locale.LanguagePicker : He.Window {
 
     var search_entry = new Gtk.SearchEntry () {
       placeholder_text = "Search languages…",
-      margin_start = 18,
       halign = Gtk.Align.START
     };
     content.append (search_entry);
@@ -39,8 +37,6 @@ class Locale.LanguagePicker : He.Window {
     content.append (scrolled);
 
     var listbox = new Gtk.ListBox () {
-      margin_start = 18,
-      margin_end = 18,
     };
     listbox.add_css_class ("content-list");
     foreach (var language in language_list) {
@@ -59,9 +55,6 @@ class Locale.LanguagePicker : He.Window {
 
     var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
       homogeneous = true,
-      margin_start = 18,
-      margin_end = 18,
-      margin_bottom = 18,
     };
     content.append (button_box);
 
