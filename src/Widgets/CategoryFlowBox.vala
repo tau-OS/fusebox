@@ -23,14 +23,13 @@ namespace Fusebox {
         construct {
             flowbox = new Gtk.ListBox () {
                 activate_on_single_click = true,
-                selection_mode = Gtk.SelectionMode.BROWSE
+                selection_mode = Gtk.SelectionMode.SINGLE
             };
-            flowbox.add_css_class ("content-list");
+            flowbox.add_css_class ("navigation-section-list");
             flowbox.set_sort_func (sort_function);
             flowbox.set_header_func (header_function);
 
             valign = Gtk.Align.START;
-            spacing = 6;
             orientation = Gtk.Orientation.VERTICAL;
 
             append (flowbox);
@@ -66,7 +65,6 @@ namespace Fusebox {
                 } else {
                     var header_label = new Gtk.Label (header_string) {
                         halign = Gtk.Align.START,
-                        margin_bottom = 6,
                         margin_top = 6
                     };
                     header_label.add_css_class ("heading");

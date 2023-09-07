@@ -173,7 +173,6 @@ namespace Fusebox {
             headerbar.append (search_button);
             headerbar.append (menu_button);
             headerbar.viewtitle_widget = title_label;
-            headerbar.viewsubtitle_label = "";
 
             search_button.toggled.connect (() => {
                 search_box.visible = search_button.active;
