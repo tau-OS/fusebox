@@ -44,14 +44,14 @@ public class About.OSView : Gtk.Box {
             selectable = true,
             xalign = 0
         };
-        os_title.get_style_context ().add_class ("view-title");
+        os_title.add_css_class ("view-title");
         var os_subtitle = new Gtk.Label (os_sub_name.replace ("(", "“").replace (")", "”")) {
             ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             use_markup = true,
             xalign = 0
         };
-        os_subtitle.get_style_context ().add_class ("view-subtitle");
+        os_subtitle.add_css_class ("view-subtitle");
         var os_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
         os_box.append (os_title);
         os_box.append (os_subtitle);
@@ -61,13 +61,13 @@ public class About.OSView : Gtk.Box {
             selectable = true,
             xalign = 0
         };
-        hostname_title.get_style_context ().add_class ("cb-title");
+        hostname_title.add_css_class ("cb-title");
         hostname_subtitle = new Gtk.Label (get_host_name ()) {
             selectable = true,
             use_markup = true,
             xalign = 0
         };
-        hostname_subtitle.get_style_context ().add_class ("cb-subtitle");
+        hostname_subtitle.add_css_class ("cb-subtitle");
         var hostname_image = new Gtk.Image () {
             halign = Gtk.Align.START,
         };
@@ -105,14 +105,14 @@ public class About.OSView : Gtk.Box {
             margin_bottom = 6,
             xalign = 0
         };
-        storage_title.get_style_context ().add_class ("cb-title");
+        storage_title.add_css_class ("cb-title");
         storage_subtitle = new Gtk.Label ("") {
             ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             use_markup = true,
             xalign = 0
         };
-        storage_subtitle.get_style_context ().add_class ("cb-subtitle");
+        storage_subtitle.add_css_class ("cb-subtitle");
         get_storage_info.begin ();
         var storage_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         storage_box.append (storage_gauge);
@@ -124,14 +124,14 @@ public class About.OSView : Gtk.Box {
             selectable = true,
             xalign = 0
         };
-        model_title.get_style_context ().add_class ("cb-title");
+        model_title.add_css_class ("cb-title");
         var model_subtitle = new Gtk.Label (get_model_info ()) {
             ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             use_markup = true,
             xalign = 0
         };
-        model_subtitle.get_style_context ().add_class ("cb-subtitle");
+        model_subtitle.add_css_class ("cb-subtitle");
         var model_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         model_box.append (model_title);
         model_box.append (model_subtitle);
@@ -141,14 +141,14 @@ public class About.OSView : Gtk.Box {
             selectable = true,
             xalign = 0
         };
-        ram_title.get_style_context ().add_class ("cb-title");
+        ram_title.add_css_class ("cb-title");
         var ram_subtitle = new Gtk.Label (get_mem_info ()) {
             ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             use_markup = true,
             xalign = 0
         };
-        ram_subtitle.get_style_context ().add_class ("cb-subtitle");
+        ram_subtitle.add_css_class ("cb-subtitle");
         var ram_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         ram_box.append (ram_title);
         ram_box.append (ram_subtitle);
@@ -158,14 +158,14 @@ public class About.OSView : Gtk.Box {
             selectable = true,
             xalign = 0
         };
-        cpu_title.get_style_context ().add_class ("cb-title");
+        cpu_title.add_css_class ("cb-title");
         var cpu_subtitle = new Gtk.Label (get_cpu_info ()) {
             ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             use_markup = true,
             xalign = 0
         };
-        cpu_subtitle.get_style_context ().add_class ("cb-subtitle");
+        cpu_subtitle.add_css_class ("cb-subtitle");
         var cpu_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         cpu_box.append (cpu_title);
         cpu_box.append (cpu_subtitle);
@@ -175,14 +175,14 @@ public class About.OSView : Gtk.Box {
             selectable = true,
             xalign = 0
         };
-        gpu_title.get_style_context ().add_class ("cb-title");
+        gpu_title.add_css_class ("cb-title");
         gpu_subtitle = new Gtk.Label ("") {
             ellipsize = Pango.EllipsizeMode.END,
             selectable = true,
             use_markup = true,
             xalign = 0
         };
-        gpu_subtitle.get_style_context ().add_class ("cb-subtitle");
+        gpu_subtitle.add_css_class ("cb-subtitle");
         get_graphics_info.begin ();
         var gpu_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         gpu_box.append (gpu_title);
@@ -197,10 +197,7 @@ public class About.OSView : Gtk.Box {
         stor_host_box.append (hostname_box);
         stor_host_box.append (storage_box);
 
-        var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
-            margin_start = 18,
-            margin_end = 18
-        };
+        var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         info_box.append (os_box);
         info_box.append (stor_host_box);
         info_box.append (model_box);

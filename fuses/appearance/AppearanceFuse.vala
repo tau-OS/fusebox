@@ -50,7 +50,7 @@ public class Appearance.Fuse : Fusebox.Fuse {
                 viewtitle_widget = stack_switcher,
                 show_back = false,
                 scroller = appearance_view.sw,
-                viewsubtitle_label = ""
+                margin_bottom = 12,
             };
 
             main_grid = new Gtk.Grid ();

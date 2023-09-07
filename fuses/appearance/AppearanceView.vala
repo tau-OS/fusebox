@@ -30,7 +30,38 @@ public class AppearanceView : Gtk.Box {
     public Appearance.WallpaperGrid wallpaper_view;
     public Gtk.Switch accent_switch;
     public Gtk.ScrolledWindow sw;
-    private Gtk.Box ensor_box;
+    private Gtk.FlowBox main_flowbox;
+    private EnsorModeButton current_emb;
+
+    private string _ensor;
+    public string ensor {
+        get { return _ensor; }
+        set {
+            if (value == "default") {
+                select_ensor (defavlt);
+                return;
+            }
+
+            if (value == "muted") {
+                select_ensor (muted);
+                return;
+            }
+
+            if (value == "vibrant") {
+                select_ensor (vibrant);
+                return;
+            }
+
+            if (value == "mono") {
+                select_ensor (monochrome);
+                return;
+            }
+
+            _ensor = value;
+            critical ("Unknown palette ID: %s", value);
+        }
+    }
+
 
     public AppearanceView (Fusebox.Fuse _fuse) {
         Object (fuse: _fuse);
@@ -232,8 +263,7 @@ public class AppearanceView : Gtk.Box {
             row_spacing = 6,
             margin_start = 18,
             margin_end = 18,
-            margin_bottom = 18,
-            margin_top = 18
+            margin_bottom = 18
         };
         grid.attach (prefer_box, 0, 0);
 
@@ -317,25 +347,37 @@ public class AppearanceView : Gtk.Box {
 
         defavlt = new EnsorModeButton ("default");
         defavlt.tooltip_text = _("Default Scheme");
-        muted = new EnsorModeButton ("muted", defavlt);
+        muted = new EnsorModeButton ("muted");
         muted.tooltip_text = _("Muted Scheme");
-        vibrant = new EnsorModeButton ("vibrant", defavlt);
+        vibrant = new EnsorModeButton ("vibrant");
         vibrant.tooltip_text = _("Vibrant Scheme");
-        monochrome = new EnsorModeButton ("mono", defavlt);
+        monochrome = new EnsorModeButton ("mono");
         monochrome.tooltip_text = _("Monochromatic Scheme");
 
-        ensor_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 11);
-        ensor_box.hexpand = true;
-        ensor_box.halign = Gtk.Align.END;
-        ensor_box.append (defavlt);
-        ensor_box.append (muted);
-        ensor_box.append (vibrant);
-        ensor_box.append (monochrome);
+        main_flowbox = new Gtk.FlowBox () {
+            hexpand = true,
+            halign = Gtk.Align.END,
+            column_spacing = 12,
+            homogeneous = true,
+            min_children_per_line = 4,
+            max_children_per_line = 4
+        };
+        main_flowbox.append (defavlt);
+        main_flowbox.append (muted);
+        main_flowbox.append (vibrant);
+        main_flowbox.append (monochrome);
+        main_flowbox.child_activated.connect (child_activated_cb);
+
+        ensor_refresh ();
+        tau_appearance_settings.notify["changed::ensor-scheme"].connect (() => {
+            ensor_refresh ();
+        });
 
         var ensor_main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         ensor_main_box.append (ensor_label);
         ensor_main_box.append (ensor_info);
-        ensor_main_box.append (ensor_box);
+        ensor_main_box.append (main_flowbox);
+        ensor_main_box.add_css_class ("ensor-box");
 
         var accent_grid = new Gtk.Grid () {
             row_spacing = 12,
@@ -499,41 +541,84 @@ public class AppearanceView : Gtk.Box {
         }
     }
 
-    private class EnsorModeButton : Gtk.CheckButton {
-        public string mode { get; construct; }
+    private void child_activated_cb (Gtk.FlowBoxChild child) {
+        select_ensor (child as EnsorModeButton);
+    }
 
-        public EnsorModeButton (string mode, Gtk.CheckButton? group_member = null) {
+    private void select_ensor (EnsorModeButton emb) {
+        current_emb = emb;
+        _ensor = emb.mode;
+        tau_appearance_settings.set_string ("ensor-scheme", emb.mode);
+        main_flowbox.select_child (current_emb);
+    }
+
+    private void ensor_refresh () {
+        string value = tau_appearance_settings.get_string ("ensor-scheme");
+
+        if (value == "default") {
+            select_ensor (defavlt);
+        } else if (value == "muted") {
+            select_ensor (muted);
+        } else if (value == "vibrant") {
+            select_ensor (vibrant);
+        } else if (value == "mono") {
+            select_ensor (monochrome);
+        }
+    }
+
+    private class EnsorModeButton : Gtk.FlowBoxChild {
+        public string mode { get; construct; }
+        public int[] colors;
+
+        public EnsorModeButton (string mode) {
             Object (
-                    mode: mode,
-                    group: group_member
+                    mode: mode
             );
+            width_request = 38;
+            overflow = HIDDEN;
         }
 
         construct {
-            if (mode == "mono") {
-                add_css_class ("mono2");
-            } else {
-                add_css_class (mode.to_string ());
+            if (mode == "default") {
+                colors = {0x7a44ac, 0x805157, 0xFFF7FE, 0x1D1B1E};
+            } else if (mode == "muted") {
+                colors = {0x685974, 0x70585B, 0xFDF8FA, 0x1D1B1D};
+            } else if (mode == "vibrant") {
+                colors = {0x8623D9, 0x855400, 0xFFF7FE, 0x201925};
+            } else if (mode == "mono") {
+                colors = {0x5E5E5E, 0x5E5E5E, 0xFFFFFF, 0x0E0E0E};
             }
-
-            add_css_class ("selection-mode");
-
-            active = mode == tau_appearance_settings.get_string ("ensor-scheme");
-
-            realize.connect (() => {
-                toggled.connect (() => {
-                    if (mode == "default") {
-                        tau_appearance_settings.set_string ("ensor-scheme", "default");
-                    } else if (mode == "muted") {
-                        tau_appearance_settings.set_string ("ensor-scheme", "muted");
-                    } else if (mode == "vibrant") {
-                        tau_appearance_settings.set_string ("ensor-scheme", "vibrant");
-                    } else if (mode == "mono") {
-                        tau_appearance_settings.set_string ("ensor-scheme", "mono");
-                    }
-                });
-            });
         }
+
+        public override void snapshot (Gtk.Snapshot snapshot) {
+            int w = get_width ();
+            int h = get_height ();
+    
+            float r = 999;
+    
+            snapshot.translate ({ w / 2, h / 2 });
+    
+            Gsk.RoundedRect rect = {};
+            rect.init_from_rect ({{ -r, -r }, { r * 2, r * 2 }}, r);
+            snapshot.push_rounded_clip (rect);
+            snapshot.append_color (color_to_rgba (0), {{ -r, -r }, { r, r }});
+            snapshot.append_color (color_to_rgba (1), {{ -r, 0 }, { r, r }});
+            snapshot.append_color (color_to_rgba (2), {{ 0, 0 }, { r, r }});
+            snapshot.append_color (color_to_rgba (3), {{ 0, -r }, { r, r }});
+            snapshot.pop ();
+            snapshot.append_inset_shadow (rect, {0, 0, 0}, 0, 0, 1, 0);
+        }
+        private Gdk.RGBA color_to_rgba (int index) {
+            int rgb = colors[index];
+            float r = ((rgb >> 16) & 0xFF) / 255.0f;
+            float g = ((rgb >> 8) & 0xFF) / 255.0f;
+            float b = (rgb & 0xFF) / 255.0f;
+    
+            return { r, g, b, 1.0f };
+        }
+        public int[] get_colors () {
+            return colors;
+        }    
     }
 
     private class PrefersAccentColorButton : Gtk.CheckButton {

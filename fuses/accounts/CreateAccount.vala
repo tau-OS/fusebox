@@ -30,12 +30,7 @@ class Accounts.CreateAccount : He.Window {
     this.parent = parent;
     this.resizable = false;
 
-    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
-      margin_bottom = 24,
-      margin_top = 24,
-      margin_start = 24,
-      margin_end = 24,
-    };
+    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
 
     var avatar_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 16) {
       margin_bottom = 12,
@@ -142,6 +137,7 @@ class Accounts.CreateAccount : He.Window {
     winhandle.set_child (main_box);
 
     this.set_child (winhandle);
+    main_box.add_css_class ("dialog-content");
     this.add_css_class ("dialog-content");
 
     username_entry.get_entry ().changed.connect (() => {

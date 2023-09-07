@@ -40,18 +40,12 @@ class Accounts.EditAccount : He.Window {
     this.administator = user.get_account_type () == Act.UserAccountType.ADMINISTRATOR;
     this.icon_file = user.icon_file;
 
-    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
-      margin_bottom = 24,
-      margin_top = 24,
-      margin_start = 24,
-      margin_end = 24,
-    };
+    var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
 
-    var avatar_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
+    var avatar_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 16) {
       margin_bottom = 12,
-      margin_top = 12,
       valign = Gtk.Align.CENTER,
-      halign = Gtk.Align.CENTER,
+      halign = Gtk.Align.START,
     };
     main_box.append (avatar_box);
 
@@ -72,31 +66,23 @@ class Accounts.EditAccount : He.Window {
     var title = new Gtk.Label (user.real_name) {
       halign = Gtk.Align.CENTER,
     };
-    title.add_css_class ("large-title");
+    title.add_css_class ("display");
     avatar_box.append (title);
 
-    var username_block = new He.MiniContentBlock () {
-      title = "Username",
-    };
-    main_box.append (username_block);
-
     var username_entry = new He.TextField.from_regex (username_regex) {
+      placeholder_text = _("Username"),
       text = user.get_user_name (),
       sensitive = false,
     };
-    username_entry.set_parent (username_block);
     username_entry.support_text = (_("4—32 non-capitalized letters/numbers."));
-
-    var name_block = new He.MiniContentBlock () {
-      title = "Name",
-    };
-    main_box.append (name_block);
+    main_box.append (username_entry);
 
     var name_entry = new He.TextField () {
       text = user.real_name,
     };
-    name_entry.placeholder_text = "Emily Fuentes";
-    name_entry.set_parent (name_block);
+    name_entry.placeholder_text = _("Name");
+    name_entry.support_text = (_("The person's name."));
+    main_box.append (name_entry);
 
     var administrator_block = new He.MiniContentBlock () {
       title = "Administrator",
@@ -141,6 +127,7 @@ class Accounts.EditAccount : He.Window {
     winhandle.set_child (main_box);
 
     this.set_child (winhandle);
+    main_box.add_css_class ("dialog-content");
     this.add_css_class ("dialog-content");
 
     name_entry.get_entry ().changed.connect (() => {

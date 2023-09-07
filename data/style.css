@@ -2,21 +2,6 @@ entry.search {
   border-radius: 999px;
 }
 
-.fuse-block {
-  background: none;
-  padding: 14.5px 16px;
-  border-radius: 8px;
-  color: @view_fg_color;
-}
-
-.fuse-block:hover {
-  background: linear-gradient(0deg, alpha(@accent_bg_color, 0.11), alpha(@accent_bg_color, 0.11)), image(@view_bg_color);
-}
-
-row:selected .fuse-block {
-  background: linear-gradient(0deg, alpha(@accent_bg_color, 0.14), alpha(@accent_bg_color, 0.14)), image(@view_bg_color);
-}
-
 .main-content-block {
   background: linear-gradient(0deg, alpha(@accent_bg_color, 0.11), alpha(@accent_bg_color, 0.11)), image(@view_bg_color);
   padding: 18px;
@@ -123,24 +108,6 @@ button.flat label {
 }
 .mono:disabled radio {
   background: alpha(#888, 0.18);
-}
-
-.mono2 radio {
-  background: #888;
-}
-
-.default radio {
-  background: #8C56BF;
-}
-
-.vibrant radio {
-  background: #8C56BF;
-  filter: saturate(5);
-}
-
-.muted radio {
-  background: #8C56BF;
-  filter: saturate(0.5);
 }
 
 .multi radio {
@@ -280,4 +247,13 @@ spinbutton.flat {
 .colored.disabled {
     background-color: alpha(@view_fg_color, 0.16);
     color: alpha(@view_fg_color, 0.38);
+}
+
+.ensor-box > flowbox > flowboxchild {
+  border-radius: 999px;
+  padding: 0;
+}
+
+.ensor-box > flowbox > flowboxchild:selected {
+  box-shadow: 0 0 0 5px @accent_color, 0 0 0 2px @view_bg_color;
 }
