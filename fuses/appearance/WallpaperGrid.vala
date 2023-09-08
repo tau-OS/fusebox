@@ -368,7 +368,7 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
 
     private Gtk.Revealer check_revealer;
     private Gtk.ToggleButton check;
-    private Gtk.Image image;
+    private He.ContentBlockImage image;
 
     public string? thumb_path { get; construct set; }
     public bool thumb_valid { get; construct; }
@@ -414,9 +414,9 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
     }
 
     construct {
-        image = new Gtk.Image () {
-            width_request = 128,
-            height_request = 128
+        image = new He.ContentBlockImage ("") {
+            requested_width = 135,
+            requested_height = 135
         };
 
         check = new Gtk.ToggleButton () {
@@ -469,7 +469,7 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
     }
 
     private async void update_thumb () {
-        image.set_from_file (thumb_path);
+        image.file = "file://"+thumb_path;
     }
 }
 
