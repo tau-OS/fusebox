@@ -71,6 +71,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         };
         wallpaper_view.child_activated.connect (update_checked_wallpaper);
         wallpaper_view.set_sort_func (wallpapers_sort_function);
+        wallpaper_view.add_css_class ("wallpaper-grid");
 
         var wallpaper_label = new Gtk.Label (_("Wallpaper")) {
             halign = Gtk.Align.START
@@ -367,7 +368,7 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
 
     private Gtk.Revealer check_revealer;
     private Gtk.ToggleButton check;
-    private He.ContentBlockImage image;
+    private Gtk.Image image;
 
     public string? thumb_path { get; construct set; }
     public bool thumb_valid { get; construct; }
@@ -413,9 +414,9 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
     }
 
     construct {
-        image = new He.ContentBlockImage ("") {
-            requested_height = 135,
-            requested_width = 135
+        image = new Gtk.Image () {
+            width_request = 128,
+            height_request = 128
         };
 
         check = new Gtk.ToggleButton () {
@@ -437,7 +438,6 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
         overlay.set_child (image);
         overlay.add_overlay (check_revealer);
         set_child (overlay);
-        add_css_class ("wallpaper");
 
         if (uri != null) {
             var file = File.new_for_uri (uri);
@@ -454,11 +454,7 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
         });
 
         try {
-            if (thumb_valid && thumb_path != null) {
-                update_thumb.begin ();
-            } else {
-                generate_and_load_thumb ();
-            }
+            generate_and_load_thumb ();
         } catch (Error e) {
             critical ("Failed to load wallpaper thumbnail: %s", e.message);
             return;
@@ -466,18 +462,14 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
     }
 
     private void generate_and_load_thumb () {
-        var scale = get_style_context ().get_scale ();
+        var scale = 1;
         ThumbnailGenerator.get_default ().get_thumbnail (uri, THUMB_WIDTH * scale, () => {
             update_thumb.begin ();
         });
     }
 
     private async void update_thumb () {
-        if (!thumb_valid || thumb_path == null) {
-            return;
-        }
-
-        image.file = "file://" + thumb_path;
+        image.set_from_file (thumb_path);
     }
 }
 

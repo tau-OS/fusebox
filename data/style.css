@@ -27,19 +27,6 @@ button.flat label {
   margin-left: 6px;
 }
 
-.wallpaper {
-  background: none;
-  padding: 0;
-}
-
-.wallpaper:selected .content-block-image {
-  border-radius: 999px;
-}
-
-.wallpaper .content-block-image {
-  border-radius: 26px;
-}
-
 .red radio {
   background: #e25480;
 }
@@ -256,4 +243,14 @@ spinbutton.flat {
 
 .ensor-box > flowbox > flowboxchild:selected {
   box-shadow: 0 0 0 5px @accent_color, 0 0 0 2px @view_bg_color;
+}
+
+.wallpaper-grid > flowboxchild {
+  border-radius: 26px;
+  padding: 0;
+  min-height: 128;
+}
+
+.wallpaper > flowboxchild:selected {
+  border-radius: 999px;
 }
