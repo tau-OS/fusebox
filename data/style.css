@@ -68,13 +68,6 @@ button.flat label {
   background: alpha(#72da82, 0.18);
 }
 
-.mint radio {
-  background: #85d1bf;
-}
-.mint:disabled radio {
-  background: alpha(#85d1bf, 0.18);
-}
-
 .blue radio {
   background: #58a8fa;
 }
@@ -87,13 +80,6 @@ button.flat label {
 }
 .purple:disabled radio {
   background: alpha(#a57bcd, 0.18);
-}
-
-.brown radio {
-  background: #bf8856;
-}
-.brown:disabled radio {
-  background: alpha(#bf8856, 0.18);
 }
 
 .pink radio {
@@ -111,7 +97,7 @@ button.flat label {
 }
 
 .multi radio {
-  background: linear-gradient(45deg,
+  background: linear-gradient(90deg,
       #e25480 0%,
       #f99e5c 13%,
       #febc16 26%,
@@ -256,4 +242,25 @@ spinbutton.flat {
 
 .ensor-box > flowbox > flowboxchild:selected {
   box-shadow: 0 0 0 5px @accent_color, 0 0 0 2px @view_bg_color;
+}
+
+.color-scheme-button {
+  padding: 6px;
+  background: none;
+}
+.color-scheme-button image {
+  box-shadow: 0 0 0 1px alpha(@outline, 0.38);
+  border-radius: 8px;
+}
+.color-scheme-button label {
+  font-weight: 500;
+}
+.color-scheme-button:hover image {
+  box-shadow: 0 0 0 1px @outline;
+}
+.color-scheme-button:checked image {
+  box-shadow: 0 0 0 3px @accent_color;
+}
+.color-scheme-button:checked label {
+  font-weight: 700;
 }

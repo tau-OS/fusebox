@@ -4,11 +4,8 @@ public class AppearanceView : Gtk.Box {
     private static GLib.Settings fusebox_appearance_settings;
     private static GLib.Settings bg_settings;
     private PrefersAccentColorButton red;
-    private PrefersAccentColorButton orange;
-    private PrefersAccentColorButton brown;
     private PrefersAccentColorButton yellow;
     private PrefersAccentColorButton green;
-    private PrefersAccentColorButton mint;
     private PrefersAccentColorButton blue;
     private PrefersAccentColorButton purple;
     private PrefersAccentColorButton pink;
@@ -25,7 +22,7 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton prefer_medium_radio;
     private Gtk.ToggleButton prefer_harsh_radio;
     private Gtk.Box accent_box;
-
+    public He.ContentBlockImage wallpaper_preview;
     public Fusebox.Fuse fuse { get; construct set; }
     public Appearance.WallpaperGrid wallpaper_view;
     public Gtk.Switch accent_switch;
@@ -75,15 +72,82 @@ public class AppearanceView : Gtk.Box {
     }
 
     construct {
+        // Wallpaper Block
+        wallpaper_view = new Appearance.WallpaperGrid (fuse, this);
+
+        var wallpaper_label = new Gtk.Label (_("Wallpaper")) {
+            halign = Gtk.Align.START
+        };
+        wallpaper_label.add_css_class ("cb-title");
+        var wallpaper_sublabel = new Gtk.Label (_("Change desktop background picture")) {
+            halign = Gtk.Align.START
+        };
+        wallpaper_sublabel.add_css_class ("cb-subtitle");
+
+        var wallpaper_details_label = new Gtk.Label ("") {
+            halign = Gtk.Align.START
+        };
+        wallpaper_details_label.add_css_class ("cb-title");
+
+        wallpaper_details_label.label = wallpaper_view.wallpaper_title;
+
+        var wallpaper_details_sublabel = new Gtk.Label ("") {
+            halign = Gtk.Align.START
+        };
+        wallpaper_details_sublabel.add_css_class ("cb-subtitle");
+
+        wallpaper_details_sublabel.label = wallpaper_view.wallpaper_subtitle;
+
+        wallpaper_preview = new He.ContentBlockImage (wallpaper_view.current_wallpaper_path) {
+            requested_height = 150,
+            requested_width = 230
+        };
+
+        var wallpaper_details_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
+            vexpand = true,
+            valign = Gtk.Align.CENTER
+        };
+        wallpaper_details_box.append (wallpaper_details_label);
+        wallpaper_details_box.append (wallpaper_details_sublabel);
+
+        var wallpaper_preview_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 24);
+        wallpaper_preview_box.append (wallpaper_preview);
+        wallpaper_preview_box.append (wallpaper_details_box);
+
+        var wallpaper_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        wallpaper_box.append (wallpaper_label);
+        wallpaper_box.append (wallpaper_sublabel);
+
+        var wallpaper_grid_button = new He.IconicButton ("pan-end-symbolic") {
+            hexpand = true,
+            vexpand = true,
+            halign = Gtk.Align.END,
+            valign = Gtk.Align.START
+        };
+
+        var wallpaper_header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 24);
+        wallpaper_header_box.append (wallpaper_box);
+        wallpaper_header_box.append (wallpaper_grid_button);
+
+        var wallpaper_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        wallpaper_main_box.append (wallpaper_header_box);
+        wallpaper_main_box.append (wallpaper_preview_box);
+        wallpaper_main_box.add_css_class ("mini-content-block");
+
+        // Color Scheme Block
         var prefer_label = new Gtk.Label (_("Color Scheme")) {
             halign = Gtk.Align.START
         };
         prefer_label.add_css_class ("cb-title");
+        var prefer_sublabel = new Gtk.Label (_("Applies to windows, panels and other places")) {
+            halign = Gtk.Align.START
+        };
+        prefer_sublabel.add_css_class ("cb-subtitle");
 
         var prefer_default_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/by-apps.svg") {
-            pixel_size = 64,
+            pixel_size = 80,
             hexpand = true,
-            halign = Gtk.Align.CENTER
+            halign = Gtk.Align.START
         };
 
         var prefer_default_card = new Gtk.Grid ();
@@ -91,20 +155,26 @@ public class AppearanceView : Gtk.Box {
 
         var prefer_default_grid = new Gtk.Grid () {
             row_spacing = 6,
-            halign = Gtk.Align.CENTER
+            halign = Gtk.Align.START
         };
         prefer_default_grid.attach (prefer_default_card, 0, 0);
-        prefer_default_grid.attach (new Gtk.Label (_("Set By Apps")), 0, 1);
+        prefer_default_grid.attach (new Gtk.Label (_("Set By Apps")) {
+            css_classes = {"caption"},
+            halign = Gtk.Align.START
+        }, 0, 1);
 
         prefer_default_radio = new Gtk.ToggleButton () {
             hexpand = true,
             tooltip_text = _("Apps will choose their own color scheme.")
         };
         prefer_default_radio.add_css_class ("image-button");
+        prefer_default_radio.add_css_class ("flat");
+        prefer_default_radio.add_css_class ("color-scheme-button");
         prefer_default_radio.child = (prefer_default_grid);
 
         var prefer_light_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/light.svg") {
-            pixel_size = 64
+            pixel_size = 80,
+            halign = Gtk.Align.START
         };
 
         var prefer_light_card = new Gtk.Grid ();
@@ -112,10 +182,13 @@ public class AppearanceView : Gtk.Box {
 
         var prefer_light_grid = new Gtk.Grid () {
             row_spacing = 6,
-            halign = Gtk.Align.CENTER
+            halign = Gtk.Align.START
         };
         prefer_light_grid.attach (prefer_light_card, 0, 0);
-        prefer_light_grid.attach (new Gtk.Label (_("Light")), 0, 1);
+        prefer_light_grid.attach (new Gtk.Label (_("Light")) {
+            css_classes = {"caption"},
+            halign = Gtk.Align.START
+        }, 0, 1);
 
         prefer_light_radio = new Gtk.ToggleButton () {
             group = prefer_default_radio,
@@ -123,10 +196,13 @@ public class AppearanceView : Gtk.Box {
             hexpand = true
         };
         prefer_light_radio.add_css_class ("image-button");
+        prefer_light_radio.add_css_class ("flat");
+        prefer_light_radio.add_css_class ("color-scheme-button");
         prefer_light_radio.child = (prefer_light_grid);
 
         var dark_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/dark.svg") {
-            pixel_size = 64
+            pixel_size = 80,
+            halign = Gtk.Align.START
         };
 
         var dark_card = new Gtk.Grid ();
@@ -134,10 +210,13 @@ public class AppearanceView : Gtk.Box {
 
         var dark_grid = new Gtk.Grid () {
             row_spacing = 6,
-            halign = Gtk.Align.CENTER
+            halign = Gtk.Align.START
         };
         dark_grid.attach (dark_card, 0, 0);
-        dark_grid.attach (new Gtk.Label (_("Dark")), 0, 1);
+        dark_grid.attach (new Gtk.Label (_("Dark")) {
+            css_classes = {"caption"},
+            halign = Gtk.Align.START
+        }, 0, 1);
 
         prefer_dark_radio = new Gtk.ToggleButton () {
             group = prefer_default_radio,
@@ -145,129 +224,37 @@ public class AppearanceView : Gtk.Box {
             hexpand = true
         };
         prefer_dark_radio.add_css_class ("image-button");
+        prefer_dark_radio.add_css_class ("flat");
+        prefer_dark_radio.add_css_class ("color-scheme-button");
         prefer_dark_radio.child = (dark_grid);
 
-        var prefer_style_box = new He.SegmentedButton () {
+        var prefer_style_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 24) {
             hexpand = true,
-            homogeneous = true
+            halign = Gtk.Align.START
         };
         prefer_style_box.append (prefer_default_radio);
         prefer_style_box.append (prefer_light_radio);
         prefer_style_box.append (prefer_dark_radio);
 
-        var prefer_dm_sep = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
-            visible = false
-        };
+        var prefer_label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        prefer_label_box.append (prefer_label);
+        prefer_label_box.append (prefer_sublabel);
 
-        var prefer_dm_label = new Gtk.Label (_("Dark Mode Strength")) {
-            halign = Gtk.Align.START,
-            visible = false
-        };
-        prefer_dm_label.add_css_class ("cb-title");
-
-        var prefer_soft_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/soft.svg") {
-            pixel_size = 64
-        };
-        prefer_soft_image.add_css_class ("icon-dropshadow");
-
-        var prefer_soft_card = new Gtk.Grid ();
-        prefer_soft_card.attach (prefer_soft_image, 0, 0);
-
-        var prefer_soft_grid = new Gtk.Grid () {
-            row_spacing = 6,
-            hexpand = true,
-            halign = Gtk.Align.CENTER
-        };
-        prefer_soft_grid.attach (prefer_soft_card, 0, 0);
-        prefer_soft_grid.attach (new Gtk.Label (_("Soft")), 0, 1);
-
-        prefer_soft_radio = new Gtk.ToggleButton () {
-            hexpand = true,
-            tooltip_text = _("The intensity of the dark mode will be softer.")
-        };
-        prefer_soft_radio.add_css_class ("image-button");
-        prefer_soft_radio.child = (prefer_soft_grid);
-
-        var prefer_medium_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/medium.svg") {
-            pixel_size = 64
-        };
-        prefer_medium_image.add_css_class ("icon-dropshadow");
-
-        var prefer_medium_card = new Gtk.Grid ();
-        prefer_medium_card.attach (prefer_medium_image, 0, 0);
-
-        var prefer_medium_grid = new Gtk.Grid () {
-            row_spacing = 6,
-            hexpand = true,
-            halign = Gtk.Align.CENTER
-        };
-        prefer_medium_grid.attach (prefer_medium_card, 0, 0);
-        prefer_medium_grid.attach (new Gtk.Label (_("Medium")), 0, 1);
-
-        prefer_medium_radio = new Gtk.ToggleButton () {
-            group = prefer_soft_radio,
-            tooltip_text = _("The intensity of the dark mode will be the default."),
-            hexpand = true
-        };
-        prefer_medium_radio.add_css_class ("image-button");
-        prefer_medium_radio.child = (prefer_medium_grid);
-
-        var prefer_harsh_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/harsh.svg") {
-            pixel_size = 64
-        };
-        prefer_harsh_image.add_css_class ("icon-dropshadow");
-
-        var prefer_harsh_card = new Gtk.Grid ();
-        prefer_harsh_card.attach (prefer_harsh_image, 0, 0);
-
-        var prefer_harsh_grid = new Gtk.Grid () {
-            row_spacing = 6,
-            hexpand = true,
-            halign = Gtk.Align.CENTER
-        };
-        prefer_harsh_grid.attach (prefer_harsh_card, 0, 0);
-        prefer_harsh_grid.attach (new Gtk.Label (_("Harsh")), 0, 1);
-
-        prefer_harsh_radio = new Gtk.ToggleButton () {
-            group = prefer_soft_radio,
-            tooltip_text = _("The intensity of the dark mode will be harsher."),
-            hexpand = true
-        };
-        prefer_harsh_radio.add_css_class ("image-button");
-        prefer_harsh_radio.child = (prefer_harsh_grid);
-
-        var prefer_dm_box = new He.SegmentedButton () {
-            hexpand = true,
-            homogeneous = true,
-            visible = false
-        };
-        prefer_dm_box.append (prefer_soft_radio);
-        prefer_dm_box.append (prefer_medium_radio);
-        prefer_dm_box.append (prefer_harsh_radio);
-
-        var prefer_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
-        prefer_main_box.append (prefer_label);
+        var prefer_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 18);
+        prefer_main_box.append (prefer_label_box);
         prefer_main_box.append (prefer_style_box);
-
-        var prefer_main_dm_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
-        prefer_main_dm_box.append (prefer_dm_label);
-        prefer_main_dm_box.append (prefer_dm_box);
 
         var prefer_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
         prefer_box.append (prefer_main_box);
-        prefer_box.append (prefer_dm_sep);
-        prefer_box.append (prefer_main_dm_box);
-        prefer_box.add_css_class ("mini-content-block");
 
         var grid = new Gtk.Grid () {
-            row_spacing = 6,
-            margin_start = 18,
-            margin_end = 18,
-            margin_bottom = 18
+            row_spacing = 24,
+            margin_bottom = 18,
+            vexpand = true,
+            valign = Gtk.Align.START
         };
-        grid.attach (prefer_box, 0, 0);
 
-        var accent_label = new Gtk.Label (_("Accent Color")) {
+        var accent_label = new Gtk.Label (_("Accent color")) {
             halign = Gtk.Align.START
         };
         accent_label.add_css_class ("cb-title");
@@ -281,12 +268,6 @@ public class AppearanceView : Gtk.Box {
         red = new PrefersAccentColorButton ("red", purple);
         red.tooltip_text = _("Red");
 
-        orange = new PrefersAccentColorButton ("orange", purple);
-        orange.tooltip_text = _("Orange");
-
-        brown = new PrefersAccentColorButton ("brown", purple);
-        brown.tooltip_text = _("Brown");
-
         yellow = new PrefersAccentColorButton ("yellow", purple);
         yellow.tooltip_text = _("Yellow");
 
@@ -296,20 +277,17 @@ public class AppearanceView : Gtk.Box {
         blue = new PrefersAccentColorButton ("blue", purple);
         blue.tooltip_text = _("Blue");
 
-        mint = new PrefersAccentColorButton ("mint", purple);
-        mint.tooltip_text = _("Mint");
-
         mono = new PrefersAccentColorButton ("mono", purple);
         mono.tooltip_text = _("Mono");
 
         multi = new PrefersAccentColorButton ("multi", purple);
         multi.tooltip_text = _("Set By Apps");
 
-        var accentw_label = new Gtk.Label (_("Accent Color From Wallpaper")) {
+        var accentw_label = new Gtk.Label (_("Wallpaper color")) {
             halign = Gtk.Align.START,
             valign = Gtk.Align.CENTER
         };
-        accentw_label.add_css_class ("cb-subtitle");
+        accentw_label.add_css_class ("cb-title");
 
         accent_switch = new Gtk.Switch () {
             halign = Gtk.Align.END,
@@ -321,26 +299,29 @@ public class AppearanceView : Gtk.Box {
         wallpaper_accent_box.append (accentw_label);
         wallpaper_accent_box.append (accent_switch);
 
-        accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
-            homogeneous = true
+        accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0) {
+            homogeneous = true,
+            halign = Gtk.Align.END,
+            hexpand = true
         };
         accent_box.append (purple);
         accent_box.append (pink);
         accent_box.append (red);
-        accent_box.append (brown);
-        accent_box.append (orange);
         accent_box.append (yellow);
         accent_box.append (green);
-        accent_box.append (mint);
         accent_box.append (blue);
         accent_box.append (mono);
         accent_box.append (multi);
 
-        var ensor_label = new Gtk.Label (_("Accent Color Scheme")) {
+        var accent_main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        accent_main_box.append (accent_label);
+        accent_main_box.append (accent_box);
+
+        var ensor_label = new Gtk.Label (_("Accent scheme")) {
             halign = Gtk.Align.START,
             valign = Gtk.Align.CENTER
         };
-        ensor_label.add_css_class ("cb-subtitle");
+        ensor_label.add_css_class ("cb-title");
 
         var ensor_info = new Gtk.Image () {
             icon_name = "dialog-information-symbolic",
@@ -381,23 +362,11 @@ public class AppearanceView : Gtk.Box {
         ensor_main_box.append (main_flowbox);
         ensor_main_box.add_css_class ("ensor-box");
 
-        var accent_grid = new Gtk.Grid () {
-            row_spacing = 18,
-            column_homogeneous = true,
-            hexpand = true,
-            row_homogeneous = true,
-            margin_bottom = 6
-        };
-        accent_grid.attach (accent_label, 0, 0);
-        accent_grid.attach (accent_box, 0, 1);
-        accent_grid.attach (wallpaper_accent_box, 0, 2);
-        accent_grid.attach (ensor_main_box, 0, 3);
-        accent_grid.add_css_class ("mini-content-block");
-
-        grid.attach (accent_grid, 0, 3);
-
-        wallpaper_view = new Appearance.WallpaperGrid (fuse, this);
-        grid.attach (wallpaper_view, 0, 4);
+        grid.attach (prefer_box, 0, 0);
+        grid.attach (accent_main_box, 0, 1);
+        grid.attach (wallpaper_accent_box, 0, 2);
+        grid.attach (ensor_main_box, 0, 3);
+        grid.add_css_class ("mini-content-block");
 
         fusebox_appearance_settings.bind ("wallpaper-accent", accent_switch, "active", SettingsBindFlags.DEFAULT);
         fusebox_appearance_settings.bind("wallpaper-accent", accent_box, "sensitive", SettingsBindFlags.INVERT_BOOLEAN);
@@ -408,14 +377,11 @@ public class AppearanceView : Gtk.Box {
 
                 multi.set_active (false);
                 red.set_active (false);
-                orange.set_active (false);
                 yellow.set_active (false);
                 green.set_active (false);
-                mint.set_active (false);
                 blue.set_active (false);
                 purple.set_active (false);
                 pink.set_active (false);
-                brown.set_active (false);
 
                 accent_set.begin ();
             } else {
@@ -425,32 +391,83 @@ public class AppearanceView : Gtk.Box {
             return Gdk.EVENT_PROPAGATE;
         });
 
+        var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        main_box.append (wallpaper_main_box);
+        main_box.append (grid);
+
         sw = new Gtk.ScrolledWindow ();
         sw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
-        sw.set_child (grid);
+        sw.set_child (main_box);
 
         var clamp = new Bis.Latch ();
         clamp.set_child (sw);
 
-        append (clamp);
+        var wmain_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        wmain_box.append (wallpaper_view);
+
+        var wsw = new Gtk.ScrolledWindow ();
+        wsw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
+        wsw.set_child (wmain_box);
+
+        var wclamp = new Bis.Latch ();
+        wclamp.set_child (wsw);
+
+        var text_view = new Appearance.TextView ();
+
+        var main_stack = new Gtk.Stack () {
+            transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
+            transition_duration = 400
+        };
+        main_stack.add_titled (clamp, "desktop", _("Desktop"));
+        main_stack.add_titled (text_view, "text", _("Text"));
+
+        var stack_switcher = new He.ViewSwitcher ();
+        stack_switcher.stack = main_stack;
+
+        var appbar = new He.AppBar () {
+            show_back = false,
+            margin_bottom = 12,
+            viewtitle_widget = stack_switcher
+        };
+
+        var wallpaper_stack = new Gtk.Stack () {
+            transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
+            transition_duration = 400
+        };
+        wallpaper_stack.add_titled (main_stack, "appearance", _("Appearance"));
+        wallpaper_stack.add_titled (wclamp, "wallpaper", _("Wallpaper"));
+
+        var wallpaper_mlabel = new Gtk.Label (_("Wallpaper")) {
+            halign = Gtk.Align.START,
+            css_classes = {"view-title"}
+        };
+
+        wallpaper_grid_button.clicked.connect (() => {
+            wallpaper_stack.set_visible_child (wclamp);
+            appbar.show_back = true;
+            appbar.viewtitle_widget.unparent ();
+            appbar.viewtitle_widget = wallpaper_mlabel;
+        });
+
+        appbar.back_button.clicked.connect (() => {
+            wallpaper_stack.set_visible_child (main_stack);
+            appbar.show_back = false;
+            appbar.viewtitle_widget.unparent ();
+            appbar.viewtitle_widget = stack_switcher;
+        });
+
+        orientation = Gtk.Orientation.VERTICAL;
+        append (appbar);
+        append (wallpaper_stack);
 
         prefer_default_radio.toggled.connect (() => {
             set_color_scheme (He.Desktop.ColorScheme.NO_PREFERENCE);
-            prefer_dm_sep.visible = false;
-            prefer_dm_label.visible = false;
-            prefer_dm_box.visible = false;
         });
         prefer_light_radio.toggled.connect (() => {
             set_color_scheme (He.Desktop.ColorScheme.LIGHT);
-            prefer_dm_sep.visible = false;
-            prefer_dm_label.visible = false;
-            prefer_dm_box.visible = false;
         });
         prefer_dark_radio.toggled.connect (() => {
             set_color_scheme (He.Desktop.ColorScheme.DARK);
-            prefer_dm_sep.visible = true;
-            prefer_dm_label.visible = true;
-            prefer_dm_box.visible = true;
         });
 
         color_scheme_refresh ();
@@ -576,7 +593,8 @@ public class AppearanceView : Gtk.Box {
             Object (
                     mode: mode
             );
-            width_request = 38;
+            width_request = 42;
+            height_request = 42;
             overflow = HIDDEN;
         }
 

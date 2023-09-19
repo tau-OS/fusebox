@@ -51,6 +51,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     private bool prevent_update_mode = false; // When restoring the combo state, don't trigger the update.
     private bool finished; // Shows that we got or wallpapers together
 
+    public string wallpaper_title;
+    public string wallpaper_subtitle;
+
     public WallpaperGrid (Fusebox.Fuse _fuse, AppearanceView _appearance_view) {
         Object (fuse: _fuse, appearance_view: _appearance_view);
     }
@@ -99,7 +102,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             spacing = 12,
             hexpand = true
         };
-        wallpaper_title_box.append (wallpaper_label);
         wallpaper_title_box.append (wallpaper_removal_button);
 
         var wallpaper_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
@@ -118,17 +120,34 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
 
         load_settings ();
         attach (view_overlay, 0, 1);
+        margin_start = 18; margin_end = 18;
 
         view_overlay.clicked.connect (show_wallpaper_chooser);
     }
 
+    public const string FILE_ATTRIBUTES = "standard::*,time::*,id::file,id::filesystem,etag::value";
     private async void update_wallpaper (string uri) {
         var file = File.new_for_uri (uri);
         string furi = file.get_uri ();
+
         settings.set_string ("picture-uri", furi);
         settings.set_string ("picture-uri-dark", furi);
         if (appearance_view.accent_switch.active)
             appearance_view.accent_set.begin ();
+        
+        appearance_view.wallpaper_preview.file = furi;
+
+        try {
+            FileInfo info = file.query_info (FILE_ATTRIBUTES, FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+            var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
+            var width = pixbuf.get_width ();
+            var height = pixbuf.get_height ();
+
+            wallpaper_title = load_artist_name ();
+            wallpaper_subtitle = width.to_string () + "×" + height.to_string () + ", " + info.get_content_type ().to_string ().replace ("image/", "").up ();
+        } catch (Error e) {
+            warning (e.message);
+        }
     }
 
     private void show_wallpaper_chooser () {
@@ -165,6 +184,47 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     private void load_settings () {
         prevent_update_mode = true;
         current_wallpaper_path = settings.get_string ("picture-uri");
+
+        try {
+            var file = File.new_for_uri (current_wallpaper_path);
+            FileInfo info = file.query_info (FILE_ATTRIBUTES, FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+
+            var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
+            var width = pixbuf.get_width ();
+            var height = pixbuf.get_height ();
+
+            wallpaper_title = load_artist_name ();
+            wallpaper_subtitle = width.to_string () + "×" + height.to_string () + ", " + info.get_content_type ().to_string ().replace ("image/", "").up ();
+        } catch (Error e) {
+            warning (e.message);
+        }
+    }
+
+    private string load_artist_name () {
+        if (current_wallpaper_path != null) {
+            string path = "";
+            GExiv2.Metadata metadata;
+            try {
+                path = Filename.from_uri (current_wallpaper_path);
+                metadata = new GExiv2.Metadata ();
+                metadata.open_path (path);
+            } catch (Error e) {
+                warning ("Error parsing exif metadata of \"%s\": %s", path, e.message);
+                return "";
+            }
+
+            if (metadata.has_exif ()) {
+                var artist_name = metadata.get_tag_string ("Exif.Image.Artist");
+                if (artist_name != null) {
+                    return (_("Artist: %s").printf (artist_name));
+                } else {
+                    return "";
+                }
+            }
+        } else {
+            return "";
+        }
+        return "Current Wallpaper";
     }
 
     private static File ? copy_for_library (File source) {

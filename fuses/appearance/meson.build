@@ -14,6 +14,7 @@ shared_module(
         meson.get_compiler('vala').find_library('posix'),
         dependency('libhelium-1'),
         dependency('gee-0.8'),
+        dependency('gexiv2'),
         dependency('libbismuth-1', version: '>=1.0.0'),
     ],
     install: true,

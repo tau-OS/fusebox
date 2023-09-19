@@ -1,13 +1,53 @@
-<svg width="120" height="80" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g style="mix-blend-mode:overlay">
-<rect width="120" height="80" rx="12" fill="#2D2D2D"/>
-<rect x="8" y="8" width="105" height="30" rx="8" fill="#3D3D3D"/>
-<rect x="8" y="43" width="105" height="30" rx="8" fill="#3D3D3D"/>
-<rect x="34" y="16" width="47" height="5" fill="#F0F0F2"/>
-<rect x="34" y="26" width="72" height="5" fill="#F0F0F2" fill-opacity="0.5"/>
-<rect x="34" y="50" width="47" height="5" fill="#F0F0F2"/>
-<rect x="34" y="60" width="72" height="5" fill="#F0F0F2" fill-opacity="0.5"/>
-<rect x="14" y="16" width="15" height="15" rx="7.5" fill="#8AC2FB"/>
-<rect x="14" y="50" width="15" height="15" rx="7.5" fill="#98E8A5"/>
-</g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   fill="none"
+   version="1.1"
+   id="svg14"
+   sodipodi:docname="dark.svg"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     id="namedview14"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="false"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="false"
+     inkscape:deskcolor="#d1d1d1"
+     showborder="false"
+     borderlayer="true"
+     inkscape:clip-to-page="false"
+     inkscape:zoom="3.1952388"
+     inkscape:cx="59.932923"
+     inkscape:cy="39.903121"
+     inkscape:window-width="2560"
+     inkscape:window-height="927"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g14" />
+  <g
+     style="mix-blend-mode:overlay"
+     id="g14"
+     transform="translate(4,24)">
+    <rect
+       width="127.00775"
+       height="127.00775"
+       rx="11.906977"
+       fill="#2d2d2d"
+       id="rect1"
+       x="-3.503876"
+       y="-23.503876"
+       style="fill:#2d2d2d;stroke:#000000;stroke-width:0.992248;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.352611;fill-opacity:1"
+       ry="11.906977" />
+  </g>
 </svg>
