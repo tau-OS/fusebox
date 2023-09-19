@@ -143,7 +143,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             var width = pixbuf.get_width ();
             var height = pixbuf.get_height ();
 
+            wallpaper_title = "";
             wallpaper_title = load_artist_name ();
+            wallpaper_subtitle = "";
             wallpaper_subtitle = width.to_string () + "×" + height.to_string () + ", " + info.get_content_type ().to_string ().replace ("image/", "").up ();
         } catch (Error e) {
             warning (e.message);
@@ -193,7 +195,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             var width = pixbuf.get_width ();
             var height = pixbuf.get_height ();
 
+            wallpaper_title = "";
             wallpaper_title = load_artist_name ();
+            wallpaper_subtitle = "";
             wallpaper_subtitle = width.to_string () + "×" + height.to_string () + ", " + info.get_content_type ().to_string ().replace ("image/", "").up ();
         } catch (Error e) {
             warning (e.message);
