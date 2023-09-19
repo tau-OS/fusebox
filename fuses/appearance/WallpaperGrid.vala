@@ -210,19 +210,19 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                 metadata.open_path (path);
             } catch (Error e) {
                 warning ("Error parsing exif metadata of \"%s\": %s", path, e.message);
-                return "";
+                return "Current Wallpaper";
             }
 
             if (metadata.has_exif ()) {
                 var artist_name = metadata.get_tag_string ("Exif.Image.Artist");
                 if (artist_name != null) {
-                    return (_("Artist: %s").printf (artist_name));
+                    return (_("%s").printf (artist_name));
                 } else {
-                    return "";
+                    return "Current Wallpaper";
                 }
             }
         } else {
-            return "";
+            return "Current Wallpaper";
         }
         return "Current Wallpaper";
     }
