@@ -27,6 +27,8 @@ public class AppearanceView : Gtk.Box {
     public Appearance.WallpaperGrid wallpaper_view;
     public Gtk.Switch accent_switch;
     public Gtk.ScrolledWindow sw;
+    public Gtk.Label wallpaper_details_label;
+    public Gtk.Label wallpaper_details_sublabel;
     private Gtk.FlowBox main_flowbox;
     private EnsorModeButton current_emb;
 
@@ -84,14 +86,14 @@ public class AppearanceView : Gtk.Box {
         };
         wallpaper_sublabel.add_css_class ("cb-subtitle");
 
-        var wallpaper_details_label = new Gtk.Label ("") {
+        wallpaper_details_label = new Gtk.Label ("") {
             halign = Gtk.Align.START
         };
         wallpaper_details_label.add_css_class ("cb-title");
 
         wallpaper_details_label.label = wallpaper_view.wallpaper_title;
 
-        var wallpaper_details_sublabel = new Gtk.Label ("") {
+        wallpaper_details_sublabel = new Gtk.Label ("") {
             halign = Gtk.Align.START
         };
         wallpaper_details_sublabel.add_css_class ("cb-subtitle");

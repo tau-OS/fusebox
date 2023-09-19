@@ -147,6 +147,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             wallpaper_title = load_artist_name ();
             wallpaper_subtitle = "";
             wallpaper_subtitle = width.to_string () + "×" + height.to_string () + ", " + info.get_content_type ().to_string ().replace ("image/", "").up ();
+
+            appearance_view.wallpaper_details_label.label = wallpaper_title;
+            appearance_view.wallpaper_details_sublabel.label = wallpaper_subtitle;
         } catch (Error e) {
             warning (e.message);
         }
@@ -199,6 +202,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             wallpaper_title = load_artist_name ();
             wallpaper_subtitle = "";
             wallpaper_subtitle = width.to_string () + "×" + height.to_string () + ", " + info.get_content_type ().to_string ().replace ("image/", "").up ();
+
+            appearance_view.wallpaper_details_label.label = wallpaper_title;
+            appearance_view.wallpaper_details_sublabel.label = wallpaper_subtitle;
         } catch (Error e) {
             warning (e.message);
         }
