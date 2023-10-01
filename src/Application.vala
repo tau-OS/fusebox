@@ -198,7 +198,7 @@ namespace Fusebox {
             empty_page.action_button.visible = false;
 
             var eheaderbar = new He.AppBar () {
-                show_buttons = true,
+                show_buttons = false,
                 show_back = false
             };
 
