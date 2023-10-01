@@ -77,6 +77,7 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
             appbar = new He.AppBar () {
                 viewtitle_widget = status_switch,
                 show_back = false,
+                show_buttons = false,
                 hexpand = true,
             };
 

@@ -62,7 +62,7 @@ public class Mouse.Fuse : Fusebox.Fuse {
             var appbar = new He.AppBar () {
                 viewtitle_widget = stack_switcher,
                 show_back = false,
-                flat = true
+                show_buttons = false
             };
 
             main_grid = new Gtk.Grid () {

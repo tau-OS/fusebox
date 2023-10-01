@@ -64,6 +64,7 @@ public class Display.Fuse : Fusebox.Fuse {
                 viewtitle_widget = stack_switcher,
                 show_back = false,
                 hexpand = true,
+                show_buttons = false
             };
             main_grid.attach (appbar, 0, 0);
             main_grid.attach (stack, 0, 1);

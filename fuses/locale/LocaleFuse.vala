@@ -29,7 +29,7 @@ public class Locale.Fuse : Fusebox.Fuse {
             var appbar = new He.AppBar () {
                 viewtitle_widget = view_label,
                 show_back = false,
-                flat = true
+                show_buttons = false
             };
 
             main_grid = new Gtk.Grid () {

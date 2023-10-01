@@ -29,6 +29,7 @@ public class Accounts.Fuse : Fusebox.Fuse {
             var appbar = new He.AppBar () {
                 viewtitle_widget = view_label,
                 show_back = false,
+                show_buttons = false,
                 hexpand = true,
             };
 

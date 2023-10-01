@@ -29,7 +29,8 @@ public class About.Fuse : Fusebox.Fuse {
 
             var appbar = new He.AppBar () {
                 viewtitle_widget = view_label,
-                show_back = false
+                show_back = false,
+                show_buttons = false
             };
 
             main_grid = new Gtk.Grid () {

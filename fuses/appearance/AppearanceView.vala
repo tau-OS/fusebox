@@ -428,6 +428,7 @@ public class AppearanceView : Gtk.Box {
 
         var appbar = new He.AppBar () {
             show_back = false,
+            show_buttons = false,
             margin_bottom = 12,
             viewtitle_widget = stack_switcher
         };

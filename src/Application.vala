@@ -161,7 +161,7 @@ namespace Fusebox {
             };
 
             headerbar = new He.AppBar () {
-                show_buttons = false,
+                show_buttons = true,
                 show_back = false,
                 width_request = 250
             };

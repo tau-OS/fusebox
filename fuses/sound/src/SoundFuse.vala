@@ -54,7 +54,8 @@ public class Sound.Fuse : Fusebox.Fuse {
 
             var appbar = new He.AppBar () {
                 viewtitle_widget = stack_switcher,
-                show_back = false
+                show_back = false,
+                show_buttons = false
             };
 
             main_grid = new Gtk.Grid () {
