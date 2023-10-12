@@ -25,11 +25,12 @@ impl Default for AppsFuse {
 
         let app_bar = AppBar::builder()
             .show_back(false)
+             show_left_title_buttons(false)
+            .show_right_title_buttons(true)
             .halign(Align::Fill)
             .hexpand(true)
             .build();
 
-        app_bar.add_css_class("flat");
         let view_label = Label::builder()
             .label(&gettext("Applications"))
             .css_classes(vec!["view-title".to_string()])

@@ -63,8 +63,8 @@ public class Display.Fuse : Fusebox.Fuse {
             var appbar = new He.AppBar () {
                 viewtitle_widget = stack_switcher,
                 show_back = false,
-                hexpand = true,
-                show_buttons = false
+                show_left_title_buttons = false,
+                show_right_title_buttons = true
             };
             main_grid.attach (appbar, 0, 0);
             main_grid.attach (stack, 0, 1);

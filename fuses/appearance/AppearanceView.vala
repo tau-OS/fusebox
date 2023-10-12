@@ -428,7 +428,8 @@ public class AppearanceView : Gtk.Box {
 
         var appbar = new He.AppBar () {
             show_back = false,
-            show_buttons = false,
+            show_left_title_buttons = false,
+            show_right_title_buttons = true,
             margin_bottom = 12,
             viewtitle_widget = stack_switcher
         };
@@ -618,7 +619,7 @@ public class AppearanceView : Gtk.Box {
             int h = get_height ();
 
             float r = 999;
-    
+
             snapshot.translate ({ w / 2, h / 2 });
 
             Gsk.RoundedRect rect = {};
@@ -636,9 +637,9 @@ public class AppearanceView : Gtk.Box {
             float r = ((rgb >> 16) & 0xFF) / 255.0f;
             float g = ((rgb >> 8) & 0xFF) / 255.0f;
             float b = (rgb & 0xFF) / 255.0f;
-    
+
             return { r, g, b, 1.0f };
-        } 
+        }
     }
 
     private class PrefersAccentColorButton : Gtk.CheckButton {

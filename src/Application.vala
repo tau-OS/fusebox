@@ -161,7 +161,6 @@ namespace Fusebox {
             };
 
             headerbar = new He.AppBar () {
-                show_buttons = true,
                 show_back = false,
                 width_request = 250
             };
@@ -198,7 +197,8 @@ namespace Fusebox {
             empty_page.action_button.visible = false;
 
             var eheaderbar = new He.AppBar () {
-                show_buttons = false,
+                show_left_title_buttons = false,
+                show_right_title_buttons = true,
                 show_back = false
             };
 
