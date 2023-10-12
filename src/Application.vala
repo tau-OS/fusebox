@@ -162,7 +162,8 @@ namespace Fusebox {
 
             headerbar = new He.AppBar () {
                 show_back = false,
-                width_request = 250
+                show_right_title_buttons = false,
+                width_request = 230
             };
 
             var title_label = new Gtk.Label (_("Settings"));
