@@ -18,9 +18,6 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton prefer_light_radio;
     private Gtk.ToggleButton prefer_default_radio;
     private Gtk.ToggleButton prefer_dark_radio;
-    private Gtk.ToggleButton prefer_soft_radio;
-    private Gtk.ToggleButton prefer_medium_radio;
-    private Gtk.ToggleButton prefer_harsh_radio;
     private Gtk.Box accent_box;
     public He.ContentBlockImage wallpaper_preview;
     public Fusebox.Fuse fuse { get; construct set; }
@@ -478,21 +475,6 @@ public class AppearanceView : Gtk.Box {
         interface_settings.notify["changed::color-scheme"].connect (() => {
             color_scheme_refresh ();
         });
-
-        prefer_soft_radio.toggled.connect (() => {
-            set_dark_mode_strength (He.DarkModeStrength.SOFT);
-        });
-        prefer_medium_radio.toggled.connect (() => {
-            set_dark_mode_strength (He.DarkModeStrength.MEDIUM);
-        });
-        prefer_harsh_radio.toggled.connect (() => {
-            set_dark_mode_strength (He.DarkModeStrength.HARSH);
-        });
-
-        dark_mode_strength_refresh ();
-        tau_appearance_settings.notify["changed::dark-mode-strength"].connect (() => {
-            dark_mode_strength_refresh ();
-        });
     }
 
     private void set_color_scheme (He.Desktop.ColorScheme color_scheme) {
@@ -514,28 +496,6 @@ public class AppearanceView : Gtk.Box {
             prefer_default_radio.set_active (false);
             prefer_light_radio.set_active (false);
             prefer_dark_radio.set_active (true);
-        }
-    }
-
-    private void set_dark_mode_strength (He.DarkModeStrength strength) {
-        tau_appearance_settings.set_enum ("dark-mode-strength", strength);
-    }
-
-    private void dark_mode_strength_refresh () {
-        int value = tau_appearance_settings.get_enum ("dark-mode-strength");
-
-        if (value == He.DarkModeStrength.SOFT) {
-            prefer_soft_radio.set_active (true);
-            prefer_medium_radio.set_active (false);
-            prefer_harsh_radio.set_active (false);
-        } else if (value == He.DarkModeStrength.MEDIUM) {
-            prefer_soft_radio.set_active (false);
-            prefer_medium_radio.set_active (true);
-            prefer_harsh_radio.set_active (false);
-        } else if (value == He.DarkModeStrength.HARSH) {
-            prefer_soft_radio.set_active (false);
-            prefer_medium_radio.set_active (false);
-            prefer_harsh_radio.set_active (true);
         }
     }
 
