@@ -264,3 +264,7 @@ spinbutton.flat {
 .color-scheme-button:checked label {
   font-weight: 700;
 }
+
+.content-block-image {
+  border-radius: 26px;
+}

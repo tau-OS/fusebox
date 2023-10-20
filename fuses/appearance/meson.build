@@ -3,6 +3,7 @@ fuse_files = files(
     'AppearanceView.vala',
     'WallpaperGrid.vala',
     'TextView.vala',
+    'WindowView.vala',
     # 'DockView.vala',
 )
 

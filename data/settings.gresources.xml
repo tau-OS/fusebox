@@ -8,6 +8,17 @@
     <file alias="light.svg">assets/light.svg</file>
     <file alias="dark.svg">assets/dark.svg</file>
     <file alias="by-apps.svg">assets/by-apps.svg</file>
+
+    <file alias="adwaita-d.svg">assets/adwaita-d.svg</file>
+    <file alias="adwaita-l.svg">assets/adwaita-l.svg</file>
+    <file alias="breeze-d.svg">assets/breeze-d.svg</file>
+    <file alias="breeze-l.svg">assets/breeze-l.svg</file>
+    <file alias="fluent-d.svg">assets/fluent-d.svg</file>
+    <file alias="fluent-l.svg">assets/fluent-l.svg</file>
+    <file alias="granite-d.svg">assets/granite-d.svg</file>
+    <file alias="granite-l.svg">assets/granite-l.svg</file>
+    <file alias="kiri-d.svg">assets/kiri-d.svg</file>
+    <file alias="kiri-l.svg">assets/kiri-l.svg</file>
   </gresource>
   <gresource prefix="/com/fyralabs/Fusebox/icons">
     <file alias="scalable/actions/default-scroll-symbolic.svg">icons/hicolor/scalable/actions/default-scroll-symbolic.svg</file>

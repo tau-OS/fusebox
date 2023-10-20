@@ -411,6 +411,7 @@ public class AppearanceView : Gtk.Box {
         var wclamp = new Bis.Latch ();
         wclamp.set_child (wsw);
 
+        var window_view = new Appearance.WindowView ();
         var text_view = new Appearance.TextView ();
 
         var main_stack = new Gtk.Stack () {
@@ -418,6 +419,7 @@ public class AppearanceView : Gtk.Box {
             transition_duration = 400
         };
         main_stack.add_titled (clamp, "desktop", _("Desktop"));
+        main_stack.add_titled (window_view, "windows", _("Windows"));
         main_stack.add_titled (text_view, "text", _("Text"));
 
         var stack_switcher = new He.ViewSwitcher ();
