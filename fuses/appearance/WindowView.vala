@@ -16,7 +16,8 @@
      construct {
         wm_layout_preview = new He.ContentBlockImage ("resource:///com/fyralabs/Fusebox/Appearance/kiri-l.svg") {
             requested_width = 550,
-            requested_height = 200
+            requested_height = 200,
+            halign = Gtk.Align.CENTER
         };
 
         wm_layout_cb = new Gtk.ComboBoxText () {
@@ -168,7 +169,10 @@
         var sw = new Gtk.ScrolledWindow ();
         sw.set_child (grid);
 
-        append (sw);
+        var lapel = new Bis.Latch ();
+        lapel.set_child (sw);
+
+        append (lapel);
         hexpand = true;
 
         wm_layout_refresh ();
