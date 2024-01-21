@@ -57,6 +57,7 @@ public class Bluetooth.MainView : He.Bin {
         clamp.set_parent (this);
 
         this.vexpand = true;
+        this.hexpand = true;
 
         if (manager.retrieve_finished) {
             complete_setup ();
