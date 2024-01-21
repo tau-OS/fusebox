@@ -1,14 +1,14 @@
-%define glib2_version 2.72.0
-%define gnome_desktop_version 42.0
+%define glib2_version 2.78.0
+%define gnome_desktop_version 44.0
 %define gsd_version 42.1
-%define gsettings_desktop_schemas_version 42.0
-%define gtk4_version 4.6.2
+%define gsettings_desktop_schemas_version 44.0
+%define gtk4_version 4.12.5
 %define libhelium_version 1.0
 %global geoclue2_version 2.6.0
 
 Name:           fusebox
 Version:        0.2.0
-Release:        2
+Release:        3
 Summary:        Change system and user settings.
 
 License:        GPLv3+ and CC-BY-SA
