@@ -23,6 +23,7 @@ public class AppearanceView : Gtk.Box {
     public Fusebox.Fuse fuse { get; construct set; }
     public Appearance.WallpaperGrid wallpaper_view;
     public Gtk.Switch accent_switch;
+    public Gtk.Switch contrast_switch;
     public Gtk.ScrolledWindow sw;
     public Gtk.Label wallpaper_details_label;
     public Gtk.Label wallpaper_details_sublabel;
@@ -298,6 +299,22 @@ public class AppearanceView : Gtk.Box {
         wallpaper_accent_box.append (accentw_label);
         wallpaper_accent_box.append (accent_switch);
 
+        var contrast_label = new Gtk.Label (_("High contrast")) {
+            halign = Gtk.Align.START,
+            valign = Gtk.Align.CENTER
+        };
+        contrast_label.add_css_class ("cb-title");
+
+        contrast_switch = new Gtk.Switch () {
+            halign = Gtk.Align.END,
+            valign = Gtk.Align.CENTER,
+            hexpand = true
+        };
+
+        var contrast_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+        contrast_box.append (contrast_label);
+        contrast_box.append (contrast_switch);
+
         accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0) {
             homogeneous = true,
             halign = Gtk.Align.END,
@@ -365,6 +382,7 @@ public class AppearanceView : Gtk.Box {
         grid.attach (accent_main_box, 0, 1);
         grid.attach (wallpaper_accent_box, 0, 2);
         grid.attach (ensor_main_box, 0, 3);
+        grid.attach (contrast_box, 0, 4);
         grid.add_css_class ("mini-content-block");
 
         fusebox_appearance_settings.bind ("wallpaper-accent", accent_switch, "active", SettingsBindFlags.DEFAULT);
@@ -386,6 +404,17 @@ public class AppearanceView : Gtk.Box {
             } else {
                 multi.set_active (true);
                 accent_box.sensitive = true;
+            }
+            return Gdk.EVENT_PROPAGATE;
+        });
+
+        contrast_switch.state_set.connect (() => {
+            if (contrast_switch.active) {
+                set_contrast_scheme (He.Desktop.ContrastScheme.HIGH);
+                accent_set.begin ();
+            } else {
+                set_contrast_scheme (He.Desktop.ContrastScheme.DEFAULT);
+                accent_set.begin ();
             }
             return Gdk.EVENT_PROPAGATE;
         });
@@ -477,6 +506,11 @@ public class AppearanceView : Gtk.Box {
         interface_settings.notify["changed::color-scheme"].connect (() => {
             color_scheme_refresh ();
         });
+
+        contrast_refresh ();
+        tau_appearance_settings.notify["changed::contrast"].connect (() => {
+            contrast_refresh ();
+        });
     }
 
     private void set_color_scheme (He.Desktop.ColorScheme color_scheme) {
@@ -498,6 +532,22 @@ public class AppearanceView : Gtk.Box {
             prefer_default_radio.set_active (false);
             prefer_light_radio.set_active (false);
             prefer_dark_radio.set_active (true);
+        }
+    }
+
+    private void set_contrast_scheme (He.Desktop.ContrastScheme contrast_scheme) {
+        tau_appearance_settings.set_enum ("contrast", contrast_scheme);
+    }
+
+    private void contrast_refresh () {
+        int value = tau_appearance_settings.get_enum ("contrast");
+
+        if (value == He.Desktop.ContrastScheme.DEFAULT) {
+            contrast_switch.active = false;
+        } else if (value == He.Desktop.ContrastScheme.HIGH) {
+            contrast_switch.active = true;
+        } else if (value == He.Desktop.ContrastScheme.LOW) {
+            contrast_switch.active = false;
         }
     }
 
