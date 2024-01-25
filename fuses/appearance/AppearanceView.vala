@@ -411,10 +411,8 @@ public class AppearanceView : Gtk.Box {
         contrast_switch.state_set.connect (() => {
             if (contrast_switch.active) {
                 set_contrast_scheme (He.Desktop.ContrastScheme.HIGH);
-                accent_set.begin ();
             } else {
                 set_contrast_scheme (He.Desktop.ContrastScheme.DEFAULT);
-                accent_set.begin ();
             }
             return Gdk.EVENT_PROPAGATE;
         });
