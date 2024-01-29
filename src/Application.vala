@@ -135,6 +135,7 @@ namespace Fusebox {
             };
             search_box.add_controller (search_box_eventcontrollerkey);
             search_box.add_css_class ("search");
+            search_box.add_css_class ("text-field");
 
             var search_button = new Gtk.ToggleButton ();
             search_button.icon_name = "system-search-symbolic";
@@ -163,7 +164,7 @@ namespace Fusebox {
             headerbar = new He.AppBar () {
                 show_back = false,
                 show_right_title_buttons = false,
-                width_request = 230
+                width_request = 265
             };
 
             var title_label = new Gtk.Label (_("Settings"));
