@@ -24,8 +24,7 @@ public class Fusebox.CategoryIcon : Gtk.ListBoxRow {
 
     construct {
         var icon = new Gtk.Image.from_icon_name (fuse.icon) {
-            pixel_size = 16,
-            tooltip_text = fuse.description
+            pixel_size = 24,
         };
 
         var fuse_name = new Gtk.Label (fuse.display_name) {
@@ -34,11 +33,13 @@ public class Fusebox.CategoryIcon : Gtk.ListBoxRow {
             wrap_mode = Pango.WrapMode.WORD_CHAR,
             xalign = 0
         };
+        fuse_name.add_css_class ("cb-title");
 
         var layout = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 16);
         layout.append (icon);
         layout.append (fuse_name);
         layout.add_css_class ("mini-content-block");
+        layout.tooltip_text = fuse.description;
 
         child = layout;
 

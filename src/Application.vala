@@ -129,9 +129,7 @@ namespace Fusebox {
                 visible = false,
                 halign = Gtk.Align.START,
                 margin_start = 18,
-                margin_end = 18,
-                margin_bottom = 12,
-                margin_top = 6
+                margin_end = 18
             };
             search_box.add_controller (search_box_eventcontrollerkey);
             search_box.add_css_class ("search");
