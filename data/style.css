@@ -33,11 +33,11 @@ button.flat label {
 }
 
 .wallpaper-grid flowboxchild:selected .content-block-image {
-  border-radius: 999px;
+  border-radius: 12px;
 }
 
 .wallpaper-grid flowboxchild .content-block-image {
-  border-radius: 26px;
+  border-radius: 8px;
 }
 
 .red radio {
@@ -268,5 +268,5 @@ spinbutton.flat {
 }
 
 .content-block-image {
-  border-radius: 26px;
+  border-radius: 8px;
 }
