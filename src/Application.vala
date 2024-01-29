@@ -153,6 +153,7 @@ namespace Fusebox {
             };
             menu_popover_grid.attach (about_menu_item, 0, 0, 1, 1);
             menu_popover.child = menu_popover_grid;
+            menu_popover.has_arrow = false;
 
             var menu_button = new Gtk.MenuButton () {
                 popover = menu_popover,
