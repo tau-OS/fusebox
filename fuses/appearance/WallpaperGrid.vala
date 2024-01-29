@@ -36,8 +36,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
 
     private Gtk.ScrolledWindow wallpaper_scrolled_window;
     private Gtk.FlowBox wallpaper_view;
-    private He.OverlayButton view_overlay;
-    private He.DisclosureButton wallpaper_removal_button;
+    private He.TextButton wallpaper_add_button;
+    private He.TextButton wallpaper_removal_button;
 
     public Appearance.WallpaperContainer active_wallpaper = null;
     private Appearance.WallpaperContainer wallpaper_for_removal = null;
@@ -81,7 +81,21 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         };
         wallpaper_label.add_css_class ("cb-title");
 
-        wallpaper_removal_button = new He.DisclosureButton ("") {
+        var wallpaper_title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
+            spacing = 12,
+            hexpand = true,
+            halign = Gtk.Align.START
+        };
+
+        wallpaper_add_button = new He.TextButton ("") {
+            child = new He.ButtonContent () {
+                label = "Add Wallpaper…",
+                icon = "list-add-symbolic"
+            }
+        };
+        wallpaper_add_button.clicked.connect (show_wallpaper_chooser);
+
+        wallpaper_removal_button = new He.TextButton ("") {
             hexpand = true,
             halign = Gtk.Align.START,
             icon = "user-trash-symbolic",
@@ -98,10 +112,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             wallpaper_removal_button.visible = false;
         });
 
-        var wallpaper_title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
-            spacing = 12,
-            hexpand = true
-        };
+        wallpaper_title_box.prepend (wallpaper_add_button);
         wallpaper_title_box.append (wallpaper_removal_button);
 
         var wallpaper_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
@@ -112,17 +123,10 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         wallpaper_main_box.append (wallpaper_title_box);
         wallpaper_main_box.append (wallpaper_view);
 
-        view_overlay = new He.OverlayButton ("", null, null) {
-            typeb = SECONDARY
-        };
-        view_overlay.icon = "list-add-symbolic";
-        view_overlay.child = (wallpaper_main_box);
-
         load_settings ();
-        attach (view_overlay, 0, 1);
-        margin_start = 18; margin_end = 18;
-
-        view_overlay.clicked.connect (show_wallpaper_chooser);
+        attach (wallpaper_main_box, 0, 1);
+        margin_start = 18;
+        margin_end = 18;
     }
 
     public const string FILE_ATTRIBUTES = "standard::*,time::*,id::file,id::filesystem,etag::value";
