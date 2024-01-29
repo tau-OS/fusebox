@@ -164,7 +164,7 @@ namespace Fusebox {
             headerbar = new He.AppBar () {
                 show_back = false,
                 show_right_title_buttons = false,
-                width_request = 265
+                width_request = 305
             };
 
             var title_label = new Gtk.Label (_("Settings"));
@@ -255,8 +255,8 @@ namespace Fusebox {
             add_window (main_window);
             main_window.present ();
             main_window.set_size_request (360, 360);
-            main_window.default_height = 711;
-            main_window.default_width = 800;
+            main_window.default_height = 800;
+            main_window.default_width = 900;
             // Actions
             actions = new SimpleActionGroup ();
             actions.add_action_entries (ACTION_ENTRIES, this);
