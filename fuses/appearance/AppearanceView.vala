@@ -29,6 +29,7 @@ public class AppearanceView : Gtk.Box {
     public Gtk.Label wallpaper_details_sublabel;
     private Gtk.FlowBox main_flowbox;
     private EnsorModeButton current_emb;
+    private uint rscale_timeout;
 
     private string _ensor;
     public string ensor {
@@ -378,11 +379,55 @@ public class AppearanceView : Gtk.Box {
         ensor_main_box.append (main_flowbox);
         ensor_main_box.add_css_class ("ensor-box");
 
+        var roundness_label = new Gtk.Label (_("UI Roundness")) {
+            halign = Gtk.Align.START
+        };
+        roundness_label.add_css_class ("cb-title");
+
+        var roundness_adjustment = new Gtk.Adjustment (-1, 0.75, 2.0, 0.0858, 0, 0);
+
+        var roundness_scale = new Gtk.Scale (Gtk.Orientation.HORIZONTAL, roundness_adjustment) {
+            draw_value = false,
+            hexpand = true
+        };
+        roundness_scale.add_mark (1.0, Gtk.PositionType.TOP, null);
+        roundness_scale.add_mark (1.5, Gtk.PositionType.TOP, null);
+        roundness_scale.add_mark (2.0, Gtk.PositionType.TOP, null);
+
+        var roundness_spinbutton = new Gtk.SpinButton (roundness_adjustment, 0.25, 2) {
+            valign = Gtk.Align.CENTER
+        };
+
+        var roundness_control_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+        roundness_control_box.append (roundness_scale);
+        roundness_control_box.append (roundness_spinbutton);
+
+        var roundness_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        roundness_box.append (roundness_label);
+        roundness_box.append (roundness_control_box);
+        roundness_box.add_css_class ("mini-content-block");
+
+        tau_appearance_settings.bind ("font-weight", roundness_adjustment, "value", SettingsBindFlags.GET);
+
+        // Setting scale is slow, so we wait while pressed to keep UI responsive
+        roundness_adjustment.value_changed.connect (() => {
+            if (rscale_timeout != 0) {
+                GLib.Source.remove (rscale_timeout);
+            }
+
+            rscale_timeout = Timeout.add (300, () => {
+                rscale_timeout = 0;
+                tau_appearance_settings.set_double ("roundness", roundness_adjustment.value);
+                return false;
+            });
+        });
+
         grid.attach (prefer_box, 0, 0);
         grid.attach (accent_main_box, 0, 1);
         grid.attach (wallpaper_accent_box, 0, 2);
         grid.attach (ensor_main_box, 0, 3);
         grid.attach (contrast_box, 0, 4);
+        grid.attach (roundness_box, 0, 5);
         grid.add_css_class ("mini-content-block");
 
         fusebox_appearance_settings.bind ("wallpaper-accent", accent_switch, "active", SettingsBindFlags.DEFAULT);
