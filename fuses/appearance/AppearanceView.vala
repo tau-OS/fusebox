@@ -392,6 +392,8 @@ public class AppearanceView : Gtk.Box {
         };
         roundness_scale.add_mark (1.0, Gtk.PositionType.TOP, null);
         roundness_scale.add_mark (2.0, Gtk.PositionType.TOP, null);
+        roundness_scale.add_mark (3.0, Gtk.PositionType.TOP, null);
+        roundness_scale.add_mark (4.0, Gtk.PositionType.TOP, null);
 
         var roundness_spinbutton = new Gtk.SpinButton (roundness_adjustment, 0.25, 2) {
             valign = Gtk.Align.CENTER
