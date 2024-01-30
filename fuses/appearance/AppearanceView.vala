@@ -384,7 +384,7 @@ public class AppearanceView : Gtk.Box {
         };
         roundness_label.add_css_class ("cb-title");
 
-        var roundness_adjustment = new Gtk.Adjustment (-1, 0.0, 12.5, 0.1, 0, 0);
+        var roundness_adjustment = new Gtk.Adjustment (-1, 0.0, 12.5, 1.0, 0, 0);
 
         var roundness_scale = new Gtk.Scale (Gtk.Orientation.HORIZONTAL, roundness_adjustment) {
             draw_value = false,
