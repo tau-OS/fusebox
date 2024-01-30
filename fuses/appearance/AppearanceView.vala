@@ -399,7 +399,7 @@ public class AppearanceView : Gtk.Box {
         roundness_scale.scale.draw_value = true;
         roundness_scale.scale.value_pos = Gtk.PositionType.LEFT;
         roundness_scale.stop_indicator_visibility = true;
-        roundness_scale.scale.add_mark (1.0, Gtk.PositionType.TOP, null);
+        roundness_scale.add_mark (1.0, null);
 
         var roundness_control_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         roundness_control_box.append (roundness_scale);

@@ -30,7 +30,7 @@ public class Appearance.TextView : Gtk.Box {
         size_scale.scale.draw_value = true;
         size_scale.scale.value_pos = Gtk.PositionType.LEFT;
         size_scale.stop_indicator_visibility = true;
-        size_scale.scale.add_mark (1, Gtk.PositionType.TOP, null);
+        size_scale.add_mark (1, null);
 
         var size_control_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         size_control_box.append (size_scale);
@@ -55,7 +55,7 @@ public class Appearance.TextView : Gtk.Box {
         font_weight_scale.scale.draw_value = true;
         font_weight_scale.scale.value_pos = Gtk.PositionType.LEFT;
         font_weight_scale.stop_indicator_visibility = true;
-        font_weight_scale.scale.add_mark (1.0, Gtk.PositionType.TOP, null);
+        font_weight_scale.add_mark (1.0, null);
 
         var font_weight_control_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         font_weight_control_box.append (font_weight_scale);
