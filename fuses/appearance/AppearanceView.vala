@@ -405,7 +405,6 @@ public class AppearanceView : Gtk.Box {
         var roundness_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         roundness_box.append (roundness_label);
         roundness_box.append (roundness_control_box);
-        roundness_box.add_css_class ("mini-content-block");
 
         tau_appearance_settings.bind ("font-weight", roundness_adjustment, "value", SettingsBindFlags.GET);
 
