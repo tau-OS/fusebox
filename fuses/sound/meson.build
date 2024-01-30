@@ -22,7 +22,7 @@ shared_module('fuse-sound',
         dependency('gobject-2.0', version: '>=2.34'),
         dependency('libpulse'),
         dependency('libpulse-mainloop-glib'),
-        meson.get_compiler('vala').find_library('libpulse-ext', dirs: join_paths(meson.source_root(), 'fuses/sound/vapi')),
+        meson.get_compiler('vala').find_library('libpulse-ext', dirs: join_paths(meson.current_source_dir(), 'vapi')),
     ],
     install: true,
     install_dir: join_paths(fuses_dir, 'system')
