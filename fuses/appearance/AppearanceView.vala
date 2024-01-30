@@ -384,15 +384,15 @@ public class AppearanceView : Gtk.Box {
         };
         roundness_label.add_css_class ("cb-title");
 
-        var roundness_adjustment = new Gtk.Adjustment (-1, 0.75, 2.0, 0.0858, 0, 0);
+        var roundness_adjustment = new Gtk.Adjustment (-1, 0.0, 12.5, 0.1, 0, 0);
 
         var roundness_scale = new Gtk.Scale (Gtk.Orientation.HORIZONTAL, roundness_adjustment) {
             draw_value = false,
             hexpand = true
         };
         roundness_scale.add_mark (1.0, Gtk.PositionType.TOP, null);
-        roundness_scale.add_mark (1.5, Gtk.PositionType.TOP, null);
         roundness_scale.add_mark (2.0, Gtk.PositionType.TOP, null);
+        roundness_scale.add_mark (5.0, Gtk.PositionType.TOP, null);
 
         var roundness_spinbutton = new Gtk.SpinButton (roundness_adjustment, 0.25, 2) {
             valign = Gtk.Align.CENTER
