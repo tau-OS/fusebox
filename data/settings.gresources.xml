@@ -21,6 +21,8 @@
     <file alias="kiri-l.svg">assets/kiri-l.svg</file>
   </gresource>
   <gresource prefix="/com/fyralabs/Fusebox/icons">
+    <file alias="scalable/actions/no-round-symbolic.svg">icons/hicolor/scalable/actions/no-round-symbolic.svg</file>
+    <file alias="scalable/actions/round-symbolic.svg">icons/hicolor/scalable/actions/round-symbolic.svg</file>
     <file alias="scalable/actions/default-scroll-symbolic.svg">icons/hicolor/scalable/actions/default-scroll-symbolic.svg</file>
     <file alias="scalable/actions/natural-scroll-symbolic.svg">icons/hicolor/scalable/actions/natural-scroll-symbolic.svg</file>
     <file alias="scalable/actions/default-touch-scroll-symbolic.svg">icons/hicolor/scalable/actions/default-touch-scroll-symbolic.svg</file>
