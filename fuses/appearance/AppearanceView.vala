@@ -391,20 +391,17 @@ public class AppearanceView : Gtk.Box {
 
         var roundness_adjustment = new Gtk.Adjustment (-1, 0.0, 3.0, 1.0, 0, 0);
 
-        var roundness_scale = new Gtk.Scale (Gtk.Orientation.HORIZONTAL, roundness_adjustment) {
-            draw_value = false,
+        var roundness_scale = new He.Slider () {
             hexpand = true
         };
-        roundness_scale.add_mark (1.0, Gtk.PositionType.TOP, null);
-        roundness_scale.add_mark (2.0, Gtk.PositionType.TOP, null);
-
-        var roundness_spinbutton = new Gtk.SpinButton (roundness_adjustment, 0.25, 2) {
-            valign = Gtk.Align.CENTER
-        };
+        roundness_scale.scale.orientation = Gtk.Orientation.HORIZONTAL;
+        roundness_scale.scale.adjustment = roundness_adjustment;
+        roundness_scale.scale.draw_value = false;
+        roundness_scale.stop_indicator_visibility = true;
+        roundness_scale.scale.add_mark (1.0, Gtk.PositionType.TOP, null);
 
         var roundness_control_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         roundness_control_box.append (roundness_scale);
-        roundness_control_box.append (roundness_spinbutton);
 
         var roundness_title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         roundness_title_box.append (roundness_label);

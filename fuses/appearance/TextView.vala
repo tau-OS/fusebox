@@ -20,22 +20,19 @@ public class Appearance.TextView : Gtk.Box {
         };
         size_label.add_css_class ("cb-title");
 
-        var size_adjustment = new Gtk.Adjustment (-1, 0.75, 1.5, 0.05, 0, 0);
+        var size_adjustment = new Gtk.Adjustment (-1, 0.75, 2.0, 0.1, 0, 0);
 
-        var size_scale = new Gtk.Scale (Gtk.Orientation.HORIZONTAL, size_adjustment) {
-            draw_value = false,
+        var size_scale = new He.Slider () {
             hexpand = true
         };
-        size_scale.add_mark (1, Gtk.PositionType.TOP, null);
-        size_scale.add_mark (1.25, Gtk.PositionType.TOP, null);
-
-        var size_spinbutton = new Gtk.SpinButton (size_adjustment, 0.25, 2) {
-            valign = Gtk.Align.CENTER
-        };
+        size_scale.scale.orientation = Gtk.Orientation.HORIZONTAL;
+        size_scale.scale.adjustment = size_adjustment;
+        size_scale.scale.draw_value = false;
+        size_scale.stop_indicator_visibility = true;
+        size_scale.scale.add_mark (1, Gtk.PositionType.TOP, null);
 
         var size_control_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         size_control_box.append (size_scale);
-        size_control_box.append (size_spinbutton);
 
         var size_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         size_box.append (size_label);
@@ -49,21 +46,17 @@ public class Appearance.TextView : Gtk.Box {
 
         var font_weight_adjustment = new Gtk.Adjustment (-1, 0.75, 2.0, 0.0858, 0, 0);
 
-        var font_weight_scale = new Gtk.Scale (Gtk.Orientation.HORIZONTAL, font_weight_adjustment) {
-            draw_value = false,
+        var font_weight_scale = new He.Slider () {
             hexpand = true
         };
-        font_weight_scale.add_mark (1.0, Gtk.PositionType.TOP, null);
-        font_weight_scale.add_mark (1.5, Gtk.PositionType.TOP, null);
-        font_weight_scale.add_mark (2.0, Gtk.PositionType.TOP, null);
-
-        var font_weight_spinbutton = new Gtk.SpinButton (font_weight_adjustment, 0.25, 2) {
-            valign = Gtk.Align.CENTER
-        };
+        font_weight_scale.scale.orientation = Gtk.Orientation.HORIZONTAL;
+        font_weight_scale.scale.adjustment = font_weight_adjustment;
+        font_weight_scale.scale.draw_value = false;
+        font_weight_scale.stop_indicator_visibility = true;
+        font_weight_scale.scale.add_mark (1.0, Gtk.PositionType.TOP, null);
 
         var font_weight_control_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         font_weight_control_box.append (font_weight_scale);
-        font_weight_control_box.append (font_weight_spinbutton);
 
         var font_weight_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         font_weight_box.append (font_weight_label);
