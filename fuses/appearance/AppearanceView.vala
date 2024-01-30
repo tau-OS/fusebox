@@ -384,6 +384,11 @@ public class AppearanceView : Gtk.Box {
         };
         roundness_label.add_css_class ("cb-title");
 
+        var roundness_info = new Gtk.Image () {
+            icon_name = "dialog-information-symbolic",
+            tooltip_text = _("Change how round elements are based on this choice.")
+        };
+
         var roundness_adjustment = new Gtk.Adjustment (-1, 0.0, 3.0, 1.0, 0, 0);
 
         var roundness_scale = new Gtk.Scale (Gtk.Orientation.HORIZONTAL, roundness_adjustment) {
@@ -401,8 +406,12 @@ public class AppearanceView : Gtk.Box {
         roundness_control_box.append (roundness_scale);
         roundness_control_box.append (roundness_spinbutton);
 
+        var roundness_title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+        roundness_title_box.append (roundness_label);
+        roundness_title_box.append (roundness_info);
+
         var roundness_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        roundness_box.append (roundness_label);
+        roundness_box.append (roundness_title_box);
         roundness_box.append (roundness_control_box);
 
         tau_appearance_settings.bind ("font-weight", roundness_adjustment, "value", SettingsBindFlags.GET);
