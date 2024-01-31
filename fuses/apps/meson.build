@@ -32,6 +32,7 @@ cargo_build = custom_target(
   depend_files: [
     meson.project_source_root() / 'fuses/apps' / 'Cargo.toml',
     meson.project_source_root() / 'fuses/apps' / 'src' / 'lib.rs',
+    meson.project_build_root() / 'meson-private' / 'fusebox-1.pc',
   ],
 
   depends: [
