@@ -55,7 +55,7 @@ libfusebox_lib = library('fusebox-1',
 
 
 
-libfusebox_pc = pkg.generate(
+pkg.generate(
     libfusebox_lib,
     filebase: 'fusebox-1',
     name: 'Fusebox',
