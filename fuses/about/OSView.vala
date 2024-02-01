@@ -20,6 +20,16 @@ public class About.OSView : Gtk.Box {
     private Gtk.Label storage_subtitle;
     private Gtk.ProgressBar storage_gauge;
 
+    private static Regex pc_name_regex;
+
+    static construct {
+      try {
+        pc_name_regex = new Regex ("^[A-Za-z0-9' ]*$");
+      } catch (Error e) {
+        critical ("Failed to compile regex: %s", e.message);
+      }
+    }
+
     construct {
         try {
             system_interface = Bus.get_proxy_sync (
@@ -55,7 +65,9 @@ public class About.OSView : Gtk.Box {
         var os_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
         os_box.append (os_title);
         os_box.append (os_subtitle);
-        os_box.add_css_class ("main-content-block");
+        os_box.add_css_class ("mini-content-block");
+        os_box.add_css_class ("surface-container-highest-bg-color");
+        os_box.add_css_class ("x-large-radius");
 
         var hostname_title = new Gtk.Label (_("Device Name")) {
             selectable = true,
@@ -272,8 +284,10 @@ public class About.OSView : Gtk.Box {
                 icon_name = "dialog-information-symbolic"
             };
 
-            var rename_entry = new He.TextField () {
-                text = system_interface.pretty_hostname
+            var rename_entry = new He.TextField.from_regex (pc_name_regex) {
+                text = system_interface.pretty_hostname,
+                needs_validation = true,
+                support_text = (_("4—32 letters/numbers, with apostrophe or spaces if needed.")),
             };
 
             rename_entry.notify["is-valid"].connect (() => {
