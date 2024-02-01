@@ -389,7 +389,7 @@ public class AppearanceView : Gtk.Box {
             tooltip_text = _("Change how round elements are based on this choice.")
         };
 
-        var roundness_adjustment = new Gtk.Adjustment (-1, 0.0, 3.0, 1.0, 0, 0);
+        var roundness_adjustment = new Gtk.Adjustment (-1, 0.0, 2.0, 1.0, 0, 0);
 
         var roundness_scale = new He.Slider () {
             hexpand = true
@@ -413,7 +413,7 @@ public class AppearanceView : Gtk.Box {
         roundness_box.append (roundness_title_box);
         roundness_box.append (roundness_control_box);
 
-        tau_appearance_settings.bind ("font-weight", roundness_adjustment, "value", SettingsBindFlags.GET);
+        tau_appearance_settings.bind ("roundness", roundness_adjustment, "value", SettingsBindFlags.GET);
 
         // Setting scale is slow, so we wait while pressed to keep UI responsive
         roundness_adjustment.value_changed.connect (() => {
@@ -468,7 +468,10 @@ public class AppearanceView : Gtk.Box {
             return Gdk.EVENT_PROPAGATE;
         });
 
-        var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+            margin_start = 18,
+            margin_end = 18
+        };
         main_box.append (wallpaper_main_box);
         main_box.append (grid);
 
@@ -476,18 +479,15 @@ public class AppearanceView : Gtk.Box {
         sw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
         sw.set_child (main_box);
 
-        var clamp = new Bis.Latch ();
-        clamp.set_child (sw);
-
-        var wmain_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        var wmain_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+            margin_start = 18,
+            margin_end = 18
+        };
         wmain_box.append (wallpaper_view);
 
         var wsw = new Gtk.ScrolledWindow ();
         wsw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
         wsw.set_child (wmain_box);
-
-        var wclamp = new Bis.Latch ();
-        wclamp.set_child (wsw);
 
         var window_view = new Appearance.WindowView ();
         var text_view = new Appearance.TextView ();
@@ -496,7 +496,7 @@ public class AppearanceView : Gtk.Box {
             transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
             transition_duration = 400
         };
-        main_stack.add_titled (clamp, "desktop", _("Desktop"));
+        main_stack.add_titled (sw, "desktop", _("Desktop"));
         main_stack.add_titled (window_view, "windows", _("Windows"));
         main_stack.add_titled (text_view, "text", _("Text"));
 
@@ -516,7 +516,7 @@ public class AppearanceView : Gtk.Box {
             transition_duration = 400
         };
         wallpaper_stack.add_titled (main_stack, "appearance", _("Appearance"));
-        wallpaper_stack.add_titled (wclamp, "wallpaper", _("Wallpaper"));
+        wallpaper_stack.add_titled (wsw, "wallpaper", _("Wallpaper"));
 
         var wallpaper_mlabel = new Gtk.Label (_("Wallpaper")) {
             halign = Gtk.Align.START,
@@ -524,7 +524,7 @@ public class AppearanceView : Gtk.Box {
         };
 
         wallpaper_grid_button.clicked.connect (() => {
-            wallpaper_stack.set_visible_child (wclamp);
+            wallpaper_stack.set_visible_child (wsw);
             appbar.show_back = true;
             appbar.viewtitle_widget.unparent ();
             appbar.viewtitle_widget = wallpaper_mlabel;

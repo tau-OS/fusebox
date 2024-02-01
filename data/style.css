@@ -17,21 +17,13 @@ button.flat label {
   background: @success_container_bg_color;
   color: @success_container_fg_color;
   box-shadow: inset 0 0 0 1px @outline;
-  margin-top: 8px;
+  margin-top: 12px;
   margin-left: 6px;
 }
 
 .wallpaper-grid flowboxchild {
   background: none;
   padding: 0;
-}
-
-.wallpaper-grid flowboxchild:selected .content-block-image {
-  border-radius: 12px;
-}
-
-.wallpaper-grid flowboxchild .content-block-image {
-  border-radius: 8px;
 }
 
 .red radio {
@@ -259,8 +251,4 @@ spinbutton.flat {
 }
 .color-scheme-button:checked label {
   font-weight: 700;
-}
-
-.content-block-image {
-  border-radius: 8px;
 }

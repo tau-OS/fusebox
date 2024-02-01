@@ -19,6 +19,7 @@
             requested_height = 200,
             halign = Gtk.Align.CENTER
         };
+        wm_layout_preview.add_css_class ("large-radius");
 
         wm_layout_cb = new Gtk.ComboBoxText () {
             valign = Gtk.Align.CENTER
@@ -169,10 +170,7 @@
         var sw = new Gtk.ScrolledWindow ();
         sw.set_child (grid);
 
-        var lapel = new Bis.Latch ();
-        lapel.set_child (sw);
-
-        append (lapel);
+        append (sw);
         hexpand = true;
 
         wm_layout_refresh ();

@@ -125,8 +125,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
 
         load_settings ();
         attach (wallpaper_main_box, 0, 1);
-        margin_start = 18;
-        margin_end = 18;
     }
 
     public const string FILE_ATTRIBUTES = "standard::*,time::*,id::file,id::filesystem,etag::value";
@@ -457,9 +455,13 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
             if (value) {
                 check.set_active (true);
                 check_revealer.reveal_child = true;
+                image.remove_css_class ("large-radius");
+                image.add_css_class ("x-large-radius");
             } else {
                 check.set_active (false);
                 check_revealer.reveal_child = false;
+                image.remove_css_class ("x-large-radius");
+                image.add_css_class ("large-radius");
             }
             queue_draw ();
         }
@@ -492,6 +494,7 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
             requested_width = 135,
             requested_height = 135
         };
+        image.add_css_class ("large-radius");
 
         check = new Gtk.ToggleButton () {
             halign = Gtk.Align.START,
@@ -499,7 +502,7 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
             can_focus = false,
             icon_name = "emblem-ok-symbolic"
         };
-        check.add_css_class ("circular");
+        check.add_css_class ("circle-radius");
         check.add_css_class ("checked-up");
 
         check_revealer = new Gtk.Revealer () {
