@@ -145,11 +145,12 @@ public class AppearanceView : Gtk.Box {
         };
         prefer_sublabel.add_css_class ("cb-subtitle");
 
-        var prefer_default_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/by-apps.svg") {
-            pixel_size = 80,
-            hexpand = true,
-            halign = Gtk.Align.START
+        var prefer_default_image = new He.ContentBlockImage ("resource:///com/fyralabs/Fusebox/Appearance/by-apps.svg") {
+            requested_width = 80,
+            requested_height = 80,
+            valign = Gtk.Align.START
         };
+        prefer_default_image.add_css_class ("large-radius");
 
         var prefer_default_card = new Gtk.Grid ();
         prefer_default_card.attach (prefer_default_image, 0, 0);
@@ -173,10 +174,12 @@ public class AppearanceView : Gtk.Box {
         prefer_default_radio.add_css_class ("color-scheme-button");
         prefer_default_radio.child = (prefer_default_grid);
 
-        var prefer_light_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/light.svg") {
-            pixel_size = 80,
-            halign = Gtk.Align.START
+        var prefer_light_image = new He.ContentBlockImage ("resource:///com/fyralabs/Fusebox/Appearance/light.svg") {
+            requested_width = 80,
+            requested_height = 80,
+            valign = Gtk.Align.START
         };
+        prefer_light_image.add_css_class ("large-radius");
 
         var prefer_light_card = new Gtk.Grid ();
         prefer_light_card.attach (prefer_light_image, 0, 0);
@@ -201,10 +204,12 @@ public class AppearanceView : Gtk.Box {
         prefer_light_radio.add_css_class ("color-scheme-button");
         prefer_light_radio.child = (prefer_light_grid);
 
-        var dark_image = new Gtk.Image.from_resource ("/com/fyralabs/Fusebox/Appearance/dark.svg") {
-            pixel_size = 80,
-            halign = Gtk.Align.START
+        var dark_image = new He.ContentBlockImage ("resource:///com/fyralabs/Fusebox/Appearance/dark.svg") {
+            requested_width = 80,
+            requested_height = 80,
+            valign = Gtk.Align.START
         };
+        dark_image.add_css_class ("large-radius");
 
         var dark_card = new Gtk.Grid ();
         dark_card.attach (dark_image, 0, 0);
