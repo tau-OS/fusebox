@@ -1,7 +1,5 @@
 docgen = find_program('valadoc', required: get_option('documentation'))
 
-docs_dir = datadir / 'doc'
-
 dir = 'fusebox'
 target = custom_target(
     'valadoc',
