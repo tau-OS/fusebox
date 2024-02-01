@@ -2,9 +2,9 @@ public class Sound.OutputPanel : Gtk.Grid {
     private Gtk.ListBox devices_listbox;
     private unowned PulseAudioManager pam;
 
-    Gtk.Scale volume_scale;
+    He.Slider volume_scale;
     Gtk.Switch volume_switch;
-    Gtk.Scale balance_scale;
+    He.Slider balance_scale;
 
     private Device default_device = null;
 
@@ -39,16 +39,17 @@ public class Sound.OutputPanel : Gtk.Grid {
             hexpand = true
         };
 
-        volume_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 5) {
-            draw_value = false,
+        var volume_adjustment = new Gtk.Adjustment (-1, 0.0, 100.0, 5.0, 0, 0);
+        volume_scale = new He.Slider () {
             hexpand = true,
             valign = Gtk.Align.CENTER
         };
-        volume_scale.adjustment.page_increment = 5;
-        volume_scale.set_range (0, 100);
-        volume_scale.add_mark (0, Gtk.PositionType.BOTTOM, _("0%"));
-        volume_scale.add_mark (70, Gtk.PositionType.BOTTOM, _("Recommended"));
-        volume_scale.add_mark (100, Gtk.PositionType.BOTTOM, _("100%"));
+        volume_scale.scale.orientation = Gtk.Orientation.HORIZONTAL;
+        volume_scale.scale.adjustment = volume_adjustment;
+        volume_scale.scale.draw_value = false;
+        volume_scale.add_mark (0, _("0%"));
+        volume_scale.add_mark (70, _("Recommended"));
+        volume_scale.add_mark (100, _("100%"));
 
         var settings = new GLib.Settings ("com.fyralabs.Fusebox");
         if (settings.get_boolean ("show-audio-dialog")) {
@@ -66,17 +67,18 @@ public class Sound.OutputPanel : Gtk.Grid {
             hexpand = true
         };
 
-        balance_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, -1, 1, 0.1) {
-            draw_value = false,
-            has_origin = false,
+        var balance_adjustment = new Gtk.Adjustment (-1, -1, 1, 0.1, 0, 0);
+        balance_scale = new He.Slider () {
             hexpand = true,
             valign = Gtk.Align.CENTER
         };
-
-        balance_scale.adjustment.page_increment = 0.1;
-        balance_scale.add_mark (-1, Gtk.PositionType.BOTTOM, _("Left"));
-        balance_scale.add_mark (0, Gtk.PositionType.BOTTOM, _("Center"));
-        balance_scale.add_mark (1, Gtk.PositionType.BOTTOM, _("Right"));
+        balance_scale.scale.orientation = Gtk.Orientation.HORIZONTAL;
+        balance_scale.scale.adjustment = balance_adjustment;
+        balance_scale.scale.draw_value = false;
+        balance_scale.scale.has_origin = false;
+        balance_scale.add_mark (-1, _("Left"));
+        balance_scale.add_mark (0, _("Center"));
+        balance_scale.add_mark (1, _("Right"));
 
         var balance_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         balance_box.append (balance_scale);
@@ -116,7 +118,10 @@ public class Sound.OutputPanel : Gtk.Grid {
             hexpand = true
         };
 
-        screen_reader_switch.set_parent (screen_reader_settings_row);
+        var screen_reader_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        screen_reader_box.append (screen_reader_switch);
+
+        screen_reader_box.set_parent (screen_reader_settings_row);
 
         var no_device_grid = new He.EmptyPage ();
         no_device_grid.title = _("No Connected Audio Devices Detected");
@@ -166,8 +171,8 @@ public class Sound.OutputPanel : Gtk.Grid {
                 if (volume_switch.active == default_device.is_muted) {
                     volume_switch.activate ();
                 }
-                volume_scale.set_value (default_device.volume);
-                balance_scale.set_value (default_device.balance);
+                volume_scale.scale.set_value (default_device.volume);
+                balance_scale.scale.set_value (default_device.balance);
                 default_device.notify.connect (device_notify);
             }
         }
@@ -177,14 +182,14 @@ public class Sound.OutputPanel : Gtk.Grid {
 
     private void disconnect_signals () {
         volume_switch.notify["active"].disconnect (volume_switch_changed);
-        volume_scale.value_changed.disconnect (volume_scale_value_changed);
-        balance_scale.value_changed.disconnect (balance_scale_value_changed);
+        volume_scale.scale.value_changed.disconnect (volume_scale_value_changed);
+        balance_scale.scale.value_changed.disconnect (balance_scale_value_changed);
     }
 
     private void connect_signals () {
         volume_switch.notify["active"].connect (volume_switch_changed);
-        volume_scale.value_changed.connect (volume_scale_value_changed);
-        balance_scale.value_changed.connect (balance_scale_value_changed);
+        volume_scale.scale.value_changed.connect (volume_scale_value_changed);
+        balance_scale.scale.value_changed.connect (balance_scale_value_changed);
     }
 
     private void volume_scale_value_changed () {
@@ -194,7 +199,7 @@ public class Sound.OutputPanel : Gtk.Grid {
         if (settings.get_boolean ("show-audio-dialog")) {
             audio_alert_dialog_cb ();
         } else {
-            pam.change_device_volume (default_device, (float) volume_scale.get_value ());
+            pam.change_device_volume (default_device, (float) volume_scale.scale.get_value ());
         }
 
         connect_signals ();
@@ -202,7 +207,7 @@ public class Sound.OutputPanel : Gtk.Grid {
 
     private void balance_scale_value_changed () {
         disconnect_signals ();
-        pam.change_device_balance (default_device, (float) balance_scale.get_value ());
+        pam.change_device_balance (default_device, (float) balance_scale.scale.get_value ());
         connect_signals ();
     }
 
@@ -221,10 +226,10 @@ public class Sound.OutputPanel : Gtk.Grid {
                 }
                 break;
             case "volume":
-                volume_scale.set_value (default_device.volume);
+                volume_scale.scale.set_value (default_device.volume);
                 break;
             case "balance":
-                balance_scale.set_value (default_device.balance);
+                balance_scale.scale.set_value (default_device.balance);
                 break;
         }
 
@@ -250,7 +255,7 @@ public class Sound.OutputPanel : Gtk.Grid {
 
     private void audio_alert_dialog_cb () {
         var settings = new GLib.Settings ("com.fyralabs.Fusebox");
-        if (volume_scale.get_value () > (float) 70.0) {
+        if (volume_scale.scale.get_value () > (float) 70.0) {
             var ok_button = new He.FillButton ("Understood");
 
             var volume_alert_dialog = new He.Dialog (
@@ -285,15 +290,15 @@ public class Sound.OutputPanel : Gtk.Grid {
             volume_alert_dialog.add (volume_check);
 
             ok_button.clicked.connect (() => {
-                if (volume_scale.get_value () > (float) 70.0) {
-                    volume_scale.set_value ((float) 69.0);
+                if (volume_scale.scale.get_value () > (float) 70.0) {
+                    volume_scale.scale.set_value ((float) 69.0);
                     pam.change_device_volume (default_device, (float) 69.0);
                 }
                 volume_alert_dialog.destroy ();
             });
 
             volume_alert_dialog.cancel_button.clicked.connect (() => {
-                pam.change_device_volume (default_device, (float) volume_scale.get_value ());
+                pam.change_device_volume (default_device, (float) volume_scale.scale.get_value ());
                 volume_alert_dialog.destroy ();
             });
 

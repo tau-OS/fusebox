@@ -2,7 +2,7 @@ public class Sound.InputPanel : Gtk.Grid {
     private Gtk.ListBox devices_listbox;
     private unowned PulseAudioManager pam;
 
-    Gtk.Scale volume_scale;
+    He.Slider volume_scale;
     Gtk.Switch volume_switch;
     Gtk.LevelBar level_bar;
 
@@ -32,14 +32,17 @@ public class Sound.InputPanel : Gtk.Grid {
             hexpand = true
         };
 
-        volume_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 5) {
-            draw_value = false,
+        var volume_adjustment = new Gtk.Adjustment (-1, 0.0, 100.0, 5.0, 0, 0);
+        volume_scale = new He.Slider () {
             hexpand = true,
             valign = Gtk.Align.CENTER
         };
-
-        volume_scale.add_mark (10, Gtk.PositionType.BOTTOM, _("Unamplified"));
-        volume_scale.add_mark (80, Gtk.PositionType.BOTTOM, _("100%"));
+        volume_scale.scale.orientation = Gtk.Orientation.HORIZONTAL;
+        volume_scale.scale.adjustment = volume_adjustment;
+        volume_scale.scale.draw_value = true;
+        volume_scale.scale.value_pos = Gtk.PositionType.LEFT;
+        volume_scale.add_mark (10, _("Unamplified"));
+        volume_scale.add_mark (80, _("100%"));
 
         volume_switch = new Gtk.Switch () {
             valign = Gtk.Align.CENTER,
@@ -106,17 +109,17 @@ public class Sound.InputPanel : Gtk.Grid {
 
     private void disconnect_signals () {
         volume_switch.notify["active"].disconnect (volume_switch_changed);
-        volume_scale.value_changed.disconnect (volume_scale_value_changed);
+        volume_scale.scale.value_changed.disconnect (volume_scale_value_changed);
     }
 
     private void connect_signals () {
         volume_switch.notify["active"].connect (volume_switch_changed);
-        volume_scale.value_changed.connect (volume_scale_value_changed);
+        volume_scale.scale.value_changed.connect (volume_scale_value_changed);
     }
 
     private void volume_scale_value_changed () {
         disconnect_signals ();
-        pam.change_device_volume (default_device, volume_scale.get_value ());
+        pam.change_device_volume (default_device, volume_scale.scale.get_value ());
         connect_signals ();
     }
 
@@ -139,7 +142,7 @@ public class Sound.InputPanel : Gtk.Grid {
                 if (volume_switch.active == default_device.is_muted) {
                     volume_switch.activate ();
                 }
-                volume_scale.set_value (default_device.volume);
+                volume_scale.scale.set_value (default_device.volume);
                 default_device.notify.connect (device_notify);
             }
         }
@@ -156,7 +159,7 @@ public class Sound.InputPanel : Gtk.Grid {
             }
             break;
         case "volume":
-            volume_scale.set_value (default_device.volume);
+            volume_scale.scale.set_value (default_device.volume);
             break;
         }
 
