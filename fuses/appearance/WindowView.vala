@@ -15,11 +15,10 @@
 
      construct {
         wm_layout_preview = new He.ContentBlockImage ("resource:///com/fyralabs/Fusebox/Appearance/kiri-l.svg") {
-            requested_width = 550,
-            requested_height = 200,
-            halign = Gtk.Align.CENTER
+            requested_width = 360,
+            requested_height = 240
         };
-        wm_layout_preview.add_css_class ("large-radius");
+        wm_layout_preview.add_css_class ("circle-radius");
 
         wm_layout_cb = new Gtk.ComboBoxText () {
             valign = Gtk.Align.CENTER
