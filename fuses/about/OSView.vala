@@ -201,7 +201,7 @@ public class About.OSView : Gtk.Box {
         gpu_box.append (gpu_subtitle);
         gpu_box.add_css_class ("mini-content-block");
 
-        var stor_host_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
+        var stor_host_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6) {
             margin_bottom = 6,
             vexpand = false,
             homogeneous = true
@@ -209,13 +209,14 @@ public class About.OSView : Gtk.Box {
         stor_host_box.append (hostname_box);
         stor_host_box.append (storage_box);
 
-        var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 2);
         info_box.append (os_box);
         info_box.append (stor_host_box);
         info_box.append (model_box);
         info_box.append (cpu_box);
         info_box.append (gpu_box);
         info_box.append (ram_box);
+        info_box.add_css_class ("content-list");
 
         var scroller = new Gtk.ScrolledWindow () {
             vexpand = true
