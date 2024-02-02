@@ -14,19 +14,16 @@ public class Mouse.TouchpadView : Gtk.Box {
 
         var pointer_speed_adjustment = new Gtk.Adjustment (0, -1, 1, 0.1, 0, 0);
 
-        var pointer_speed_scale = new Gtk.Scale (Gtk.Orientation.HORIZONTAL, pointer_speed_adjustment) {
-            draw_value = false,
+        var pointer_speed_scale = new He.Slider () {
             hexpand = true,
             width_request = 240,
-            margin_end = 6,
-            valign = Gtk.Align.CENTER
         };
-        pointer_speed_scale.add_mark (-1, Gtk.PositionType.BOTTOM, (_("Slower")));
-        pointer_speed_scale.add_mark (0, Gtk.PositionType.BOTTOM, (_("Default")));
-        pointer_speed_scale.add_mark (1, Gtk.PositionType.BOTTOM, (_("Faster")));
-
+        pointer_speed_scale.scale.set_adjustment (pointer_speed_adjustment);
+        pointer_speed_scale.add_mark (-1, (_("Slower")));
+        pointer_speed_scale.add_mark (0, (_("Default")));
+        pointer_speed_scale.add_mark (1, (_("Faster")));
         for (double x = -0.5; x < 1; x += 0.5) {
-            pointer_speed_scale.add_mark (x, Gtk.PositionType.BOTTOM, null);
+            pointer_speed_scale.add_mark (x, null);
         }
 
         var pointer_speed_box = new He.SettingsRow () {
@@ -35,7 +32,7 @@ public class Mouse.TouchpadView : Gtk.Box {
         };
         pointer_speed_box.primary_button = (He.Button)pointer_speed_scale;
 
-        var pointer_acceleration_switch = new Gtk.Switch () {
+        var pointer_acceleration_switch = new He.Switch () {
             valign = Gtk.Align.CENTER
         };
 
@@ -125,7 +122,7 @@ public class Mouse.TouchpadView : Gtk.Box {
         main_scrolling_box.append (scrolling_box);
         main_scrolling_box.add_css_class ("mini-content-block");
 
-        var tap_click_switch = new Gtk.Switch () {
+        var tap_click_switch = new He.Switch () {
             valign = Gtk.Align.CENTER
         };
 
@@ -137,7 +134,7 @@ public class Mouse.TouchpadView : Gtk.Box {
         tap_click_box.primary_button = (He.Button)tap_click_switch;
 
         main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
-            sensitive = touchpad_enable_box.main_switch.active
+            sensitive = touchpad_enable_box.main_switch.iswitch.active
         };
         main_box.append (pointer_speed_box);
         main_box.append (pointer_acceleration_box);
@@ -156,31 +153,31 @@ public class Mouse.TouchpadView : Gtk.Box {
         this.append (clamp);
         orientation = Gtk.Orientation.VERTICAL;
 
-        touchpad_enable_box.main_switch.notify["active"].connect (() => {
-            if (touchpad_enable_box.main_switch.active) {
+        touchpad_enable_box.main_switch.iswitch.notify["active"].connect (() => {
+            if (touchpad_enable_box.main_switch.iswitch.active) {
                 main_box.sensitive = true;
             } else {
                 main_box.sensitive = false;
             }
         });
-        touchpad_settings.bind ("send-events", touchpad_enable_box.main_switch, "active", GLib.SettingsBindFlags.DEFAULT);
+        touchpad_settings.bind ("send-events", touchpad_enable_box.main_switch.iswitch, "active", GLib.SettingsBindFlags.DEFAULT);
         touchpad_settings.bind ("speed", pointer_speed_scale, "value", GLib.SettingsBindFlags.DEFAULT);
 
-        touchpad_settings.bind ("tap-to-click", tap_click_switch, "active", GLib.SettingsBindFlags.DEFAULT);
+        touchpad_settings.bind ("tap-to-click", tap_click_switch.iswitch, "active", GLib.SettingsBindFlags.DEFAULT);
 
         switch (touchpad_settings.get_enum ("accel-profile")) {
             case 1:
-                pointer_acceleration_switch.active = false;
+                pointer_acceleration_switch.iswitch.active = false;
                 break;
             case 2:
             case 0:
             default:
-                pointer_acceleration_switch.active = true;
+                pointer_acceleration_switch.iswitch.active = true;
                 break;
         }
 
-        pointer_acceleration_switch.notify["state-set"].connect (() => {
-            if (pointer_acceleration_switch.active) {
+        pointer_acceleration_switch.iswitch.notify["state-set"].connect (() => {
+            if (pointer_acceleration_switch.iswitch.active) {
                 touchpad_settings.set_enum ("accel-profile", 2);
             } else {
                 touchpad_settings.set_enum ("accel-profile", 1);

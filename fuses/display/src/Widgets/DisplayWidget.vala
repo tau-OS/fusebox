@@ -44,7 +44,7 @@ public class Display.DisplayWidget : Gtk.Box {
     public Gtk.Button primary_image { get; private set; }
     public Gtk.MenuButton toggle_settings { get; private set; }
 
-    private Gtk.Switch use_switch;
+    private He.Switch use_switch;
 
     private Gtk.ComboBox resolution_combobox;
     private Gtk.TreeStore resolution_tree_store;
@@ -99,12 +99,12 @@ public class Display.DisplayWidget : Gtk.Box {
             hexpand = vexpand = true
         };
 
-        use_switch = new Gtk.Switch () {
+        use_switch = new He.Switch () {
             halign = Gtk.Align.START
         };
         var use_row = new He.SettingsRow.with_details (_("Use Display"), null, (He.Button)use_switch);
 
-        virtual_monitor.bind_property ("is-active", use_switch, "active", GLib.BindingFlags.SYNC_CREATE | GLib.BindingFlags.BIDIRECTIONAL);
+        virtual_monitor.bind_property ("is-active", use_switch.iswitch, "active", GLib.BindingFlags.SYNC_CREATE | GLib.BindingFlags.BIDIRECTIONAL);
 
         resolution_tree_store = new Gtk.TreeStore (ResolutionColumns.TOTAL, typeof (string), typeof (int), typeof (int));
         resolution_combobox = new Gtk.ComboBox.with_model (resolution_tree_store);
@@ -256,16 +256,16 @@ public class Display.DisplayWidget : Gtk.Box {
         halign = Gtk.Align.CENTER;
         append (grid);
 
-        use_switch.bind_property ("active", resolution_combobox, "sensitive");
-        use_switch.bind_property ("active", rotation_combobox, "sensitive");
-        use_switch.bind_property ("active", refresh_combobox, "sensitive");
+        use_switch.iswitch.bind_property ("active", resolution_combobox, "sensitive");
+        use_switch.iswitch.bind_property ("active", rotation_combobox, "sensitive");
+        use_switch.iswitch.bind_property ("active", refresh_combobox, "sensitive");
 
-        use_switch.notify["active"].connect (() => {
+        use_switch.iswitch.notify["active"].connect (() => {
             if (rotation_combobox.active == -1) rotation_combobox.set_active (0);
             if (resolution_combobox.active == -1) resolution_combobox.set_active (0);
             if (refresh_combobox.active == -1) refresh_combobox.set_active (0);
 
-            if (use_switch.active) {
+            if (use_switch.iswitch.active) {
                 remove_css_class ("disabled");
             } else {
                 add_css_class ("disabled");

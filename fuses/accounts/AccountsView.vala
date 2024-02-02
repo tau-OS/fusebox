@@ -57,24 +57,24 @@ public class Accounts.AccountsView : Gtk.Box {
             autologin_dropdown.selected = users.index (inital_autologin_user);
         }
 
-        var autologin_switch = new Gtk.Switch () {
+        var autologin_switch = new He.Switch () {
             valign = Gtk.Align.CENTER
         };
-        autologin_switch.active = inital_autologin_user != null;
+        autologin_switch.iswitch.active = inital_autologin_user != null;
         autologin_actions_box.append (autologin_switch);
 
         // TODO If the user cancels, we need to reset the switch to the previous state.. since it seems like it doesn't throw an error, this isn't straightforward
 
         autologin_dropdown.notify["selected-item"].connect (() => {
             var user = (Act.User) autologin_dropdown.selected_item;
-            if (autologin_switch.active) {
+            if (autologin_switch.iswitch.active) {
                 user.set_automatic_login (true);
             }
         });
 
-        autologin_switch.notify["active"].connect (() => {
+        autologin_switch.iswitch.notify["active"].connect (() => {
             var user = (Act.User) autologin_dropdown.selected_item;
-            user.set_automatic_login (autologin_switch.active);
+            user.set_automatic_login (autologin_switch.iswitch.active);
         });
 
         var clamp = new Bis.Latch ();

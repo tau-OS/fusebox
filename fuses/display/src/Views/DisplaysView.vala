@@ -29,7 +29,7 @@ public class Display.DisplaysView : Gtk.Grid {
     construct {
             displays_overlay = new DisplaysOverlay ();
 
-            var mirror_switch = new Gtk.Switch ();
+            var mirror_switch = new He.Switch ();
             var mirror_row = new He.SettingsRow.with_details (_("Mirror Display"), null, (He.Button)mirror_switch);
 
             dpi_combo = new Gtk.ComboBoxText ();
@@ -82,9 +82,9 @@ public class Display.DisplaysView : Gtk.Grid {
                 monitor_manager.set_monitor_config ();
             });
 
-            mirror_switch.active = monitor_manager.is_mirrored;
-            mirror_switch.notify["active"].connect (() => {
-                if (mirror_switch.active) {
+            mirror_switch.iswitch.active = monitor_manager.is_mirrored;
+            mirror_switch.iswitch.notify["active"].connect (() => {
+                if (mirror_switch.iswitch.active) {
                     monitor_manager.enable_clone_mode ();
                     monitor_manager.set_monitor_config ();
                 } else {
@@ -107,11 +107,11 @@ public class Display.DisplaysView : Gtk.Grid {
         if (has_accelerometer) {
             var touchscreen_settings = new GLib.Settings (TOUCHSCREEN_SETTINGS_PATH);
 
-            var rotation_lock_switch = new Gtk.Switch ();
+            var rotation_lock_switch = new He.Switch ();
             var rotation_row = new He.SettingsRow.with_details (_("Rotation Lock"), null, (He.Button)rotation_lock_switch);
             action_bar.append (rotation_row);
 
-            touchscreen_settings.bind ("orientation-lock", rotation_lock_switch, "state", SettingsBindFlags.DEFAULT);
+            touchscreen_settings.bind ("orientation-lock", rotation_lock_switch.iswitch, "state", SettingsBindFlags.DEFAULT);
         }
     }
 

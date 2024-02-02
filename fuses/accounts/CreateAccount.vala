@@ -96,7 +96,7 @@ class Accounts.CreateAccount : He.Window {
     administrator_block.add_css_class ("text-meson-red");
     main_box.append (administrator_block);
 
-    var administrator_switch = new Gtk.Switch () {
+    var administrator_switch = new He.Switch () {
       valign = Gtk.Align.CENTER,
     };
     administrator_switch.add_css_class ("bg-meson-red");
@@ -157,8 +157,8 @@ class Accounts.CreateAccount : He.Window {
       apply_button.sensitive = this.fields_changed ();
     });
 
-    administrator_switch.notify["active"].connect (() => {
-      this.administator = administrator_switch.active;
+    administrator_switch.iswitch.notify["active"].connect (() => {
+      this.administator = administrator_switch.iswitch.active;
       apply_button.sensitive = this.fields_changed ();
     });
 

@@ -69,9 +69,9 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
                 hexpand = true,
                 title = (_("Bluetooth"))
             };
-            status_switch.main_switch.active = manager.is_powered;
-            status_switch.main_switch.notify["active"].connect (() => {
-                manager.set_global_state.begin (status_switch.main_switch.active);
+            status_switch.main_switch.iswitch.active = manager.is_powered;
+            status_switch.main_switch.iswitch.notify["active"].connect (() => {
+                manager.set_global_state.begin (status_switch.main_switch.iswitch.active);
             });
 
             appbar = new He.AppBar () {

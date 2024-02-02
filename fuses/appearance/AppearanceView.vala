@@ -22,8 +22,8 @@ public class AppearanceView : Gtk.Box {
     public He.ContentBlockImage wallpaper_preview;
     public Fusebox.Fuse fuse { get; construct set; }
     public Appearance.WallpaperGrid wallpaper_view;
-    public Gtk.Switch accent_switch;
-    public Gtk.Switch contrast_switch;
+    public He.Switch accent_switch;
+    public He.Switch contrast_switch;
     public Gtk.ScrolledWindow sw;
     public Gtk.Label wallpaper_details_label;
     public Gtk.Label wallpaper_details_sublabel;
@@ -295,7 +295,7 @@ public class AppearanceView : Gtk.Box {
         };
         accentw_label.add_css_class ("cb-title");
 
-        accent_switch = new Gtk.Switch () {
+        accent_switch = new He.Switch () {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
             hexpand = true
@@ -311,7 +311,7 @@ public class AppearanceView : Gtk.Box {
         };
         contrast_label.add_css_class ("cb-title");
 
-        contrast_switch = new Gtk.Switch () {
+        contrast_switch = new He.Switch () {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
             hexpand = true
@@ -441,11 +441,11 @@ public class AppearanceView : Gtk.Box {
         grid.attach (roundness_box, 0, 5);
         grid.add_css_class ("mini-content-block");
 
-        fusebox_appearance_settings.bind ("wallpaper-accent", accent_switch, "active", SettingsBindFlags.DEFAULT);
+        fusebox_appearance_settings.bind ("wallpaper-accent", accent_switch.iswitch, "active", SettingsBindFlags.DEFAULT);
         fusebox_appearance_settings.bind("wallpaper-accent", accent_box, "sensitive", SettingsBindFlags.INVERT_BOOLEAN);
 
-        accent_switch.state_set.connect (() => {
-            if (accent_switch.active) {
+        accent_switch.iswitch.state_set.connect (() => {
+            if (accent_switch.iswitch.active) {
                 accent_box.sensitive = false;
 
                 multi.set_active (false);
@@ -464,8 +464,8 @@ public class AppearanceView : Gtk.Box {
             return Gdk.EVENT_PROPAGATE;
         });
 
-        contrast_switch.state_set.connect (() => {
-            if (contrast_switch.active) {
+        contrast_switch.iswitch.state_set.connect (() => {
+            if (contrast_switch.iswitch.active) {
                 set_contrast_scheme (He.Desktop.ContrastScheme.HIGH);
             } else {
                 set_contrast_scheme (He.Desktop.ContrastScheme.DEFAULT);
@@ -597,11 +597,11 @@ public class AppearanceView : Gtk.Box {
         int value = tau_appearance_settings.get_enum ("contrast");
 
         if (value == He.Desktop.ContrastScheme.DEFAULT) {
-            contrast_switch.active = false;
+            contrast_switch.iswitch.active = false;
         } else if (value == He.Desktop.ContrastScheme.HIGH) {
-            contrast_switch.active = true;
+            contrast_switch.iswitch.active = true;
         } else if (value == He.Desktop.ContrastScheme.LOW) {
-            contrast_switch.active = false;
+            contrast_switch.iswitch.active = false;
         }
     }
 

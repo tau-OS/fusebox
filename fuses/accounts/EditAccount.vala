@@ -91,12 +91,12 @@ class Accounts.EditAccount : He.Window {
     administrator_block.add_css_class ("text-meson-red");
     main_box.append (administrator_block);
 
-    var administrator_switch = new Gtk.Switch () {
-      active = user.get_account_type () == Act.UserAccountType.ADMINISTRATOR,
+    var administrator_switch = new He.Switch () {
       valign = Gtk.Align.CENTER,
     };
     administrator_switch.add_css_class ("bg-meson-red");
     administrator_switch.set_parent (administrator_block);
+    administrator_switch.iswitch.active = user.get_account_type () == Act.UserAccountType.ADMINISTRATOR;
 
     var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
       margin_top = 12,
@@ -135,8 +135,8 @@ class Accounts.EditAccount : He.Window {
       apply_button.sensitive = this.fields_changed ();
     });
 
-    administrator_switch.notify["active"].connect (() => {
-      this.administator = administrator_switch.active;
+    administrator_switch.iswitch.notify["active"].connect (() => {
+      this.administator = administrator_switch.iswitch.active;
       apply_button.sensitive = this.fields_changed ();
     });
 

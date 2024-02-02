@@ -38,7 +38,7 @@ public class DateTime.DateTimeView : Gtk.Box {
         date_time_label_box.append (date_time_label);
         date_time_label_box.append (date_time_sublabel);
 
-        var date_time_switch = new Gtk.Switch () {
+        var date_time_switch = new He.Switch () {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
             hexpand = true
@@ -93,7 +93,7 @@ public class DateTime.DateTimeView : Gtk.Box {
         timezone_label_box.append (timezone_label);
         timezone_label_box.append (timezone_sublabel);
 
-        var timezone_switch = new Gtk.Switch () {
+        var timezone_switch = new He.Switch () {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
             hexpand = true
@@ -113,7 +113,7 @@ public class DateTime.DateTimeView : Gtk.Box {
             if (datetime1.CanNTP == false) {
                 date_time_switch.sensitive = false;
             } else if (datetime1.NTP) {
-                date_time_switch.active = true;
+                date_time_switch.iswitch.active = true;
             }
         } catch (IOError e) {
             critical (e.message);
@@ -203,16 +203,16 @@ public class DateTime.DateTimeView : Gtk.Box {
         append (clamp);
         orientation = Gtk.Orientation.VERTICAL;
 
-        date_time_switch.notify["state"].connect (() => {
+        date_time_switch.iswitch.notify["state"].connect (() => {
             try {
-                datetime1.SetNTP (date_time_switch.active, true);
+                datetime1.SetNTP (date_time_switch.iswitch.active, true);
             } catch (Error e) {
-                date_time_switch.active = false;
-                date_time_switch.sensitive = false;
+                date_time_switch.iswitch.active = false;
+                date_time_switch.iswitch.sensitive = false;
                 critical (e.message);
             }
 
-            if (date_time_switch.active) {
+            if (date_time_switch.iswitch.active) {
                 date_time_manual_box.visible = false;
                 date_time_sep.visible = false;
             } else {
@@ -220,7 +220,7 @@ public class DateTime.DateTimeView : Gtk.Box {
                 date_time_sep.visible = true;
             }
         });
-        if (date_time_switch.active) {
+        if (date_time_switch.iswitch.active) {
             date_time_manual_box.visible = false;
             date_time_sep.visible = false;
         } else {
@@ -255,7 +255,7 @@ public class DateTime.DateTimeView : Gtk.Box {
         });
 
         date_time_date_picker.notify["date"].connect (() => {
-            if (date_time_switch.active == true)
+            if (date_time_switch.iswitch.active == true)
                 return;
 
             var now_local = new GLib.DateTime.now_local ();
@@ -271,9 +271,9 @@ public class DateTime.DateTimeView : Gtk.Box {
             ct_manager.datetime_has_changed ();
         });
 
-        timezone_settings.bind ("automatic-timezone", timezone_switch, "active", SettingsBindFlags.DEFAULT);
-        timezone_switch.notify["state"].connect (() => {
-            if (timezone_switch.active) {
+        timezone_settings.bind ("automatic-timezone", timezone_switch.iswitch, "active", SettingsBindFlags.DEFAULT);
+        timezone_switch.iswitch.notify["state"].connect (() => {
+            if (timezone_switch.iswitch.active) {
                 timezone_manual_box.visible = false;
                 timezone_sep.visible = false;
             } else {
@@ -281,7 +281,7 @@ public class DateTime.DateTimeView : Gtk.Box {
                 timezone_sep.visible = true;
             }
         });
-        if (timezone_switch.active) {
+        if (timezone_switch.iswitch.active) {
             timezone_manual_box.visible = false;
             timezone_sep.visible = false;
         } else {

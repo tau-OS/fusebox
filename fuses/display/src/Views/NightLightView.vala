@@ -97,7 +97,7 @@ public class Display.NightLightView : Gtk.Grid {
         attach (content_grid, 0, 2, 2, 1);
         show ();
 
-        settings.bind ("night-light-enabled", status_switch.main_switch, "active", GLib.SettingsBindFlags.DEFAULT);
+        settings.bind ("night-light-enabled", status_switch.main_switch.iswitch, "active", GLib.SettingsBindFlags.DEFAULT);
         settings.bind ("night-light-enabled", content_grid, "sensitive", GLib.SettingsBindFlags.GET);
         settings.bind ("night-light-temperature", this, "temperature", GLib.SettingsBindFlags.GET);
 
@@ -148,8 +148,8 @@ public class Display.NightLightView : Gtk.Grid {
             clear_snooze ();
         });
 
-        status_switch.main_switch.notify["active"].connect (() => {
-            if (status_switch.main_switch.active) {
+        status_switch.main_switch.iswitch.notify["active"].connect (() => {
+            if (status_switch.main_switch.iswitch.active) {
                 clear_snooze ();
             }
         });

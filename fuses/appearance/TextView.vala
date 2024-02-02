@@ -70,14 +70,14 @@ public class Appearance.TextView : Gtk.Box {
         };
         dyslexia_font_label.add_css_class ("cb-title");
 
-        var dyslexia_font_switch = new Gtk.Switch () {
+        var dyslexia_font_switch = new He.Switch () {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
             hexpand = true
         };
 
         var dyslexia_font_description_label = new Gtk.Label (
-                                                             _("Bottom-heavy letters and improved spacing can help with legibility and readability.")
+                _("Bottom-heavy letters and improved spacing can help with legibility and readability.")
             ) {
             wrap = true,
             xalign = 0
@@ -138,12 +138,12 @@ public class Appearance.TextView : Gtk.Box {
         var document_font = interface_settings.get_string (DOCUMENT_FONT_KEY);
 
         if (interface_font == OD_REG_FONT) {
-            dyslexia_font_switch.active = true;
+            dyslexia_font_switch.iswitch.active = true;
         } else {
-            dyslexia_font_switch.active = false;
+            dyslexia_font_switch.iswitch.active = false;
         }
-        dyslexia_font_switch.notify["active"].connect (() => {
-            if (dyslexia_font_switch.active) {
+        dyslexia_font_switch.iswitch.notify["active"].connect (() => {
+            if (dyslexia_font_switch.iswitch.active) {
                 interface_settings.set_string (FONT_KEY, OD_REG_FONT);
                 interface_settings.set_string (DOCUMENT_FONT_KEY, OD_DOC_FONT);
             } else {
