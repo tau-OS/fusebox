@@ -3,7 +3,7 @@ public class Sound.OutputPanel : Gtk.Grid {
     private unowned PulseAudioManager pam;
 
     He.Slider volume_scale;
-    Gtk.Switch volume_switch;
+    He.Switch volume_switch;
     He.Slider balance_scale;
 
     private Device default_device = null;
@@ -29,10 +29,10 @@ public class Sound.OutputPanel : Gtk.Grid {
         };
         scrolled.set_child (devices_listbox);
 
-        volume_switch = new Gtk.Switch () {
+        volume_switch = new He.Switch () {
             valign = Gtk.Align.CENTER,
-            active = true
         };
+        volume_switch.iswitch.active = true;
 
         var volume_settings_row = new He.MiniContentBlock () {
             title = _("Volume"),
@@ -112,7 +112,7 @@ public class Sound.OutputPanel : Gtk.Grid {
             hexpand = true
         };
 
-        var screen_reader_switch = new Gtk.Switch () {
+        var screen_reader_switch = new He.Switch () {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
             hexpand = true
@@ -138,9 +138,9 @@ public class Sound.OutputPanel : Gtk.Grid {
 
         var applications_settings = new GLib.Settings ("org.gnome.desktop.a11y.applications");
         applications_settings.bind ("screen-reader-enabled", this, "screen_reader_active", SettingsBindFlags.DEFAULT);
-        bind_property ("screen_reader_active", screen_reader_switch, "active", GLib.BindingFlags.BIDIRECTIONAL, () => {
-            if (screen_reader_active != screen_reader_switch.active) {
-                screen_reader_switch.activate ();
+        bind_property ("screen_reader_active", screen_reader_switch.iswitch, "active", GLib.BindingFlags.BIDIRECTIONAL, () => {
+            if (screen_reader_active != screen_reader_switch.iswitch.active) {
+                screen_reader_switch.iswitch.activate ();
             }
         }, null);
 
@@ -148,8 +148,8 @@ public class Sound.OutputPanel : Gtk.Grid {
         pam.new_device.connect (add_device);
         pam.notify["default-output"].connect (default_changed);
 
-        volume_switch.bind_property ("active", volume_scale, "sensitive", BindingFlags.DEFAULT);
-        volume_switch.bind_property ("active", balance_scale, "sensitive", BindingFlags.DEFAULT);
+        volume_switch.iswitch.bind_property ("active", volume_scale, "sensitive", BindingFlags.DEFAULT);
+        volume_switch.iswitch.bind_property ("active", balance_scale, "sensitive", BindingFlags.DEFAULT);
 
         var sound_settings = new Settings ("org.gnome.desktop.sound");
         sound_settings.bind ("event-sounds", audio_alert_check, "active", GLib.SettingsBindFlags.DEFAULT);
@@ -168,8 +168,8 @@ public class Sound.OutputPanel : Gtk.Grid {
 
             default_device = pam.default_output;
             if (default_device != null) {
-                if (volume_switch.active == default_device.is_muted) {
-                    volume_switch.activate ();
+                if (volume_switch.iswitch.active == default_device.is_muted) {
+                    volume_switch.iswitch.activate ();
                 }
                 volume_scale.scale.set_value (default_device.volume);
                 balance_scale.scale.set_value (default_device.balance);
@@ -181,13 +181,13 @@ public class Sound.OutputPanel : Gtk.Grid {
     }
 
     private void disconnect_signals () {
-        volume_switch.notify["active"].disconnect (volume_switch_changed);
+        volume_switch.iswitch.notify["active"].disconnect (volume_switch_changed);
         volume_scale.scale.value_changed.disconnect (volume_scale_value_changed);
         balance_scale.scale.value_changed.disconnect (balance_scale_value_changed);
     }
 
     private void connect_signals () {
-        volume_switch.notify["active"].connect (volume_switch_changed);
+        volume_switch.iswitch.notify["active"].connect (volume_switch_changed);
         volume_scale.scale.value_changed.connect (volume_scale_value_changed);
         balance_scale.scale.value_changed.connect (balance_scale_value_changed);
     }
@@ -213,7 +213,7 @@ public class Sound.OutputPanel : Gtk.Grid {
 
     private void volume_switch_changed () {
         disconnect_signals ();
-        pam.change_device_mute (default_device, !volume_switch.active);
+        pam.change_device_mute (default_device, !volume_switch.iswitch.active);
         connect_signals ();
     }
 
@@ -221,8 +221,8 @@ public class Sound.OutputPanel : Gtk.Grid {
         disconnect_signals ();
         switch (pspec.get_name ()) {
             case "is-muted":
-                if (volume_switch.active == default_device.is_muted) {
-                    volume_switch.activate ();
+                if (volume_switch.iswitch.active == default_device.is_muted) {
+                    volume_switch.iswitch.activate ();
                 }
                 break;
             case "volume":
