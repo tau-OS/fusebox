@@ -46,8 +46,8 @@ public class About.OSView : Gtk.Box {
         );
         var os_sub_name = "<b>%s %s</b>".printf (
                                                  Environment.get_os_info (GLib.OsInfoKey.VERSION_ID) ?? "",
-                                                 Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME) ??
-                                                 "(Guadalajara)" // Remember to change this with every new GNOME release until we do a new DE
+                                                 "(" + Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME)[0].toupper ().to_string () + Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME).substring(1,-1) + ")" ??
+                                                 ""
         );
         var os_title = new Gtk.Label (os_pretty_name) {
             ellipsize = Pango.EllipsizeMode.END,
