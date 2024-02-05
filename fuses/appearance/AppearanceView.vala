@@ -666,7 +666,7 @@ public class AppearanceView : Gtk.Box {
             width_request = 42;
             height_request = 42;
             overflow = HIDDEN;
-            add_css_class ("x-large-radius")
+            add_css_class ("x-large-radius");
         }
 
         construct {
