@@ -666,6 +666,7 @@ public class AppearanceView : Gtk.Box {
             width_request = 42;
             height_request = 42;
             overflow = HIDDEN;
+            add_css_class ("x-large-radius")
         }
 
         construct {
@@ -684,7 +685,7 @@ public class AppearanceView : Gtk.Box {
             int w = get_width ();
             int h = get_height ();
 
-            float r = 999;
+            float r = 0;
 
             snapshot.translate ({ w / 2, h / 2 });
 
