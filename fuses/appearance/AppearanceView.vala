@@ -685,7 +685,7 @@ public class AppearanceView : Gtk.Box {
             int w = get_width ();
             int h = get_height ();
 
-            float r = 0;
+            float r = 999;
 
             snapshot.translate ({ w / 2, h / 2 });
 
