@@ -4,6 +4,7 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
 
     var avatar = new He.Avatar (64, user.icon_file != null ? "file://" + user.icon_file : null, user.real_name) {
       margin_end = 24,
+      status = false
     };
     main_box.append (avatar);
 
@@ -37,7 +38,6 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
                                   true,
                                   He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this),
                                   "Delete " + user.real_name + "'s Account",
-                                  "Are you sure you want to delete this account?",
                                   "You cannot undo this action, and will delete " + user.real_name + "'s data.",
                                   "dialog-warning-symbolic",
                                   new He.FillButton ("Delete"),
