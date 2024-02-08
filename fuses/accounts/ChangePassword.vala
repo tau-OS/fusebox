@@ -49,13 +49,13 @@ class Accounts.ChangePassword : He.Window {
     };
     apply_button.set_size_request (200, -1);
     apply_button.clicked.connect (() => {
-      user.set_password (password_entry.text, user.password_hint);
+      user.set_password (password_entry.get_entry ().text, user.password_hint);
       this.destroy ();
     });
     button_box.append (apply_button);
 
     password_confirm_entry.notify["is-valid"].connect (() => {
-      apply_button.sensitive = password_entry.text == password_confirm_entry.text;
+      apply_button.sensitive = password_entry.get_entry ().text == password_confirm_entry.get_entry ().text;
     });
   }
 }

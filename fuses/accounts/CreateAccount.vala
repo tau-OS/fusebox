@@ -9,12 +9,12 @@ class Accounts.CreateAccount : He.Window {
     }
   }
 
-  private string username = "";
-  private string real_name = "";
+  private string username;
+  private string real_name;
   private bool administator = false;
   private string? icon_file = null;
-  private string password = "";
-  private string password_confirm = "";
+  private string password;
+  private string password_confirm;
 
 
   bool fields_changed () {
