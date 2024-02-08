@@ -3,7 +3,8 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
     var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 
     var avatar = new He.Avatar (64, user.icon_file != null ? "file://" + user.icon_file : null, user.real_name, user.is_logged_in ()) {
-      margin_end = 24
+      margin_end = 24,
+      status = user.is_logged_in ()
     };
     main_box.append (avatar);
 
