@@ -2,9 +2,8 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
   public AccountRow (Act.User user) {
     var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 
-    var avatar = new He.Avatar (64, user.icon_file != null ? "file://" + user.icon_file : null, user.real_name) {
-      margin_end = 24,
-      status = false
+    var avatar = new He.Avatar (64, user.icon_file != null ? "file://" + user.icon_file : null, user.real_name, user.is_logged_in ()) {
+      margin_end = 24
     };
     main_box.append (avatar);
 
@@ -38,6 +37,7 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
                                   true,
                                   He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this),
                                   "Delete " + user.real_name + "'s Account",
+                                  "",
                                   "You cannot undo this action, and will delete " + user.real_name + "'s data.",
                                   "dialog-warning-symbolic",
                                   new He.FillButton ("Delete"),
