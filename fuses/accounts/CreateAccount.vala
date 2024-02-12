@@ -140,20 +140,20 @@ class Accounts.CreateAccount : He.Window {
     main_box.add_css_class ("dialog-content");
     this.add_css_class ("dialog-content");
 
-    username_entry.get_entry ().changed.connect (() => {
-      this.username = username_entry.get_entry ().text;
+    username_entry.get_internal_entry ().changed.connect (() => {
+      this.username = username_entry.get_internal_entry ().text;
       apply_button.sensitive = this.fields_changed ();
     });
 
-    name_entry.get_entry ().changed.connect (() => {
-      this.real_name = name_entry.get_entry ().text;
+    name_entry.get_internal_entry ().changed.connect (() => {
+      this.real_name = name_entry.get_internal_entry ().text;
       title.set_text (this.real_name);
       avatar.text = this.real_name;
       apply_button.sensitive = this.fields_changed ();
     });
 
     password_confirm_entry.notify["is-valid"].connect (() => {
-      this.password_confirm = password_confirm_entry.get_entry ().text;
+      this.password_confirm = password_confirm_entry.get_internal_entry ().text;
       apply_button.sensitive = this.fields_changed ();
     });
 

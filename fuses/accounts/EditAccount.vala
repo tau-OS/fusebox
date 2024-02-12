@@ -130,7 +130,7 @@ class Accounts.EditAccount : He.Window {
     main_box.add_css_class ("dialog-content");
     this.add_css_class ("dialog-content");
 
-    name_entry.get_entry ().changed.connect (() => {
+    name_entry.get_internal_entry ().changed.connect (() => {
       this.real_name = name_entry.text;
       apply_button.sensitive = this.fields_changed ();
     });
