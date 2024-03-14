@@ -146,8 +146,8 @@ public class AppearanceView : Gtk.Box {
         prefer_sublabel.add_css_class ("cb-subtitle");
 
         var prefer_default_image = new He.ContentBlockImage ("resource:///com/fyralabs/Fusebox/Appearance/by-apps.svg") {
-            requested_width = 80,
-            requested_height = 80,
+            requested_width = 128,
+            requested_height = 128,
             valign = Gtk.Align.START
         };
         prefer_default_image.add_css_class ("large-radius");
@@ -175,8 +175,8 @@ public class AppearanceView : Gtk.Box {
         prefer_default_radio.child = (prefer_default_grid);
 
         var prefer_light_image = new He.ContentBlockImage ("resource:///com/fyralabs/Fusebox/Appearance/light.svg") {
-            requested_width = 80,
-            requested_height = 80,
+            requested_width = 128,
+            requested_height = 128,
             valign = Gtk.Align.START
         };
         prefer_light_image.add_css_class ("large-radius");
@@ -205,8 +205,8 @@ public class AppearanceView : Gtk.Box {
         prefer_light_radio.child = (prefer_light_grid);
 
         var dark_image = new He.ContentBlockImage ("resource:///com/fyralabs/Fusebox/Appearance/dark.svg") {
-            requested_width = 80,
-            requested_height = 80,
+            requested_width = 128,
+            requested_height = 128,
             valign = Gtk.Align.START
         };
         dark_image.add_css_class ("large-radius");
