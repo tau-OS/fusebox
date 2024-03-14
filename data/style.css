@@ -364,6 +364,7 @@ spinbutton.flat {
   padding: 6px;
   background: none;
   box-shadow: none;
+  background-color: alpha(@accent_bg_color, 0.15);
 }
 .color-scheme-button .content-block-image {
   margin: 0;
