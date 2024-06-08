@@ -10,7 +10,7 @@ public class Accounts.Fuse : Fusebox.Fuse {
                 category: Category.PERSONAL,
                 code_name: "com.fyralabs.Fusebox.Accounts",
                 display_name: _("Accounts"),
-                description: _("Manage user accounts"),
+                description: _("User accounts, automatic login"),
                 icon: "settings-users-symbolic",
                 supported_settings: settings,
                 index: 2

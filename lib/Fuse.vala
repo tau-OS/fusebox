@@ -54,7 +54,7 @@ public abstract class Fusebox.Fuse : GLib.Object {
     public string display_name { get; construct; }
 
     /**
-     * A short description of the Fuse.
+     * The description of the fuse, showcases important sections separated by commas.
      */
     public string description { get; construct; }
 

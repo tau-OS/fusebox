@@ -35,11 +35,26 @@ public class Fusebox.CategoryIcon : Gtk.ListBoxRow {
         };
         fuse_name.add_css_class ("cb-title");
 
+        var fuse_description = new Gtk.Label (fuse.description) {
+            hexpand = true,
+            wrap = true,
+            wrap_mode = Pango.WrapMode.WORD_CHAR,
+            xalign = 0
+        };
+        fuse_name.add_css_class ("cb-subtitle");
+
+        var text_layout = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+            valign = Gtk.Align.CENTER,
+            margin_top = 6,
+            margin_bottom = 6
+        };
+        text_layout.append (fuse_name);
+        text_layout.append (fuse_description);
+
         var layout = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 16);
         layout.append (icon);
-        layout.append (fuse_name);
+        layout.append (text_layout);
         layout.add_css_class ("mini-content-block");
-        layout.tooltip_text = fuse.description;
 
         child = layout;
 

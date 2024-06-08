@@ -42,7 +42,7 @@ public class Startup.Fuse : Fusebox.Fuse {
                 category: Category.SYSTEM,
                 code_name: "com.fyralabs.Fusebox.Startup",
                 display_name: _("App Autostart"),
-                description: _("Manage applications that start automatically"),
+                description: _("Startup apps"),
                 icon: "settings-applications-symbolic",
                 supported_settings: settings,
                 index: 6

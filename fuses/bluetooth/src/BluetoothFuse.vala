@@ -29,7 +29,7 @@ public class Bluetooth.Fuse : Fusebox.Fuse {
                 category: Category.NETWORK,
                 code_name: "com.fyralabs.Fusebox.Bluetooth",
                 display_name: _("Bluetooth"),
-                description: _("Configure Bluetooth Settings"),
+                description: _("Manage connections, transfer, sharing"),
                 icon: "settings-bluetooth-symbolic",
                 supported_settings: settings,
                 index: 0

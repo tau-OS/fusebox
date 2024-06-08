@@ -11,7 +11,7 @@ public class About.Fuse : Fusebox.Fuse {
                 category: Category.SYSTEM,
                 code_name: "com.fyralabs.Fusebox.About",
                 display_name: _("About"),
-                description: _("View OS information"),
+                description: _("OS information, hardware specs"),
                 icon: "settings-about-symbolic",
                 supported_settings: settings,
                 index: 5

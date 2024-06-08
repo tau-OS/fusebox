@@ -142,20 +142,25 @@ public class Fusebox.SearchView : Gtk.Box {
 
         construct {
             var image = new Gtk.Image.from_icon_name (icon_name) {
-                pixel_size = 16
+                pixel_size = 24
             };
 
             var label = new Gtk.Label (description) {
-                ellipsize = Pango.EllipsizeMode.MIDDLE
+                ellipsize = Pango.EllipsizeMode.MIDDLE,
+                hexpand = true,
+                wrap = true,
+                wrap_mode = Pango.WrapMode.WORD_CHAR,
+                xalign = 0
             };
 
-            var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+            var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 16) {
+                margin_bottom = 6
+            };
             box.append (image);
             box.append (label);
+            box.add_css_class ("mini-content-block");
 
             child = box;
-            add_css_class ("fuse-block");
-            margin_bottom = 6;
         }
     }
 }

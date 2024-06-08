@@ -14,7 +14,7 @@ public class Sound.Fuse : Fusebox.Fuse {
                 category: Category.SYSTEM,
                 code_name: "com.fyralabs.Fusebox.Sound",
                 display_name: _("Sound"),
-                description: _("Change sound and microphone volume"),
+                description: _("Sound and microphone volume"),
                 icon: "settings-sound-symbolic",
                 supported_settings: settings,
                 index: 0
