@@ -30,7 +30,7 @@ public class Mouse.Fuse : Fusebox.Fuse {
             category: Category.SYSTEM,
             code_name: "mouse-fuse",
             display_name: _("Mouse & Keyboard"),
-            description:_("Mice, keyboards, and touchpads."),
+            description:_("Mice, keyboards, and touchpads"),
             icon: "settings-mouse-symbolic",
             supported_settings: new GLib.HashTable<string, string?> (null, null),
             index: 5
