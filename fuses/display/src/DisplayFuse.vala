@@ -32,7 +32,7 @@ public class Display.Fuse : Fusebox.Fuse {
             category: Category.SYSTEM,
             code_name: "com.fyralabs.Fusebox.display",
             display_name: _("Displays"),
-            description: _("Screen resolution, monitor position"),
+            description: _("Screen props, monitor position"),
             icon: "settings-display-symbolic",
             supported_settings: settings,
             index: 2
