@@ -160,7 +160,7 @@ public class AppearanceView : Gtk.Box {
             halign = Gtk.Align.START
         };
         prefer_default_grid.attach (prefer_default_card, 0, 0);
-        prefer_default_grid.attach (new Gtk.Label (_("Set By Apps")) {
+        prefer_default_grid.attach (new Gtk.Label (_("Auto")) {
             css_classes = {"caption"},
             halign = Gtk.Align.START
         }, 0, 1);
@@ -238,9 +238,9 @@ public class AppearanceView : Gtk.Box {
             hexpand = true,
             halign = Gtk.Align.START
         };
-        prefer_style_box.append (prefer_default_radio);
         prefer_style_box.append (prefer_light_radio);
         prefer_style_box.append (prefer_dark_radio);
+        prefer_style_box.append (prefer_default_radio);
 
         var prefer_label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         prefer_label_box.append (prefer_label);
