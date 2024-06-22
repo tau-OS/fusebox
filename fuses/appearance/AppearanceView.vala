@@ -326,6 +326,7 @@ public class AppearanceView : Gtk.Box {
             halign = Gtk.Align.END,
             hexpand = true
         };
+        accent_box.append (multi);
         accent_box.append (purple);
         accent_box.append (pink);
         accent_box.append (red);
@@ -333,7 +334,6 @@ public class AppearanceView : Gtk.Box {
         accent_box.append (green);
         accent_box.append (blue);
         accent_box.append (mono);
-        accent_box.append (multi);
 
         var accent_main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
         accent_main_box.append (accent_label);
