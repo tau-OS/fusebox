@@ -495,6 +495,7 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
             requested_height = 135
         };
         image.add_css_class ("large-radius");
+        image.tooltip_text = (thumb_path);
 
         check = new Gtk.ToggleButton () {
             halign = Gtk.Align.START,
