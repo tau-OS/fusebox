@@ -394,7 +394,7 @@ public class AppearanceView : Gtk.Box {
             tooltip_text = _("Change how round elements are based on this choice.")
         };
 
-        var roundness_adjustment = new Gtk.Adjustment (-1, 0.0, 2.0, 1.0, 0, 0);
+        var roundness_adjustment = new Gtk.Adjustment (-1, 0.0, 2.0, 0.5, 0, 0);
 
         var roundness_scale = new He.Slider () {
             hexpand = true
@@ -403,7 +403,9 @@ public class AppearanceView : Gtk.Box {
         roundness_scale.scale.adjustment = roundness_adjustment;
         roundness_scale.scale.draw_value = true;
         roundness_scale.scale.value_pos = Gtk.PositionType.LEFT;
+        roundness_scale.add_mark (0.5, null);
         roundness_scale.add_mark (1.0, null);
+        roundness_scale.add_mark (1.5, null);
         roundness_scale.left_icon = "no-round-symbolic";
         roundness_scale.right_icon = "round-symbolic";
 
