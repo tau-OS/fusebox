@@ -15,6 +15,7 @@ public class AppearanceView : Gtk.Box {
     private EnsorModeButton muted;
     private EnsorModeButton vibrant;
     private EnsorModeButton monochrome;
+    private EnsorModeButton salad;
     private Gtk.ToggleButton prefer_light_radio;
     private Gtk.ToggleButton prefer_default_radio;
     private Gtk.ToggleButton prefer_dark_radio;
@@ -358,18 +359,21 @@ public class AppearanceView : Gtk.Box {
         vibrant.tooltip_text = _("Vibrant Scheme");
         monochrome = new EnsorModeButton ("mono");
         monochrome.tooltip_text = _("Monochromatic Scheme");
+        salad = new EnsorModeButton ("salad");
+        salad.tooltip_text = _("Fruit Salad Scheme");
 
         main_flowbox = new Gtk.FlowBox () {
             hexpand = true,
             halign = Gtk.Align.END,
             column_spacing = 12,
             homogeneous = true,
-            min_children_per_line = 4,
-            max_children_per_line = 4
+            min_children_per_line = 5,
+            max_children_per_line = 5
         };
         main_flowbox.append (defavlt);
         main_flowbox.append (muted);
         main_flowbox.append (vibrant);
+        main_flowbox.append (salad);
         main_flowbox.append (monochrome);
         main_flowbox.child_activated.connect (child_activated_cb);
 
@@ -654,6 +658,8 @@ public class AppearanceView : Gtk.Box {
             select_ensor (vibrant);
         } else if (value == "mono") {
             select_ensor (monochrome);
+        } else if (value == "salad") {
+            select_ensor (salad);
         }
     }
 
@@ -673,13 +679,15 @@ public class AppearanceView : Gtk.Box {
 
         construct {
             if (mode == "default") {
-                colors = {0x7a44ac, 0x805157, 0xFFF7FE, 0x665A6F};
+                colors = {0x6F528B, 0x665A6F, 0xFFFBFF, 0x815157};
             } else if (mode == "muted") {
-                colors = {0x685974, 0x70585B, 0xFDF8FA, 0x635C65};
+                colors = {0x645B6A, 0x635C66, 0xFEF8FA, 0x765659};
             } else if (mode == "vibrant") {
-                colors = {0x8623D9, 0x855400, 0xFFF7FE, 0x864D64};
+                colors = {0x8900E9, 0x705576, 0xFFF7FE, 0x7D4F76};
             } else if (mode == "mono") {
-                colors = {0x5E5E5E, 0x5E5E5E, 0xFFFFFF, 0x5E5E5E};
+                colors = {0x5E5E5E, 0x5E5E5E, 0xF9F9F9, 0x5E5E5E};
+            } else if (mode == "salad") {
+                colors = {0x1F5FA8, 0x3C5F91, 0xFFFBFF, 0x6F528B};
             }
         }
 
