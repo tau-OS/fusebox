@@ -704,9 +704,6 @@ public class AppearanceView : Gtk.Box {
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
                 int first = result.index (0);
-                int second = result.index (1);
-                int third = result.index (2);
-                int fourth = result.index (3);
 
                 if (first != 0) {
                     tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (first));
@@ -828,7 +825,7 @@ public class AppearanceView : Gtk.Box {
             var css = ".color radio { background: %s }".printf (hex);
             css_provider.load_from_string (css);
             var context = this.get_style_context ();
-            context.add_provider (css_provider, 1);
+            context.add_provider (css_provider, 999);
 
             active = color == tau_appearance_settings.get_string ("accent-color");
 
