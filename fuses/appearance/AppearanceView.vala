@@ -11,6 +11,10 @@ public class AppearanceView : Gtk.Box {
     private PrefersAccentColorButton pink;
     private PrefersAccentColorButton mono;
     private PrefersAccentColorButton multi;
+    private PrefersAccentColorButton first_accent;
+    private PrefersAccentColorButton second_accent;
+    private PrefersAccentColorButton third_accent;
+    private PrefersAccentColorButton fourth_accent;
     private EnsorModeButton defavlt; // default is a Vala keyword, deal with it
     private EnsorModeButton muted;
     private EnsorModeButton vibrant;
@@ -20,10 +24,11 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton prefer_default_radio;
     private Gtk.ToggleButton prefer_dark_radio;
     private Gtk.Box accent_box;
+    private Gtk.Box wallpaper_accent_choices_box;
     public He.ContentBlockImage wallpaper_preview;
     public Fusebox.Fuse fuse { get; construct set; }
     public Appearance.WallpaperGrid wallpaper_view;
-    public He.Switch accent_switch;
+    public He.Switch wp_switch;
     public He.Switch contrast_switch;
     public Gtk.ScrolledWindow sw;
     public Gtk.Label wallpaper_details_label;
@@ -146,7 +151,9 @@ public class AppearanceView : Gtk.Box {
         };
         prefer_sublabel.add_css_class ("cb-subtitle");
 
-        var prefer_default_image = new He.ContentBlockImage ("resource:///com/fyralabs/Fusebox/Appearance/by-apps.svg") {
+        var prefer_default_image = new He.ContentBlockImage (
+                "resource:///com/fyralabs/Fusebox/Appearance/by-apps.svg"
+        ) {
             requested_width = 128,
             requested_height = 128,
             valign = Gtk.Align.START
@@ -266,28 +273,28 @@ public class AppearanceView : Gtk.Box {
         };
         accent_label.add_css_class ("cb-title");
 
-        purple = new PrefersAccentColorButton ("purple");
+        purple = new PrefersAccentColorButton ("purple", null);
         purple.tooltip_text = _("Purple");
 
-        pink = new PrefersAccentColorButton ("pink", purple);
+        pink = new PrefersAccentColorButton ("pink", null, purple);
         pink.tooltip_text = _("Pink");
 
-        red = new PrefersAccentColorButton ("red", purple);
+        red = new PrefersAccentColorButton ("red", null, purple);
         red.tooltip_text = _("Red");
 
-        yellow = new PrefersAccentColorButton ("yellow", purple);
+        yellow = new PrefersAccentColorButton ("yellow", null, purple);
         yellow.tooltip_text = _("Yellow");
 
-        green = new PrefersAccentColorButton ("green", purple);
+        green = new PrefersAccentColorButton ("green", null, purple);
         green.tooltip_text = _("Green");
 
-        blue = new PrefersAccentColorButton ("blue", purple);
+        blue = new PrefersAccentColorButton ("blue", null, purple);
         blue.tooltip_text = _("Blue");
 
-        mono = new PrefersAccentColorButton ("mono", purple);
+        mono = new PrefersAccentColorButton ("mono", null, purple);
         mono.tooltip_text = _("Mono");
 
-        multi = new PrefersAccentColorButton ("multi", purple);
+        multi = new PrefersAccentColorButton ("multi", null, purple);
         multi.tooltip_text = _("Set By Apps");
 
         var accentw_label = new Gtk.Label (_("Wallpaper color")) {
@@ -296,15 +303,36 @@ public class AppearanceView : Gtk.Box {
         };
         accentw_label.add_css_class ("cb-title");
 
-        accent_switch = new He.Switch () {
+        wp_switch = new He.Switch () {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
             hexpand = true
         };
 
+        wallpaper_accent_choices_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
+            visible = false
+        };
+        first_accent = new PrefersAccentColorButton ("wallpaper", null, null) {
+            visible = false
+        };
+        second_accent = new PrefersAccentColorButton ("wallpaper", null, first_accent) {
+            visible = false
+        };
+        third_accent = new PrefersAccentColorButton ("wallpaper", null, first_accent) {
+            visible = false
+        };
+        fourth_accent = new PrefersAccentColorButton ("wallpaper", null, first_accent) {
+            visible = false
+        };
+        wallpaper_accent_choices_box.append (first_accent);
+        wallpaper_accent_choices_box.append (second_accent);
+        wallpaper_accent_choices_box.append (third_accent);
+        wallpaper_accent_choices_box.append (fourth_accent);
+
         var wallpaper_accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wallpaper_accent_box.append (accentw_label);
-        wallpaper_accent_box.append (accent_switch);
+        wallpaper_accent_box.append (wp_switch);
+        wallpaper_accent_box.append (wallpaper_accent_choices_box);
 
         var contrast_label = new Gtk.Label (_("High contrast")) {
             halign = Gtk.Align.START,
@@ -447,11 +475,14 @@ public class AppearanceView : Gtk.Box {
         grid.attach (roundness_box, 0, 5);
         grid.add_css_class ("mini-content-block");
 
-        fusebox_appearance_settings.bind ("wallpaper-accent", accent_switch.iswitch, "active", SettingsBindFlags.DEFAULT);
-        fusebox_appearance_settings.bind("wallpaper-accent", accent_box, "sensitive", SettingsBindFlags.INVERT_BOOLEAN);
+        fusebox_appearance_settings.bind ("wallpaper-accent", wp_switch.iswitch, "active", SettingsBindFlags.DEFAULT);
+        fusebox_appearance_settings.bind ("wallpaper-accent", accent_box, "sensitive", SettingsBindFlags.INVERT_BOOLEAN);
+        fusebox_appearance_settings.bind ("wallpaper-accent", wallpaper_accent_choices_box, "visible", SettingsBindFlags.DEFAULT);
 
-        accent_switch.iswitch.state_set.connect (() => {
-            if (accent_switch.iswitch.active) {
+        accent_setup.begin ();
+
+        wp_switch.iswitch.state_set.connect (() => {
+            if (wp_switch.iswitch.active) {
                 accent_box.sensitive = false;
 
                 multi.set_active (false);
@@ -611,6 +642,59 @@ public class AppearanceView : Gtk.Box {
         }
     }
 
+    public async void accent_setup () {
+        try {
+            GLib.File file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
+            Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
+
+            var loop = new MainLoop ();
+            He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
+                GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
+                int first = result.index (0);
+                int second = result.index (1);
+                int third = result.index (2);
+                int fourth = result.index (3);
+
+                if (first != 0) {
+                    first_accent.hex = He.Color.hexcode_argb (first);
+                    first_accent.visible = true;
+                } else if (first != 0 && second != 0) {
+                    first_accent.hex = He.Color.hexcode_argb (first);
+                    first_accent.visible = true;
+                    second_accent.hex = He.Color.hexcode_argb (second);
+                    second_accent.set_group (first_accent);
+                    second_accent.visible = true;
+                } else if (first != 0 && second != 0 && third != 0) {
+                    first_accent.hex = He.Color.hexcode_argb (first);
+                    first_accent.visible = true;
+                    second_accent.hex = He.Color.hexcode_argb (second);
+                    second_accent.set_group (first_accent);
+                    second_accent.visible = true;
+                    third_accent.hex = He.Color.hexcode_argb (third);
+                    third_accent.set_group (first_accent);
+                    third_accent.visible = true;
+                } else if (first != 0 && second != 0 && third != 0 && fourth != 0) {
+                    first_accent.hex = He.Color.hexcode_argb (first);
+                    first_accent.visible = true;
+                    second_accent.hex = He.Color.hexcode_argb (second);
+                    second_accent.set_group (first_accent);
+                    second_accent.visible = true;
+                    third_accent.hex = He.Color.hexcode_argb (third);
+                    third_accent.set_group (first_accent);
+                    third_accent.visible = true;
+                    fourth_accent.hex = He.Color.hexcode_argb (fourth);
+                    fourth_accent.set_group (first_accent);
+                    fourth_accent.visible = true;
+                }
+                loop.quit ();
+            });
+            loop.run ();
+
+        } catch (Error e) {
+            print (e.message);
+        }
+    }
+
     public async void accent_set () {
         try {
             GLib.File file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
@@ -619,14 +703,18 @@ public class AppearanceView : Gtk.Box {
             var loop = new MainLoop ();
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
-                int top = result.index (0);
-                print ("FIRST FUSEBOX ARGB RESULT (should be the same as Ensor's): %d\n".printf (top));
+                int first = result.index (0);
+                int second = result.index (1);
+                int third = result.index (2);
+                int fourth = result.index (3);
 
-                if (top != 0) {
-                    tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (top));
+                if (first != 0) {
+                    tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (first));
+                    first_accent.active = true;
                 } else {
                     tau_appearance_settings.set_string ("accent-color", "#8C56BF");
                 }
+
                 loop.quit ();
             });
             loop.run ();
@@ -721,17 +809,26 @@ public class AppearanceView : Gtk.Box {
 
     private class PrefersAccentColorButton : Gtk.CheckButton {
         public string color { get; construct; }
+        public string hex { get; set; }
 
-        public PrefersAccentColorButton (string color, Gtk.CheckButton? group_member = null) {
+        public PrefersAccentColorButton (string color, string? hex, Gtk.CheckButton? group_member = null) {
             Object (
                     color: color,
+                    hex: hex,
                     group: group_member
             );
         }
 
         construct {
+            add_css_class ("color");
             add_css_class (color.to_string ());
             add_css_class ("selection-mode");
+
+            var css_provider = new Gtk.CssProvider ();
+            var css = ".color radio { background: %s }".printf (hex);
+            css_provider.load_from_string (css);
+            var context = this.get_style_context ();
+            context.add_provider (css_provider, 1);
 
             active = color == tau_appearance_settings.get_string ("accent-color");
 
@@ -759,6 +856,8 @@ public class AppearanceView : Gtk.Box {
                         tau_appearance_settings.set_string ("accent-color", "multi");
                     } else if (color == "mono") {
                         tau_appearance_settings.set_string ("accent-color", "mono");
+                    } else {
+                        tau_appearance_settings.set_string ("accent-color", hex);
                     }
                 });
             });
