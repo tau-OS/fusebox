@@ -814,46 +814,6 @@ public class AppearanceView : Gtk.Box {
                     hex: hex,
                     group: group_member
             );
-
-            var css_provider = new Gtk.CssProvider ();
-            var css = """
-                .wallpaper1 radio {
-                    background: %s;
-                }
-                .wallpaper1:disabled radio {
-                    background: alpha(%s, 0.18);
-                }
-                .wallpaper2 radio {
-                    background: %s;
-                }
-                .wallpaper2:disabled radio {
-                    background: alpha(%s, 0.18);
-                }
-                .wallpaper3 radio {
-                    background: %s;
-                }
-                .wallpaper3:disabled radio {
-                    background: alpha(%s, 0.18);
-                }
-                .wallpaper4 radio {
-                    background: %s;
-                }
-                .wallpaper4:disabled radio {
-                    background: alpha(%s, 0.18);
-                }
-            """.printf (
-                hex,
-                hex,
-                hex,
-                hex,
-                hex,
-                hex,
-                hex,
-                hex
-            );
-            css_provider.load_from_string (css);
-            Gdk.Display display = Gdk.Display.get_default ();
-            Gtk.StyleContext.add_provider_for_display (display, css_provider, 69);
         }
 
         construct {

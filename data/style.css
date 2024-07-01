@@ -226,19 +226,91 @@ button.flat label {
   box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.99);
 }
 
-.wallpaper:checked radio {
+.wallpaper1 radio {
+  background: linear-gradient(
+    45deg,
+    #e25480,
+    #72da82
+  );
+}
+.wallpaper1:disabled radio {
+  background: alpha(linear-gradient(
+    45deg,
+    #e25480,
+    #72da82
+  ), 0.18);
+}
+.wallpaper2 radio {
+  background: linear-gradient(
+    45deg,
+    #febc16,
+    #a57bcd
+  );
+}
+.wallpaper2:disabled radio {
+  background: alpha(linear-gradient(
+    45deg,
+    #febc16,
+    #a57bcd
+  ), 0.18);
+}
+.wallpaper3 radio {
+  background: linear-gradient(
+    45deg,
+    #58a8fa,
+    #e25480
+  );
+}
+.wallpaper3:disabled radio {
+  background: alpha(linear-gradient(
+    45deg,
+    #58a8fa,
+    #e25480
+  ), 0.18);
+}
+.wallpaper4 radio {
+  background: linear-gradient(
+    45deg,
+    #f99e5c,
+    #58a8fa
+  );
+}
+.wallpaper4:disabled radio {
+  background: alpha(linear-gradient(
+    45deg,
+    #f99e5c,
+    #58a8fa
+  ), 0.18);
+}
+
+.wallpaper1:checked radio,
+.wallpaper2:checked radio,
+.wallpaper3:checked radio,
+.wallpaper4:checked radio {
   box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.38);
 }
-.wallpaper:hover radio {
+.wallpaper1:hover radio,
+.wallpaper2:hover radio,
+.wallpaper3:hover radio,
+.wallpaper4:hover radio {
   box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
 }
-.wallpaper:active radio {
+.wallpaper1:active radio,
+.wallpaper2:active radio,
+.wallpaper3:active radio,
+.wallpaper4:active radio {
   box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.53);
 }
-.wallpaper:hover:checked radio {
+.wallpaper1:hover:checked radio,
+.wallpaper2:hover:checked radio,
+.wallpaper3:hover:checked radio,
+.wallpaper4:hover:checked radio {
   box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
 }
-.wallpaper:active:checked radio {
+.wallpaper1:active:checked radio,
+.wallpaper2:active:checked radio,
+.wallpaper3:active:checked radio,
+.wallpaper4:active:checked radio {
   box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.53);
 }
 
