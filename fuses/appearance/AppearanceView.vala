@@ -313,17 +313,17 @@ public class AppearanceView : Gtk.Box {
             valign = Gtk.Align.CENTER,
             hexpand = true
         };
-        first_accent = new PrefersAccentColorButton ("wallpaper", "#F00", null) {
+        first_accent = new PrefersAccentColorButton ("wallpaper1", "#F00", null) {
             visible = false,
             active = true
         };
-        second_accent = new PrefersAccentColorButton ("wallpaper", "#0F0", first_accent) {
+        second_accent = new PrefersAccentColorButton ("wallpaper2", "#0F0", first_accent) {
             visible = false
         };
-        third_accent = new PrefersAccentColorButton ("wallpaper", "#00F", first_accent) {
+        third_accent = new PrefersAccentColorButton ("wallpaper3", "#00F", first_accent) {
             visible = false
         };
-        fourth_accent = new PrefersAccentColorButton ("wallpaper", "#FFF", first_accent) {
+        fourth_accent = new PrefersAccentColorButton ("wallpaper4", "#FFF", first_accent) {
             visible = false
         };
         wallpaper_accent_choices_box.append (first_accent);
@@ -660,52 +660,56 @@ public class AppearanceView : Gtk.Box {
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
 
-                int first = 0, second = 0, third = 0, fourth = 0;
-                if (result.index (0) != null){ first = result.index (0); } else { first = 0; };
-                if (result.index (1) != null) { second = result.index (1); } else { first = 0; };
-                if (result.index (2) != null) { third = result.index (2); } else { first = 0; };
-                if (result.index (3) != null) { fourth = result.index (3); } else { first = 0; };
+                int first;
+                int second;
+                int third;
+                int fourth;
 
-                if (result.index (0) != null) print ("FIRST FUSEBOX ARGB RESULT (should be the same as Ensor's): %d\n".printf (result.index (0)));
-                if (result.index (1) != null) print ("SECOND FUSEBOX ARGB RESULT (should be the same as Ensor's): %d\n".printf (result.index (1)));
-                if (result.index (2) != null) print ("THIRD FUSEBOX ARGB RESULT (should be the same as Ensor's): %d\n".printf (result.index (2)));
-                if (result.index (3) != null) print ("FOURTH FUSEBOX ARGB RESULT (should be the same as Ensor's): %d\n".printf (result.index (3)));
+                first = result.index (0);
 
-                if (result.index (0) != null) print ("FIRST FUSEBOX HEX RESULT: %s\n".printf (He.Color.hexcode_argb (result.index (0))));
-                if (result.index (1) != null) print ("SECOND FUSEBOX HEX RESULT: %s\n".printf (He.Color.hexcode_argb (result.index (1))));
-                if (result.index (2) != null) print ("THIRD FUSEBOX HEX RESULT: %s\n".printf (He.Color.hexcode_argb (result.index (2))));
-                if (result.index (3) != null) print ("FOURTH FUSEBOX HEX RESULT: %s\n".printf (He.Color.hexcode_argb (result.index (3))));
+                if (result.index (0) != null) print ("#1 FUSEBOX ARGB RESULT (should be the same as Ensor's): %d\n".printf (result.index (0)));
+                if (result.index (0) != null) print ("#1 FUSEBOX HEX RESULT: %s\n".printf (He.Color.hexcode_argb (first)));
+                first_accent.hex = He.Color.hexcode_argb (first);
+                first_accent.visible = true;
+                second_accent.visible = false;
+                third_accent.visible = false;
+                fourth_accent.visible = false;
 
-                if (first != 0 && second != 0 && third != 0 && fourth != 0) {
-                    first_accent.hex = He.Color.hexcode_argb (first);
-                    first_accent.visible = true;
+                if (result.index (0) != null && result.index (1) != null && result.index (2) == null && result.index (3) == null) {
+                    second = result.index (1);
+                    if (result.index (1) != null) print ("#2 FUSEBOX ARGB RESULT (should be the same as Ensor's): %d\n".printf (result.index (1)));
+                    if (result.index (1) != null) print ("#2 FUSEBOX HEX RESULT: %s\n".printf (He.Color.hexcode_argb (second)));
+
+                    second_accent.hex = He.Color.hexcode_argb (second);
+                    second_accent.visible = true;
+                    third_accent.visible = false;
+                    fourth_accent.visible = false;
+                }
+                if (result.index (0) != null && result.index (1) != null && result.index (2) != null && result.index (3) == null) {
+                    second = result.index (1);
+                    third = result.index (2);
+                    if (result.index (1) != null) print ("#3 FUSEBOX ARGB RESULT (should be the same as Ensor's): %d\n".printf (result.index (2)));
+                    if (result.index (1) != null) print ("#3 FUSEBOX HEX RESULT: %s\n".printf (He.Color.hexcode_argb (third)));
+
+                    second_accent.hex = He.Color.hexcode_argb (second);
+                    second_accent.visible = true;
+                    third_accent.hex = He.Color.hexcode_argb (third);
+                    third_accent.visible = true;
+                    fourth_accent.visible = false;
+                }
+                if (result.index (0) != null && result.index (1) != null && result.index (2) != null && result.index (3) != null) {
+                    second = result.index (1);
+                    third = result.index (2);
+                    fourth = result.index (3);
+                    if (result.index (1) != null) print ("#4 FUSEBOX ARGB RESULT (should be the same as Ensor's): %d\n".printf (result.index (3)));
+                    if (result.index (1) != null) print ("#4 FUSEBOX HEX RESULT: %s\n".printf (He.Color.hexcode_argb (fourth)));
+
                     second_accent.hex = He.Color.hexcode_argb (second);
                     second_accent.visible = true;
                     third_accent.hex = He.Color.hexcode_argb (third);
                     third_accent.visible = true;
                     fourth_accent.hex = He.Color.hexcode_argb (fourth);
                     fourth_accent.visible = true;
-                } else if (first != 0 && second != 0 && third != 0 && fourth == 0) {
-                    first_accent.hex = He.Color.hexcode_argb (first);
-                    first_accent.visible = true;
-                    second_accent.hex = He.Color.hexcode_argb (second);
-                    second_accent.visible = true;
-                    third_accent.hex = He.Color.hexcode_argb (third);
-                    third_accent.visible = true;
-                } else if (first != 0 && second != 0 && third == 0 && fourth == 0) {
-                    first_accent.hex = He.Color.hexcode_argb (first);
-                    first_accent.visible = true;
-                    second_accent.hex = He.Color.hexcode_argb (second);
-                    second_accent.visible = true;
-                } else if (first != 0 && second == 0 && third == 0 && fourth == 0) {
-                    first_accent.hex = He.Color.hexcode_argb (first);
-                    first_accent.visible = true;
-                }
-
-                if (first != 0) {
-                    tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (first));
-                } else {
-                    tau_appearance_settings.set_string ("accent-color", "#8C56BF");
                 }
 
                 loop.quit ();
@@ -810,16 +814,53 @@ public class AppearanceView : Gtk.Box {
                     hex: hex,
                     group: group_member
             );
+
+            var css_provider = new Gtk.CssProvider ();
+            var css = """
+                .wallpaper1 radio {
+                    background: %s;
+                }
+                .wallpaper1:disabled radio {
+                    background: alpha(%s, 0.18);
+                }
+                .wallpaper2 radio {
+                    background: %s;
+                }
+                .wallpaper2:disabled radio {
+                    background: alpha(%s, 0.18);
+                }
+                .wallpaper3 radio {
+                    background: %s;
+                }
+                .wallpaper3:disabled radio {
+                    background: alpha(%s, 0.18);
+                }
+                .wallpaper4 radio {
+                    background: %s;
+                }
+                .wallpaper4:disabled radio {
+                    background: alpha(%s, 0.18);
+                }
+            """.printf (
+                hex,
+                hex,
+                hex,
+                hex,
+                hex,
+                hex,
+                hex,
+                hex
+            );
+            css_provider.load_from_string (css);
+            Gdk.Display display = Gdk.Display.get_default ();
+            Gtk.StyleContext.add_provider_for_display (display, css_provider, 69);
         }
 
         construct {
             add_css_class (color.to_string ());
             add_css_class ("selection-mode");
 
-            var css_provider = new Gtk.CssProvider ();
-            var css = ".wallpaper radio { background: %s; }".printf (hex);
-            css_provider.load_from_string (css);
-            this.get_style_context ().add_provider (css_provider, 1);
+            active = color == tau_appearance_settings.get_string ("accent-color");
 
             toggled.connect (() => {
                 if (color == "purple") {
@@ -844,7 +885,7 @@ public class AppearanceView : Gtk.Box {
                     tau_appearance_settings.set_string ("accent-color", "multi");
                 } else if (color == "mono") {
                     tau_appearance_settings.set_string ("accent-color", "mono");
-                } else if (color == "wallpaper") {
+                } else {
                     tau_appearance_settings.set_string ("accent-color", hex);
                 }
             });
