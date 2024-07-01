@@ -135,7 +135,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         settings.set_string ("picture-uri", furi);
         settings.set_string ("picture-uri-dark", furi);
         if (appearance_view.wp_switch.iswitch.active)
-            appearance_view.accent_set.begin ();
+            appearance_view.accent_setup.begin ();
         
         appearance_view.wallpaper_preview.file = furi;
 
