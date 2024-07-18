@@ -39,6 +39,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     private He.TextButton wallpaper_add_button;
     private He.TextButton wallpaper_removal_button;
 
+    public He.AppBar wappbar;
+
     public Appearance.WallpaperContainer active_wallpaper = null;
     private Appearance.WallpaperContainer wallpaper_for_removal = null;
 
@@ -64,6 +66,21 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     }
 
     construct {
+        var wallpaper_mlabel = new He.ViewTitle () {
+            label = (_("Wallpaper"))
+        };
+
+        wappbar = new He.AppBar () {
+            show_back = true,
+            show_left_title_buttons = false,
+            show_right_title_buttons = true,
+            viewtitle_widget = wallpaper_mlabel
+        };
+
+        wappbar.back_button.clicked.connect (() => {
+            appearance_view.wallpaper_stack.set_visible_child_name ("appearance");
+        });
+
         wallpaper_view = new Gtk.FlowBox () {
             activate_on_single_click = true,
             column_spacing = 12,
@@ -84,7 +101,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         var wallpaper_title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             spacing = 12,
             hexpand = true,
-            halign = Gtk.Align.START
+            halign = Gtk.Align.END
         };
 
         wallpaper_add_button = new He.TextButton ("") {
@@ -97,7 +114,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
 
         wallpaper_removal_button = new He.TextButton ("") {
             hexpand = true,
-            halign = Gtk.Align.START,
+            halign = Gtk.Align.END,
             icon = "user-trash-symbolic",
             visible = false
         };
@@ -115,16 +132,25 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         wallpaper_title_box.prepend (wallpaper_add_button);
         wallpaper_title_box.append (wallpaper_removal_button);
 
-        var wallpaper_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+        var wallpaper_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             spacing = 12,
-            hexpand = true
+            hexpand = true,
+            margin_start = 18,
+            margin_end = 18
         };
         wallpaper_main_box.add_css_class ("mini-content-block");
         wallpaper_main_box.append (wallpaper_title_box);
         wallpaper_main_box.append (wallpaper_view);
 
+        var wsw = new Gtk.ScrolledWindow () {
+            vexpand = true
+        };
+        wsw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
+        wsw.set_child (wallpaper_main_box);
+
         load_settings ();
-        attach (wallpaper_main_box, 0, 1);
+        attach (wappbar, 0, 0);
+        attach (wsw, 0, 1);
     }
 
     public const string FILE_ATTRIBUTES = "standard::*,time::*,id::file,id::filesystem,etag::value";

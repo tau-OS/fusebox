@@ -33,6 +33,8 @@ public class AppearanceView : Gtk.Box {
     public Gtk.ScrolledWindow sw;
     public Gtk.Label wallpaper_details_label;
     public Gtk.Label wallpaper_details_sublabel;
+    public Gtk.Stack wallpaper_stack;
+    public Gtk.Stack main_stack;
     private Gtk.FlowBox main_flowbox;
     private EnsorModeButton current_emb;
     private uint rscale_timeout;
@@ -533,20 +535,10 @@ public class AppearanceView : Gtk.Box {
         sw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
         sw.set_child (main_box);
 
-        var wmain_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
-            margin_start = 18,
-            margin_end = 18
-        };
-        wmain_box.append (wallpaper_view);
-
-        var wsw = new Gtk.ScrolledWindow ();
-        wsw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
-        wsw.set_child (wmain_box);
-
         var window_view = new Appearance.WindowView ();
         var text_view = new Appearance.TextView ();
 
-        var main_stack = new Gtk.Stack () {
+        main_stack = new Gtk.Stack () {
             transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
             transition_duration = 400
         };
@@ -561,38 +553,25 @@ public class AppearanceView : Gtk.Box {
             show_back = false,
             show_left_title_buttons = false,
             show_right_title_buttons = true,
-            margin_bottom = 12,
             viewtitle_widget = stack_switcher
         };
 
-        var wallpaper_stack = new Gtk.Stack () {
+        var abox = new Gtk.Box (Gtk.Orientation.VERTICAL,0);
+        abox.append (appbar);
+        abox.append (main_stack);
+
+        wallpaper_stack = new Gtk.Stack () {
             transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
             transition_duration = 400
         };
-        wallpaper_stack.add_titled (main_stack, "appearance", _("Appearance"));
-        wallpaper_stack.add_titled (wsw, "wallpaper", _("Wallpaper"));
-
-        var wallpaper_mlabel = new Gtk.Label (_("Wallpaper")) {
-            halign = Gtk.Align.START,
-            css_classes = {"view-title"}
-        };
+        wallpaper_stack.add_titled (abox, "appearance", _("Appearance"));
+        wallpaper_stack.add_titled (wallpaper_view, "wallpaper", _("Wallpaper"));
 
         wallpaper_grid_button.clicked.connect (() => {
-            wallpaper_stack.set_visible_child (wsw);
-            appbar.show_back = true;
-            appbar.viewtitle_widget.unparent ();
-            appbar.viewtitle_widget = wallpaper_mlabel;
-        });
-
-        appbar.back_button.clicked.connect (() => {
-            wallpaper_stack.set_visible_child (main_stack);
-            appbar.show_back = false;
-            appbar.viewtitle_widget.unparent ();
-            appbar.viewtitle_widget = stack_switcher;
+            wallpaper_stack.set_visible_child_name ("wallpaper");
         });
 
         orientation = Gtk.Orientation.VERTICAL;
-        append (appbar);
         append (wallpaper_stack);
 
         prefer_default_radio.toggled.connect (() => {
