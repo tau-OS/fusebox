@@ -18,7 +18,7 @@ public class About.OSView : Gtk.Box {
     private Gtk.Label hostname_subtitle;
     private Gtk.Label gpu_subtitle;
     private Gtk.Label storage_subtitle;
-    private Gtk.ProgressBar storage_gauge;
+    private He.ProgressBar storage_gauge;
 
     private static Regex pc_name_regex;
 
@@ -109,8 +109,9 @@ public class About.OSView : Gtk.Box {
         hostname_box.append (hostname_subtitle);
         hostname_box.add_css_class ("mini-content-block");
 
-        storage_gauge = new Gtk.ProgressBar () {
+        storage_gauge = new He.ProgressBar () {
             vexpand = true,
+            hexpand = true,
             valign = Gtk.Align.CENTER
         };
         var storage_title = new Gtk.Label (_("Storage")) {
@@ -647,7 +648,7 @@ public class About.OSView : Gtk.Box {
 
             var fraction = (double.parse (used) * 1.04858) / (double.parse (storage_capacity) * 1.04858);
 
-            storage_gauge.set_fraction (fraction);
+            storage_gauge.progressbar.set_fraction (fraction);
             storage_subtitle.label = used + " / " + storage_capacity;
         } catch (Error e) {
             critical (e.message);
