@@ -170,8 +170,8 @@ namespace Fusebox {
             title_label.add_css_class ("view-title");
             title_label.halign = Gtk.Align.START;
 
-            headerbar.append (search_button);
-            headerbar.append (menu_button);
+            headerbar.append_toggle (search_button);
+            headerbar.append_menu (menu_button);
             headerbar.viewtitle_widget = title_label;
 
             search_button.toggled.connect (() => {
