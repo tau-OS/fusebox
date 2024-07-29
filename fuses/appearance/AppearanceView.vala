@@ -617,20 +617,21 @@ public class AppearanceView : Gtk.Box {
         }
     }
 
-    private void set_contrast_scheme (double contrast_scheme) {
-        tau_appearance_settings.set_double ("contrast", contrast_scheme);
-    }
-
     private void contrast_refresh () {
         double value = tau_appearance_settings.get_double ("contrast");
 
-        if (value == 0.0) {
+        if (value == 3.0) {
+            contrast_switch.iswitch.active = true;
+        } else if (value == 0.0) {
             contrast_switch.iswitch.active = false;
         } else if (value == 1.0) {
-            contrast_switch.iswitch.active = true;
-        } else if (value == -1.0) {
+            contrast_switch.iswitch.active = false;
+        } else if (value == 2.0) {
             contrast_switch.iswitch.active = false;
         }
+    }
+    private void set_contrast_scheme (double contrast_scheme) {
+        tau_appearance_settings.set_double ("contrast", contrast_scheme);
     }
 
     public async void accent_setup () {
