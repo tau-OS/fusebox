@@ -517,9 +517,9 @@ public class AppearanceView : Gtk.Box {
 
         contrast_switch.iswitch.state_set.connect (() => {
             if (contrast_switch.iswitch.active) {
-                set_contrast_scheme (He.Desktop.ContrastScheme.HIGH);
+                set_contrast_scheme (1.0);
             } else {
-                set_contrast_scheme (He.Desktop.ContrastScheme.DEFAULT);
+                set_contrast_scheme (0.0);
             }
             return Gdk.EVENT_PROPAGATE;
         });
@@ -617,18 +617,18 @@ public class AppearanceView : Gtk.Box {
         }
     }
 
-    private void set_contrast_scheme (He.Desktop.ContrastScheme contrast_scheme) {
-        tau_appearance_settings.set_enum ("contrast", contrast_scheme);
+    private void set_contrast_scheme (double contrast_scheme) {
+        tau_appearance_settings.set_double ("contrast", contrast_scheme);
     }
 
     private void contrast_refresh () {
-        int value = tau_appearance_settings.get_enum ("contrast");
+        double value = tau_appearance_settings.get_double ("contrast");
 
-        if (value == He.Desktop.ContrastScheme.DEFAULT) {
+        if (value == 0.0) {
             contrast_switch.iswitch.active = false;
-        } else if (value == He.Desktop.ContrastScheme.HIGH) {
+        } else if (value == 1.0) {
             contrast_switch.iswitch.active = true;
-        } else if (value == He.Desktop.ContrastScheme.LOW) {
+        } else if (value == -1.0) {
             contrast_switch.iswitch.active = false;
         }
     }
