@@ -517,9 +517,9 @@ public class AppearanceView : Gtk.Box {
 
         contrast_switch.iswitch.state_set.connect (() => {
             if (contrast_switch.iswitch.active) {
-                set_contrast_scheme (1.0);
+                set_contrast_scheme (3.0);
             } else {
-                set_contrast_scheme (0.0);
+                set_contrast_scheme (1.0);
             }
             return Gdk.EVENT_PROPAGATE;
         });
