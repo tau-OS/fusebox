@@ -177,22 +177,22 @@ public class Appearance.ContrastView : Gtk.Box {
     private void contrast_refresh () {
         double value = tau_appearance_settings.get_double ("contrast");
 
-        if (value == 0.0) {
+        if (value == 1.0) {
             contrast_button_1.active = true;
             contrast_button_2.active = false;
             contrast_button_3.active = false;
             contrast_button_4.active = false;
-        } else if (value == 1.0) {
+        } else if (value == 2.0) {
             contrast_button_2.active = true;
             contrast_button_1.active = false;
             contrast_button_3.active = false;
             contrast_button_4.active = false;
-        } else if (value == 2.0) {
+        } else if (value == 3.0) {
             contrast_button_3.active = true;
             contrast_button_2.active = false;
             contrast_button_1.active = false;
             contrast_button_4.active = false;
-        } else if (value == 3.0) {
+        } else if (value == 4.0) {
             contrast_button_4.active = true;
             contrast_button_2.active = false;
             contrast_button_3.active = false;
