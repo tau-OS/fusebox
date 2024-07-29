@@ -130,6 +130,17 @@ public class Appearance.ContrastView : Gtk.Box {
         contrast_box.append (contrast_seg_button);
         contrast_box.add_css_class ("mini-content-block");
 
+        var contrast_info_image = new Gtk.Image () {
+            icon_name = "dialog-information-symbolic",
+            pixel_size = 24
+        };
+
+        var contrast_info_label = new Gtk.Label (_("Some apps may not support all color and text contrast settings."));
+
+        var contrast_info_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+        contrast_info_box.append (contrast_info_image);
+        contrast_info_box.append (contrast_info_label);
+
         var contrast_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             spacing = 12,
             hexpand = true,
@@ -139,6 +150,7 @@ public class Appearance.ContrastView : Gtk.Box {
         contrast_main_box.append (contrast_info);
         contrast_main_box.append (contrast_preview);
         contrast_main_box.append (contrast_box);
+        contrast_main_box.append (contrast_info_box);
 
         var csw = new Gtk.ScrolledWindow () {
             vexpand = true,
