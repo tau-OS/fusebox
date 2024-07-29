@@ -1,6 +1,7 @@
 fuse_files = files(
     'AppearanceFuse.vala',
     'AppearanceView.vala',
+    'ContrastView.vala',
     'WallpaperGrid.vala',
     'TextView.vala',
     'WindowView.vala',

@@ -29,10 +29,10 @@ public class AppearanceView : Gtk.Box {
     public Fusebox.Fuse fuse { get; construct set; }
     public Appearance.WallpaperGrid wallpaper_view;
     public He.Switch wp_switch;
-    public He.Switch contrast_switch;
     public Gtk.ScrolledWindow sw;
     public Gtk.Label wallpaper_details_label;
     public Gtk.Label wallpaper_details_sublabel;
+    public Gtk.Stack contrast_stack;
     public Gtk.Stack wallpaper_stack;
     public Gtk.Stack main_stack;
     private Gtk.FlowBox main_flowbox;
@@ -348,21 +348,22 @@ public class AppearanceView : Gtk.Box {
         wallpaper_accent_box.append (wallpaper_accent_choices_box);
         wallpaper_accent_box.append (wp_switch);
 
-        var contrast_label = new Gtk.Label (_("High contrast")) {
+        var contrast_label = new Gtk.Label (_("Contrast Settings")) {
             halign = Gtk.Align.START,
             valign = Gtk.Align.CENTER
         };
         contrast_label.add_css_class ("cb-title");
 
-        contrast_switch = new He.Switch () {
+        var contrast_grid_button = new He.IconicButton ("pan-end-symbolic") {
+            hexpand = true,
+            vexpand = true,
             halign = Gtk.Align.END,
-            valign = Gtk.Align.CENTER,
-            hexpand = true
+            valign = Gtk.Align.START
         };
 
         var contrast_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         contrast_box.append (contrast_label);
-        contrast_box.append (contrast_switch);
+        contrast_box.append (contrast_grid_button);
 
         accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0) {
             homogeneous = true,
@@ -515,15 +516,6 @@ public class AppearanceView : Gtk.Box {
             return Gdk.EVENT_PROPAGATE;
         });
 
-        contrast_switch.iswitch.state_set.connect (() => {
-            if (contrast_switch.iswitch.active) {
-                set_contrast_scheme (3.0);
-            } else {
-                set_contrast_scheme (1.0);
-            }
-            return Gdk.EVENT_PROPAGATE;
-        });
-
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
             margin_start = 18,
             margin_end = 18
@@ -571,8 +563,21 @@ public class AppearanceView : Gtk.Box {
             wallpaper_stack.set_visible_child_name ("wallpaper");
         });
 
+        var contrast_view = new Appearance.ContrastView (fuse, this);
+
+        contrast_stack = new Gtk.Stack () {
+            transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
+            transition_duration = 400
+        };
+        contrast_stack.add_titled (wallpaper_stack, "appearance", _("Appearance"));
+        contrast_stack.add_titled (contrast_view, "contrast", _("Contrast"));
+
+        contrast_grid_button.clicked.connect (() => {
+            contrast_stack.set_visible_child_name ("contrast");
+        });
+
         orientation = Gtk.Orientation.VERTICAL;
-        append (wallpaper_stack);
+        append (contrast_stack);
 
         prefer_default_radio.toggled.connect (() => {
             set_color_scheme (He.Desktop.ColorScheme.NO_PREFERENCE);
@@ -587,11 +592,6 @@ public class AppearanceView : Gtk.Box {
         color_scheme_refresh ();
         interface_settings.notify["changed::color-scheme"].connect (() => {
             color_scheme_refresh ();
-        });
-
-        contrast_refresh ();
-        tau_appearance_settings.notify["changed::contrast"].connect (() => {
-            contrast_refresh ();
         });
     }
 
@@ -615,23 +615,6 @@ public class AppearanceView : Gtk.Box {
             prefer_light_radio.set_active (false);
             prefer_dark_radio.set_active (true);
         }
-    }
-
-    private void contrast_refresh () {
-        double value = tau_appearance_settings.get_double ("contrast");
-
-        if (value == 3.0) {
-            contrast_switch.iswitch.active = true;
-        } else if (value == 0.0) {
-            contrast_switch.iswitch.active = false;
-        } else if (value == 1.0) {
-            contrast_switch.iswitch.active = false;
-        } else if (value == 2.0) {
-            contrast_switch.iswitch.active = false;
-        }
-    }
-    private void set_contrast_scheme (double contrast_scheme) {
-        tau_appearance_settings.set_double ("contrast", contrast_scheme);
     }
 
     public async void accent_setup () {

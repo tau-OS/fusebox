@@ -4,7 +4,7 @@
      private Gtk.ComboBoxText wm_dc_cb;
      private Gtk.ComboBoxText wm_sc_cb;
      private Gtk.ComboBoxText wm_focus_cb;
-     private He.ContentBlockImage wm_layout_preview;
+     private Gtk.Box wm_layout_preview;
 
      public WindowView () {
      }
@@ -14,11 +14,26 @@
      }
 
      construct {
-        wm_layout_preview = new He.ContentBlockImage ("resource:///com/fyralabs/Fusebox/Appearance/kiri-l.svg") {
-            requested_width = 360,
-            requested_height = 240
+        var wm_layout_preview_label = new He.ViewTitle () {
+            label = (_("View"))
+        };
+        var wm_layout_preview_bar = new He.AppBar () {
+            can_target = false,
+            viewtitle_widget = wm_layout_preview_label
+        };
+        var wm_layout_preview_mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+            margin_top = 24,
+            margin_start = 48,
+            margin_end = 48
+        };
+        wm_layout_preview_mbox.append (wm_layout_preview_bar);
+        wm_layout_preview_mbox.add_css_class ("medium-radius");
+        wm_layout_preview_mbox.add_css_class ("surface-bg-color");
+        wm_layout_preview = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
         };
         wm_layout_preview.add_css_class ("circle-radius");
+        wm_layout_preview.add_css_class ("surface-container-bg-color");
+        wm_layout_preview.append (wm_layout_preview_mbox);
 
         wm_layout_cb = new Gtk.ComboBoxText () {
             valign = Gtk.Align.CENTER
@@ -64,7 +79,7 @@
             }
         );
         wm_title_box.append (
-            new Gtk.Label (_("Change what the mouse does when interacting with the  titlebar")) {
+            new Gtk.Label (_("Change what the mouse does when interacting with the titlebar")) {
                 css_classes = { "cb-subtitle", "dim-label" },
                 xalign = 0,
                 hexpand = true,
@@ -198,23 +213,18 @@
         switch (title) {
             case "close,minimize,maximize:":
                 wm_layout_cb.set_active (0);
-                wm_layout_preview.file = "resource:///com/fyralabs/Fusebox/Appearance/kiri-l.svg";
                 break;
             case ":minimize,maximize,close":
                 wm_layout_cb.set_active (2);
-                wm_layout_preview.file = "resource:///com/fyralabs/Fusebox/Appearance/fluent-l.svg";
                 break;
             case "close:maximize":
                 wm_layout_cb.set_active (3);
-                wm_layout_preview.file = "resource:///com/fyralabs/Fusebox/Appearance/granite-l.svg";
                 break;
             case ":close":
                 wm_layout_cb.set_active (4);
-                wm_layout_preview.file = "resource:///com/fyralabs/Fusebox/Appearance/adwaita-l.svg";
                 break;
             case "appmenu:minimize,maximize,close":
                 wm_layout_cb.set_active (5);
-                wm_layout_preview.file = "resource:///com/fyralabs/Fusebox/Appearance/breeze-l.svg";
                 break;
         }
 
@@ -224,23 +234,18 @@
                 case 0:
                 case 1:
                     wm_settings.set_string ("button-layout", "close,minimize,maximize:");
-                    wm_layout_preview.file = "resource:///com/fyralabs/Fusebox/Appearance/kiri-l.svg";
                     break;
                 case 2:
                     wm_settings.set_string ("button-layout", ":minimize,maximize,close");
-                    wm_layout_preview.file = "resource:///com/fyralabs/Fusebox/Appearance/fluent-l.svg";
                     break;
                 case 3:
                     wm_settings.set_string ("button-layout", "close:maximize");
-                    wm_layout_preview.file = "resource:///com/fyralabs/Fusebox/Appearance/granite-l.svg";
                     break;
                 case 4:
                     wm_settings.set_string ("button-layout", ":close");
-                    wm_layout_preview.file = "resource:///com/fyralabs/Fusebox/Appearance/adwaita-l.svg";
                     break;
                 case 5:
                     wm_settings.set_string ("button-layout", "appmenu:minimize,maximize,close");
-                    wm_layout_preview.file = "resource:///com/fyralabs/Fusebox/Appearance/breeze-l.svg";
                     break;
             }
         });

@@ -143,7 +143,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         wallpaper_main_box.append (wallpaper_view);
 
         var wsw = new Gtk.ScrolledWindow () {
-            vexpand = true
+            vexpand = true,
+            margin_bottom = 18
         };
         wsw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
         wsw.set_child (wallpaper_main_box);
