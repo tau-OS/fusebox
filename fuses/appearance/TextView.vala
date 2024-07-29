@@ -1,9 +1,9 @@
 public class Appearance.TextView : Gtk.Box {
     private const string FONT_KEY = "font-name";
     private const string DOCUMENT_FONT_KEY = "document-font-name";
-    private const string REG_FONT = "Manrope 10";
-    private const string DOC_FONT = "Manrope 10";
-    private const string OD_REG_FONT = "OpenDyslexic Regular 9";
+    private const string REG_FONT = "Geist Regular 11";
+    private const string DOC_FONT = "Geist Regular 11";
+    private const string OD_REG_FONT = "OpenDyslexic Regular 10";
     private const string OD_DOC_FONT = "OpenDyslexic Regular 10";
     private static GLib.Settings tau_appearance_settings;
 
