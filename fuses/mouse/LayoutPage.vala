@@ -107,7 +107,7 @@ namespace Mouse {
             var sep = new Gtk.Separator (Gtk.Orientation.VERTICAL);
 
             column_spacing = 12;
-            row_spacing = 12;
+            row_spacing = 6;
             attach (display, 0, 0, 1, 4);
             attach (sep, 1, 0, 1, 4);
             attach (switch_layout_label, 2, 0, 1, 1);

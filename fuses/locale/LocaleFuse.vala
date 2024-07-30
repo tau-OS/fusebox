@@ -34,7 +34,7 @@ public class Locale.Fuse : Fusebox.Fuse {
             };
 
             main_grid = new Gtk.Grid () {
-                row_spacing = 12
+                row_spacing = 6
             };
             main_grid.attach (appbar, 0, 0);
             main_grid.attach (locale_view, 0, 1);

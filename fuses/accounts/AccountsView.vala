@@ -13,7 +13,7 @@ public class Accounts.AccountsView : Gtk.Box {
             dialog.present ();
         });
 
-        var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         overlay_button.child = mbox;
 
         var user_list = new Gtk.ListBox () {
@@ -26,8 +26,7 @@ public class Accounts.AccountsView : Gtk.Box {
         mbox.append (user_list);
 
         var autologin_box = new He.MiniContentBlock () {
-            title = _("Automatic Login"),
-            margin_top = 12
+            title = _("Automatic Login")
         };
         mbox.append (autologin_box);
 

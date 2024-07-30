@@ -45,9 +45,9 @@ public class Mouse.Fuse : Fusebox.Fuse {
             var keyboard_view = new KeyboardView ();
 
             stack = new Gtk.Stack () {
-                margin_bottom = 24,
-                margin_start = 24,
-                margin_end = 24,
+                margin_bottom = 18,
+                margin_start = 18,
+                margin_end = 18,
                 vhomogeneous = false,
                 transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
                 transition_duration = 400
@@ -67,7 +67,7 @@ public class Mouse.Fuse : Fusebox.Fuse {
             };
 
             main_grid = new Gtk.Grid () {
-                row_spacing = 12
+                row_spacing = 6
             };
             main_grid.attach (appbar, 0, 0);
             main_grid.attach (stack, 0, 1);

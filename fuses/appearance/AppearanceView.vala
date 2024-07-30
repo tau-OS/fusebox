@@ -119,7 +119,7 @@ public class AppearanceView : Gtk.Box {
         wallpaper_details_box.append (wallpaper_details_label);
         wallpaper_details_box.append (wallpaper_details_sublabel);
 
-        var wallpaper_preview_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 24);
+        var wallpaper_preview_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wallpaper_preview_box.append (wallpaper_preview);
         wallpaper_preview_box.append (wallpaper_details_box);
 
@@ -135,11 +135,11 @@ public class AppearanceView : Gtk.Box {
             is_iconic = true
         };
 
-        var wallpaper_header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 24);
+        var wallpaper_header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wallpaper_header_box.append (wallpaper_box);
         wallpaper_header_box.append (wallpaper_grid_button);
 
-        var wallpaper_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        var wallpaper_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         wallpaper_main_box.append (wallpaper_header_box);
         wallpaper_main_box.append (wallpaper_preview_box);
         wallpaper_main_box.add_css_class ("mini-content-block");
@@ -245,7 +245,7 @@ public class AppearanceView : Gtk.Box {
         prefer_dark_radio.add_css_class ("color-scheme-button");
         prefer_dark_radio.child = (dark_grid);
 
-        var prefer_style_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 24) {
+        var prefer_style_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             hexpand = true,
             halign = Gtk.Align.START
         };
@@ -257,7 +257,7 @@ public class AppearanceView : Gtk.Box {
         prefer_label_box.append (prefer_label);
         prefer_label_box.append (prefer_sublabel);
 
-        var prefer_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 18);
+        var prefer_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         prefer_main_box.append (prefer_label_box);
         prefer_main_box.append (prefer_style_box);
 
@@ -311,7 +311,7 @@ public class AppearanceView : Gtk.Box {
             valign = Gtk.Align.CENTER,
         };
 
-        wallpaper_accent_choices_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0) {
+        wallpaper_accent_choices_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
             hexpand = true
@@ -367,8 +367,7 @@ public class AppearanceView : Gtk.Box {
         contrast_box.append (contrast_label);
         contrast_box.append (contrast_grid_button);
 
-        accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0) {
-            homogeneous = true,
+        accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             halign = Gtk.Align.END,
             hexpand = true
         };
@@ -381,7 +380,7 @@ public class AppearanceView : Gtk.Box {
         accent_box.append (blue);
         accent_box.append (mono);
 
-        var accent_main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var accent_main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         accent_main_box.append (accent_label);
         accent_main_box.append (accent_box);
 
@@ -410,7 +409,7 @@ public class AppearanceView : Gtk.Box {
         main_flowbox = new Gtk.FlowBox () {
             hexpand = true,
             halign = Gtk.Align.END,
-            column_spacing = 12,
+            column_spacing = 24,
             homogeneous = true,
             min_children_per_line = 5,
             max_children_per_line = 5
@@ -519,7 +518,7 @@ public class AppearanceView : Gtk.Box {
             return Gdk.EVENT_PROPAGATE;
         });
 
-        var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+        var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             margin_start = 18,
             margin_end = 18
         };
@@ -551,7 +550,7 @@ public class AppearanceView : Gtk.Box {
             viewtitle_widget = stack_switcher
         };
 
-        var abox = new Gtk.Box (Gtk.Orientation.VERTICAL,0);
+        var abox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         abox.append (appbar);
         abox.append (main_stack);
 

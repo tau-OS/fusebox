@@ -1,6 +1,6 @@
 public class Accounts.AccountRow : Gtk.ListBoxRow {
   public AccountRow (Act.User user) {
-    var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+    var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
 
     var avatar = new He.Avatar (64, user.icon_file != null ? "file://" + user.icon_file : null, user.real_name, false) {
       margin_end = 24,

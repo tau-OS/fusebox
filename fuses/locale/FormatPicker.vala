@@ -15,11 +15,11 @@ class Locale.FormatPicker : He.Window {
     this.set_size_request (440, 550);
     this.add_css_class ("dialog-content");
 
-    var main = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+    var main = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
     main.add_css_class ("dialog-content");
-    var side = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+    var side = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
     main.append (side);
-    var content = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+    var content = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
     side.append (content);
 
     var title = new Gtk.Label (_("Format")) {

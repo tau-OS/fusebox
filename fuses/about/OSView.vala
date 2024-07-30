@@ -66,9 +66,8 @@ public class About.OSView : Gtk.Box {
         var os_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
         os_box.append (os_title);
         os_box.append (os_subtitle);
-        os_box.add_css_class ("mini-content-block");
+        os_box.add_css_class ("content-block");
         os_box.add_css_class ("surface-container-highest-bg-color");
-        os_box.add_css_class ("x-large-radius");
 
         var hostname_title = new Gtk.Label (_("Device Name")) {
             selectable = true,
@@ -210,7 +209,7 @@ public class About.OSView : Gtk.Box {
         stor_host_box.append (hostname_box);
         stor_host_box.append (storage_box);
 
-        var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 2);
+        var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         info_box.append (os_box);
         info_box.append (stor_host_box);
         info_box.append (model_box);

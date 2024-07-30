@@ -21,7 +21,7 @@
             can_target = false,
             viewtitle_widget = wm_layout_preview_label
         };
-        var wm_layout_preview_mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+        var wm_layout_preview_mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             margin_top = 24,
             margin_start = 48,
             margin_end = 48
@@ -29,7 +29,7 @@
         wm_layout_preview_mbox.append (wm_layout_preview_bar);
         wm_layout_preview_mbox.add_css_class ("medium-radius");
         wm_layout_preview_mbox.add_css_class ("surface-bg-color");
-        wm_layout_preview = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+        wm_layout_preview = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
         };
         wm_layout_preview.add_css_class ("circle-radius");
         wm_layout_preview.add_css_class ("surface-container-bg-color");
@@ -65,7 +65,7 @@
             }
         );
 
-        var wm_layout_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var wm_layout_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wm_layout_box.append (wm_layout_box_cb);
         wm_layout_box.append (wm_layout_cb);
         wm_layout_box.hexpand = true;
@@ -96,7 +96,7 @@
         wm_dc_cb.append_text (_("None"));
         wm_dc_cb.active = 0;
 
-        var wm_dc_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var wm_dc_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wm_dc_box.append (
             new Gtk.Label (_("Double Click")) {
                 css_classes = { "cb-title" },
@@ -121,7 +121,7 @@
         wm_sc_cb.append_text (_("None"));
         wm_sc_cb.active = 2;
 
-        var wm_sc_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var wm_sc_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wm_sc_box.append (
             new Gtk.Label (_("Secondary Click")) {
                 css_classes = { "cb-title" },
@@ -144,7 +144,7 @@
         wm_focus_cb.append_text ("Focus on Hover");
         wm_focus_cb.active = 0;
 
-        var wm_focus_box_cb = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        var wm_focus_box_cb = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
         wm_focus_box_cb.append (
             new Gtk.Label (_("Focusing")) {
                 css_classes = { "cb-title" },
@@ -163,14 +163,14 @@
             }
         );
 
-        var wm_focus_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var wm_focus_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wm_focus_box.append (wm_focus_box_cb);
         wm_focus_box.append (wm_focus_cb);
         wm_focus_box.hexpand = true;
         wm_focus_box.add_css_class ("mini-content-block");
 
         var grid = new Gtk.Grid () {
-         row_spacing = 18,
+         row_spacing = 6,
          margin_start = 18,
          margin_end = 18,
          margin_bottom = 18,

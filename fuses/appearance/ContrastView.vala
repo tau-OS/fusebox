@@ -58,7 +58,7 @@ public class Appearance.ContrastView : Gtk.Box {
             is_pill = true
         };
         contrast_preview_box.primary_button = (contrast_preview_button);
-        var contrast_preview_mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+        var contrast_preview_mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             margin_bottom = 24,
             margin_top = 24,
             margin_start = 48,
@@ -75,7 +75,7 @@ public class Appearance.ContrastView : Gtk.Box {
             margin_top = 64
         };
         contrast_preview_mbox.append (contrast_preview_overlay_button);
-        contrast_preview = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+        contrast_preview = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
         };
         contrast_preview.add_css_class ("circle-radius");
         contrast_preview.add_css_class ("surface-container-bg-color");

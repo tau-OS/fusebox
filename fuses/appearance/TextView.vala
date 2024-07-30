@@ -101,7 +101,7 @@ proclaimed as the highest aspiration of the common people…"""));
         dyslexia_control_box.append (dyslexia_font_label);
         dyslexia_control_box.append (dyslexia_font_description_label);
 
-        var dyslexia_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var dyslexia_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         dyslexia_box.append (dyslexia_control_box);
         dyslexia_box.append (dyslexia_font_switch);
         dyslexia_box.add_css_class ("mini-content-block");

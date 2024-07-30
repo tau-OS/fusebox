@@ -84,6 +84,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         wallpaper_view = new Gtk.FlowBox () {
             activate_on_single_click = true,
             column_spacing = 12,
+            row_spacing = 12,
             valign = Gtk.Align.START,
             selection_mode = Gtk.SelectionMode.SINGLE,
             max_children_per_line = 4,
@@ -99,7 +100,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         wallpaper_label.add_css_class ("cb-title");
 
         var wallpaper_title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
-            spacing = 12,
             hexpand = true,
             halign = Gtk.Align.END
         };
@@ -135,7 +135,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         wallpaper_title_box.append (wallpaper_removal_button);
 
         var wallpaper_main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
-            spacing = 12,
             hexpand = true,
             margin_start = 18,
             margin_end = 18
@@ -520,8 +519,8 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
 
     construct {
         image = new He.ContentBlockImage ("") {
-            requested_width = 135,
-            requested_height = 135
+            requested_width = 128,
+            requested_height = 128
         };
         image.add_css_class ("large-radius");
         image.tooltip_text = (thumb_path);

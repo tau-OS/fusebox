@@ -98,7 +98,7 @@ public class Sound.OutputPanel : Gtk.Grid {
             hexpand = true
         };
 
-        var alerts_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+        var alerts_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             valign = Gtk.Align.CENTER
         };
         alerts_box.append (audio_alert_check);
@@ -118,7 +118,7 @@ public class Sound.OutputPanel : Gtk.Grid {
             hexpand = true
         };
 
-        var screen_reader_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var screen_reader_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         screen_reader_box.append (screen_reader_switch);
 
         screen_reader_box.set_parent (screen_reader_settings_row);

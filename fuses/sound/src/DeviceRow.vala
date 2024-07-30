@@ -16,7 +16,7 @@ public class Sound.DeviceRow : Gtk.ListBoxRow {
         var image = new Gtk.Image.from_icon_name (device.icon_name + "-symbolic") {
             tooltip_text = device.get_nice_form_factor (),
             use_fallback = true,
-            pixel_size = 32
+            pixel_size = 24
         };
 
         var name_label = new Gtk.Label (device.display_name) {
@@ -30,7 +30,7 @@ public class Sound.DeviceRow : Gtk.ListBoxRow {
         description_label.add_css_class ("cb-subtitle");
 
         var grid = new Gtk.Grid () {
-            column_spacing = 16,
+            column_spacing = 12,
             orientation = Gtk.Orientation.HORIZONTAL
         };
         grid.attach (activate_radio, 0, 0, 1, 2);

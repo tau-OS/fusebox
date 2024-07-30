@@ -43,7 +43,7 @@ public class Display.Fuse : Fusebox.Fuse {
     public override Gtk.Widget get_widget () {
         if (main_grid == null) {
             main_grid = new Gtk.Grid () {
-                row_spacing = 12,
+                row_spacing = 6,
                 column_homogeneous = true
             };
             var displays_view = new DisplaysView ();

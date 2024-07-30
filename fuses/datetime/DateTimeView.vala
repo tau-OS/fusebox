@@ -34,7 +34,7 @@ public class DateTime.DateTimeView : Gtk.Box {
         };
         date_time_sublabel.add_css_class ("cb-subtitle");
 
-        var date_time_label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        var date_time_label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         date_time_label_box.append (date_time_label);
         date_time_label_box.append (date_time_sublabel);
 
@@ -71,7 +71,7 @@ public class DateTime.DateTimeView : Gtk.Box {
             visible = false
         };
 
-        var date_time_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+        var date_time_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             margin_end = 18,
             margin_start = 18
         };
@@ -89,7 +89,7 @@ public class DateTime.DateTimeView : Gtk.Box {
         };
         timezone_sublabel.add_css_class ("cb-subtitle");
 
-        var timezone_label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        var timezone_label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         timezone_label_box.append (timezone_label);
         timezone_label_box.append (timezone_sublabel);
 
@@ -152,7 +152,7 @@ public class DateTime.DateTimeView : Gtk.Box {
             visible = false
         };
 
-        var timezone_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+        var timezone_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             margin_end = 18,
             margin_start = 18
         };
@@ -190,7 +190,7 @@ public class DateTime.DateTimeView : Gtk.Box {
         timeformat_box.append (timeformat_label);
         timeformat_box.append (timeformat_toggle_box);
 
-        var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         mbox.append (date_time_box);
         mbox.append (timezone_box);
         mbox.append (timeformat_box);

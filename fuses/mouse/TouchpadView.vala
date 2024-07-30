@@ -113,11 +113,11 @@ public class Mouse.TouchpadView : Gtk.Box {
         };
         scroll_label.add_css_class ("cb-title");
 
-        var scrolling_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var scrolling_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         scrolling_box.append (default_scroll);
         scrolling_box.append (natural_scroll);
 
-        var main_scrolling_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        var main_scrolling_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         main_scrolling_box.append (scroll_label);
         main_scrolling_box.append (scrolling_box);
         main_scrolling_box.add_css_class ("mini-content-block");
@@ -133,7 +133,7 @@ public class Mouse.TouchpadView : Gtk.Box {
         };
         tap_click_box.primary_button = (He.Button)tap_click_switch;
 
-        main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {
+        main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             sensitive = touchpad_enable_box.main_switch.iswitch.active
         };
         main_box.append (pointer_speed_box);
@@ -141,7 +141,7 @@ public class Mouse.TouchpadView : Gtk.Box {
         main_box.append (tap_click_box);
         main_box.append (main_scrolling_box);
 
-        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         box.append (touchpad_enable_box);
         box.append (main_box);
 
