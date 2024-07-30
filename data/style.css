@@ -470,3 +470,7 @@ spinbutton.flat {
 .color-scheme-button:checked label {
   font-weight: 700;
 }
+
+.text-block {
+  padding: 18px 0;
+}

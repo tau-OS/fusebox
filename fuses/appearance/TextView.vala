@@ -15,6 +15,19 @@ public class Appearance.TextView : Gtk.Box {
     }
 
     construct {
+        var preview_text_block = new Gtk.Label ("");
+        preview_text_block.wrap_mode = Pango.WrapMode.WORD_CHAR;
+        preview_text_block.valign = Gtk.Align.START;
+        preview_text_block.add_css_class ("text-block");
+        preview_text_block.add_css_class ("surface-container-lowest-bg-color");
+        preview_text_block.add_css_class ("large-radius");
+        preview_text_block.label = (_(
+"""Whereas disregard and contempt for human rights have resulted in
+barbarous acts which have outraged the conscience of mankind, and
+the advent of a world in which human beings shall enjoy freedom of
+speech and belief and freedom from fear and want has been
+proclaimed as the highest aspiration of the common people…"""));
+
         var size_label = new Gtk.Label (_("Size")) {
             halign = Gtk.Align.START
         };
@@ -94,6 +107,7 @@ public class Appearance.TextView : Gtk.Box {
         dyslexia_box.add_css_class ("mini-content-block");
 
         var grid = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        grid.append (preview_text_block);
         grid.append (size_box);
         grid.append (font_weight_box);
         grid.append (dyslexia_box);
