@@ -149,16 +149,16 @@ public class Mouse.MouseView : Gtk.Box {
         };
         scroll_label.add_css_class ("cb-title");
 
-        var scrolling_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var scrolling_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         scrolling_box.append (default_scroll);
         scrolling_box.append (natural_scroll);
 
-        var main_scrolling_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        var main_scrolling_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         main_scrolling_box.append (scroll_label);
         main_scrolling_box.append (scrolling_box);
         main_scrolling_box.add_css_class ("mini-content-block");
 
-        var mouse_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        var mouse_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         mouse_box.append (primary_button_box);
         mouse_box.append (pointer_speed_box);
         mouse_box.append (pointer_acceleration_box);
