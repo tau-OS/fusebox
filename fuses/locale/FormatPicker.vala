@@ -63,15 +63,18 @@ class Locale.FormatPicker : He.Window {
     };
     main.append (button_box);
 
-    var cancel_button = new He.TextButton (_("Cancel"));
+    var cancel_button = new He.Button (null, _("Cancel")) {
+      is_textual = true
+    };
     cancel_button.set_size_request (200, -1);
     cancel_button.clicked.connect (() => {
       this.destroy ();
     });
     button_box.append (cancel_button);
 
-    var apply_button = new He.FillButton (_("Set Format")) {
+    var apply_button = new He.Button (null, _("Set Format")) {
       sensitive = false,
+      is_fill = true
     };
     apply_button.set_size_request (200, -1);
     apply_button.clicked.connect (() => {

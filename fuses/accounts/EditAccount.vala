@@ -50,9 +50,10 @@ class Accounts.EditAccount : He.Window {
     main_box.append (avatar_box);
 
     var avatar = new He.Avatar (96, user.icon_file != null ? "file://" + user.icon_file : null, user.real_name, false);
-    var avatar_edit_button = new He.DisclosureButton ("document-edit-symbolic") {
+    var avatar_edit_button = new He.Button ("document-edit-symbolic", null) {
       valign = Gtk.Align.END,
       halign = Gtk.Align.END,
+      is_disclosure = true
     };
 
     var avatar_overlay = new Gtk.Overlay () {
@@ -106,15 +107,18 @@ class Accounts.EditAccount : He.Window {
     };
     main_box.append (button_box);
 
-    var cancel_button = new He.TextButton (_("Cancel"));
+    var cancel_button = new He.Button (null, _("Cancel")) {
+      is_textual = true
+    };
     cancel_button.set_size_request (200, -1);
     cancel_button.clicked.connect (() => {
       this.destroy ();
     });
     button_box.append (cancel_button);
 
-    var apply_button = new He.FillButton (_("Edit Account")) {
+    var apply_button = new He.Button (null, _("Edit Account")) {
       sensitive = false,
+      is_fill = true
     };
     apply_button.clicked.connect (() => {
       this.update_user ();

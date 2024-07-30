@@ -22,10 +22,10 @@
 public class Mouse.LayoutPageDisplay : Gtk.Frame {
     private SourceSettings settings;
     private Gtk.TreeView tree;
-    private He.IconicButton up_button;
-    private He.IconicButton down_button;
-    private He.IconicButton add_button;
-    private He.IconicButton remove_button;
+    private He.Button up_button;
+    private He.Button down_button;
+    private He.Button add_button;
+    private He.Button remove_button;
 
     /*
      * Set to true when the user has just clicked on the list to prevent
@@ -53,22 +53,26 @@ public class Mouse.LayoutPageDisplay : Gtk.Frame {
         };
         scroll.set_child (tree);
 
-        add_button = new He.IconicButton ("list-add-symbolic") {
-            tooltip_text = _("Add…")
+        add_button = new He.Button ("list-add-symbolic", null) {
+            tooltip_text = _("Add…"),
+            is_iconic = true
         };
 
-        remove_button = new He.IconicButton ("list-remove-symbolic") {
+        remove_button = new He.Button ("list-remove-symbolic", null) {
             sensitive = false,
+            is_iconic = true,
             tooltip_text = _("Remove")
         };
 
-        up_button = new He.IconicButton ("go-up-symbolic") {
+        up_button = new He.Button ("go-up-symbolic", null) {
             sensitive = false,
+            is_iconic = true,
             tooltip_text = _("Move up")
         };
 
-        down_button = new He.IconicButton ("go-down-symbolic") {
+        down_button = new He.Button ("go-down-symbolic", null) {
             sensitive = false,
+            is_iconic = true,
             tooltip_text = _("Move down")
         };
 
@@ -386,9 +390,10 @@ public class Mouse.AddLayoutDialog : He.Window {
         input_language_grid.attach (search_entry, 0, 0);
         input_language_grid.attach (input_language_scrolled, 0, 1);
 
-        var back_button = new He.DisclosureButton ("") {
+        var back_button = new He.Button (null, null) {
             halign = Gtk.Align.START,
             hexpand = true,
+            is_disclosure = true,
             icon = "go-previous-symbolic"
         };
 
@@ -406,7 +411,8 @@ public class Mouse.AddLayoutDialog : He.Window {
         };
         layout_scrolled.set_child (layout_list_box);
 
-        var keyboard_map_button = new He.TintButton (_("Preview Layout")) {
+        var keyboard_map_button = new He.Button (null, _("Preview Layout")) {
+            is_tint = true,
             halign = Gtk.Align.END
         };
 
@@ -439,7 +445,9 @@ public class Mouse.AddLayoutDialog : He.Window {
         frame_grid.attach (header_revealer, 0, 0);
         frame_grid.attach (deck, 0, 1);
 
-        var button_add = new He.PillButton (_("Add Layout"));
+        var button_add = new He.Button (null, _("Add Layout")) {
+            is_pill = true
+        };
         button_add.sensitive = false;
 
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {

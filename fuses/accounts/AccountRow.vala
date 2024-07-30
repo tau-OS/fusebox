@@ -30,7 +30,9 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
     };
     main_box.append (button_box);
 
-    var delete_button = new He.DisclosureButton ("user-trash-symbolic");
+    var delete_button = new He.Button ("user-trash-symbolic", null) {
+      is_disclosure = true
+    };
     delete_button.visible = GLib.Environment.get_user_name () != user.user_name;
     delete_button.add_css_class ("bg-meson-red");
     delete_button.clicked.connect (() => {
@@ -41,7 +43,9 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
                                   "Are you sure you want to delete this account?",
                                   "You cannot undo this action, and will delete " + user.real_name + "'s data.",
                                   "dialog-warning-symbolic",
-                                  new He.FillButton ("Delete"),
+                                  new He.Button (null, "Delete") {
+                                    is_fill = true
+                                  },
                                   null
       );
 
@@ -58,14 +62,18 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
     });
     button_box.append (delete_button);
 
-    var change_password_button = new He.DisclosureButton ("dialog-password-symbolic");
+    var change_password_button = new He.Button ("dialog-password-symbolic", null) {
+      is_disclosure = true
+    };
     change_password_button.clicked.connect (() => {
       var dialog = new Accounts.ChangePassword (user, He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this));
       dialog.present ();
     });
     button_box.append (change_password_button);
 
-    var edit_button = new He.DisclosureButton ("document-edit-symbolic");
+    var edit_button = new He.Button ("document-edit-symbolic", null) {
+      is_disclosure = true
+    };
     edit_button.clicked.connect (() => {
       var dialog = new Accounts.EditAccount (user, He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this));
       dialog.present ();

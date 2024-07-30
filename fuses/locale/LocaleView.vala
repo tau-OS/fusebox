@@ -41,7 +41,9 @@ public class Locale.LocaleView : Gtk.Box {
 
         var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
 
-        var language_button = new He.DisclosureButton ("document-edit-symbolic");
+        var language_button = new He.Button ("document-edit-symbolic", null) {
+            is_disclosure = true
+        };
         language_button.clicked.connect (() => {
             var dialog = new Locale.LanguagePicker (He.Misc.find_ancestor_of_type<He.ApplicationWindow> (mbox));
             dialog.show ();
@@ -70,7 +72,9 @@ public class Locale.LocaleView : Gtk.Box {
         });
         mbox.append (language_block);
 
-        var format_button = new He.DisclosureButton ("document-edit-symbolic");
+        var format_button = new He.Button ("document-edit-symbolic", null) {
+            is_disclosure = true
+        };
         format_button.clicked.connect (() => {
             var dialog = new Locale.FormatPicker (He.Misc.find_ancestor_of_type<He.ApplicationWindow> (mbox));
             dialog.show ();

@@ -93,13 +93,12 @@ public class About.OSView : Gtk.Box {
         }
         hostname_image.icon_name = icon_name;
         hostname_image.add_css_class ("rounded-icon");
-        var hostname_button = new Gtk.Button () {
-            icon_name = "pan-end-symbolic",
+        var hostname_button = new He.Button (null, null) {
+            icon = "pan-end-symbolic",
+            is_disclosure = true,
             hexpand = true,
             halign = Gtk.Align.END
         };
-        hostname_button.add_css_class ("flat");
-        hostname_button.add_css_class ("circular");
         var hostname_action_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
         hostname_action_box.append (hostname_title);
         hostname_action_box.append (hostname_button);
@@ -269,8 +268,9 @@ public class About.OSView : Gtk.Box {
         });
 
         hostname_button.clicked.connect (() => {
-            var rename_button = new He.FillButton (_("Rename")) {
-                sensitive = false
+            var rename_button = new He.Button (null, _("Rename")) {
+                sensitive = false,
+                is_fill = true
             };
             var title_label = new Gtk.Label ("Rename Your Computer") {
                 halign = Gtk.Align.CENTER
@@ -308,7 +308,9 @@ public class About.OSView : Gtk.Box {
             main_box.append (t_label);
             main_box.append (rename_entry);
 
-            var cancel_button = new He.TextButton ("Cancel");
+            var cancel_button = new He.Button (null, "Cancel") {
+                is_textual = true
+            };
 
             var action_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6) {
                 homogeneous = true

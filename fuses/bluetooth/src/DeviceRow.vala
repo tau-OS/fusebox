@@ -54,8 +54,8 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
         }
     }
 
-    private He.FillButton connect_button;
-    private He.TintButton forget_button;
+    private He.Button connect_button;
+    private He.Button forget_button;
     private He.ModifierBadge state;
     private Gtk.Label state_label;
     private Gtk.LinkButton settings_button;
@@ -136,8 +136,9 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
         };
         settings_button.add_css_class ("disclosure-button");
 
-        forget_button = new He.TintButton ("") {
+        forget_button = new He.Button (null, "") {
             margin_end = 3,
+            is_tint = true,
             label = _("Forget"),
             visible = false,
             valign = Gtk.Align.CENTER,
@@ -145,8 +146,9 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
             tooltip_text = _("Forget this device")
         };
 
-        connect_button = new He.FillButton ("") {
-            valign = Gtk.Align.CENTER
+        connect_button = new He.Button (null, "") {
+            valign = Gtk.Align.CENTER,
+            is_fill = true
         };
 
         size_group.add_widget (connect_button);

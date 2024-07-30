@@ -53,8 +53,9 @@ public class Appearance.ContrastView : Gtk.Box {
             can_target = false,
             margin_start = margin_end = 18
         };
-        var contrast_preview_button = new He.PillButton (_("Action")) {
-            can_target = false
+        var contrast_preview_button = new He.Button (null, _("Action")) {
+            can_target = false,
+            is_pill = true
         };
         contrast_preview_box.primary_button = (contrast_preview_button);
         var contrast_preview_mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0) {

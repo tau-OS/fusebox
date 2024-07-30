@@ -36,8 +36,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
 
     private Gtk.ScrolledWindow wallpaper_scrolled_window;
     private Gtk.FlowBox wallpaper_view;
-    private He.TextButton wallpaper_add_button;
-    private He.TextButton wallpaper_removal_button;
+    private He.Button wallpaper_add_button;
+    private He.Button wallpaper_removal_button;
 
     public He.AppBar wappbar;
 
@@ -104,7 +104,8 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             halign = Gtk.Align.END
         };
 
-        wallpaper_add_button = new He.TextButton ("") {
+        wallpaper_add_button = new He.Button (null, "") {
+            is_textual = true,
             child = new He.ButtonContent () {
                 label = "Add Wallpaper…",
                 icon = "list-add-symbolic"
@@ -112,11 +113,12 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         };
         wallpaper_add_button.clicked.connect (show_wallpaper_chooser);
 
-        wallpaper_removal_button = new He.TextButton ("") {
+        wallpaper_removal_button = new He.Button (null, "") {
             hexpand = true,
             halign = Gtk.Align.END,
             icon = "user-trash-symbolic",
-            visible = false
+            visible = false,
+            is_textual = true
         };
         wallpaper_removal_button.clicked.connect (() => {
             var wallpaper = (Appearance.WallpaperContainer) wallpaper_view.get_selected_children ().data;
@@ -163,7 +165,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         settings.set_string ("picture-uri-dark", furi);
         if (appearance_view.wp_switch.iswitch.active)
             appearance_view.accent_setup.begin ();
-        
+
         appearance_view.wallpaper_preview.file = furi;
 
         try {

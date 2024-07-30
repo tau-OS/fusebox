@@ -127,11 +127,12 @@ public class AppearanceView : Gtk.Box {
         wallpaper_box.append (wallpaper_label);
         wallpaper_box.append (wallpaper_sublabel);
 
-        var wallpaper_grid_button = new He.IconicButton ("pan-end-symbolic") {
+        var wallpaper_grid_button = new He.Button ("pan-end-symbolic", null) {
             hexpand = true,
             vexpand = true,
             halign = Gtk.Align.END,
-            valign = Gtk.Align.START
+            valign = Gtk.Align.START,
+            is_iconic = true
         };
 
         var wallpaper_header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 24);
@@ -354,11 +355,12 @@ public class AppearanceView : Gtk.Box {
         };
         contrast_label.add_css_class ("cb-title");
 
-        var contrast_grid_button = new He.IconicButton ("pan-end-symbolic") {
+        var contrast_grid_button = new He.Button ("pan-end-symbolic", null) {
             hexpand = true,
             vexpand = true,
             halign = Gtk.Align.END,
-            valign = Gtk.Align.START
+            valign = Gtk.Align.START,
+            is_iconic = true
         };
 
         var contrast_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
@@ -486,8 +488,9 @@ public class AppearanceView : Gtk.Box {
         grid.attach (accent_main_box, 0, 1);
         grid.attach (wallpaper_accent_box, 0, 2);
         grid.attach (ensor_main_box, 0, 3);
-        grid.attach (contrast_box, 0, 4);
-        grid.attach (roundness_box, 0, 5);
+        grid.attach (roundness_box, 0, 4);
+
+        grid.attach (contrast_box, 0, 6);
         grid.add_css_class ("mini-content-block");
 
         fusebox_appearance_settings.bind ("wallpaper-accent", wp_switch.iswitch, "active", SettingsBindFlags.DEFAULT);

@@ -1,4 +1,4 @@
-po_extra_dir = join_paths(meson.source_root(), 'po', 'extra')
+po_extra_dir = join_paths(meson.project_source_root(), 'po', 'extra')
 
 install_data(
     'settings.gschema.xml',

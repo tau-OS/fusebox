@@ -85,7 +85,7 @@ public class DateTime.WorldLocationFinder : Gtk.Box {
     private Gtk.Stack search_stack;
     private Gtk.ListBox listbox;
     private Gtk.SearchEntry search_entry;
-    private He.PillButton add_button;
+    private He.Button add_button;
 
     construct {
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
@@ -119,8 +119,9 @@ public class DateTime.WorldLocationFinder : Gtk.Box {
         search_stack.add_named (search_label, "empty");
         search_stack.add_named (listbox, "results");
 
-        add_button = new He.PillButton ("") {
+        add_button = new He.Button (null, "") {
             margin_bottom = 18,
+            is_pill = true,
             label = _("Add Location")
         };
 

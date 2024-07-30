@@ -256,7 +256,9 @@ public class Sound.OutputPanel : Gtk.Grid {
     private void audio_alert_dialog_cb () {
         var settings = new GLib.Settings ("com.fyralabs.Fusebox");
         if (volume_scale.scale.get_value () > (float) 70.0) {
-            var ok_button = new He.FillButton ("Understood");
+            var ok_button = new He.Button (null, "Understood") {
+                is_fill = true
+            };
 
             var volume_alert_dialog = new He.Dialog (
                                                      true,

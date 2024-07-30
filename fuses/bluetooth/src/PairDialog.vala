@@ -99,14 +99,18 @@ public class PairDialog : He.Dialog {
         case AuthType.REQUEST_CONFIRMATION:
             info = _("See if the code displayed on “%s” matches below.").printf (device_name);
 
-            var confirm_button = new He.FillButton (_("Pair"));
+            var confirm_button = new He.Button (null, _("Pair")) {
+                is_fill = true
+            };
             primary_button = confirm_button;
             break;
         case AuthType.DISPLAY_PASSKEY:
             info = _("“%s” wants to pair with this device. See if the code displayed on “%s” matches below.")
                  .printf (device_name, device_name);
 
-            var confirm_button = new He.FillButton (_("Pair"));
+            var confirm_button = new He.Button (null, _("Pair")) {
+                is_fill = true
+            };
             primary_button = confirm_button;
             break;
         case AuthType.DISPLAY_PIN_CODE:
@@ -115,7 +119,9 @@ public class PairDialog : He.Dialog {
         case AuthType.REQUEST_AUTHORIZATION:
             info = _("“%s” wants to pair with this device.").printf (device_name);
 
-            var confirm_button = new He.FillButton (_("Pair"));
+            var confirm_button = new He.Button (null, _("Pair")) {
+                is_fill = true
+            };
             primary_button = confirm_button;
             break;
         }

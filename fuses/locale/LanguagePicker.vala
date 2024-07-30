@@ -58,14 +58,17 @@ class Locale.LanguagePicker : He.Window {
     };
     content.append (button_box);
 
-    var cancel_button = new He.TextButton (_("Cancel"));
+    var cancel_button = new He.Button (null, _("Cancel")) {
+      is_textual = true
+    };
     cancel_button.clicked.connect (() => {
       this.destroy ();
     });
     button_box.append (cancel_button);
 
-    var apply_button = new He.FillButton (_("Set Language")) {
+    var apply_button = new He.Button (null, _("Set Language")) {
       sensitive = false,
+      is_fill = true
     };
     apply_button.clicked.connect (() => {
       var selected = listbox.get_selected_row () as Locale.LocaleRow;
