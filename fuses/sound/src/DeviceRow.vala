@@ -29,6 +29,9 @@ public class Sound.DeviceRow : Gtk.ListBoxRow {
         };
         description_label.add_css_class ("cb-subtitle");
 
+        activate_radio.halign = Gtk.Align.END;
+        activate_radio.hexpand = true;
+
         var grid = new Gtk.Grid () {
             column_spacing = 12,
             orientation = Gtk.Orientation.HORIZONTAL
