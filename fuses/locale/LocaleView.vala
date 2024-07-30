@@ -41,7 +41,7 @@ public class Locale.LocaleView : Gtk.Box {
 
         var mbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
 
-        var language_button = new He.Button ("document-edit-symbolic", null) {
+        var language_button = new He.Button ("document-edit-symbolic", "") {
             is_disclosure = true
         };
         language_button.clicked.connect (() => {
@@ -72,7 +72,7 @@ public class Locale.LocaleView : Gtk.Box {
         });
         mbox.append (language_block);
 
-        var format_button = new He.Button ("document-edit-symbolic", null) {
+        var format_button = new He.Button ("document-edit-symbolic", "") {
             is_disclosure = true
         };
         format_button.clicked.connect (() => {

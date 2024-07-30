@@ -50,7 +50,7 @@ class Accounts.EditAccount : He.Window {
     main_box.append (avatar_box);
 
     var avatar = new He.Avatar (96, user.icon_file != null ? "file://" + user.icon_file : null, user.real_name, false);
-    var avatar_edit_button = new He.Button ("document-edit-symbolic", null) {
+    var avatar_edit_button = new He.Button ("document-edit-symbolic", "") {
       valign = Gtk.Align.END,
       halign = Gtk.Align.END,
       is_disclosure = true

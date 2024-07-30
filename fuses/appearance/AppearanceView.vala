@@ -127,7 +127,7 @@ public class AppearanceView : Gtk.Box {
         wallpaper_box.append (wallpaper_label);
         wallpaper_box.append (wallpaper_sublabel);
 
-        var wallpaper_grid_button = new He.Button ("pan-end-symbolic", null) {
+        var wallpaper_grid_button = new He.Button ("pan-end-symbolic", "") {
             hexpand = true,
             vexpand = true,
             halign = Gtk.Align.END,
@@ -355,7 +355,7 @@ public class AppearanceView : Gtk.Box {
         };
         contrast_label.add_css_class ("cb-title");
 
-        var contrast_grid_button = new He.Button ("pan-end-symbolic", null) {
+        var contrast_grid_button = new He.Button ("pan-end-symbolic", "") {
             hexpand = true,
             vexpand = true,
             halign = Gtk.Align.END,

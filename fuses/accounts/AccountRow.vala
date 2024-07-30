@@ -30,7 +30,7 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
     };
     main_box.append (button_box);
 
-    var delete_button = new He.Button ("user-trash-symbolic", null) {
+    var delete_button = new He.Button ("user-trash-symbolic", "") {
       is_disclosure = true
     };
     delete_button.visible = GLib.Environment.get_user_name () != user.user_name;
@@ -62,7 +62,7 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
     });
     button_box.append (delete_button);
 
-    var change_password_button = new He.Button ("dialog-password-symbolic", null) {
+    var change_password_button = new He.Button ("dialog-password-symbolic", "") {
       is_disclosure = true
     };
     change_password_button.clicked.connect (() => {
@@ -71,7 +71,7 @@ public class Accounts.AccountRow : Gtk.ListBoxRow {
     });
     button_box.append (change_password_button);
 
-    var edit_button = new He.Button ("document-edit-symbolic", null) {
+    var edit_button = new He.Button ("document-edit-symbolic", "") {
       is_disclosure = true
     };
     edit_button.clicked.connect (() => {

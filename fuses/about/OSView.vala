@@ -93,7 +93,7 @@ public class About.OSView : Gtk.Box {
         }
         hostname_image.icon_name = icon_name;
         hostname_image.add_css_class ("rounded-icon");
-        var hostname_button = new He.Button (null, null) {
+        var hostname_button = new He.Button (null, "") {
             icon = "pan-end-symbolic",
             is_disclosure = true,
             hexpand = true,

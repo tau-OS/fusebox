@@ -53,24 +53,24 @@ public class Mouse.LayoutPageDisplay : Gtk.Frame {
         };
         scroll.set_child (tree);
 
-        add_button = new He.Button ("list-add-symbolic", null) {
+        add_button = new He.Button ("list-add-symbolic", "") {
             tooltip_text = _("Add…"),
             is_iconic = true
         };
 
-        remove_button = new He.Button ("list-remove-symbolic", null) {
+        remove_button = new He.Button ("list-remove-symbolic", "") {
             sensitive = false,
             is_iconic = true,
             tooltip_text = _("Remove")
         };
 
-        up_button = new He.Button ("go-up-symbolic", null) {
+        up_button = new He.Button ("go-up-symbolic", "") {
             sensitive = false,
             is_iconic = true,
             tooltip_text = _("Move up")
         };
 
-        down_button = new He.Button ("go-down-symbolic", null) {
+        down_button = new He.Button ("go-down-symbolic", "") {
             sensitive = false,
             is_iconic = true,
             tooltip_text = _("Move down")
