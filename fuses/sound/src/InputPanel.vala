@@ -15,7 +15,8 @@ public class Sound.InputPanel : Gtk.Grid {
         row_spacing = 6;
 
         devices_listbox = new Gtk.ListBox () {
-            activate_on_single_click = true
+            activate_on_single_click = true,
+            row_spacing = 6
         };
 
         devices_listbox.row_activated.connect ((row) => {

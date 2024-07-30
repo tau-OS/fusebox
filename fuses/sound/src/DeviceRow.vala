@@ -33,10 +33,10 @@ public class Sound.DeviceRow : Gtk.ListBoxRow {
             column_spacing = 12,
             orientation = Gtk.Orientation.HORIZONTAL
         };
-        grid.attach (activate_radio, 0, 0, 1, 2);
         grid.attach (image, 1, 0, 1, 2);
         grid.attach (name_label, 2, 0);
         grid.attach (description_label, 2, 1);
+        grid.attach (activate_radio, 3, 0, 1, 2);
 
         add_css_class ("mini-content-block");
         set_child (grid);
