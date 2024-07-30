@@ -30,7 +30,7 @@ public class Sound.DeviceRow : Gtk.ListBoxRow {
         description_label.add_css_class ("cb-subtitle");
 
         var grid = new Gtk.Grid () {
-            column_spacing = 12
+            column_spacing = 12,
             orientation = Gtk.Orientation.HORIZONTAL
         };
         grid.attach (image, 1, 0, 1, 2);
