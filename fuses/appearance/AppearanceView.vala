@@ -629,48 +629,48 @@ public class AppearanceView : Gtk.Box {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
 
                 if (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") == 0) {
-                    tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (result.index (0)));
+                    tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (result.index (0)));
                     first_accent.active = true;
                 } else if (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") == 1 && result.index (1) != null) {
-                    tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (result.index (1)));
+                    tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (result.index (1)));
                     second_accent.active = true;
                 } else if (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") == 2 && result.index (1) != null && result.index (2) != null) {
-                    tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (result.index (2)));
+                    tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (result.index (2)));
                     third_accent.active = true;
                 } else if (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") == 3 && result.index (1) != null && result.index (2) != null && result.index (3) != null) {
-                    tau_appearance_settings.set_string ("accent-color", He.Color.hexcode_argb (result.index (3)));
+                    tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (result.index (3)));
                     fourth_accent.active = true;
                 }
 
                 if (result.index (0) != null) {
-                    first_accent.hex = He.Color.hexcode_argb (result.index (0));
+                    first_accent.hex = He.hexcode_argb (result.index (0));
                     first_accent.visible = true;
                     second_accent.visible = false;
                     third_accent.visible = false;
                     fourth_accent.visible = false;
                 }
                 if (result.index (0) != null && result.index (1) != null) {
-                    first_accent.hex = He.Color.hexcode_argb (result.index (0));
-                    second_accent.hex = He.Color.hexcode_argb (result.index (1));
+                    first_accent.hex = He.hexcode_argb (result.index (0));
+                    second_accent.hex = He.hexcode_argb (result.index (1));
                     first_accent.visible = true;
                     second_accent.visible = true;
                     third_accent.visible = false;
                     fourth_accent.visible = false;
                 }
                 if (result.index (0) != null && result.index (1) != null && result.index (2) != null) {
-                    first_accent.hex = He.Color.hexcode_argb (result.index (0));
-                    second_accent.hex = He.Color.hexcode_argb (result.index (1));
-                    third_accent.hex = He.Color.hexcode_argb (result.index (2));
+                    first_accent.hex = He.hexcode_argb (result.index (0));
+                    second_accent.hex = He.hexcode_argb (result.index (1));
+                    third_accent.hex = He.hexcode_argb (result.index (2));
                     first_accent.visible = true;
                     second_accent.visible = true;
                     third_accent.visible = true;
                     fourth_accent.visible = false;
                 }
                 if (result.index (0) != null && result.index (1) != null && result.index (2) != null && result.index (3) != null) {
-                    first_accent.hex = He.Color.hexcode_argb (result.index (0));
-                    second_accent.hex = He.Color.hexcode_argb (result.index (1));
-                    third_accent.hex = He.Color.hexcode_argb (result.index (2));
-                    fourth_accent.hex = He.Color.hexcode_argb (result.index (3));
+                    first_accent.hex = He.hexcode_argb (result.index (0));
+                    second_accent.hex = He.hexcode_argb (result.index (1));
+                    third_accent.hex = He.hexcode_argb (result.index (2));
+                    fourth_accent.hex = He.hexcode_argb (result.index (3));
                     first_accent.visible = true;
                     second_accent.visible = true;
                     third_accent.visible = true;
