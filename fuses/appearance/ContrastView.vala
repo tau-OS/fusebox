@@ -190,22 +190,22 @@ public class Appearance.ContrastView : Gtk.Box {
     private void contrast_refresh () {
         double value = tau_appearance_settings.get_double ("contrast");
 
-        if (value == 1.0) {
+        if (value == -1.0) {
             contrast_button_1.active = true;
             contrast_button_2.active = false;
             contrast_button_3.active = false;
             contrast_button_4.active = false;
-        } else if (value == 2.0) {
+        } else if (value == 0.0) {
             contrast_button_2.active = true;
             contrast_button_1.active = false;
             contrast_button_3.active = false;
             contrast_button_4.active = false;
-        } else if (value == 3.0) {
+        } else if (value == 0.5) {
             contrast_button_3.active = true;
             contrast_button_2.active = false;
             contrast_button_1.active = false;
             contrast_button_4.active = false;
-        } else if (value == 4.0) {
+        } else if (value == 1.0) {
             contrast_button_4.active = true;
             contrast_button_2.active = false;
             contrast_button_3.active = false;
@@ -220,15 +220,15 @@ public class Appearance.ContrastView : Gtk.Box {
 
     private void on_contrast_button_toggled (Gtk.ToggleButton contrast_button) {
         if (contrast_button == contrast_button_1) {
-            set_contrast (1.0);
+            set_contrast (-1.0);
         } else if (contrast_button == contrast_button_2) {
-            set_contrast (2.0);
+            set_contrast (0.0);
         } else if (contrast_button == contrast_button_3) {
-            set_contrast (3.0);
+            set_contrast (0.5);
         } else if (contrast_button == contrast_button_4) {
-            set_contrast (4.0);
+            set_contrast (1.0);
         } else {
-            set_contrast (2.0);
+            set_contrast (0.0);
         }
     }
     private void set_contrast (double contrast) {
