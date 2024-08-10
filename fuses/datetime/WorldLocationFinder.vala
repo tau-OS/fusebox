@@ -119,7 +119,7 @@ public class DateTime.WorldLocationFinder : Gtk.Box {
         search_stack.add_named (search_label, "empty");
         search_stack.add_named (listbox, "results");
 
-        add_button = new He.Button (null, "") {
+        add_button = new He.Button ("", "") {
             margin_bottom = 18,
             is_pill = true,
             label = _("Add Location")
