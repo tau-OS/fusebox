@@ -50,8 +50,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     private Cancellable last_cancellable;
 
     public string current_wallpaper_path;
+    public string current_lock_wallpaper_path;
     private bool prevent_update_mode = false; // When restoring the combo state, don't trigger the update.
-    private bool finished; // Shows that we got or wallpapers together
+    private bool finished; // Shows that we got our wallpapers together
 
     public string wallpaper_title;
     public string wallpaper_subtitle;
@@ -93,11 +94,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         wallpaper_view.child_activated.connect (update_checked_wallpaper);
         wallpaper_view.set_sort_func (wallpapers_sort_function);
         wallpaper_view.add_css_class ("wallpaper-grid");
-
-        var wallpaper_label = new Gtk.Label (_("Wallpaper")) {
-            halign = Gtk.Align.START
-        };
-        wallpaper_label.add_css_class ("cb-title");
 
         var wallpaper_title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             hexpand = true,
@@ -166,6 +162,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             appearance_view.accent_setup.begin ();
 
         appearance_view.wallpaper_preview.file = furi;
+        appearance_view.wallpaper_lock_preview.file = furi;
 
         try {
             FileInfo info = file.query_info (FILE_ATTRIBUTES, FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
@@ -177,9 +174,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             wallpaper_title = load_artist_name ();
             wallpaper_subtitle = "";
             wallpaper_subtitle = width.to_string () + "×" + height.to_string () + ", " + info.get_content_type ().to_string ().replace ("image/", "").up ();
-
-            appearance_view.wallpaper_details_label.label = wallpaper_title;
-            appearance_view.wallpaper_details_sublabel.label = wallpaper_subtitle;
         } catch (Error e) {
             warning (e.message);
         }
@@ -219,6 +213,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     private void load_settings () {
         prevent_update_mode = true;
         current_wallpaper_path = settings.get_string ("picture-uri");
+        current_lock_wallpaper_path = settings.get_string ("picture-uri");
 
         try {
             var file = File.new_for_uri (current_wallpaper_path);
@@ -232,9 +227,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             wallpaper_title = load_artist_name ();
             wallpaper_subtitle = "";
             wallpaper_subtitle = width.to_string () + "×" + height.to_string () + ", " + info.get_content_type ().to_string ().replace ("image/", "").up ();
-
-            appearance_view.wallpaper_details_label.label = wallpaper_title;
-            appearance_view.wallpaper_details_sublabel.label = wallpaper_subtitle;
         } catch (Error e) {
             warning (e.message);
         }
@@ -409,8 +401,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             var wallpaper = new WallpaperContainer (file.get_uri (), thumb_path, thumb_valid);
             wallpaper_view.append (wallpaper);
 
-            if (current_wallpaper_path.has_suffix (file.get_uri ()) &&
-                settings.get_string ("picture-options") != "none") {
+            if (current_wallpaper_path.has_suffix (file.get_uri ())) {
                 this.wallpaper_view.select_child (wallpaper);
                 wallpaper.checked = true;
                 active_wallpaper = wallpaper;

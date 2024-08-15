@@ -5,10 +5,6 @@
     <file alias="style-dark.css">style-dark.css</file>
   </gresource>
   <gresource prefix="/com/fyralabs/Fusebox/Appearance">
-    <file alias="light.svg">assets/light.svg</file>
-    <file alias="dark.svg">assets/dark.svg</file>
-    <file alias="by-apps.svg">assets/by-apps.svg</file>
-    
     <file alias="multi.svg">assets/multi.svg</file>
   </gresource>
   <gresource prefix="/com/fyralabs/Fusebox/icons">
