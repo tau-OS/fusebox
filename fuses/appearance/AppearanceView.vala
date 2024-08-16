@@ -18,7 +18,6 @@ public class AppearanceView : Gtk.Box {
     private EnsorModeButton defavlt; // default is a Vala keyword, deal with it
     private EnsorModeButton muted;
     private EnsorModeButton vibrant;
-    private EnsorModeButton monochrome;
     private EnsorModeButton salad;
     private Gtk.CheckButton prefer_light_radio;
     private Gtk.CheckButton prefer_default_radio;
@@ -54,11 +53,6 @@ public class AppearanceView : Gtk.Box {
 
             if (value == "vibrant") {
                 select_ensor (vibrant);
-                return;
-            }
-
-            if (value == "mono") {
-                select_ensor (monochrome);
                 return;
             }
 
@@ -303,8 +297,6 @@ public class AppearanceView : Gtk.Box {
         muted.tooltip_text = _("Muted Scheme");
         vibrant = new EnsorModeButton ("vibrant");
         vibrant.tooltip_text = _("Vibrant Scheme");
-        monochrome = new EnsorModeButton ("mono");
-        monochrome.tooltip_text = _("Monochromatic Scheme");
         salad = new EnsorModeButton ("salad");
         salad.tooltip_text = _("Fruit Salad Scheme");
 
@@ -313,14 +305,13 @@ public class AppearanceView : Gtk.Box {
             halign = Gtk.Align.END,
             column_spacing = 24,
             homogeneous = true,
-            min_children_per_line = 5,
-            max_children_per_line = 5
+            min_children_per_line = 4,
+            max_children_per_line = 4
         };
         main_flowbox.append (defavlt);
         main_flowbox.append (muted);
         main_flowbox.append (vibrant);
         main_flowbox.append (salad);
-        main_flowbox.append (monochrome);
         main_flowbox.child_activated.connect (child_activated_cb);
 
         ensor_refresh ();
@@ -411,14 +402,21 @@ public class AppearanceView : Gtk.Box {
         grid.add_css_class ("mini-content-block");
 
         fusebox_appearance_settings.bind ("wallpaper-accent", wp_switch.iswitch, "active", SettingsBindFlags.DEFAULT);
+        ensor_main_box.set_visible (wp_switch.iswitch.get_active ());
         fusebox_appearance_settings.bind ("wallpaper-accent", accent_box, "sensitive", SettingsBindFlags.INVERT_BOOLEAN);
         fusebox_appearance_settings.bind ("wallpaper-accent", wallpaper_accent_choices_box, "visible", SettingsBindFlags.DEFAULT);
         fusebox_appearance_settings.bind ("wallpaper-accent", dummy_box, "visible", SettingsBindFlags.INVERT_BOOLEAN);
 
-        accent_setup.begin ();
+        if (wp_switch.iswitch.get_active ()) {
+            accent_setup.begin ();
+        } else {
+            select_ensor (defavlt);
+        }
+
         wp_switch.iswitch.state_set.connect (() => {
             if (wp_switch.iswitch.active) {
                 accent_box.sensitive = false;
+                ensor_main_box.set_visible (true);
 
                 multi.set_active (false);
                 red.set_active (false);
@@ -432,6 +430,8 @@ public class AppearanceView : Gtk.Box {
             } else {
                 multi.set_active (true);
                 accent_box.sensitive = true;
+                ensor_main_box.set_visible (false);
+                select_ensor (defavlt);
             }
             return Gdk.EVENT_PROPAGATE;
         });
@@ -575,16 +575,38 @@ public class AppearanceView : Gtk.Box {
                     second_accent.visible = false;
                     third_accent.visible = false;
                     fourth_accent.visible = false;
+
+                    int[] argb_ints = {result.index (0)};
+                    ColorGenerator color_gen = new ColorGenerator(argb_ints);
+                    Gee.ArrayList<int> resd = color_gen.get_generated_colors(He.SchemeVariant.DEFAULT);
+                    defavlt.colors = resd;
+                    Gee.ArrayList<int> resm = color_gen.get_generated_colors(He.SchemeVariant.MUTED);
+                    muted.colors = resm;
+                    Gee.ArrayList<int> resv = color_gen.get_generated_colors(He.SchemeVariant.VIBRANT);
+                    vibrant.colors = resv;
+                    Gee.ArrayList<int> ress = color_gen.get_generated_colors(He.SchemeVariant.SALAD);
+                    salad.colors = ress;
                 }
-                if (result.index (0) != null && result.index (1) != null) {
+                if (result.index (1) != null) {
                     first_accent.hex = He.hexcode_argb (result.index (0));
                     second_accent.hex = He.hexcode_argb (result.index (1));
                     first_accent.visible = true;
                     second_accent.visible = true;
                     third_accent.visible = false;
                     fourth_accent.visible = false;
+
+                    int[] argb_ints = {result.index (0), result.index (1)};
+                    ColorGenerator color_gen = new ColorGenerator(argb_ints);
+                    Gee.ArrayList<int> resd = color_gen.get_generated_colors(He.SchemeVariant.DEFAULT);
+                    defavlt.colors = resd;
+                    Gee.ArrayList<int> resm = color_gen.get_generated_colors(He.SchemeVariant.MUTED);
+                    muted.colors = resm;
+                    Gee.ArrayList<int> resv = color_gen.get_generated_colors(He.SchemeVariant.VIBRANT);
+                    vibrant.colors = resv;
+                    Gee.ArrayList<int> ress = color_gen.get_generated_colors(He.SchemeVariant.SALAD);
+                    salad.colors = ress;
                 }
-                if (result.index (0) != null && result.index (1) != null && result.index (2) != null) {
+                if (result.index (1) != null && result.index (2) != null) {
                     first_accent.hex = He.hexcode_argb (result.index (0));
                     second_accent.hex = He.hexcode_argb (result.index (1));
                     third_accent.hex = He.hexcode_argb (result.index (2));
@@ -592,8 +614,19 @@ public class AppearanceView : Gtk.Box {
                     second_accent.visible = true;
                     third_accent.visible = true;
                     fourth_accent.visible = false;
+
+                    int[] argb_ints = {result.index (0), result.index (1), result.index (2)};
+                    ColorGenerator color_gen = new ColorGenerator(argb_ints);
+                    Gee.ArrayList<int> resd = color_gen.get_generated_colors(He.SchemeVariant.DEFAULT);
+                    defavlt.colors = resd;
+                    Gee.ArrayList<int> resm = color_gen.get_generated_colors(He.SchemeVariant.MUTED);
+                    muted.colors = resm;
+                    Gee.ArrayList<int> resv = color_gen.get_generated_colors(He.SchemeVariant.VIBRANT);
+                    vibrant.colors = resv;
+                    Gee.ArrayList<int> ress = color_gen.get_generated_colors(He.SchemeVariant.SALAD);
+                    salad.colors = ress;
                 }
-                if (result.index (0) != null && result.index (1) != null && result.index (2) != null && result.index (3) != null) {
+                if (result.index (1) != null && result.index (2) != null && result.index (3) != null) {
                     first_accent.hex = He.hexcode_argb (result.index (0));
                     second_accent.hex = He.hexcode_argb (result.index (1));
                     third_accent.hex = He.hexcode_argb (result.index (2));
@@ -602,6 +635,17 @@ public class AppearanceView : Gtk.Box {
                     second_accent.visible = true;
                     third_accent.visible = true;
                     fourth_accent.visible = true;
+
+                    int[] argb_ints = {result.index (0), result.index (1), result.index (2), result.index (3)};
+                    ColorGenerator color_gen = new ColorGenerator(argb_ints);
+                    Gee.ArrayList<int> resd = color_gen.get_generated_colors(He.SchemeVariant.DEFAULT);
+                    defavlt.colors = resd;
+                    Gee.ArrayList<int> resm = color_gen.get_generated_colors(He.SchemeVariant.MUTED);
+                    muted.colors = resm;
+                    Gee.ArrayList<int> resv = color_gen.get_generated_colors(He.SchemeVariant.VIBRANT);
+                    vibrant.colors = resv;
+                    Gee.ArrayList<int> ress = color_gen.get_generated_colors(He.SchemeVariant.SALAD);
+                    salad.colors = ress;
                 }
 
                 loop.quit ();
@@ -633,8 +677,6 @@ public class AppearanceView : Gtk.Box {
             select_ensor (muted);
         } else if (value == "vibrant") {
             select_ensor (vibrant);
-        } else if (value == "mono") {
-            select_ensor (monochrome);
         } else if (value == "salad") {
             select_ensor (salad);
         }
@@ -642,7 +684,7 @@ public class AppearanceView : Gtk.Box {
 
     private class EnsorModeButton : Gtk.FlowBoxChild {
         public string mode { get; construct; }
-        public int[] colors;
+        public Gee.ArrayList<int> colors;
 
         public EnsorModeButton (string mode) {
             Object (
@@ -652,20 +694,6 @@ public class AppearanceView : Gtk.Box {
             height_request = 42;
             overflow = HIDDEN;
             add_css_class ("x-large-radius");
-        }
-
-        construct {
-            if (mode == "default") {
-                colors = {0x6F528B, 0x665A6F, 0xFFFBFF, 0x815157};
-            } else if (mode == "muted") {
-                colors = {0x645B6A, 0x635C66, 0xFEF8FA, 0x765659};
-            } else if (mode == "vibrant") {
-                colors = {0x8900E9, 0x705576, 0xFFF7FE, 0x7D4F76};
-            } else if (mode == "mono") {
-                colors = {0x5E5E5E, 0x5E5E5E, 0xF9F9F9, 0x5E5E5E};
-            } else if (mode == "salad") {
-                colors = {0x1F5FA8, 0x3C5F91, 0xFFFBFF, 0x6F528B};
-            }
         }
 
         public override void snapshot (Gtk.Snapshot snapshot) {
@@ -687,7 +715,7 @@ public class AppearanceView : Gtk.Box {
             snapshot.append_inset_shadow (rect, {0, 0, 0}, 0, 0, 1, 0);
         }
         private Gdk.RGBA color_to_rgba (int index) {
-            int rgb = colors[index];
+            int rgb = colors.get (index);
             float r = ((rgb >> 16) & 0xFF) / 255.0f;
             float g = ((rgb >> 8) & 0xFF) / 255.0f;
             float b = (rgb & 0xFF) / 255.0f;
