@@ -5,6 +5,7 @@ fuse_files = files(
     'WallpaperGrid.vala',
     'TextView.vala',
     'WindowView.vala',
+    'ColorGenerator.vala',
     # 'DockView.vala',
 )
 
