@@ -310,7 +310,13 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                 }
 
                 var file = directory.resolve_relative_path (file_info.get_name ());
-                add_wallpaper_from_file.begin (file);
+                if (file.get_path ().contains (".png") || 
+                    file.get_path ().contains (".jpg") || 
+                    file.get_path ().contains (".jpeg") || 
+                    file.get_path ().contains (".gif") || 
+                    file.get_path ().contains (".webp")) {
+                    add_wallpaper_from_file.begin (file);
+                }
             }
 
             if (toplevel_folder) {
