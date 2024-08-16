@@ -1,14 +1,14 @@
 public class ColorGenerator {
     private const int SCHEME_COUNT = 4;
     private const int COLORS_PER_SCHEME = 4;
-    private const string DEFAULT_COLOR = "#8C56BF"; // tau purple as fallback
+    private const int DEFAULT_COLOR = 0x8C56BF; // tau purple as fallback
 
     private int[] argb_ints;
-    private string[] generated_colors;
+    private int[] generated_colors;
 
     public ColorGenerator(int[] argb_ints) {
         this.argb_ints = argb_ints;
-        this.generated_colors = new string[argb_ints.length * SCHEME_COUNT * COLORS_PER_SCHEME];
+        this.generated_colors = new int[argb_ints.length * SCHEME_COUNT * COLORS_PER_SCHEME];
         generate_colors();
     }
 
@@ -24,52 +24,62 @@ public class ColorGenerator {
                         var scheme = new He.DefaultScheme();
                         var dyn_scheme = scheme.generate(hct, false, 0.0);
                         int base_index = i * SCHEME_COUNT * COLORS_PER_SCHEME + j * COLORS_PER_SCHEME;
-                        generated_colors[base_index] = dyn_scheme.get_primary();
-                        generated_colors[base_index + 1] = dyn_scheme.get_secondary();
-                        generated_colors[base_index + 2] = dyn_scheme.get_tertiary();
-                        generated_colors[base_index + 3] = dyn_scheme.get_on_surface();
+                        generated_colors[base_index] = hex_to_int(dyn_scheme.get_primary());
+                        generated_colors[base_index + 1] = hex_to_int(dyn_scheme.get_secondary());
+                        generated_colors[base_index + 2] = hex_to_int(dyn_scheme.get_tertiary());
+                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_on_surface());
                         break;
                     case He.SchemeVariant.MUTED:
                         var scheme = new He.MutedScheme();
                         var dyn_scheme = scheme.generate(hct, false, 0.0);
                         int base_index = i * SCHEME_COUNT * COLORS_PER_SCHEME + j * COLORS_PER_SCHEME;
-                        generated_colors[base_index] = dyn_scheme.get_primary();
-                        generated_colors[base_index + 1] = dyn_scheme.get_secondary();
-                        generated_colors[base_index + 2] = dyn_scheme.get_tertiary();
-                        generated_colors[base_index + 3] = dyn_scheme.get_on_surface();
+                        generated_colors[base_index] = hex_to_int(dyn_scheme.get_primary());
+                        generated_colors[base_index + 1] = hex_to_int(dyn_scheme.get_secondary());
+                        generated_colors[base_index + 2] = hex_to_int(dyn_scheme.get_tertiary());
+                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_on_surface());
                         break;
                     case He.SchemeVariant.VIBRANT:
                         var scheme = new He.VibrantScheme();
                         var dyn_scheme = scheme.generate(hct, false, 0.0);
                         int base_index = i * SCHEME_COUNT * COLORS_PER_SCHEME + j * COLORS_PER_SCHEME;
-                        generated_colors[base_index] = dyn_scheme.get_primary();
-                        generated_colors[base_index + 1] = dyn_scheme.get_secondary();
-                        generated_colors[base_index + 2] = dyn_scheme.get_tertiary();
-                        generated_colors[base_index + 3] = dyn_scheme.get_on_surface();
+                        generated_colors[base_index] = hex_to_int(dyn_scheme.get_primary());
+                        generated_colors[base_index + 1] = hex_to_int(dyn_scheme.get_secondary());
+                        generated_colors[base_index + 2] = hex_to_int(dyn_scheme.get_tertiary());
+                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_on_surface());
                         break;
                     case He.SchemeVariant.SALAD:
                         var scheme = new He.SaladScheme();
                         var dyn_scheme = scheme.generate(hct, false, 0.0);
                         int base_index = i * SCHEME_COUNT * COLORS_PER_SCHEME + j * COLORS_PER_SCHEME;
-                        generated_colors[base_index] = dyn_scheme.get_primary();
-                        generated_colors[base_index + 1] = dyn_scheme.get_secondary();
-                        generated_colors[base_index + 2] = dyn_scheme.get_tertiary();
-                        generated_colors[base_index + 3] = dyn_scheme.get_on_surface();
+                        generated_colors[base_index] = hex_to_int(dyn_scheme.get_primary());
+                        generated_colors[base_index + 1] = hex_to_int(dyn_scheme.get_secondary());
+                        generated_colors[base_index + 2] = hex_to_int(dyn_scheme.get_tertiary());
+                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_on_surface());
                         break;
                 }
             }
         }
     }
 
+    // Converts a hex color string to an int
+    private int hex_to_int(string hex_color) {
+        try {
+            return int.parse(hex_color.replace("#", ""));
+        } catch (Error e) {
+            warning("Error parsing hex color '%s': %s. Using default color.", hex_color, e.message);
+            return DEFAULT_COLOR;
+        }
+    }
+
     // Retrieves the generated colors for a specified scheme
-    public string[] get_generated_colors(He.SchemeVariant scheme) {
-        int scheme_index = (int) scheme;
+    public int[] get_generated_colors(He.SchemeVariant scheme_variant) {
+        int scheme_index = (int) scheme_variant;
         if (scheme_index < 0 || scheme_index >= SCHEME_COUNT) {
             warning("Scheme index %d is out of range. Returning default colors.", scheme_index);
             return get_default_colors();
         }
 
-        string[] colors = new string[argb_ints.length * COLORS_PER_SCHEME];
+        int[] colors = new int[argb_ints.length * COLORS_PER_SCHEME];
         int base_index = scheme_index * COLORS_PER_SCHEME;
 
         for (int i = 0; i < argb_ints.length; i++) {
@@ -84,19 +94,19 @@ public class ColorGenerator {
     }
 
     // Retrieves the colors for a specific ARGB int and scheme
-    public string[] get_colors_for_argb(int index, He.SchemeVariant scheme) {
+    public int[] get_colors_for_argb(int index, He.SchemeVariant scheme_variant) {
         if (index < 0 || index >= argb_ints.length) {
             warning("Index %d out of range for ARGB values. Returning default colors.", index);
             return get_default_colors();
         }
 
-        int scheme_index = (int) scheme;
+        int scheme_index = (int) scheme_variant;
         if (scheme_index < 0 || scheme_index >= SCHEME_COUNT) {
             warning("Scheme index %d is out of range. Returning default colors.", scheme_index);
             return get_default_colors();
         }
 
-        string[] colors = new string[COLORS_PER_SCHEME];
+        int[] colors = new int[COLORS_PER_SCHEME];
         int base_index = scheme_index * COLORS_PER_SCHEME;
 
         for (int i = 0; i < COLORS_PER_SCHEME; i++) {
@@ -107,8 +117,8 @@ public class ColorGenerator {
     }
 
     // Provides a default set of colors
-    private string[] get_default_colors() {
-        string[] default_colors = new string[COLORS_PER_SCHEME];
+    private int[] get_default_colors() {
+        int[] default_colors = new int[COLORS_PER_SCHEME];
         for (int i = 0; i < COLORS_PER_SCHEME; i++) {
             default_colors[i] = DEFAULT_COLOR;
         }
