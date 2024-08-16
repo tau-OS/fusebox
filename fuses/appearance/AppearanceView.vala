@@ -102,6 +102,23 @@ public class AppearanceView : Gtk.Box {
         wallpaper_lock_preview_overlay.set_child (wallpaper_lock_preview);
         wallpaper_lock_preview_overlay.add_overlay (clock);
 
+        // XXX: UNCOMMENT WHEN KIRI LOCK SCREEN IS IMPL'D
+        //
+        //  var edit_button = new He.Button ("document-edit-symbolic", "") {
+        //      hexpand = true,
+        //      vexpand = true,
+        //      halign = Gtk.Align.END,
+        //      valign = Gtk.Align.END,
+        //      margin_end = 12,
+        //      margin_bottom = 12,
+        //      is_disclosure = true,
+        //      tooltip_text = _("Customize Lock Screen…")
+        //  };
+
+        //  var wallpaper_lock_button_overlay = new Gtk.Overlay ();
+        //  wallpaper_lock_button_overlay.set_child (wallpaper_lock_preview_overlay);
+        //  wallpaper_lock_button_overlay.add_overlay (edit_button);
+
         var wallpaper_preview_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             hexpand = true,
             vexpand = true,

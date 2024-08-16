@@ -127,6 +127,13 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             wallpaper_removal_button.visible = false;
         });
 
+        var local_bg = Path.build_filename (Environment.get_user_data_dir (), "backgrounds") + "/";
+        if (!active_wallpaper.uri.contains (local_bg)) {
+            wallpaper_removal_button.visible = false;
+        } else {
+            wallpaper_removal_button.visible = true;
+        }
+
         wallpaper_title_box.prepend (wallpaper_add_button);
         wallpaper_title_box.append (wallpaper_removal_button);
 
@@ -163,20 +170,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
 
         appearance_view.wallpaper_preview.file = furi;
         appearance_view.wallpaper_lock_preview.file = furi;
-
-        try {
-            FileInfo info = file.query_info (FILE_ATTRIBUTES, FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
-            var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
-            var width = pixbuf.get_width ();
-            var height = pixbuf.get_height ();
-
-            wallpaper_title = "";
-            wallpaper_title = load_artist_name ();
-            wallpaper_subtitle = "";
-            wallpaper_subtitle = width.to_string () + "×" + height.to_string () + ", " + info.get_content_type ().to_string ().replace ("image/", "").up ();
-        } catch (Error e) {
-            warning (e.message);
-        }
     }
 
     private void show_wallpaper_chooser () {
@@ -214,52 +207,9 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         prevent_update_mode = true;
         current_wallpaper_path = settings.get_string ("picture-uri");
         current_lock_wallpaper_path = settings.get_string ("picture-uri");
-
-        try {
-            var file = File.new_for_uri (current_wallpaper_path);
-            FileInfo info = file.query_info (FILE_ATTRIBUTES, FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
-
-            var pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
-            var width = pixbuf.get_width ();
-            var height = pixbuf.get_height ();
-
-            wallpaper_title = "";
-            wallpaper_title = load_artist_name ();
-            wallpaper_subtitle = "";
-            wallpaper_subtitle = width.to_string () + "×" + height.to_string () + ", " + info.get_content_type ().to_string ().replace ("image/", "").up ();
-        } catch (Error e) {
-            warning (e.message);
-        }
     }
 
-    private string load_artist_name () {
-        if (current_wallpaper_path != null) {
-            string path = "";
-            GExiv2.Metadata metadata;
-            try {
-                path = Filename.from_uri (current_wallpaper_path);
-                metadata = new GExiv2.Metadata ();
-                metadata.open_path (path);
-            } catch (Error e) {
-                warning ("Error parsing exif metadata of \"%s\": %s", path, e.message);
-                return "Current Wallpaper";
-            }
-
-            if (metadata.has_exif ()) {
-                var artist_name = metadata.get_tag_string ("Exif.Image.Artist");
-                if (artist_name != null) {
-                    return (_("%s").printf (artist_name));
-                } else {
-                    return "Current Wallpaper";
-                }
-            }
-        } else {
-            return "Current Wallpaper";
-        }
-        return "Current Wallpaper";
-    }
-
-    private static File ? copy_for_library (File source) {
+    private File ? copy_for_library (File source) {
         File? dest = null;
 
         string local_bg_directory = Path.build_filename (Environment.get_user_data_dir (), "backgrounds") + "/";
@@ -276,7 +226,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
 
         try {
             var timestamp = new DateTime.now_local ().format ("%Y-%m-%d-%H-%M-%S");
-            var filename = "%s-%s".printf (timestamp, source.get_basename ());
+            var filename = "%s-%s".printf (timestamp, source.get_basename ().replace (" ", "_").replace ("%20", "_"));
             string path = Path.build_filename (local_bg_directory, filename);
             dest = File.new_for_path (path);
             source.copy (dest, FileCopyFlags.OVERWRITE | FileCopyFlags.ALL_METADATA);
@@ -295,14 +245,14 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
 
         active_wallpaper = children;
-        children.checked = true;
-        var system_bg = Path.build_filename ("/usr/share/backgrounds") + "/";
-        if (children.uri.contains (system_bg)) {
+        active_wallpaper.checked = true;
+        var local_bg = Path.build_filename (Environment.get_user_data_dir (), "backgrounds") + "/";
+        if (!active_wallpaper.uri.contains (local_bg)) {
             wallpaper_removal_button.visible = false;
         } else {
             wallpaper_removal_button.visible = true;
         }
-        current_wallpaper_path = children.uri;
+        current_wallpaper_path = active_wallpaper.uri;
         update_wallpaper.begin (current_wallpaper_path);
     }
 
@@ -500,7 +450,7 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
     }
 
     public WallpaperContainer (string uri, string? thumb_path, bool thumb_valid) {
-        Object (uri: uri, thumb_path: thumb_path, thumb_valid: thumb_valid);
+        Object (uri : uri, thumb_path: thumb_path, thumb_valid: thumb_valid);
     }
 
     ~WallpaperContainer () {
@@ -509,7 +459,7 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
     }
 
     construct {
-        image = new He.ContentBlockImage ("") {
+        image = new He.ContentBlockImage ("file://" + thumb_path) {
             requested_width = 128,
             requested_height = 128
         };
@@ -566,7 +516,7 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
     }
 
     private async void update_thumb () {
-        image.file = "file://"+thumb_path;
+        image.file = "file://" + thumb_path;
     }
 }
 
