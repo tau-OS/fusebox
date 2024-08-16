@@ -27,7 +27,7 @@ public class ColorGenerator {
                         generated_colors[base_index] = hex_to_int(dyn_scheme.get_primary());
                         generated_colors[base_index + 1] = hex_to_int(dyn_scheme.get_secondary());
                         generated_colors[base_index + 2] = hex_to_int(dyn_scheme.get_tertiary());
-                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_on_surface());
+                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_surface());
                         break;
                     case He.SchemeVariant.MUTED:
                         var scheme = new He.MutedScheme();
@@ -36,7 +36,7 @@ public class ColorGenerator {
                         generated_colors[base_index] = hex_to_int(dyn_scheme.get_primary());
                         generated_colors[base_index + 1] = hex_to_int(dyn_scheme.get_secondary());
                         generated_colors[base_index + 2] = hex_to_int(dyn_scheme.get_tertiary());
-                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_on_surface());
+                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_surface());
                         break;
                     case He.SchemeVariant.VIBRANT:
                         var scheme = new He.VibrantScheme();
@@ -45,7 +45,7 @@ public class ColorGenerator {
                         generated_colors[base_index] = hex_to_int(dyn_scheme.get_primary());
                         generated_colors[base_index + 1] = hex_to_int(dyn_scheme.get_secondary());
                         generated_colors[base_index + 2] = hex_to_int(dyn_scheme.get_tertiary());
-                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_on_surface());
+                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_surface());
                         break;
                     case He.SchemeVariant.SALAD:
                         var scheme = new He.SaladScheme();
@@ -54,7 +54,7 @@ public class ColorGenerator {
                         generated_colors[base_index] = hex_to_int(dyn_scheme.get_primary());
                         generated_colors[base_index + 1] = hex_to_int(dyn_scheme.get_secondary());
                         generated_colors[base_index + 2] = hex_to_int(dyn_scheme.get_tertiary());
-                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_on_surface());
+                        generated_colors[base_index + 3] = hex_to_int(dyn_scheme.get_surface());
                         break;
                 }
             }
@@ -63,12 +63,9 @@ public class ColorGenerator {
 
     // Converts a hex color string to an int
     private int hex_to_int(string hex_color) {
-        try {
-            return int.parse(hex_color.replace("#", ""));
-        } catch (Error e) {
-            warning("Error parsing hex color '%s': %s. Using default color.", hex_color, e.message);
-            return DEFAULT_COLOR;
-        }
+        int res;
+        int.try_parse(hex_color.replace("#", ""), out res, null, 16);
+        return res;
     }
 
     // Retrieves the generated colors for a specified scheme
