@@ -10,6 +10,7 @@ add_project_arguments([
         '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
         '-DG_LOG_DOMAIN="com.fyralabs.Fusebox"',
         '-DGNOME_DESKTOP_USE_UNSTABLE_API',
+        '-w',
     ],
     language: 'c'
 )
