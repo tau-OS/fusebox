@@ -3,6 +3,11 @@ public class AppearanceView : Gtk.Box {
     private static GLib.Settings tau_appearance_settings;
     private static GLib.Settings fusebox_appearance_settings;
     private static GLib.Settings bg_settings;
+    private He.SegmentedButton color_type_button;
+    private Gtk.ToggleButton basic_type_button;
+    private Gtk.ToggleButton wallpaper_type_button;
+    private Gtk.Stack color_stack;
+    private Bis.Carousel color_carousel;
     private PrefersAccentColorButton red;
     private PrefersAccentColorButton yellow;
     private PrefersAccentColorButton green;
@@ -98,20 +103,20 @@ public class AppearanceView : Gtk.Box {
 
         // XXX: UNCOMMENT WHEN KIRI LOCK SCREEN IS IMPL'D
         //
-        //  var edit_button = new He.Button ("document-edit-symbolic", "") {
-        //      hexpand = true,
-        //      vexpand = true,
-        //      halign = Gtk.Align.END,
-        //      valign = Gtk.Align.END,
-        //      margin_end = 12,
-        //      margin_bottom = 12,
-        //      is_disclosure = true,
-        //      tooltip_text = _("Customize Lock Screen…")
-        //  };
+        // var edit_button = new He.Button ("document-edit-symbolic", "") {
+        // hexpand = true,
+        // vexpand = true,
+        // halign = Gtk.Align.END,
+        // valign = Gtk.Align.END,
+        // margin_end = 12,
+        // margin_bottom = 12,
+        // is_disclosure = true,
+        // tooltip_text = _("Customize Lock Screen…")
+        // };
 
-        //  var wallpaper_lock_button_overlay = new Gtk.Overlay ();
-        //  wallpaper_lock_button_overlay.set_child (wallpaper_lock_preview_overlay);
-        //  wallpaper_lock_button_overlay.add_overlay (edit_button);
+        // var wallpaper_lock_button_overlay = new Gtk.Overlay ();
+        // wallpaper_lock_button_overlay.set_child (wallpaper_lock_preview_overlay);
+        // wallpaper_lock_button_overlay.add_overlay (edit_button);
 
         var wallpaper_preview_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             hexpand = true,
@@ -322,7 +327,7 @@ public class AppearanceView : Gtk.Box {
         var ensor_main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         ensor_main_box.append (ensor_label);
         ensor_main_box.append (ensor_info);
-        ensor_main_box.append (main_flowbox);
+        // ensor_main_box.append (main_flowbox);
         ensor_main_box.add_css_class ("ensor-box");
 
         var contrast_label = new Gtk.Label (_("Contrast Settings")) {
@@ -396,9 +401,42 @@ public class AppearanceView : Gtk.Box {
             valign = Gtk.Align.START
         };
 
-        grid.attach (accent_main_box, 0, 0);
-        grid.attach (wallpaper_accent_box, 0, 1);
-        grid.attach (ensor_main_box, 0, 2);
+        basic_type_button = new Gtk.ToggleButton ();
+        basic_type_button.label = "Basic Colors";
+        wallpaper_type_button = new Gtk.ToggleButton ();
+        wallpaper_type_button.label = "Wallpaper Colors";
+        basic_type_button.group = wallpaper_type_button;
+
+        color_type_button = new He.SegmentedButton ();
+        color_type_button.append (basic_type_button);
+        color_type_button.append (wallpaper_type_button);
+
+        color_carousel = new Bis.Carousel ();
+        color_carousel.append (main_flowbox);
+
+        // color_carousel.append (accent_main_box);
+        // color_carousel.append (wallpaper_accent_box);
+        color_stack = new Gtk.Stack ();
+        color_stack.add_titled (accent_main_box, "basic", "Basic Colors");
+        color_stack.add_titled (color_carousel, "wallpaper", "Wallpaper Colors");
+
+        basic_type_button.toggled.connect (() => {
+            if (basic_type_button.active) {
+                color_stack.set_visible_child_name ("basic");
+            }
+        });
+        wallpaper_type_button.toggled.connect (() => {
+            if (wallpaper_type_button.active) {
+                color_stack.set_visible_child_name ("wallpaper");
+            }
+        });
+
+        grid.attach (color_type_button, 0, 0);
+
+        grid.attach (color_stack, 0, 1);
+        // grid.attach (accent_main_box, 0, 1);
+        // grid.attach (wallpaper_accent_box, 0, 2);
+        // grid.attach (ensor_main_box, 0, 3);
         grid.add_css_class ("mini-content-block");
 
         fusebox_appearance_settings.bind ("wallpaper-accent", wp_switch.iswitch, "active", SettingsBindFlags.DEFAULT);
@@ -576,15 +614,15 @@ public class AppearanceView : Gtk.Box {
                     third_accent.visible = false;
                     fourth_accent.visible = false;
 
-                    int[] argb_ints = {result.index (0)};
-                    ColorGenerator color_gen = new ColorGenerator(argb_ints);
-                    Gee.ArrayList<int> resd = color_gen.get_generated_colors(He.SchemeVariant.DEFAULT);
+                    int[] argb_ints = { result.index (0) };
+                    ColorGenerator color_gen = new ColorGenerator (argb_ints);
+                    Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
                     defavlt.colors = resd;
-                    Gee.ArrayList<int> resm = color_gen.get_generated_colors(He.SchemeVariant.MUTED);
+                    Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
                     muted.colors = resm;
-                    Gee.ArrayList<int> resv = color_gen.get_generated_colors(He.SchemeVariant.VIBRANT);
+                    Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
                     vibrant.colors = resv;
-                    Gee.ArrayList<int> ress = color_gen.get_generated_colors(He.SchemeVariant.SALAD);
+                    Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
                     salad.colors = ress;
                 }
                 if (result.index (1) != null) {
@@ -595,15 +633,15 @@ public class AppearanceView : Gtk.Box {
                     third_accent.visible = false;
                     fourth_accent.visible = false;
 
-                    int[] argb_ints = {result.index (0), result.index (1)};
-                    ColorGenerator color_gen = new ColorGenerator(argb_ints);
-                    Gee.ArrayList<int> resd = color_gen.get_generated_colors(He.SchemeVariant.DEFAULT);
+                    int[] argb_ints = { result.index (0), result.index (1) };
+                    ColorGenerator color_gen = new ColorGenerator (argb_ints);
+                    Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
                     defavlt.colors = resd;
-                    Gee.ArrayList<int> resm = color_gen.get_generated_colors(He.SchemeVariant.MUTED);
+                    Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
                     muted.colors = resm;
-                    Gee.ArrayList<int> resv = color_gen.get_generated_colors(He.SchemeVariant.VIBRANT);
+                    Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
                     vibrant.colors = resv;
-                    Gee.ArrayList<int> ress = color_gen.get_generated_colors(He.SchemeVariant.SALAD);
+                    Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
                     salad.colors = ress;
                 }
                 if (result.index (1) != null && result.index (2) != null) {
@@ -615,15 +653,15 @@ public class AppearanceView : Gtk.Box {
                     third_accent.visible = true;
                     fourth_accent.visible = false;
 
-                    int[] argb_ints = {result.index (0), result.index (1), result.index (2)};
-                    ColorGenerator color_gen = new ColorGenerator(argb_ints);
-                    Gee.ArrayList<int> resd = color_gen.get_generated_colors(He.SchemeVariant.DEFAULT);
+                    int[] argb_ints = { result.index (0), result.index (1), result.index (2) };
+                    ColorGenerator color_gen = new ColorGenerator (argb_ints);
+                    Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
                     defavlt.colors = resd;
-                    Gee.ArrayList<int> resm = color_gen.get_generated_colors(He.SchemeVariant.MUTED);
+                    Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
                     muted.colors = resm;
-                    Gee.ArrayList<int> resv = color_gen.get_generated_colors(He.SchemeVariant.VIBRANT);
+                    Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
                     vibrant.colors = resv;
-                    Gee.ArrayList<int> ress = color_gen.get_generated_colors(He.SchemeVariant.SALAD);
+                    Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
                     salad.colors = ress;
                 }
                 if (result.index (1) != null && result.index (2) != null && result.index (3) != null) {
@@ -636,22 +674,21 @@ public class AppearanceView : Gtk.Box {
                     third_accent.visible = true;
                     fourth_accent.visible = true;
 
-                    int[] argb_ints = {result.index (0), result.index (1), result.index (2), result.index (3)};
-                    ColorGenerator color_gen = new ColorGenerator(argb_ints);
-                    Gee.ArrayList<int> resd = color_gen.get_generated_colors(He.SchemeVariant.DEFAULT);
+                    int[] argb_ints = { result.index (0), result.index (1), result.index (2), result.index (3) };
+                    ColorGenerator color_gen = new ColorGenerator (argb_ints);
+                    Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
                     defavlt.colors = resd;
-                    Gee.ArrayList<int> resm = color_gen.get_generated_colors(He.SchemeVariant.MUTED);
+                    Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
                     muted.colors = resm;
-                    Gee.ArrayList<int> resv = color_gen.get_generated_colors(He.SchemeVariant.VIBRANT);
+                    Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
                     vibrant.colors = resv;
-                    Gee.ArrayList<int> ress = color_gen.get_generated_colors(He.SchemeVariant.SALAD);
+                    Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
                     salad.colors = ress;
                 }
 
                 loop.quit ();
             });
             loop.run ();
-
         } catch (Error e) {
             print (e.message);
         }
@@ -705,15 +742,16 @@ public class AppearanceView : Gtk.Box {
             snapshot.translate ({ w / 2, h / 2 });
 
             Gsk.RoundedRect rect = {};
-            rect.init_from_rect ({{ -r, -r }, { r * 2, r * 2 }}, r);
+            rect.init_from_rect ({ { -r, -r }, { r* 2, r* 2 } }, r);
             snapshot.push_rounded_clip (rect);
-            snapshot.append_color (color_to_rgba (0), {{ -r, -r }, { r, r }});
-            snapshot.append_color (color_to_rgba (1), {{ -r, 0 }, { r, r }});
-            snapshot.append_color (color_to_rgba (2), {{ 0, 0 }, { r, r }});
-            snapshot.append_color (color_to_rgba (3), {{ 0, -r }, { r, r }});
+            snapshot.append_color (color_to_rgba (0), { { -r, -r }, { r, r } });
+            snapshot.append_color (color_to_rgba (1), { { -r, 0 }, { r, r } });
+            snapshot.append_color (color_to_rgba (2), { { 0, 0 }, { r, r } });
+            snapshot.append_color (color_to_rgba (3), { { 0, -r }, { r, r } });
             snapshot.pop ();
-            snapshot.append_inset_shadow (rect, {0, 0, 0}, 0, 0, 1, 0);
+            snapshot.append_inset_shadow (rect, { 0, 0, 0 }, 0, 0, 1, 0);
         }
+
         private Gdk.RGBA color_to_rgba (int index) {
             int rgb = colors.get (index);
             float r = ((rgb >> 16) & 0xFF) / 255.0f;
@@ -730,7 +768,7 @@ public class AppearanceView : Gtk.Box {
 
         public PrefersAccentColorButton (string color, string? hex = null, Gtk.CheckButton? group_member = null) {
             Object (
-                    color: color,
+                    color : color,
                     hex: hex,
                     group: group_member
             );
