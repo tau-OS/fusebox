@@ -346,8 +346,8 @@ spinbutton.flat {
 }
 
 .color-scheme-button radio {
-  min-width: 64px;
-  min-height: 64px;
+  min-width: 48px;
+  min-height: 48px;
   padding: 0;
   margin: 0;
 }

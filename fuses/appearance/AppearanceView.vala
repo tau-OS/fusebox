@@ -298,8 +298,19 @@ public class AppearanceView : Gtk.Box {
         if (wallpaper_type_button.active) {
             color_stack.set_visible_child_name ("wallpaper");
             accent_setup.begin ();
+            accent_box.sensitive = false;
+
+            multi.set_active (false);
+            red.set_active (false);
+            yellow.set_active (false);
+            green.set_active (false);
+            blue.set_active (false);
+            purple.set_active (false);
+            pink.set_active (false);
         } else {
             color_stack.set_visible_child_name ("basic");
+            select_ensor (defavlt);
+            accent_box.sensitive = true;
         }
 
         basic_type_button.toggled.connect (() => {
