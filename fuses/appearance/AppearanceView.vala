@@ -3,9 +3,11 @@ public class AppearanceView : Gtk.Box {
     private static GLib.Settings tau_appearance_settings;
     private static GLib.Settings fusebox_appearance_settings;
     private static GLib.Settings bg_settings;
+
+    public Fusebox.Fuse fuse { get; construct set; }
+
     private He.SegmentedButton color_type_button;
     private Gtk.ToggleButton basic_type_button;
-    private Gtk.ToggleButton wallpaper_type_button;
     private Gtk.Stack color_stack;
     private Bis.Carousel color_carousel;
     private PrefersAccentColorButton red;
@@ -14,32 +16,27 @@ public class AppearanceView : Gtk.Box {
     private PrefersAccentColorButton blue;
     private PrefersAccentColorButton purple;
     private PrefersAccentColorButton pink;
-    private PrefersAccentColorButton mono;
     private PrefersAccentColorButton multi;
-    private PrefersAccentColorButton first_accent;
-    private PrefersAccentColorButton second_accent;
-    private PrefersAccentColorButton third_accent;
-    private PrefersAccentColorButton fourth_accent;
-    private EnsorModeButton defavlt; // default is a Vala keyword, deal with it
-    private EnsorModeButton muted;
-    private EnsorModeButton vibrant;
-    private EnsorModeButton salad;
+    private Gtk.FlowBoxChild defavlt; // default is a Vala keyword, deal with it
+    private Gtk.FlowBoxChild muted;
+    private Gtk.FlowBoxChild vibrant;
+    private Gtk.FlowBoxChild salad;
     private Gtk.CheckButton prefer_light_radio;
     private Gtk.CheckButton prefer_default_radio;
     private Gtk.CheckButton prefer_dark_radio;
     private Gtk.Box accent_box;
-    private Gtk.Box wallpaper_accent_choices_box;
+    private Gtk.FlowBox ensor_flowbox;
+    private Gtk.FlowBoxChild current_emb;
+
     public He.ContentBlockImage wallpaper_preview;
     public He.ContentBlockImage wallpaper_lock_preview;
-    public Fusebox.Fuse fuse { get; construct set; }
     public Appearance.WallpaperGrid wallpaper_view;
-    public He.Switch wp_switch;
+    public Gtk.ToggleButton wallpaper_type_button;
     public Gtk.ScrolledWindow sw;
     public Gtk.Stack contrast_stack;
     public Gtk.Stack wallpaper_stack;
     public Gtk.Stack main_stack;
-    private Gtk.FlowBox main_flowbox;
-    private EnsorModeButton current_emb;
+
     private uint rscale_timeout;
 
     private string _ensor;
@@ -104,14 +101,14 @@ public class AppearanceView : Gtk.Box {
         // XXX: UNCOMMENT WHEN KIRI LOCK SCREEN IS IMPL'D
         //
         // var edit_button = new He.Button ("document-edit-symbolic", "") {
-        // hexpand = true,
-        // vexpand = true,
-        // halign = Gtk.Align.END,
-        // valign = Gtk.Align.END,
-        // margin_end = 12,
-        // margin_bottom = 12,
-        // is_disclosure = true,
-        // tooltip_text = _("Customize Lock Screen…")
+        //  hexpand = true,
+        //  vexpand = true,
+        //  halign = Gtk.Align.END,
+        //  valign = Gtk.Align.END,
+        //  margin_end = 12,
+        //  margin_bottom = 12,
+        //  is_disclosure = true,
+        //  tooltip_text = _("Customize Lock Screen…")
         // };
 
         // var wallpaper_lock_button_overlay = new Gtk.Overlay ();
@@ -190,11 +187,22 @@ public class AppearanceView : Gtk.Box {
         prefer_box.append (prefer_style_box);
         prefer_box.add_css_class ("mini-content-block");
 
-        var accent_label = new Gtk.Label (_("Accent color")) {
-            halign = Gtk.Align.START
-        };
-        accent_label.add_css_class ("cb-title");
+        prefer_default_radio.toggled.connect (() => {
+            set_color_scheme (He.Desktop.ColorScheme.NO_PREFERENCE);
+        });
+        prefer_light_radio.toggled.connect (() => {
+            set_color_scheme (He.Desktop.ColorScheme.LIGHT);
+        });
+        prefer_dark_radio.toggled.connect (() => {
+            set_color_scheme (He.Desktop.ColorScheme.DARK);
+        });
 
+        color_scheme_refresh ();
+        interface_settings.notify["changed::color-scheme"].connect (() => {
+            color_scheme_refresh ();
+        });
+
+        // Accent Block
         purple = new PrefersAccentColorButton ("purple", "");
         purple.tooltip_text = _("Purple");
 
@@ -213,63 +221,13 @@ public class AppearanceView : Gtk.Box {
         blue = new PrefersAccentColorButton ("blue", "", purple);
         blue.tooltip_text = _("Blue");
 
-        mono = new PrefersAccentColorButton ("mono", "", purple);
-        mono.tooltip_text = _("Mono");
-
         multi = new PrefersAccentColorButton ("multi", "", purple);
         multi.tooltip_text = _("Set By Apps");
 
-        var accentw_label = new Gtk.Label (_("Wallpaper Color")) {
-            halign = Gtk.Align.START,
-            valign = Gtk.Align.CENTER
-        };
-        accentw_label.add_css_class ("cb-title");
-
-        wp_switch = new He.Switch () {
-            halign = Gtk.Align.END,
-            valign = Gtk.Align.CENTER,
-        };
-
-        wallpaper_accent_choices_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
-            halign = Gtk.Align.END,
-            valign = Gtk.Align.CENTER,
-            hexpand = true
-        };
-        first_accent = new PrefersAccentColorButton ("wallpaper1", null, null) {
-            visible = false,
-            tooltip_text = _("Wallpaper Accent #1")
-        };
-        second_accent = new PrefersAccentColorButton ("wallpaper2", null, first_accent) {
-            visible = false,
-            tooltip_text = _("Wallpaper Accent #2")
-        };
-        third_accent = new PrefersAccentColorButton ("wallpaper3", null, first_accent) {
-            visible = false,
-            tooltip_text = _("Wallpaper Accent #3")
-        };
-        fourth_accent = new PrefersAccentColorButton ("wallpaper4", null, first_accent) {
-            visible = false,
-            tooltip_text = _("Wallpaper Accent #4")
-        };
-        wallpaper_accent_choices_box.append (first_accent);
-        wallpaper_accent_choices_box.append (second_accent);
-        wallpaper_accent_choices_box.append (third_accent);
-        wallpaper_accent_choices_box.append (fourth_accent);
-
-        var dummy_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0) {
-            halign = Gtk.Align.END,
-            valign = Gtk.Align.CENTER,
-            hexpand = true
-        };
-
-        var wallpaper_accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
-        wallpaper_accent_box.append (accentw_label);
-        wallpaper_accent_box.append (dummy_box);
-        wallpaper_accent_box.append (wallpaper_accent_choices_box);
-        wallpaper_accent_box.append (wp_switch);
-
         accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
-            halign = Gtk.Align.END,
+            halign = Gtk.Align.CENTER,
+            valign = Gtk.Align.CENTER,
+            homogeneous = true,
             hexpand = true
         };
         accent_box.append (multi);
@@ -279,57 +237,97 @@ public class AppearanceView : Gtk.Box {
         accent_box.append (yellow);
         accent_box.append (green);
         accent_box.append (blue);
-        accent_box.append (mono);
 
-        var accent_main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
-        accent_main_box.append (accent_label);
-        accent_main_box.append (accent_box);
-
-        var ensor_label = new Gtk.Label (_("Accent Scheme")) {
-            halign = Gtk.Align.START,
-            valign = Gtk.Align.CENTER
-        };
-        ensor_label.add_css_class ("cb-title");
-
-        var ensor_info = new Gtk.Image () {
-            icon_name = "dialog-information-symbolic",
-            tooltip_text = _("Pick a scheme to set the color tones for your user interface.")
-        };
-
-        defavlt = new EnsorModeButton ("default");
+        defavlt = new Gtk.FlowBoxChild ();
+        defavlt.child = new EnsorModeButton ("default");
         defavlt.tooltip_text = _("Default Scheme");
-        muted = new EnsorModeButton ("muted");
+        muted = new Gtk.FlowBoxChild ();
+        muted.child = new EnsorModeButton ("muted");
         muted.tooltip_text = _("Muted Scheme");
-        vibrant = new EnsorModeButton ("vibrant");
+        vibrant = new Gtk.FlowBoxChild ();
+        vibrant.child = new EnsorModeButton ("vibrant");
         vibrant.tooltip_text = _("Vibrant Scheme");
-        salad = new EnsorModeButton ("salad");
+        salad = new Gtk.FlowBoxChild ();
+        salad.child = new EnsorModeButton ("salad");
         salad.tooltip_text = _("Fruit Salad Scheme");
 
-        main_flowbox = new Gtk.FlowBox () {
+        ensor_flowbox = new Gtk.FlowBox () {
             hexpand = true,
-            halign = Gtk.Align.END,
-            column_spacing = 24,
+            halign = Gtk.Align.CENTER,
+            valign = Gtk.Align.CENTER,
+            column_spacing = 12,
             homogeneous = true,
             min_children_per_line = 4,
             max_children_per_line = 4
         };
-        main_flowbox.append (defavlt);
-        main_flowbox.append (muted);
-        main_flowbox.append (vibrant);
-        main_flowbox.append (salad);
-        main_flowbox.child_activated.connect (child_activated_cb);
+        ensor_flowbox.add_css_class ("ensor-box");
+        ensor_flowbox.append (defavlt);
+        ensor_flowbox.append (muted);
+        ensor_flowbox.append (vibrant);
+        ensor_flowbox.append (salad);
+        ensor_flowbox.child_activated.connect (child_activated_cb);
 
         ensor_refresh ();
         tau_appearance_settings.notify["changed::ensor-scheme"].connect (() => {
             ensor_refresh ();
         });
 
-        var ensor_main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
-        ensor_main_box.append (ensor_label);
-        ensor_main_box.append (ensor_info);
-        // ensor_main_box.append (main_flowbox);
-        ensor_main_box.add_css_class ("ensor-box");
+        wallpaper_type_button = new Gtk.ToggleButton () {
+            active = fusebox_appearance_settings.get_boolean ("wallpaper-accent") == true
+        };
+        wallpaper_type_button.label = "Wallpaper Colors";
+        basic_type_button = new Gtk.ToggleButton ();
+        basic_type_button.label = "Basic Colors";
+        basic_type_button.group = wallpaper_type_button;
 
+        color_type_button = new He.SegmentedButton () {
+            hexpand = true,
+            homogeneous = true
+        };
+        color_type_button.add_css_class ("pill-segment");
+        color_type_button.append (wallpaper_type_button);
+        color_type_button.append (basic_type_button);
+
+        color_carousel = new Bis.Carousel ();
+        color_carousel.append (ensor_flowbox);
+
+        color_stack = new Gtk.Stack ();
+        color_stack.add_titled (accent_box, "basic", "Basic Colors");
+        color_stack.add_titled (color_carousel, "wallpaper", "Wallpaper Colors");
+
+        if (wallpaper_type_button.active) {
+            color_stack.set_visible_child_name ("wallpaper");
+            accent_setup.begin ();
+        } else {
+            color_stack.set_visible_child_name ("basic");
+        }
+
+        basic_type_button.toggled.connect (() => {
+            color_stack.set_visible_child_name ("basic");
+            fusebox_appearance_settings.set_boolean ("wallpaper-accent", false);
+            select_ensor (defavlt);
+            accent_box.sensitive = true;
+        });
+        wallpaper_type_button.toggled.connect (() => {
+            color_stack.set_visible_child_name ("wallpaper");
+            fusebox_appearance_settings.set_boolean ("wallpaper-accent", true);
+            accent_setup.begin ();
+            accent_box.sensitive = false;
+
+            multi.set_active (false);
+            red.set_active (false);
+            yellow.set_active (false);
+            green.set_active (false);
+            blue.set_active (false);
+            purple.set_active (false);
+            pink.set_active (false);
+        });
+
+        tau_appearance_settings.notify["changed::accent-color"].connect (() => {
+            accent_setup.begin ();
+        });
+
+        // Contrast Block
         var contrast_label = new Gtk.Label (_("Contrast Settings")) {
             halign = Gtk.Align.START,
             valign = Gtk.Align.CENTER
@@ -349,6 +347,7 @@ public class AppearanceView : Gtk.Box {
         contrast_box.append (contrast_grid_button);
         contrast_box.add_css_class ("mini-content-block");
 
+        // Roundness Block
         var roundness_label = new Gtk.Label (_("Interface Roundness")) {
             halign = Gtk.Align.START
         };
@@ -394,93 +393,14 @@ public class AppearanceView : Gtk.Box {
             });
         });
 
-
-        var grid = new Gtk.Grid () {
-            row_spacing = 18,
-            vexpand = true,
-            valign = Gtk.Align.START
-        };
-
-        basic_type_button = new Gtk.ToggleButton ();
-        basic_type_button.label = "Basic Colors";
-        wallpaper_type_button = new Gtk.ToggleButton ();
-        wallpaper_type_button.label = "Wallpaper Colors";
-        basic_type_button.group = wallpaper_type_button;
-
-        color_type_button = new He.SegmentedButton ();
-        color_type_button.append (basic_type_button);
-        color_type_button.append (wallpaper_type_button);
-
-        color_carousel = new Bis.Carousel ();
-        color_carousel.append (main_flowbox);
-
-        // color_carousel.append (accent_main_box);
-        // color_carousel.append (wallpaper_accent_box);
-        color_stack = new Gtk.Stack ();
-        color_stack.add_titled (accent_main_box, "basic", "Basic Colors");
-        color_stack.add_titled (color_carousel, "wallpaper", "Wallpaper Colors");
-
-        basic_type_button.toggled.connect (() => {
-            if (basic_type_button.active) {
-                color_stack.set_visible_child_name ("basic");
-            }
-        });
-        wallpaper_type_button.toggled.connect (() => {
-            if (wallpaper_type_button.active) {
-                color_stack.set_visible_child_name ("wallpaper");
-            }
-        });
-
-        grid.attach (color_type_button, 0, 0);
-
-        grid.attach (color_stack, 0, 1);
-        // grid.attach (accent_main_box, 0, 1);
-        // grid.attach (wallpaper_accent_box, 0, 2);
-        // grid.attach (ensor_main_box, 0, 3);
-        grid.add_css_class ("mini-content-block");
-
-        fusebox_appearance_settings.bind ("wallpaper-accent", wp_switch.iswitch, "active", SettingsBindFlags.DEFAULT);
-        ensor_main_box.set_visible (wp_switch.iswitch.get_active ());
-        fusebox_appearance_settings.bind ("wallpaper-accent", accent_box, "sensitive", SettingsBindFlags.INVERT_BOOLEAN);
-        fusebox_appearance_settings.bind ("wallpaper-accent", wallpaper_accent_choices_box, "visible", SettingsBindFlags.DEFAULT);
-        fusebox_appearance_settings.bind ("wallpaper-accent", dummy_box, "visible", SettingsBindFlags.INVERT_BOOLEAN);
-
-        if (wp_switch.iswitch.get_active ()) {
-            accent_setup.begin ();
-        } else {
-            select_ensor (defavlt);
-        }
-
-        wp_switch.iswitch.state_set.connect (() => {
-            if (wp_switch.iswitch.active) {
-                accent_box.sensitive = false;
-                ensor_main_box.set_visible (true);
-
-                multi.set_active (false);
-                red.set_active (false);
-                yellow.set_active (false);
-                green.set_active (false);
-                blue.set_active (false);
-                purple.set_active (false);
-                pink.set_active (false);
-
-                accent_setup.begin ();
-            } else {
-                multi.set_active (true);
-                accent_box.sensitive = true;
-                ensor_main_box.set_visible (false);
-                select_ensor (defavlt);
-            }
-            return Gdk.EVENT_PROPAGATE;
-        });
-
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             margin_start = 18,
             margin_end = 18,
             margin_bottom = 18
         };
         main_box.append (wallpaper_main_box);
-        main_box.append (grid);
+        main_box.append (color_type_button);
+        main_box.append (color_stack);
 
         var sub_box = new Gtk.ListBox ();
         sub_box.append (prefer_box);
@@ -530,6 +450,7 @@ public class AppearanceView : Gtk.Box {
             wallpaper_stack.set_visible_child_name ("wallpaper");
         });
 
+        // Contrast View
         var contrast_view = new Appearance.ContrastView (fuse, this);
 
         contrast_stack = new Gtk.Stack () {
@@ -545,21 +466,6 @@ public class AppearanceView : Gtk.Box {
 
         orientation = Gtk.Orientation.VERTICAL;
         append (contrast_stack);
-
-        prefer_default_radio.toggled.connect (() => {
-            set_color_scheme (He.Desktop.ColorScheme.NO_PREFERENCE);
-        });
-        prefer_light_radio.toggled.connect (() => {
-            set_color_scheme (He.Desktop.ColorScheme.LIGHT);
-        });
-        prefer_dark_radio.toggled.connect (() => {
-            set_color_scheme (He.Desktop.ColorScheme.DARK);
-        });
-
-        color_scheme_refresh ();
-        interface_settings.notify["changed::color-scheme"].connect (() => {
-            color_scheme_refresh ();
-        });
     }
 
     private void set_color_scheme (He.Desktop.ColorScheme color_scheme) {
@@ -593,97 +499,55 @@ public class AppearanceView : Gtk.Box {
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
 
-                if (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") == 0) {
-                    tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (result.index (0)));
-                    first_accent.active = true;
-                } else if (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") == 1 && result.index (1) != null) {
-                    tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (result.index (1)));
-                    second_accent.active = true;
-                } else if (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") == 2 && result.index (1) != null && result.index (2) != null) {
-                    tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (result.index (2)));
-                    third_accent.active = true;
-                } else if (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") == 3 && result.index (1) != null && result.index (2) != null && result.index (3) != null) {
-                    tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (result.index (3)));
-                    fourth_accent.active = true;
-                }
-
                 if (result.index (0) != null) {
-                    first_accent.hex = He.hexcode_argb (result.index (0));
-                    first_accent.visible = true;
-                    second_accent.visible = false;
-                    third_accent.visible = false;
-                    fourth_accent.visible = false;
-
                     int[] argb_ints = { result.index (0) };
                     ColorGenerator color_gen = new ColorGenerator (argb_ints);
                     Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
-                    defavlt.colors = resd;
+                    ((EnsorModeButton)defavlt.get_first_child ()).colors = resd;
                     Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
-                    muted.colors = resm;
+                    ((EnsorModeButton)muted.get_first_child ()).colors = resm;
                     Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
-                    vibrant.colors = resv;
+                    ((EnsorModeButton)vibrant.get_first_child ()).colors = resv;
                     Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
-                    salad.colors = ress;
+                    ((EnsorModeButton)salad.get_first_child ()).colors = ress;
+
+                    tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (result.index (0)));
                 }
                 if (result.index (1) != null) {
-                    first_accent.hex = He.hexcode_argb (result.index (0));
-                    second_accent.hex = He.hexcode_argb (result.index (1));
-                    first_accent.visible = true;
-                    second_accent.visible = true;
-                    third_accent.visible = false;
-                    fourth_accent.visible = false;
-
                     int[] argb_ints = { result.index (0), result.index (1) };
                     ColorGenerator color_gen = new ColorGenerator (argb_ints);
                     Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
-                    defavlt.colors = resd;
+                    ((EnsorModeButton)defavlt.get_first_child ()).colors = resd;
                     Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
-                    muted.colors = resm;
+                    ((EnsorModeButton)muted.get_first_child ()).colors = resm;
                     Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
-                    vibrant.colors = resv;
+                    ((EnsorModeButton)vibrant.get_first_child ()).colors = resv;
                     Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
-                    salad.colors = ress;
+                    ((EnsorModeButton)salad.get_first_child ()).colors = ress;
                 }
                 if (result.index (1) != null && result.index (2) != null) {
-                    first_accent.hex = He.hexcode_argb (result.index (0));
-                    second_accent.hex = He.hexcode_argb (result.index (1));
-                    third_accent.hex = He.hexcode_argb (result.index (2));
-                    first_accent.visible = true;
-                    second_accent.visible = true;
-                    third_accent.visible = true;
-                    fourth_accent.visible = false;
-
                     int[] argb_ints = { result.index (0), result.index (1), result.index (2) };
                     ColorGenerator color_gen = new ColorGenerator (argb_ints);
                     Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
-                    defavlt.colors = resd;
+                    ((EnsorModeButton)defavlt.get_first_child ()).colors = resd;
                     Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
-                    muted.colors = resm;
+                    ((EnsorModeButton)muted.get_first_child ()).colors = resm;
                     Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
-                    vibrant.colors = resv;
+                    ((EnsorModeButton)vibrant.get_first_child ()).colors = resv;
                     Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
-                    salad.colors = ress;
+                    ((EnsorModeButton)salad.get_first_child ()).colors = ress;
                 }
                 if (result.index (1) != null && result.index (2) != null && result.index (3) != null) {
-                    first_accent.hex = He.hexcode_argb (result.index (0));
-                    second_accent.hex = He.hexcode_argb (result.index (1));
-                    third_accent.hex = He.hexcode_argb (result.index (2));
-                    fourth_accent.hex = He.hexcode_argb (result.index (3));
-                    first_accent.visible = true;
-                    second_accent.visible = true;
-                    third_accent.visible = true;
-                    fourth_accent.visible = true;
-
                     int[] argb_ints = { result.index (0), result.index (1), result.index (2), result.index (3) };
                     ColorGenerator color_gen = new ColorGenerator (argb_ints);
                     Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
-                    defavlt.colors = resd;
+                    ((EnsorModeButton)defavlt.get_first_child ()).colors = resd;
                     Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
-                    muted.colors = resm;
+                    ((EnsorModeButton)muted.get_first_child ()).colors = resm;
                     Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
-                    vibrant.colors = resv;
+                    ((EnsorModeButton)vibrant.get_first_child ()).colors = resv;
                     Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
-                    salad.colors = ress;
+                    ((EnsorModeButton)salad.get_first_child ()).colors = ress;
                 }
 
                 loop.quit ();
@@ -695,14 +559,14 @@ public class AppearanceView : Gtk.Box {
     }
 
     private void child_activated_cb (Gtk.FlowBoxChild child) {
-        select_ensor (child as EnsorModeButton);
+        select_ensor (child);
     }
 
-    private void select_ensor (EnsorModeButton emb) {
+    private void select_ensor (Gtk.FlowBoxChild emb) {
         current_emb = emb;
-        _ensor = emb.mode;
-        tau_appearance_settings.set_string ("ensor-scheme", emb.mode);
-        main_flowbox.select_child (current_emb);
+        _ensor = ((EnsorModeButton)emb.get_first_child ()).mode;
+        tau_appearance_settings.set_string ("ensor-scheme", _ensor);
+        ensor_flowbox.select_child (current_emb);
     }
 
     private void ensor_refresh () {
@@ -719,18 +583,16 @@ public class AppearanceView : Gtk.Box {
         }
     }
 
-    private class EnsorModeButton : Gtk.FlowBoxChild {
+    private class EnsorModeButton : Gtk.Box {
         public string mode { get; construct; }
         public Gee.ArrayList<int> colors;
 
         public EnsorModeButton (string mode) {
             Object (
-                    mode: mode
+                mode: mode
             );
-            width_request = 42;
-            height_request = 42;
             overflow = HIDDEN;
-            add_css_class ("x-large-radius");
+            add_css_class ("circle-radius");
         }
 
         public override void snapshot (Gtk.Snapshot snapshot) {
@@ -776,7 +638,7 @@ public class AppearanceView : Gtk.Box {
 
         construct {
             add_css_class (color.to_string ());
-            add_css_class ("selection-mode");
+            add_css_class ("accent-mode");
 
             active = color == tau_appearance_settings.get_string ("accent-color");
 
@@ -787,34 +649,14 @@ public class AppearanceView : Gtk.Box {
                     tau_appearance_settings.set_string ("accent-color", "pink");
                 } else if (color == "red") {
                     tau_appearance_settings.set_string ("accent-color", "red");
-                } else if (color == "orange") {
-                    tau_appearance_settings.set_string ("accent-color", "orange");
-                } else if (color == "brown") {
-                    tau_appearance_settings.set_string ("accent-color", "brown");
                 } else if (color == "yellow") {
                     tau_appearance_settings.set_string ("accent-color", "yellow");
                 } else if (color == "green") {
                     tau_appearance_settings.set_string ("accent-color", "green");
-                } else if (color == "mint") {
-                    tau_appearance_settings.set_string ("accent-color", "mint");
                 } else if (color == "blue") {
                     tau_appearance_settings.set_string ("accent-color", "blue");
                 } else if (color == "multi") {
                     tau_appearance_settings.set_string ("accent-color", "multi");
-                } else if (color == "mono") {
-                    tau_appearance_settings.set_string ("accent-color", "mono");
-                } else if (color == "wallpaper1") {
-                    fusebox_appearance_settings.set_int ("wallpaper-accent-choice", 0);
-                    tau_appearance_settings.set_string ("accent-color", hex);
-                } else if (color == "wallpaper2") {
-                    fusebox_appearance_settings.set_int ("wallpaper-accent-choice", 1);
-                    tau_appearance_settings.set_string ("accent-color", hex);
-                } else if (color == "wallpaper3") {
-                    fusebox_appearance_settings.set_int ("wallpaper-accent-choice", 2);
-                    tau_appearance_settings.set_string ("accent-color", hex);
-                } else if (color == "wallpaper4") {
-                    fusebox_appearance_settings.set_int ("wallpaper-accent-choice", 3);
-                    tau_appearance_settings.set_string ("accent-color", hex);
                 }
             });
         }

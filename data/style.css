@@ -26,6 +26,19 @@ button.flat label {
   padding: 0;
 }
 
+.accent-mode {
+  min-height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
+  background: @surface_container_bg_color;
+}
+
+.accent-mode radio {
+  min-height: 48px;
+  min-width: 48px;
+  margin: 6px;
+}
+
 .red radio {
   background: #e25480;
   color: transparent;
@@ -47,30 +60,6 @@ button.flat label {
   box-shadow: inset 0 0 0 3px @accent_color;
 }
 .red:active:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-
-.orange radio {
-  background: #f99e5c;
-  color: transparent;
-}
-.orange:disabled radio {
-  background: alpha(#f99e5c, 0.18);
-  box-shadow: inset 0 0 0 3px alpha(#f99e5c, 0.32);
-}
-.orange:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.orange:hover radio {
-  box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
-}
-.orange:active radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.orange:hover:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.orange:active:checked radio {
   box-shadow: inset 0 0 0 3px @accent_color;
 }
 
@@ -194,30 +183,6 @@ button.flat label {
   box-shadow: inset 0 0 0 3px @accent_color;
 }
 
-.mono radio {
-  background: #888;
-  color: transparent;
-}
-.mono:disabled radio {
-  background: alpha(#888, 0.18);
-  box-shadow: inset 0 0 0 3px alpha(#888, 0.32);
-}
-.mono:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.mono:hover radio {
-  box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
-}
-.mono:active radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.mono:hover:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.mono:active:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-
 .multi radio {
   background: no-repeat url("resource://com/fyralabs/Fusebox/Appearance/multi.svg");
   background-size: cover;
@@ -241,98 +206,6 @@ button.flat label {
 .multi:disabled radio {
   filter: opacity(0.38);
   box-shadow: inset 0 0 0 3px alpha(@view_fg_color, 0.32);
-}
-
-.wallpaper1 radio {
-  color: transparent;
-  background: linear-gradient(
-    45deg,
-    #e25480,
-    #72da82
-  );
-}
-.wallpaper1:disabled radio {
-  background: alpha(linear-gradient(
-    45deg,
-    #e25480,
-    #72da82
-  ), 0.18);
-}
-.wallpaper2 radio {
-  color: transparent;
-  background: linear-gradient(
-    45deg,
-    #febc16,
-    #a57bcd
-  );
-}
-.wallpaper2:disabled radio {
-  background: alpha(linear-gradient(
-    45deg,
-    #febc16,
-    #a57bcd
-  ), 0.18);
-}
-.wallpaper3 radio {
-  color: transparent;
-  background: linear-gradient(
-    45deg,
-    #58a8fa,
-    #e25480
-  );
-}
-.wallpaper3:disabled radio {
-  background: alpha(linear-gradient(
-    45deg,
-    #58a8fa,
-    #e25480
-  ), 0.18);
-}
-.wallpaper4 radio {
-  color: transparent;
-  background: linear-gradient(
-    45deg,
-    #f99e5c,
-    #58a8fa
-  );
-}
-.wallpaper4:disabled radio {
-  background: alpha(linear-gradient(
-    45deg,
-    #f99e5c,
-    #58a8fa
-  ), 0.18);
-}
-
-.wallpaper1:checked radio,
-.wallpaper2:checked radio,
-.wallpaper3:checked radio,
-.wallpaper4:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.wallpaper1:hover radio,
-.wallpaper2:hover radio,
-.wallpaper3:hover radio,
-.wallpaper4:hover radio {
-  box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
-}
-.wallpaper1:active radio,
-.wallpaper2:active radio,
-.wallpaper3:active radio,
-.wallpaper4:active radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.wallpaper1:hover:checked radio,
-.wallpaper2:hover:checked radio,
-.wallpaper3:hover:checked radio,
-.wallpaper4:hover:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.wallpaper1:active:checked radio,
-.wallpaper2:active:checked radio,
-.wallpaper3:active:checked radio,
-.wallpaper4:active:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
 }
 
 .menu-button {
@@ -449,23 +322,26 @@ spinbutton.flat {
 }
 
 .colored {
-    background-color: alpha(@accent_bg_color, 0.15);
-    color: @view_fg_color;
-    border-radius: 26px;
-    padding: 12px;
-    border: 1px solid mix(alpha(@accent_bg_color, 0.15), @view_fg_color, 0.3);
+  background-color: alpha(@accent_bg_color, 0.15);
+  color: @view_fg_color;
+  border-radius: 26px;
+  padding: 12px;
+  border: 1px solid mix(alpha(@accent_bg_color, 0.15), @view_fg_color, 0.3);
 }
 
 .colored.disabled {
-    background-color: alpha(@view_fg_color, 0.16);
-    color: alpha(@view_fg_color, 0.38);
+  background-color: alpha(@view_fg_color, 0.16);
+  color: alpha(@view_fg_color, 0.38);
 }
 
-.ensor-box > flowbox > flowboxchild {
-  padding: 0;
+.ensor-box > flowboxchild {
+  min-height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
+  padding: 14px;
+  background: @surface_container_bg_color;
 }
-
-.ensor-box > flowbox > flowboxchild:selected {
+.ensor-box > flowboxchild:selected box {
   box-shadow: 0 0 0 5px @accent_color, 0 0 0 2px @view_bg_color;
 }
 
@@ -504,4 +380,36 @@ spinbutton.flat {
   background: alpha(@scrim, 0.32);
   border-radius: 12px;
   font-feature-settings: 'tnum' 1;
+}
+
+.pill-segment {
+  background: @surface_container_bg_color;
+  border-radius: 99px;
+  padding: 4px;
+}
+.pill-segment button {
+  min-width: 48px;
+  min-height: 40px;
+  background: none;
+  padding: 0 16px;
+  color: alpha(@view_fg_color, 0.66);
+  box-shadow: none;
+  border-radius: 99px;
+}
+.pill-segment button:first-child {
+  margin-right: 2px;
+}
+.pill-segment button:last-child {
+  margin-left: 2px;
+}
+.pill-segment button:hover {
+  background: mix(@surface_bg_color, @surface_fg_color, 0.08);
+}
+.pill-segment button:active {
+  background: mix(@surface_bg_color, @surface_fg_color, 0.1);
+  color: @suggested_container_fg_color;
+}
+.pill-segment button:checked {
+  background: @accent_fg_color;
+  color: @view_fg_color;
 }
