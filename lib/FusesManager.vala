@@ -34,7 +34,8 @@ public class Fusebox.FusesManager : GLib.Object {
 
     private FusesManager () {
         fuses = new GLib.List<Fusebox.Fuse> ();
-        var base_folder = File.new_for_path (Build.FUSES_DIR);
+        var fuses_dir_env = Environment.get_variable ("FUSES_DIR");
+        var base_folder = File.new_for_path (fuses_dir_env ?? Build.FUSES_DIR);
         find_fuseins (base_folder);
     }
 

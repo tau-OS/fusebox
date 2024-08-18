@@ -3,7 +3,7 @@ po_extra_dir = join_paths(meson.project_source_root(), 'po', 'extra')
 install_data(
     'settings.gschema.xml',
     install_dir: get_option('datadir') / 'glib-2.0' / 'schemas',
-    rename: meson.project_name() + '.gschema.xml'
+    rename: meson.project_name() + '.gschema.xml',
 )
 
 i18n.merge_file(
@@ -12,7 +12,7 @@ i18n.merge_file(
     po_dir: po_extra_dir,
     type: 'desktop',
     install: true,
-    install_dir: get_option('datadir') / 'applications'
+    install_dir: get_option('datadir') / 'applications',
 )
 
 i18n.merge_file(
@@ -29,20 +29,32 @@ icon_sizes = ['128']
 foreach i : icon_sizes
     install_data(
         join_paths('icons', i + '.svg'),
-        install_dir: join_paths(get_option('datadir'), 'icons', 'hicolor', i + 'x' + i, 'apps'),
-        rename: meson.project_name() + '.svg'
+        install_dir: join_paths(
+            get_option('datadir'),
+            'icons',
+            'hicolor',
+            i + 'x' + i,
+            'apps',
+        ),
+        rename: meson.project_name() + '.svg',
     )
     install_data(
         join_paths('icons', i + '.svg'),
-        install_dir: join_paths(get_option('datadir'), 'icons', 'hicolor', i + 'x' + i + '@2', 'apps'),
-        rename: meson.project_name() + '.svg'
+        install_dir: join_paths(
+            get_option('datadir'),
+            'icons',
+            'hicolor',
+            i + 'x' + i + '@2',
+            'apps',
+        ),
+        rename: meson.project_name() + '.svg',
     )
 endforeach
 
 asresources = gnome.compile_resources(
-  'asresources',
-  'settings.gresources.xml',
-  source_dir: meson.current_build_dir(),
-  c_name: 'as',
-  install_dir: get_option('datadir') / meson.project_name(),
+    'asresources',
+    'settings.gresources.xml',
+    source_dir: meson.current_build_dir(),
+    c_name: 'as',
+    install_dir: get_option('datadir') / meson.project_name(),
 )

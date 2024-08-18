@@ -1,4 +1,5 @@
-shared_module('fuse-sample',
+shared_module(
+    'fuse-sample',
     'SampleFuse.vala',
     dependencies: [
         meson.get_compiler('vala').find_library('posix'),
@@ -9,5 +10,5 @@ shared_module('fuse-sample',
         dependency('libhelium-1'),
     ],
     install: true,
-    install_dir: join_paths(fuses_dir, 'system')
+    install_dir: join_paths(fuses_dir, 'system'),
 )
