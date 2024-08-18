@@ -1,9 +1,12 @@
+subdir('data')
+
 fuse_files = files(
     'AboutFuse.vala',
     'OSView.vala',
 )
 
 shared_module('fuse-about',
+    gresources,
     fuse_files,
     dependencies: [
         dependency('libgtop-2.0'),

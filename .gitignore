@@ -4,3 +4,4 @@ _build/
 anda-build/
 builddir/
 target/
+/subprojects/blueprint-compiler

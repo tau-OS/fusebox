@@ -1,0 +1,43 @@
+using Gtk 4.0;
+using He 1;
+using Bis 1;
+
+template $OSView : Gtk.Box {
+    spacing: 6;
+    hexpand: true;
+
+    Bis.Latch {
+        Gtk.ScrolledWindow {
+            vexpand: true;
+
+            Gtk.Box {
+                orientation: vertical;
+                spacing: 6;
+
+                He.MiniContentBlock os_block {
+                }
+
+                Gtk.Box {
+                    orientation: horizontal;
+                }
+
+                He.MiniContentBlock model_block {
+                    title: "Model";
+                }
+
+                He.MiniContentBlock processor_block {
+                    title: "Processor";
+                }
+
+                He.MiniContentBlock graphics_block {
+                    title: "Graphics";
+                    subtitle: "Loading";
+                }
+
+                He.MiniContentBlock ram_block {
+                    title: "RAM";
+                }
+            }
+        }
+    }
+}

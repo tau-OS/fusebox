@@ -12,7 +12,8 @@ public interface SessionManager : Object {
     public abstract string renderer { owned get; }
 }
 
-public class About.OSView : Gtk.Box {
+[GtkTemplate (ui = "/com/fyralabs/Fusebox/About/OSView.ui")]
+public class OSView : Gtk.Box {
     private SystemInterface system_interface;
     private SessionManager? session_manager;
     private Gtk.Label hostname_subtitle;
@@ -20,14 +21,25 @@ public class About.OSView : Gtk.Box {
     private Gtk.Label storage_subtitle;
     private He.ProgressBar storage_gauge;
 
+    [GtkChild]
+    private unowned He.MiniContentBlock os_block;
+    [GtkChild]
+    private unowned He.MiniContentBlock model_block;
+    [GtkChild]
+    private unowned He.MiniContentBlock processor_block;
+    [GtkChild]
+    private unowned He.MiniContentBlock graphics_block;
+    [GtkChild]
+    private unowned He.MiniContentBlock ram_block;
+
     private static Regex pc_name_regex;
 
     static construct {
-      try {
-        pc_name_regex = new Regex ("^[A-Za-z0-9' ]*$");
-      } catch (Error e) {
-        critical ("Failed to compile regex: %s", e.message);
-      }
+        try {
+            pc_name_regex = new Regex ("^[A-Za-z0-9' ]*$");
+        } catch (Error e) {
+            critical ("Failed to compile regex: %s", e.message);
+        }
     }
 
     construct {
@@ -46,28 +58,31 @@ public class About.OSView : Gtk.Box {
         );
         var os_sub_name = "<b>%s %s</b>".printf (
                                                  Environment.get_os_info (GLib.OsInfoKey.VERSION_ID) ?? "",
-                                                 "(" + Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME)[0].toupper ().to_string () +
-                                                       Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME).substring(1,-1).replace("_"," ") + ")" ??
+                                                 "(" + Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME)[0].toupper ().to_string ()
+                                                 + Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME).substring (1, -1).replace ("_", " ") + ")" ??
                                                  ""
         );
-        var os_title = new Gtk.Label (os_pretty_name) {
-            ellipsize = Pango.EllipsizeMode.END,
-            selectable = true,
-            xalign = 0
-        };
-        os_title.add_css_class ("view-title");
-        var os_subtitle = new Gtk.Label (os_sub_name.replace ("(", "“").replace (")", "”")) {
-            ellipsize = Pango.EllipsizeMode.END,
-            selectable = true,
-            use_markup = true,
-            xalign = 0
-        };
-        os_subtitle.add_css_class ("view-subtitle");
-        var os_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
-        os_box.append (os_title);
-        os_box.append (os_subtitle);
-        os_box.add_css_class ("content-block");
-        os_box.add_css_class ("surface-container-highest-bg-color");
+
+        os_block.title = os_pretty_name;
+        os_block.subtitle = os_sub_name;
+        // var os_title = new Gtk.Label (os_pretty_name) {
+        //     ellipsize = Pango.EllipsizeMode.END,
+        //     selectable = true,
+        //     xalign = 0
+        // };
+        // os_title.add_css_class ("view-title");
+        // var os_subtitle = new Gtk.Label (os_sub_name.replace ("(", "“").replace (")", "”")) {
+        //     ellipsize = Pango.EllipsizeMode.END,
+        //     selectable = true,
+        //     use_markup = true,
+        //     xalign = 0
+        // };
+        // os_subtitle.add_css_class ("view-subtitle");
+        // var os_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
+        // os_box.append (os_title);
+        // os_box.append (os_subtitle);
+        // os_box.add_css_class ("content-block");
+        // os_box.add_css_class ("surface-container-highest-bg-color");
 
         var hostname_title = new Gtk.Label (_("Device Name")) {
             selectable = true,
@@ -132,74 +147,83 @@ public class About.OSView : Gtk.Box {
         storage_box.append (storage_subtitle);
         storage_box.add_css_class ("mini-content-block");
 
-        var model_title = new Gtk.Label (_("Model")) {
-            selectable = true,
-            xalign = 0
-        };
-        model_title.add_css_class ("cb-title");
-        var model_subtitle = new Gtk.Label (get_model_info ()) {
-            ellipsize = Pango.EllipsizeMode.END,
-            selectable = true,
-            use_markup = true,
-            xalign = 0
-        };
-        model_subtitle.add_css_class ("cb-subtitle");
-        var model_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        model_box.append (model_title);
-        model_box.append (model_subtitle);
-        model_box.add_css_class ("mini-content-block");
+        // var model_title = new Gtk.Label (_("Model")) {
+        //     selectable = true,
+        //     xalign = 0
+        // };
+        // model_title.add_css_class ("cb-title");
+        // var model_subtitle = new Gtk.Label (get_model_info ()) {
+        //     ellipsize = Pango.EllipsizeMode.END,
+        //     selectable = true,
+        //     use_markup = true,
+        //     xalign = 0
+        // };
+        // model_subtitle.add_css_class ("cb-subtitle");
+        // var model_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        // model_box.append (model_title);
+        // model_box.append (model_subtitle);
+        // model_box.add_css_class ("mini-content-block");
+        //
+        model_block.subtitle = get_model_info ();
 
-        var ram_title = new Gtk.Label (_("RAM")) {
-            selectable = true,
-            xalign = 0
-        };
-        ram_title.add_css_class ("cb-title");
-        var ram_subtitle = new Gtk.Label (get_mem_info ()) {
-            ellipsize = Pango.EllipsizeMode.END,
-            selectable = true,
-            use_markup = true,
-            xalign = 0
-        };
-        ram_subtitle.add_css_class ("cb-subtitle");
-        var ram_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        ram_box.append (ram_title);
-        ram_box.append (ram_subtitle);
-        ram_box.add_css_class ("mini-content-block");
+        // var ram_title = new Gtk.Label (_("RAM")) {
+        //     selectable = true,
+        //     xalign = 0
+        // };
+        // ram_title.add_css_class ("cb-title");
+        // var ram_subtitle = new Gtk.Label (get_mem_info ()) {
+        //     ellipsize = Pango.EllipsizeMode.END,
+        //     selectable = true,
+        //     use_markup = true,
+        //     xalign = 0
+        // };
+        // ram_subtitle.add_css_class ("cb-subtitle");
+        // var ram_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        // ram_box.append (ram_title);
+        // ram_box.append (ram_subtitle);
+        // ram_box.add_css_class ("mini-content-block");
+        //
+        ram_block.subtitle = get_mem_info ();
 
-        var cpu_title = new Gtk.Label (_("Processor")) {
-            selectable = true,
-            xalign = 0
-        };
-        cpu_title.add_css_class ("cb-title");
-        var cpu_subtitle = new Gtk.Label (get_cpu_info ()) {
-            ellipsize = Pango.EllipsizeMode.END,
-            selectable = true,
-            use_markup = true,
-            xalign = 0
-        };
-        cpu_subtitle.add_css_class ("cb-subtitle");
-        var cpu_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        cpu_box.append (cpu_title);
-        cpu_box.append (cpu_subtitle);
-        cpu_box.add_css_class ("mini-content-block");
+        // var cpu_title = new Gtk.Label (_("Processor")) {
+        //     selectable = true,
+        //     xalign = 0
+        // };
+        // cpu_title.add_css_class ("cb-title");
+        // var cpu_subtitle = new Gtk.Label (get_cpu_info ()) {
+        //     ellipsize = Pango.EllipsizeMode.END,
+        //     selectable = true,
+        //     use_markup = true,
+        //     xalign = 0
+        // };
+        // cpu_subtitle.add_css_class ("cb-subtitle");
+        // var cpu_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        // cpu_box.append (cpu_title);
+        // cpu_box.append (cpu_subtitle);
+        // cpu_box.add_css_class ("mini-content-block");
+        //
+        processor_block.subtitle = get_cpu_info ();
 
-        var gpu_title = new Gtk.Label (_("Graphics")) {
-            selectable = true,
-            xalign = 0
-        };
-        gpu_title.add_css_class ("cb-title");
-        gpu_subtitle = new Gtk.Label ("") {
-            ellipsize = Pango.EllipsizeMode.END,
-            selectable = true,
-            use_markup = true,
-            xalign = 0
-        };
-        gpu_subtitle.add_css_class ("cb-subtitle");
+        // var gpu_title = new Gtk.Label (_("Graphics")) {
+        //     selectable = true,
+        //     xalign = 0
+        // };
+        // gpu_title.add_css_class ("cb-title");
+        // gpu_subtitle = new Gtk.Label ("") {
+        //     ellipsize = Pango.EllipsizeMode.END,
+        //     selectable = true,
+        //     use_markup = true,
+        //     xalign = 0
+        // };
+        // gpu_subtitle.add_css_class ("cb-subtitle");
+        // get_graphics_info.begin ();
+        // var gpu_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        // gpu_box.append (gpu_title);
+        // gpu_box.append (gpu_subtitle);
+        // gpu_box.add_css_class ("mini-content-block");
+        //
+
         get_graphics_info.begin ();
-        var gpu_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        gpu_box.append (gpu_title);
-        gpu_box.append (gpu_subtitle);
-        gpu_box.add_css_class ("mini-content-block");
 
         var stor_host_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6) {
             margin_bottom = 6,
@@ -210,61 +234,61 @@ public class About.OSView : Gtk.Box {
         stor_host_box.append (storage_box);
 
         var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        info_box.append (os_box);
-        info_box.append (stor_host_box);
-        info_box.append (model_box);
-        info_box.append (cpu_box);
-        info_box.append (gpu_box);
-        info_box.append (ram_box);
-        info_box.add_css_class ("content-list");
+        // info_box.append (os_box);
+        // info_box.append (stor_host_box);
+        // info_box.append (model_box);
+        // info_box.append (cpu_box);
+        // info_box.append (gpu_box);
+        // info_box.append (ram_box);
+        // info_box.add_css_class ("content-list");
 
-        var scroller = new Gtk.ScrolledWindow () {
-            vexpand = true
-        };
-        scroller.set_child (info_box);
+        // var scroller = new Gtk.ScrolledWindow () {
+        // vexpand = true
+        // };
+        // scroller.set_child (info_box);
 
-        var bug_button = new He.OverlayButton ("emblem-important-symbolic",_("Report Problem…"), null);
-        bug_button.child = (scroller);
-        bug_button.typeb = He.OverlayButton.TypeButton.PRIMARY;
+        // var bug_button = new He.OverlayButton ("emblem-important-symbolic", _("Report Problem…"), null);
+        // bug_button.child = (scroller);
+        // bug_button.typeb = He.OverlayButton.TypeButton.PRIMARY;
 
-        var clamp = new Bis.Latch ();
-        clamp.set_child (bug_button);
+        // var clamp = new Bis.Latch ();
+        // clamp.set_child (bug_button);
 
-        append (clamp);
+        // append (clamp);
         orientation = Gtk.Orientation.VERTICAL;
 
-        bug_button.clicked.connect (() => {
-            try {
-                var appinfo = GLib.AppInfo.create_from_commandline (
-                                                                    "com.fyralabs.Mondai",
-                                                                    "com.fyralabs.Mondai",
-                                                                    GLib.AppInfoCreateFlags.NONE
-                );
-                if (appinfo != null) {
-                    try {
-                        appinfo.launch (null, null);
-                    } catch (Error e) {
-                        critical (e.message);
-                    }
-                } else {
-                    warning ("Could not find Mondai, falling back to bugurl");
-                    // get bugurl from /etc/os-release
-                    var bugurl = Environment.get_os_info ("BUG_REPORT_URL");
+        // bug_button.clicked.connect (() => {
+        // try {
+        // var appinfo = GLib.AppInfo.create_from_commandline (
+        // "com.fyralabs.Mondai",
+        // "com.fyralabs.Mondai",
+        // GLib.AppInfoCreateFlags.NONE
+        // );
+        // if (appinfo != null) {
+        // try {
+        // appinfo.launch (null, null);
+        // } catch (Error e) {
+        // critical (e.message);
+        // }
+        // } else {
+        // warning ("Could not find Mondai, falling back to bugurl");
+        //// get bugurl from /etc/os-release
+        // var bugurl = Environment.get_os_info ("BUG_REPORT_URL");
 
-                    if (bugurl != null) {
-                        try {
-                            AppInfo.launch_default_for_uri (bugurl, null);
-                        } catch (Error e) {
-                            critical (e.message);
-                        }
-                    } else {
-                        warning ("Could not find bugurl");
-                    }
-                }
-            } catch (Error e) {
-                critical (e.message);
-            }
-        });
+        // if (bugurl != null) {
+        // try {
+        // AppInfo.launch_default_for_uri (bugurl, null);
+        // } catch (Error e) {
+        // critical (e.message);
+        // }
+        // } else {
+        // warning ("Could not find bugurl");
+        // }
+        // }
+        // } catch (Error e) {
+        // critical (e.message);
+        // }
+        // });
 
         hostname_button.clicked.connect (() => {
             var rename_button = new He.Button (null, _("Rename")) {
@@ -456,7 +480,8 @@ public class About.OSView : Gtk.Box {
             return null;
         }
 
-        return ARMPartDecoder.decode_arm_model (cpu_implementer, cpu_part);
+        return "";
+        // return ARMPartDecoder.decode_arm_model (cpu_implementer, cpu_part);
     }
 
     private string ? get_cpu_info () {
@@ -544,7 +569,7 @@ public class About.OSView : Gtk.Box {
     private async void get_graphics_info () {
         var primary_gpu = yield get_gpu_info ();
 
-        gpu_subtitle.label = primary_gpu;
+        graphics_block.subtitle = primary_gpu;
     }
 
     private async string ? get_gpu_info () {
