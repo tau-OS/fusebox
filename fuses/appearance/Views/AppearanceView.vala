@@ -6,7 +6,7 @@ public class AppearanceView : Gtk.Box {
 
     public Fusebox.Fuse fuse { get; construct set; }
 
-    private Bis.Carousel color_carousel;
+    private Gtk.ScrolledWindow color_sw;
     private Gtk.Box accent_box;
     private Gtk.CheckButton prefer_dark_radio;
     private Gtk.CheckButton prefer_default_radio;
@@ -240,22 +240,19 @@ public class AppearanceView : Gtk.Box {
         color_type_button.append (wallpaper_type_button);
         color_type_button.append (basic_type_button);
 
-        color_carousel = new Bis.Carousel ();
-
-        var color_carousel_dots = new Bis.CarouselIndicatorDots ();
-        color_carousel_dots.set_carousel (color_carousel);
-
-        var carousel_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
-        carousel_box.append (color_carousel);
-        carousel_box.append (color_carousel_dots);
+        color_sw = new Gtk.ScrolledWindow () {
+            height_request = 88,
+            vscrollbar_policy = Gtk.PolicyType.NEVER
+        };
 
         color_stack = new Gtk.Stack () {
             transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
             transition_duration = 400
         };
         color_stack.add_titled (accent_box, "basic", "Basic Colors");
-        color_stack.add_titled (carousel_box, "wallpaper", "Wallpaper Colors");
+        color_stack.add_titled (color_sw, "wallpaper", "Wallpaper Colors");
 
+        accent_setup.begin ();
         if (wallpaper_type_button.active) {
             color_stack.set_visible_child_name ("wallpaper");
             accent_box.sensitive = false;
@@ -271,12 +268,16 @@ public class AppearanceView : Gtk.Box {
         } else {
             color_stack.set_visible_child_name ("basic");
             accent_box.sensitive = true;
+
+            multi.set_active (true);
         }
 
         basic_type_button.toggled.connect (() => {
             color_stack.set_visible_child_name ("basic");
             fusebox_appearance_settings.set_boolean ("wallpaper-accent", false);
             accent_box.sensitive = true;
+
+            multi.set_active (true);
         });
         wallpaper_type_button.toggled.connect (() => {
             color_stack.set_visible_child_name ("wallpaper");
@@ -388,8 +389,9 @@ public class AppearanceView : Gtk.Box {
 
         main_box.append (sub_box);
 
-        sw = new Gtk.ScrolledWindow ();
-        sw.hscrollbar_policy = (Gtk.PolicyType.NEVER);
+        sw = new Gtk.ScrolledWindow () {
+            hscrollbar_policy = Gtk.PolicyType.NEVER
+        };
         sw.set_child (main_box);
 
         var window_view = new Appearance.WindowView ();
@@ -484,11 +486,9 @@ public class AppearanceView : Gtk.Box {
                         argb_ints += value;
                     }
 
-                    var ensor_flowbox = new EnsorFlowBox (argb_ints[i]);
-                    for (int j = 0; j == color_carousel.get_n_pages(); j++) {
-                        color_carousel.remove (color_carousel.get_nth_page(j));
-                    }
-                    color_carousel.append (ensor_flowbox);
+                    var ensor_flowbox = new EnsorFlowBox (argb_ints);
+
+                    color_sw.set_child (ensor_flowbox);
                 }
 
                 loop.quit ();

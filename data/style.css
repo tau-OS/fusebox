@@ -34,9 +34,15 @@ button.flat label {
 }
 
 .accent-mode radio {
-  min-height: 48px;
-  min-width: 48px;
+  min-height: 42px;
+  min-width: 42px;
   margin: 6px;
+}
+.accent-mode:checked radio,
+.accent-mode:active radio,
+.accent-mode:hover:checked radio,
+.accent-mode:active:checked radio {
+  box-shadow: 0 0 0 5px @accent_color, 0 0 0 2px @view_bg_color;
 }
 
 .red radio {
@@ -47,21 +53,6 @@ button.flat label {
   background: alpha(#e25480, 0.18);
   box-shadow: inset 0 0 0 3px alpha(#e25480, 0.32);
 }
-.red:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.red:hover radio {
-  box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
-}
-.red:active radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.red:hover:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.red:active:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
 
 .yellow radio {
   background: #febc16;
@@ -70,21 +61,6 @@ button.flat label {
 .yellow:disabled radio {
   background: alpha(#febc16, 0.18);
   box-shadow: inset 0 0 0 3px alpha(#febc16, 0.32);
-}
-.yellow:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.yellow:hover radio {
-  box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
-}
-.yellow:active radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.yellow:hover:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.yellow:active:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
 }
 
 .green radio {
@@ -95,21 +71,6 @@ button.flat label {
   background: alpha(#72da82, 0.18);
   box-shadow: inset 0 0 0 3px alpha(#72da82, 0.32);
 }
-.green:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.green:hover radio {
-  box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
-}
-.green:active radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.green:hover:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.green:active:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
 
 .blue radio {
   background: #58a8fa;
@@ -118,21 +79,6 @@ button.flat label {
 .blue:disabled radio {
   background: alpha(#58a8fa, 0.18);
   box-shadow: inset 0 0 0 3px alpha(#58a8fa, 0.32);
-}
-.blue:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.blue:hover radio {
-  box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
-}
-.blue:active radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.blue:hover:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.blue:active:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
 }
 
 .purple radio {
@@ -143,21 +89,6 @@ button.flat label {
   background: alpha(#a57bcd, 0.18);
   box-shadow: inset 0 0 0 3px alpha(#a57bcd, 0.32);
 }
-.purple:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.purple:hover radio {
-  box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
-}
-.purple:active radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.purple:hover:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.purple:active:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
 
 .pink radio {
   background: #cb76b8;
@@ -167,41 +98,14 @@ button.flat label {
   background: alpha(#cb76b8, 0.18);
   box-shadow: inset 0 0 0 3px alpha(#cb76b8, 0.32);
 }
-.pink:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.pink:hover radio {
-  box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
-}
-.pink:active radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.pink:hover:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.pink:active:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
 
 .multi radio {
   background: no-repeat url("resource://com/fyralabs/Fusebox/Appearance/multi.svg");
   background-size: cover;
   color: transparent;
 }
-.multi:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
 .multi:hover radio {
   box-shadow: inset 0 0 0 2px alpha(@view_fg_color, 0.52);
-}
-.multi:active radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.multi:hover:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
-}
-.multi:active:checked radio {
-  box-shadow: inset 0 0 0 3px @accent_color;
 }
 .multi:disabled radio {
   filter: opacity(0.38);
@@ -341,6 +245,9 @@ spinbutton.flat {
   padding: 14px;
   background: @surface_container_bg_color;
 }
+.ensor-box > flowboxchild box {
+  box-shadow: inset 0 0 0 2px @borders;
+}
 .ensor-box > flowboxchild:selected box {
   box-shadow: 0 0 0 5px @accent_color, 0 0 0 2px @view_bg_color;
 }
@@ -410,6 +317,6 @@ spinbutton.flat {
   color: @suggested_container_fg_color;
 }
 .pill-segment button:checked {
-  background: @accent_fg_color;
+  background: @surface_container_lowest_bg_color;
   color: @view_fg_color;
 }
