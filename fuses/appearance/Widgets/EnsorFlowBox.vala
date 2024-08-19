@@ -26,7 +26,7 @@ public class EnsorFlowBox : He.Bin {
         flowbox.child_activated.connect (child_activated_cb);
 
         var sel = fusebox_appearance_settings.get_int ("wallpaper-accent-choice");
-        flowbox.select_child (flowbox.get_child_at_index ((sel < 0 || sel > (color.length * 4)) ? sel : 0));
+        flowbox.select_child (flowbox.get_child_at_index ((sel < 0 || sel > (color.length * 4)) ? 0 : sel));
 
         for (int i = 0; i < color.length; i++) {
             make_ensor_set (color[i]);
