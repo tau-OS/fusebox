@@ -6,7 +6,8 @@ fuse_files = files(
     'TextView.vala',
     'WindowView.vala',
     'Utils/ColorGenerator.vala',
-    'Utils/EnsorModeButton.vala',
+    'Widgets/EnsorModeButton.vala',
+    'Widgets/EnsorFlowBox.vala',
     # 'DockView.vala',
 )
 

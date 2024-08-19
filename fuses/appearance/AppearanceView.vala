@@ -11,7 +11,6 @@ public class AppearanceView : Gtk.Box {
     private Gtk.CheckButton prefer_dark_radio;
     private Gtk.CheckButton prefer_default_radio;
     private Gtk.CheckButton prefer_light_radio;
-    private Gtk.FlowBoxChild current_emb;
     private Gtk.Stack color_stack;
     private Gtk.ToggleButton basic_type_button;
     private He.SegmentedButton color_type_button;
@@ -198,7 +197,7 @@ public class AppearanceView : Gtk.Box {
 
         accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
             halign = Gtk.Align.CENTER,
-            valign = Gtk.Align.CENTER,
+            valign = Gtk.Align.START,
             homogeneous = true,
             hexpand = true
         };
@@ -234,14 +233,17 @@ public class AppearanceView : Gtk.Box {
         carousel_box.append (color_carousel);
         carousel_box.append (color_carousel_dots);
 
-        color_stack = new Gtk.Stack ();
+        color_stack = new Gtk.Stack () {
+            transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
+            transition_duration = 400
+        };
         color_stack.add_titled (accent_box, "basic", "Basic Colors");
         color_stack.add_titled (carousel_box, "wallpaper", "Wallpaper Colors");
 
         if (wallpaper_type_button.active) {
             color_stack.set_visible_child_name ("wallpaper");
-            accent_setup.begin ();
             accent_box.sensitive = false;
+            accent_setup.begin ();
 
             multi.set_active (false);
             red.set_active (false);
@@ -263,7 +265,6 @@ public class AppearanceView : Gtk.Box {
         wallpaper_type_button.toggled.connect (() => {
             color_stack.set_visible_child_name ("wallpaper");
             fusebox_appearance_settings.set_boolean ("wallpaper-accent", true);
-            accent_setup.begin ();
             accent_box.sensitive = false;
 
             multi.set_active (false);
@@ -273,10 +274,6 @@ public class AppearanceView : Gtk.Box {
             blue.set_active (false);
             purple.set_active (false);
             pink.set_active (false);
-        });
-
-        tau_appearance_settings.notify["changed::accent-color"].connect (() => {
-            accent_setup.begin ();
         });
 
         // Contrast Block
@@ -451,6 +448,8 @@ public class AppearanceView : Gtk.Box {
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
 
+                int[] argb_ints = new int[3]; // We're only interested in 4 colors.
+
                 for (int i = 0; i == color_carousel.get_n_pages(); i++) {
                     color_carousel.remove (color_carousel.get_nth_page(i));
                 }
@@ -458,42 +457,18 @@ public class AppearanceView : Gtk.Box {
                 for (int i = 0; i < result.length; i++) {
                     var value = result.index(i);
                     if (value != null) {
-                        var defavlt = new Gtk.FlowBoxChild ();
-                        defavlt.child = new EnsorModeButton (value, "default");
-                        defavlt.tooltip_text = _("Default Scheme");
-                        var muted = new Gtk.FlowBoxChild ();
-                        muted.child = new EnsorModeButton (value, "muted");
-                        muted.tooltip_text = _("Muted Scheme");
-                        var vibrant = new Gtk.FlowBoxChild ();
-                        vibrant.child = new EnsorModeButton (value, "vibrant");
-                        vibrant.tooltip_text = _("Vibrant Scheme");
-                        var salad = new Gtk.FlowBoxChild ();
-                        salad.child = new EnsorModeButton (value, "salad");
-                        salad.tooltip_text = _("Fruit Salad Scheme");
-
-                        var ensor_flowbox = new Gtk.FlowBox () {
-                            hexpand = true,
-                            halign = Gtk.Align.CENTER,
-                            valign = Gtk.Align.CENTER,
-                            column_spacing = 12,
-                            homogeneous = true,
-                            min_children_per_line = 4,
-                            max_children_per_line = 4
-                        };
-                        ensor_flowbox.add_css_class ("ensor-box");
-                        ensor_flowbox.append (defavlt);
-                        ensor_flowbox.append (muted);
-                        ensor_flowbox.append (vibrant);
-                        ensor_flowbox.append (salad);
-                        ensor_flowbox.child_activated.connect ((c) => {
-                            var ensor = ((EnsorModeButton)c.get_first_child ()).mode;
-                            tau_appearance_settings.set_string ("ensor-scheme", ensor);
-                            tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (value));
-                        });
-
-                        color_carousel.append (ensor_flowbox);
+                        argb_ints[i] = value;
                     }
                 }
+
+                var ensor_flowbox1 = new EnsorFlowBox (argb_ints[0]);
+                var ensor_flowbox2 = new EnsorFlowBox (argb_ints[1]);
+                var ensor_flowbox3 = new EnsorFlowBox (argb_ints[2]);
+                var ensor_flowbox4 = new EnsorFlowBox (argb_ints[3]);
+                color_carousel.append (ensor_flowbox1);
+                color_carousel.append (ensor_flowbox2);
+                color_carousel.append (ensor_flowbox3);
+                color_carousel.append (ensor_flowbox4);
 
                 loop.quit ();
             });
