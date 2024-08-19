@@ -451,8 +451,6 @@ public class AppearanceView : Gtk.Box {
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
 
-                int[] argb_ints = new int[3]; // We're only interested in 4 colors.
-
                 for (int i = 0; i == color_carousel.get_n_pages(); i++) {
                     color_carousel.remove (color_carousel.get_nth_page(i));
                 }
@@ -460,43 +458,41 @@ public class AppearanceView : Gtk.Box {
                 for (int i = 0; i < result.length; i++) {
                     var value = result.index(i);
                     if (value != null) {
-                        argb_ints[i] = value;
+                        var defavlt = new Gtk.FlowBoxChild ();
+                        defavlt.child = new EnsorModeButton (value, "default");
+                        defavlt.tooltip_text = _("Default Scheme");
+                        var muted = new Gtk.FlowBoxChild ();
+                        muted.child = new EnsorModeButton (value, "muted");
+                        muted.tooltip_text = _("Muted Scheme");
+                        var vibrant = new Gtk.FlowBoxChild ();
+                        vibrant.child = new EnsorModeButton (value, "vibrant");
+                        vibrant.tooltip_text = _("Vibrant Scheme");
+                        var salad = new Gtk.FlowBoxChild ();
+                        salad.child = new EnsorModeButton (value, "salad");
+                        salad.tooltip_text = _("Fruit Salad Scheme");
+
+                        var ensor_flowbox = new Gtk.FlowBox () {
+                            hexpand = true,
+                            halign = Gtk.Align.CENTER,
+                            valign = Gtk.Align.CENTER,
+                            column_spacing = 12,
+                            homogeneous = true,
+                            min_children_per_line = 4,
+                            max_children_per_line = 4
+                        };
+                        ensor_flowbox.add_css_class ("ensor-box");
+                        ensor_flowbox.append (defavlt);
+                        ensor_flowbox.append (muted);
+                        ensor_flowbox.append (vibrant);
+                        ensor_flowbox.append (salad);
+                        ensor_flowbox.child_activated.connect ((c) => {
+                            var ensor = ((EnsorModeButton)c.get_first_child ()).mode;
+                            tau_appearance_settings.set_string ("ensor-scheme", ensor);
+                            tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (value));
+                        });
+
+                        color_carousel.append (ensor_flowbox);
                     }
-
-                    var defavlt = new Gtk.FlowBoxChild ();
-                    defavlt.child = new EnsorModeButton (argb_ints[i], "default");
-                    defavlt.tooltip_text = _("Default Scheme");
-                    var muted = new Gtk.FlowBoxChild ();
-                    muted.child = new EnsorModeButton (argb_ints[i], "muted");
-                    muted.tooltip_text = _("Muted Scheme");
-                    var vibrant = new Gtk.FlowBoxChild ();
-                    vibrant.child = new EnsorModeButton (argb_ints[i], "vibrant");
-                    vibrant.tooltip_text = _("Vibrant Scheme");
-                    var salad = new Gtk.FlowBoxChild ();
-                    salad.child = new EnsorModeButton (argb_ints[i], "salad");
-                    salad.tooltip_text = _("Fruit Salad Scheme");
-
-                    var ensor_flowbox = new Gtk.FlowBox () {
-                        hexpand = true,
-                        halign = Gtk.Align.CENTER,
-                        valign = Gtk.Align.CENTER,
-                        column_spacing = 12,
-                        homogeneous = true,
-                        min_children_per_line = 4,
-                        max_children_per_line = 4
-                    };
-                    ensor_flowbox.add_css_class ("ensor-box");
-                    ensor_flowbox.append (defavlt);
-                    ensor_flowbox.append (muted);
-                    ensor_flowbox.append (vibrant);
-                    ensor_flowbox.append (salad);
-                    ensor_flowbox.child_activated.connect ((c) => {
-                        var ensor = ((EnsorModeButton)c.get_first_child ()).mode;
-                        tau_appearance_settings.set_string ("ensor-scheme", ensor);
-                        tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (argb_ints[i]));
-                    });
-
-                    color_carousel.append (ensor_flowbox);
                 }
 
                 loop.quit ();
