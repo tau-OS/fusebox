@@ -1,14 +1,15 @@
 fuse_files = files(
     'AppearanceFuse.vala',
-    'AppearanceView.vala',
-    'ContrastView.vala',
-    'WallpaperGrid.vala',
-    'TextView.vala',
-    'WindowView.vala',
     'Utils/ColorGenerator.vala',
-    'Widgets/EnsorModeButton.vala',
+    'Views/AppearanceView.vala',
+    'Views/ContrastView.vala',
+    'Views/TextView.vala',
+    'Views/WindowView.vala',
+    'Widgets/AccentColorButton.vala',
     'Widgets/EnsorFlowBox.vala',
-    # 'DockView.vala',
+    'Widgets/EnsorModeButton.vala',
+    'Widgets/WallpaperGrid.vala',
+    # 'Views/DockView.vala',
 )
 
 shared_module(

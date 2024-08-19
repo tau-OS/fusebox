@@ -15,13 +15,13 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton basic_type_button;
     private He.SegmentedButton color_type_button;
 
-    private PrefersAccentColorButton blue;
-    private PrefersAccentColorButton green;
-    private PrefersAccentColorButton multi;
-    private PrefersAccentColorButton pink;
-    private PrefersAccentColorButton purple;
-    private PrefersAccentColorButton red;
-    private PrefersAccentColorButton yellow;
+    private AccentColorButton blue;
+    private AccentColorButton green;
+    private AccentColorButton multi;
+    private AccentColorButton pink;
+    private AccentColorButton purple;
+    private AccentColorButton red;
+    private AccentColorButton yellow;
 
     public Gtk.ScrolledWindow sw;
     public Gtk.Stack contrast_stack;
@@ -47,7 +47,11 @@ public class AppearanceView : Gtk.Box {
     }
 
     construct {
-        // Wallpaper Block
+        /*
+         * _ _ _ ____ _    _    ___  ____ ___  ____ ____    ___  _    ____ ____ _  _
+         * | | | |__| |    |    |__] |__| |__] |___ |__/    |__] |    |  | |    |_/
+         * |_|_| |  | |___ |___ |    |  | |    |___ |  \    |__] |___ |__| |___ | \_
+         */
         wallpaper_view = new Appearance.WallpaperGrid (fuse, this);
 
         wallpaper_preview = new He.ContentBlockImage (wallpaper_view.current_wallpaper_path) {
@@ -93,6 +97,7 @@ public class AppearanceView : Gtk.Box {
             valign = Gtk.Align.START
         };
         wallpaper_preview_box.add_css_class ("lock-box");
+        // wallpaper_preview_box.append (wallpaper_lock_button_overlay);
         wallpaper_preview_box.append (wallpaper_lock_preview_overlay);
         wallpaper_preview_box.append (wallpaper_preview);
 
@@ -113,7 +118,11 @@ public class AppearanceView : Gtk.Box {
         wallpaper_main_box.append (wallpaper_grid_button);
         wallpaper_main_box.add_css_class ("mini-content-block");
 
-        // Color Scheme Block
+        /*
+         * ____ ____ _    ____ ____    ____ ____ _  _ ____ _  _ ____    ___  _    ____ ____ _  _
+         * |    |  | |    |  | |__/    [__  |    |__| |___ |\/| |___    |__] |    |  | |    |_/
+         * |___ |__| |___ |__| |  \    ___] |___ |  | |___ |  | |___    |__] |___ |__| |___ | \_
+         */
         var prefer_label = new Gtk.Label (_("Color Scheme")) {
             halign = Gtk.Align.START
         };
@@ -173,26 +182,30 @@ public class AppearanceView : Gtk.Box {
             color_scheme_refresh ();
         });
 
-        // Accent Block
-        purple = new PrefersAccentColorButton ("purple");
+        /*
+         * ____ ____ ____ ____ _  _ ___    ____ ____ _    ____ ____    ___  _    ____ ____ _  _
+         * |__| |    |    |___ |\ |  |     |    |  | |    |  | |__/    |__] |    |  | |    |_/
+         * |  | |___ |___ |___ | \|  |     |___ |__| |___ |__| |  \    |__] |___ |__| |___ | \_
+         */
+        purple = new AccentColorButton ("purple");
         purple.tooltip_text = _("Purple");
 
-        pink = new PrefersAccentColorButton ("pink", purple);
+        pink = new AccentColorButton ("pink", purple);
         pink.tooltip_text = _("Pink");
 
-        red = new PrefersAccentColorButton ("red", purple);
+        red = new AccentColorButton ("red", purple);
         red.tooltip_text = _("Red");
 
-        yellow = new PrefersAccentColorButton ("yellow", purple);
+        yellow = new AccentColorButton ("yellow", purple);
         yellow.tooltip_text = _("Yellow");
 
-        green = new PrefersAccentColorButton ("green", purple);
+        green = new AccentColorButton ("green", purple);
         green.tooltip_text = _("Green");
 
-        blue = new PrefersAccentColorButton ("blue", purple);
+        blue = new AccentColorButton ("blue", purple);
         blue.tooltip_text = _("Blue");
 
-        multi = new PrefersAccentColorButton ("multi", purple);
+        multi = new AccentColorButton ("multi", purple);
         multi.tooltip_text = _("Set By Apps");
 
         accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
@@ -210,12 +223,14 @@ public class AppearanceView : Gtk.Box {
         accent_box.append (blue);
 
         wallpaper_type_button = new Gtk.ToggleButton () {
-            active = fusebox_appearance_settings.get_boolean ("wallpaper-accent") == true
+            active = fusebox_appearance_settings.get_boolean ("wallpaper-accent") == true,
+            label = _("Wallpaper Colors")
         };
-        wallpaper_type_button.label = "Wallpaper Colors";
-        basic_type_button = new Gtk.ToggleButton ();
-        basic_type_button.label = "Basic Colors";
-        basic_type_button.group = wallpaper_type_button;
+
+        basic_type_button = new Gtk.ToggleButton () {
+            label = _("Basic Colors"),
+            group = wallpaper_type_button
+        };
 
         color_type_button = new He.SegmentedButton () {
             hexpand = true,
@@ -226,6 +241,7 @@ public class AppearanceView : Gtk.Box {
         color_type_button.append (basic_type_button);
 
         color_carousel = new Bis.Carousel ();
+
         var color_carousel_dots = new Bis.CarouselIndicatorDots ();
         color_carousel_dots.set_carousel (color_carousel);
 
@@ -276,7 +292,11 @@ public class AppearanceView : Gtk.Box {
             pink.set_active (false);
         });
 
-        // Contrast Block
+        /*
+         * ____ ____ _  _ ___ ____ ____ ____ ___    ___  _    ____ ____ _  _
+         * |    |  | |\ |  |  |__/ |__| [__   |     |__] |    |  | |    |_/
+         * |___ |__| | \|  |  |  \ |  | ___]  |     |__] |___ |__| |___ | \_
+         */
         var contrast_label = new Gtk.Label (_("Contrast Settings")) {
             halign = Gtk.Align.START,
             valign = Gtk.Align.CENTER
@@ -296,7 +316,11 @@ public class AppearanceView : Gtk.Box {
         contrast_box.append (contrast_grid_button);
         contrast_box.add_css_class ("mini-content-block");
 
-        // Roundness Block
+        /*
+         * ____ ____ _  _ _  _ ___  _  _ ____ ____ ____    ___  _    ____ ____ _  _
+         * |__/ |  | |  | |\ | |  \ |\ | |___ [__  [__     |__] |    |  | |    |_/
+         * |  \ |__| |__| | \| |__/ | \| |___ ___] ___]    |__] |___ |__| |___ | \_
+         */
         var roundness_label = new Gtk.Label (_("Interface Roundness")) {
             halign = Gtk.Align.START
         };
@@ -342,6 +366,11 @@ public class AppearanceView : Gtk.Box {
             });
         });
 
+        /*
+         * _  _ _ ____ _ _ _    _ _  _ ___ ____ ____ ____ ____ ____ ____
+         * |  | | |___ | | |    | |\ |  |  |___ |__/ |___ |__| |    |___
+         *  \/  | |___ |_|_|    | | \|  |  |___ |  \ |    |  | |___ |___
+         */
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             margin_start = 18,
             margin_end = 18,
@@ -399,7 +428,6 @@ public class AppearanceView : Gtk.Box {
             wallpaper_stack.set_visible_child_name ("wallpaper");
         });
 
-        // Contrast View
         var contrast_view = new Appearance.ContrastView (fuse, this);
 
         contrast_stack = new Gtk.Stack () {
@@ -475,42 +503,6 @@ public class AppearanceView : Gtk.Box {
             loop.run ();
         } catch (Error e) {
             print (e.message);
-        }
-    }
-
-    private class PrefersAccentColorButton : Gtk.CheckButton {
-        public string color { get; construct; }
-
-        public PrefersAccentColorButton (string color, Gtk.CheckButton? group_member = null) {
-            Object (
-                    color : color,
-                    group: group_member
-            );
-
-            add_css_class (color.to_string ());
-            add_css_class ("accent-mode");
-        }
-
-        construct {
-            active = color == tau_appearance_settings.get_string ("accent-color");
-
-            toggled.connect (() => {
-                if (color == "purple") {
-                    tau_appearance_settings.set_string ("accent-color", "purple");
-                } else if (color == "pink") {
-                    tau_appearance_settings.set_string ("accent-color", "pink");
-                } else if (color == "red") {
-                    tau_appearance_settings.set_string ("accent-color", "red");
-                } else if (color == "yellow") {
-                    tau_appearance_settings.set_string ("accent-color", "yellow");
-                } else if (color == "green") {
-                    tau_appearance_settings.set_string ("accent-color", "green");
-                } else if (color == "blue") {
-                    tau_appearance_settings.set_string ("accent-color", "blue");
-                } else if (color == "multi") {
-                    tau_appearance_settings.set_string ("accent-color", "multi");
-                }
-            });
         }
     }
 }
