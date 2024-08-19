@@ -174,25 +174,25 @@ public class AppearanceView : Gtk.Box {
         });
 
         // Accent Block
-        purple = new PrefersAccentColorButton ("purple", "");
+        purple = new PrefersAccentColorButton ("purple");
         purple.tooltip_text = _("Purple");
 
-        pink = new PrefersAccentColorButton ("pink", "", purple);
+        pink = new PrefersAccentColorButton ("pink", purple);
         pink.tooltip_text = _("Pink");
 
-        red = new PrefersAccentColorButton ("red", "", purple);
+        red = new PrefersAccentColorButton ("red", purple);
         red.tooltip_text = _("Red");
 
-        yellow = new PrefersAccentColorButton ("yellow", "", purple);
+        yellow = new PrefersAccentColorButton ("yellow", purple);
         yellow.tooltip_text = _("Yellow");
 
-        green = new PrefersAccentColorButton ("green", "", purple);
+        green = new PrefersAccentColorButton ("green", purple);
         green.tooltip_text = _("Green");
 
-        blue = new PrefersAccentColorButton ("blue", "", purple);
+        blue = new PrefersAccentColorButton ("blue", purple);
         blue.tooltip_text = _("Blue");
 
-        multi = new PrefersAccentColorButton ("multi", "", purple);
+        multi = new PrefersAccentColorButton ("multi", purple);
         multi.tooltip_text = _("Set By Apps");
 
         accent_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12) {
@@ -480,20 +480,18 @@ public class AppearanceView : Gtk.Box {
 
     private class PrefersAccentColorButton : Gtk.CheckButton {
         public string color { get; construct; }
-        public string hex { get; construct set; }
 
-        public PrefersAccentColorButton (string color, string? hex = null, Gtk.CheckButton? group_member = null) {
+        public PrefersAccentColorButton (string color, Gtk.CheckButton? group_member = null) {
             Object (
                     color : color,
-                    hex: hex,
                     group: group_member
             );
+
+            add_css_class (color.to_string ());
+            add_css_class ("accent-mode");
         }
 
         construct {
-            add_css_class (color.to_string ());
-            add_css_class ("accent-mode");
-
             active = color == tau_appearance_settings.get_string ("accent-color");
 
             toggled.connect (() => {
