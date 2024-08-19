@@ -476,7 +476,7 @@ public class AppearanceView : Gtk.Box {
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
 
-                int[] argb_ints = new int[3]; // Only 4 colors
+                int[] argb_ints = {};
 
                 for (int i = 0; i < result.length; i++) {
                     var value = result.index(i);
