@@ -493,6 +493,7 @@ public class AppearanceView : Gtk.Box {
                     ensor_flowbox.child_activated.connect ((c) => {
                         var ensor = ((EnsorModeButton)c.get_first_child ()).mode;
                         tau_appearance_settings.set_string ("ensor-scheme", ensor);
+                        tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (argb_ints[i]));
                     });
 
                     color_carousel.append (ensor_flowbox);

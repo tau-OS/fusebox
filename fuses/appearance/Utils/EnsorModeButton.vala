@@ -2,8 +2,6 @@ public class EnsorModeButton : Gtk.Box {
     public Gee.ArrayList<int> colors;
     ColorGenerator generator;
 
-    private static GLib.Settings tau_appearance_settings;
-
     private string _mode;
     public string mode {
         get { return _mode; }
@@ -16,10 +14,6 @@ public class EnsorModeButton : Gtk.Box {
         }
     }
 
-    static construct {
-        tau_appearance_settings = new GLib.Settings ("com.fyralabs.desktop.appearance");
-    }
-
     public EnsorModeButton(int color, string initial_mode) {
         this.mode = initial_mode;
         generator = new ColorGenerator ({color});
@@ -27,8 +21,6 @@ public class EnsorModeButton : Gtk.Box {
 
         overflow = HIDDEN;
         add_css_class ("circle-radius");
-
-        tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (color));
     }
 
     private void update_colors() {
