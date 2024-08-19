@@ -476,27 +476,20 @@ public class AppearanceView : Gtk.Box {
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
 
-                int[] argb_ints = new int[3]; // We're only interested in 4 colors.
-
-                for (int i = 0; i == color_carousel.get_n_pages(); i++) {
-                    color_carousel.remove (color_carousel.get_nth_page(i));
-                }
+                int[] argb_ints = new int[3]; // Only 4 colors
 
                 for (int i = 0; i < result.length; i++) {
                     var value = result.index(i);
                     if (value != null) {
-                        argb_ints[i] = value;
+                        argb_ints += value;
                     }
-                }
 
-                var ensor_flowbox1 = new EnsorFlowBox (argb_ints[0]);
-                var ensor_flowbox2 = new EnsorFlowBox (argb_ints[1]);
-                var ensor_flowbox3 = new EnsorFlowBox (argb_ints[2]);
-                var ensor_flowbox4 = new EnsorFlowBox (argb_ints[3]);
-                color_carousel.append (ensor_flowbox1);
-                color_carousel.append (ensor_flowbox2);
-                color_carousel.append (ensor_flowbox3);
-                color_carousel.append (ensor_flowbox4);
+                    var ensor_flowbox = new EnsorFlowBox (argb_ints[i]);
+                    for (int j = 0; j == color_carousel.get_n_pages(); j++) {
+                        color_carousel.remove (color_carousel.get_nth_page(j));
+                    }
+                    color_carousel.append (ensor_flowbox);
+                }
 
                 loop.quit ();
             });

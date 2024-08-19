@@ -1,17 +1,10 @@
 public class EnsorFlowBox : He.Bin {
-    private int color;
-
     private static GLib.Settings tau_appearance_settings;
-
-    public EnsorFlowBox (int color) {
-        this.color = color;
-    }
-
     static construct {
         tau_appearance_settings = new GLib.Settings ("com.fyralabs.desktop.appearance");
     }
 
-    construct {
+    public EnsorFlowBox (int color) {
         var defavlt = new Gtk.FlowBoxChild ();
         defavlt.child = new EnsorModeButton (color, "default");
         defavlt.tooltip_text = _("Default Scheme");
