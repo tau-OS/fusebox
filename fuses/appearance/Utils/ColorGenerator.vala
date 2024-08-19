@@ -1,16 +1,14 @@
-using Gee;
-
 public class ColorGenerator {
     private const int SCHEME_COUNT = 6; // 6 entries on the He.SchemeVariant enum
     private const int COLORS_PER_SCHEME = 4;
     private const int DEFAULT_COLOR = 0x8C56BF; // Tau Purple as fallback
 
     private int[] argb_ints;
-    private ArrayList<int> generated_colors;
+    private Gee.ArrayList<int> generated_colors;
 
     public ColorGenerator(int[] argb_ints) {
         this.argb_ints = argb_ints;
-        this.generated_colors = new ArrayList<int>();
+        this.generated_colors = new Gee.ArrayList<int>();
         generate_colors();
     }
 
@@ -72,14 +70,14 @@ public class ColorGenerator {
     }
 
     // Retrieves the generated colors for a specified scheme
-    public ArrayList<int> get_generated_colors(He.SchemeVariant scheme_variant) {
+    public Gee.ArrayList<int> get_generated_colors(He.SchemeVariant scheme_variant) {
         int scheme_index = (int) scheme_variant;
         if (scheme_index < 0 || scheme_index >= SCHEME_COUNT) {
             warning("Scheme index %d is out of range. Returning default colors.", scheme_index);
             return get_default_colors();
         }
 
-        var colors = new ArrayList<int>();
+        var colors = new Gee.ArrayList<int>();
         int base_index = scheme_index * COLORS_PER_SCHEME;
 
         for (int i = 0; i < argb_ints.length; i++) {
@@ -102,7 +100,7 @@ public class ColorGenerator {
     }
 
     // Retrieves the colors for a specific ARGB int and scheme
-    public ArrayList<int> get_colors_for_argb(int index, He.SchemeVariant scheme_variant) {
+    public Gee.ArrayList<int> get_colors_for_argb(int index, He.SchemeVariant scheme_variant) {
         if (index < 0 || index >= argb_ints.length) {
             warning("Index %d out of range for ARGB values. Returning default colors.", index);
             return get_default_colors();
@@ -114,7 +112,7 @@ public class ColorGenerator {
             return get_default_colors();
         }
 
-        var colors = new ArrayList<int>();
+        var colors = new Gee.ArrayList<int>();
         int base_index = index * SCHEME_COUNT * COLORS_PER_SCHEME + scheme_index * COLORS_PER_SCHEME;
 
         for (int i = 0; i < COLORS_PER_SCHEME; i++) {
@@ -125,8 +123,8 @@ public class ColorGenerator {
     }
 
     // Provides a default set of colors
-    private ArrayList<int> get_default_colors() {
-        var default_colors = new ArrayList<int>();
+    private Gee.ArrayList<int> get_default_colors() {
+        var default_colors = new Gee.ArrayList<int>();
         for (int i = 0; i <= COLORS_PER_SCHEME; i++) {
             default_colors.add(DEFAULT_COLOR);
         }

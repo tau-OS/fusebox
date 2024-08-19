@@ -1,68 +1,40 @@
 public class AppearanceView : Gtk.Box {
+    private static GLib.Settings bg_settings;
+    private static GLib.Settings fusebox_appearance_settings;
     private static GLib.Settings interface_settings;
     private static GLib.Settings tau_appearance_settings;
-    private static GLib.Settings fusebox_appearance_settings;
-    private static GLib.Settings bg_settings;
 
     public Fusebox.Fuse fuse { get; construct set; }
 
-    private He.SegmentedButton color_type_button;
-    private Gtk.ToggleButton basic_type_button;
-    private Gtk.Stack color_stack;
     private Bis.Carousel color_carousel;
+    private Gtk.Box accent_box;
+    private Gtk.CheckButton prefer_dark_radio;
+    private Gtk.CheckButton prefer_default_radio;
+    private Gtk.CheckButton prefer_light_radio;
+    private Gtk.FlowBoxChild current_emb;
+    private Gtk.Stack color_stack;
+    private Gtk.ToggleButton basic_type_button;
+    private He.SegmentedButton color_type_button;
+
+    private PrefersAccentColorButton blue;
+    private PrefersAccentColorButton green;
+    private PrefersAccentColorButton multi;
+    private PrefersAccentColorButton pink;
+    private PrefersAccentColorButton purple;
     private PrefersAccentColorButton red;
     private PrefersAccentColorButton yellow;
-    private PrefersAccentColorButton green;
-    private PrefersAccentColorButton blue;
-    private PrefersAccentColorButton purple;
-    private PrefersAccentColorButton pink;
-    private PrefersAccentColorButton multi;
-    private Gtk.FlowBoxChild defavlt; // default is a Vala keyword, deal with it
-    private Gtk.FlowBoxChild muted;
-    private Gtk.FlowBoxChild vibrant;
-    private Gtk.FlowBoxChild salad;
-    private Gtk.CheckButton prefer_light_radio;
-    private Gtk.CheckButton prefer_default_radio;
-    private Gtk.CheckButton prefer_dark_radio;
-    private Gtk.Box accent_box;
-    private Gtk.FlowBox ensor_flowbox;
-    private Gtk.FlowBoxChild current_emb;
 
-    public He.ContentBlockImage wallpaper_preview;
-    public He.ContentBlockImage wallpaper_lock_preview;
-    public Appearance.WallpaperGrid wallpaper_view;
-    public Gtk.ToggleButton wallpaper_type_button;
     public Gtk.ScrolledWindow sw;
     public Gtk.Stack contrast_stack;
-    public Gtk.Stack wallpaper_stack;
     public Gtk.Stack main_stack;
+    public Gtk.Stack wallpaper_stack;
+    public Gtk.ToggleButton wallpaper_type_button;
+    public He.ContentBlockImage wallpaper_lock_preview;
+    public He.ContentBlockImage wallpaper_preview;
+
+    public Appearance.WallpaperGrid wallpaper_view;
 
     private uint rscale_timeout;
-
-    private string _ensor;
-    public string ensor {
-        get { return _ensor; }
-        set {
-            if (value == "default") {
-                select_ensor (defavlt);
-                return;
-            }
-
-            if (value == "muted") {
-                select_ensor (muted);
-                return;
-            }
-
-            if (value == "vibrant") {
-                select_ensor (vibrant);
-                return;
-            }
-
-            _ensor = value;
-            critical ("Unknown palette ID: %s", value);
-        }
-    }
-
 
     public AppearanceView (Fusebox.Fuse _fuse) {
         Object (fuse: _fuse);
@@ -238,40 +210,6 @@ public class AppearanceView : Gtk.Box {
         accent_box.append (green);
         accent_box.append (blue);
 
-        defavlt = new Gtk.FlowBoxChild ();
-        defavlt.child = new EnsorModeButton ("default");
-        defavlt.tooltip_text = _("Default Scheme");
-        muted = new Gtk.FlowBoxChild ();
-        muted.child = new EnsorModeButton ("muted");
-        muted.tooltip_text = _("Muted Scheme");
-        vibrant = new Gtk.FlowBoxChild ();
-        vibrant.child = new EnsorModeButton ("vibrant");
-        vibrant.tooltip_text = _("Vibrant Scheme");
-        salad = new Gtk.FlowBoxChild ();
-        salad.child = new EnsorModeButton ("salad");
-        salad.tooltip_text = _("Fruit Salad Scheme");
-
-        ensor_flowbox = new Gtk.FlowBox () {
-            hexpand = true,
-            halign = Gtk.Align.CENTER,
-            valign = Gtk.Align.CENTER,
-            column_spacing = 12,
-            homogeneous = true,
-            min_children_per_line = 4,
-            max_children_per_line = 4
-        };
-        ensor_flowbox.add_css_class ("ensor-box");
-        ensor_flowbox.append (defavlt);
-        ensor_flowbox.append (muted);
-        ensor_flowbox.append (vibrant);
-        ensor_flowbox.append (salad);
-        ensor_flowbox.child_activated.connect (child_activated_cb);
-
-        ensor_refresh ();
-        tau_appearance_settings.notify["changed::ensor-scheme"].connect (() => {
-            ensor_refresh ();
-        });
-
         wallpaper_type_button = new Gtk.ToggleButton () {
             active = fusebox_appearance_settings.get_boolean ("wallpaper-accent") == true
         };
@@ -289,11 +227,16 @@ public class AppearanceView : Gtk.Box {
         color_type_button.append (basic_type_button);
 
         color_carousel = new Bis.Carousel ();
-        color_carousel.append (ensor_flowbox);
+        var color_carousel_dots = new Bis.CarouselIndicatorDots ();
+        color_carousel_dots.set_carousel (color_carousel);
+
+        var carousel_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
+        carousel_box.append (color_carousel);
+        carousel_box.append (color_carousel_dots);
 
         color_stack = new Gtk.Stack ();
         color_stack.add_titled (accent_box, "basic", "Basic Colors");
-        color_stack.add_titled (color_carousel, "wallpaper", "Wallpaper Colors");
+        color_stack.add_titled (carousel_box, "wallpaper", "Wallpaper Colors");
 
         if (wallpaper_type_button.active) {
             color_stack.set_visible_child_name ("wallpaper");
@@ -309,14 +252,12 @@ public class AppearanceView : Gtk.Box {
             pink.set_active (false);
         } else {
             color_stack.set_visible_child_name ("basic");
-            select_ensor (defavlt);
             accent_box.sensitive = true;
         }
 
         basic_type_button.toggled.connect (() => {
             color_stack.set_visible_child_name ("basic");
             fusebox_appearance_settings.set_boolean ("wallpaper-accent", false);
-            select_ensor (defavlt);
             accent_box.sensitive = true;
         });
         wallpaper_type_button.toggled.connect (() => {
@@ -510,55 +451,51 @@ public class AppearanceView : Gtk.Box {
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
 
-                if (result.index (0) != null) {
-                    int[] argb_ints = { result.index (0) };
-                    ColorGenerator color_gen = new ColorGenerator (argb_ints);
-                    Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
-                    ((EnsorModeButton)defavlt.get_first_child ()).colors = resd;
-                    Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
-                    ((EnsorModeButton)muted.get_first_child ()).colors = resm;
-                    Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
-                    ((EnsorModeButton)vibrant.get_first_child ()).colors = resv;
-                    Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
-                    ((EnsorModeButton)salad.get_first_child ()).colors = ress;
+                int[] argb_ints = new int[3]; // We're only interested in 4 colors.
 
-                    tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (result.index (0)));
+                for (int i = 0; i == color_carousel.get_n_pages(); i++) {
+                    color_carousel.remove (color_carousel.get_nth_page(i));
                 }
-                if (result.index (1) != null) {
-                    int[] argb_ints = { result.index (0), result.index (1) };
-                    ColorGenerator color_gen = new ColorGenerator (argb_ints);
-                    Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
-                    ((EnsorModeButton)defavlt.get_first_child ()).colors = resd;
-                    Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
-                    ((EnsorModeButton)muted.get_first_child ()).colors = resm;
-                    Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
-                    ((EnsorModeButton)vibrant.get_first_child ()).colors = resv;
-                    Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
-                    ((EnsorModeButton)salad.get_first_child ()).colors = ress;
-                }
-                if (result.index (1) != null && result.index (2) != null) {
-                    int[] argb_ints = { result.index (0), result.index (1), result.index (2) };
-                    ColorGenerator color_gen = new ColorGenerator (argb_ints);
-                    Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
-                    ((EnsorModeButton)defavlt.get_first_child ()).colors = resd;
-                    Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
-                    ((EnsorModeButton)muted.get_first_child ()).colors = resm;
-                    Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
-                    ((EnsorModeButton)vibrant.get_first_child ()).colors = resv;
-                    Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
-                    ((EnsorModeButton)salad.get_first_child ()).colors = ress;
-                }
-                if (result.index (1) != null && result.index (2) != null && result.index (3) != null) {
-                    int[] argb_ints = { result.index (0), result.index (1), result.index (2), result.index (3) };
-                    ColorGenerator color_gen = new ColorGenerator (argb_ints);
-                    Gee.ArrayList<int> resd = color_gen.get_generated_colors (He.SchemeVariant.DEFAULT);
-                    ((EnsorModeButton)defavlt.get_first_child ()).colors = resd;
-                    Gee.ArrayList<int> resm = color_gen.get_generated_colors (He.SchemeVariant.MUTED);
-                    ((EnsorModeButton)muted.get_first_child ()).colors = resm;
-                    Gee.ArrayList<int> resv = color_gen.get_generated_colors (He.SchemeVariant.VIBRANT);
-                    ((EnsorModeButton)vibrant.get_first_child ()).colors = resv;
-                    Gee.ArrayList<int> ress = color_gen.get_generated_colors (He.SchemeVariant.SALAD);
-                    ((EnsorModeButton)salad.get_first_child ()).colors = ress;
+
+                for (int i = 0; i < result.length; i++) {
+                    var value = result.index(i);
+                    if (value != null) {
+                        argb_ints[i] = value;
+                    }
+
+                    var defavlt = new Gtk.FlowBoxChild ();
+                    defavlt.child = new EnsorModeButton (argb_ints[i], "default");
+                    defavlt.tooltip_text = _("Default Scheme");
+                    var muted = new Gtk.FlowBoxChild ();
+                    muted.child = new EnsorModeButton (argb_ints[i], "muted");
+                    muted.tooltip_text = _("Muted Scheme");
+                    var vibrant = new Gtk.FlowBoxChild ();
+                    vibrant.child = new EnsorModeButton (argb_ints[i], "vibrant");
+                    vibrant.tooltip_text = _("Vibrant Scheme");
+                    var salad = new Gtk.FlowBoxChild ();
+                    salad.child = new EnsorModeButton (argb_ints[i], "salad");
+                    salad.tooltip_text = _("Fruit Salad Scheme");
+
+                    var ensor_flowbox = new Gtk.FlowBox () {
+                        hexpand = true,
+                        halign = Gtk.Align.CENTER,
+                        valign = Gtk.Align.CENTER,
+                        column_spacing = 12,
+                        homogeneous = true,
+                        min_children_per_line = 4,
+                        max_children_per_line = 4
+                    };
+                    ensor_flowbox.add_css_class ("ensor-box");
+                    ensor_flowbox.append (defavlt);
+                    ensor_flowbox.append (muted);
+                    ensor_flowbox.append (vibrant);
+                    ensor_flowbox.append (salad);
+                    ensor_flowbox.child_activated.connect ((c) => {
+                        var ensor = ((EnsorModeButton)c.get_first_child ()).mode;
+                        tau_appearance_settings.set_string ("ensor-scheme", ensor);
+                    });
+
+                    color_carousel.append (ensor_flowbox);
                 }
 
                 loop.quit ();
@@ -566,72 +503,6 @@ public class AppearanceView : Gtk.Box {
             loop.run ();
         } catch (Error e) {
             print (e.message);
-        }
-    }
-
-    private void child_activated_cb (Gtk.FlowBoxChild child) {
-        select_ensor (child);
-    }
-
-    private void select_ensor (Gtk.FlowBoxChild emb) {
-        current_emb = emb;
-        _ensor = ((EnsorModeButton)emb.get_first_child ()).mode;
-        tau_appearance_settings.set_string ("ensor-scheme", _ensor);
-        ensor_flowbox.select_child (current_emb);
-    }
-
-    private void ensor_refresh () {
-        string value = tau_appearance_settings.get_string ("ensor-scheme");
-
-        if (value == "default") {
-            select_ensor (defavlt);
-        } else if (value == "muted") {
-            select_ensor (muted);
-        } else if (value == "vibrant") {
-            select_ensor (vibrant);
-        } else if (value == "salad") {
-            select_ensor (salad);
-        }
-    }
-
-    private class EnsorModeButton : Gtk.Box {
-        public string mode { get; construct; }
-        public Gee.ArrayList<int> colors;
-
-        public EnsorModeButton (string mode) {
-            Object (
-                mode: mode
-            );
-            overflow = HIDDEN;
-            add_css_class ("circle-radius");
-        }
-
-        public override void snapshot (Gtk.Snapshot snapshot) {
-            int w = get_width ();
-            int h = get_height ();
-
-            float r = 999;
-
-            snapshot.translate ({ w / 2, h / 2 });
-
-            Gsk.RoundedRect rect = {};
-            rect.init_from_rect ({ { -r, -r }, { r* 2, r* 2 } }, r);
-            snapshot.push_rounded_clip (rect);
-            snapshot.append_color (color_to_rgba (0), { { -r, -r }, { r, r } });
-            snapshot.append_color (color_to_rgba (1), { { -r, 0 }, { r, r } });
-            snapshot.append_color (color_to_rgba (2), { { 0, 0 }, { r, r } });
-            snapshot.append_color (color_to_rgba (3), { { 0, -r }, { r, r } });
-            snapshot.pop ();
-            snapshot.append_inset_shadow (rect, { 0, 0, 0 }, 0, 0, 1, 0);
-        }
-
-        private Gdk.RGBA color_to_rgba (int index) {
-            int rgb = colors.get (index);
-            float r = ((rgb >> 16) & 0xFF) / 255.0f;
-            float g = ((rgb >> 8) & 0xFF) / 255.0f;
-            float b = (rgb & 0xFF) / 255.0f;
-
-            return { r, g, b, 1.0f };
         }
     }
 
