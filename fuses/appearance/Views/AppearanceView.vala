@@ -22,6 +22,7 @@ public class AppearanceView : Gtk.Box {
     private AccentColorButton purple;
     private AccentColorButton red;
     private AccentColorButton yellow;
+    private EnsorFlowBox ensor_flowbox;
 
     public Gtk.ScrolledWindow sw;
     public Gtk.Stack contrast_stack;
@@ -76,14 +77,14 @@ public class AppearanceView : Gtk.Box {
         // XXX: UNCOMMENT WHEN KIRI LOCK SCREEN IS IMPL'D
         //
         // var edit_button = new He.Button ("document-edit-symbolic", "") {
-        //  hexpand = true,
-        //  vexpand = true,
-        //  halign = Gtk.Align.END,
-        //  valign = Gtk.Align.END,
-        //  margin_end = 12,
-        //  margin_bottom = 12,
-        //  is_disclosure = true,
-        //  tooltip_text = _("Customize Lock Screen…")
+        // hexpand = true,
+        // vexpand = true,
+        // halign = Gtk.Align.END,
+        // valign = Gtk.Align.END,
+        // margin_end = 12,
+        // margin_bottom = 12,
+        // is_disclosure = true,
+        // tooltip_text = _("Customize Lock Screen…")
         // };
 
         // var wallpaper_lock_button_overlay = new Gtk.Overlay ();
@@ -284,6 +285,9 @@ public class AppearanceView : Gtk.Box {
             fusebox_appearance_settings.set_boolean ("wallpaper-accent", true);
             accent_box.sensitive = false;
 
+            var sel = fusebox_appearance_settings.get_int ("wallpaper-accent-choice");
+            ensor_flowbox.flowbox.select_child (ensor_flowbox.flowbox.get_child_at_index (sel));
+
             multi.set_active (false);
             red.set_active (false);
             yellow.set_active (false);
@@ -481,12 +485,15 @@ public class AppearanceView : Gtk.Box {
                 int[] argb_ints = {};
 
                 for (int i = 0; i < result.length; i++) {
-                    var value = result.index(i);
+                    var value = result.index (i);
                     if (value != null) {
                         argb_ints += value;
                     }
 
-                    var ensor_flowbox = new EnsorFlowBox (argb_ints);
+                    ensor_flowbox = new EnsorFlowBox (argb_ints);
+
+                    var sel = fusebox_appearance_settings.get_int ("wallpaper-accent-choice");
+                    ensor_flowbox.flowbox.select_child (ensor_flowbox.flowbox.get_child_at_index (sel));
 
                     color_sw.set_child (ensor_flowbox);
                 }
