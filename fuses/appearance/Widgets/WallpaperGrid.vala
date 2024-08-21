@@ -165,8 +165,10 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
 
         settings.set_string ("picture-uri", furi);
         settings.set_string ("picture-uri-dark", furi);
-        if (appearance_view.wallpaper_type_button.active)
+        if (appearance_view.wallpaper_type_button.active) {
             appearance_view.accent_setup.begin ();
+            appearance_view.ensor_flowbox.flowbox.select_child (appearance_view.ensor_flowbox.flowbox.get_child_at_index (0));
+        }
 
         appearance_view.wallpaper_preview.file = furi;
         appearance_view.wallpaper_lock_preview.file = furi;

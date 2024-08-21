@@ -16,8 +16,8 @@ public class EnsorFlowBox : He.Bin {
             valign = Gtk.Align.CENTER,
             column_spacing = 12,
             homogeneous = true,
-            min_children_per_line = 20,
-            max_children_per_line = 20,
+            min_children_per_line = color.length * 4,
+            max_children_per_line = color.length * 4,
             margin_start = 6,
             margin_end = 6,
             margin_bottom = 18

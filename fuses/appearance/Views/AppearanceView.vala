@@ -22,7 +22,6 @@ public class AppearanceView : Gtk.Box {
     private AccentColorButton purple;
     private AccentColorButton red;
     private AccentColorButton yellow;
-    private EnsorFlowBox ensor_flowbox;
 
     public Gtk.ScrolledWindow sw;
     public Gtk.Stack contrast_stack;
@@ -33,6 +32,7 @@ public class AppearanceView : Gtk.Box {
     public He.ContentBlockImage wallpaper_preview;
 
     public Appearance.WallpaperGrid wallpaper_view;
+    public EnsorFlowBox ensor_flowbox;
 
     private uint rscale_timeout;
 
@@ -258,6 +258,9 @@ public class AppearanceView : Gtk.Box {
             color_stack.set_visible_child_name ("wallpaper");
             accent_box.sensitive = false;
             accent_setup.begin ();
+
+            var sel = fusebox_appearance_settings.get_int ("wallpaper-accent-choice");
+            ensor_flowbox.flowbox.select_child (ensor_flowbox.flowbox.get_child_at_index (sel));
 
             multi.set_active (false);
             red.set_active (false);
@@ -491,12 +494,11 @@ public class AppearanceView : Gtk.Box {
                     }
 
                     ensor_flowbox = new EnsorFlowBox (argb_ints);
-
-                    var sel = fusebox_appearance_settings.get_int ("wallpaper-accent-choice");
-                    ensor_flowbox.flowbox.select_child (ensor_flowbox.flowbox.get_child_at_index (sel));
-
                     color_sw.set_child (ensor_flowbox);
                 }
+
+                var sel = ((int)Math.floor (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") / 4));
+                tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (argb_ints[sel]));
 
                 loop.quit ();
             });
