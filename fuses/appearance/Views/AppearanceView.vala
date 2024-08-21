@@ -264,7 +264,7 @@ public class AppearanceView : Gtk.Box {
 
             EnsorModeButton child = ((EnsorModeButton)ensor_flowbox.flowbox.get_selected_children ().nth_data (0).get_child ());
             var sels = ((int)Math.floor (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") / 4));
-            tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (child.colors.get(sel)));
+            tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (child.colors.get(sels)));
 
             multi.set_active (false);
             red.set_active (false);
@@ -297,7 +297,7 @@ public class AppearanceView : Gtk.Box {
 
             EnsorModeButton child = ((EnsorModeButton)ensor_flowbox.flowbox.get_selected_children ().nth_data (0).get_child ());
             var sels = ((int)Math.floor (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") / 4));
-            tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (child.colors.get(sel)));
+            tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (child.colors.get(sels)));
 
             multi.set_active (false);
             red.set_active (false);
