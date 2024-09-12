@@ -32,6 +32,7 @@ namespace Fusebox {
 
         construct {
             alert_view = new He.EmptyPage ();
+            alert_view.action_button.visible = false;
 
             category = new Fusebox.Category ();
 
