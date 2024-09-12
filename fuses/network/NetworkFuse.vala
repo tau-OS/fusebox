@@ -7,14 +7,16 @@ public class Network.NetworkFuse : Fusebox.Fuse {
     private He.MiniContentBlock proxy_block;
 
     private He.Switch wired_switch;
-    private He.Switch proxy_switch;
+    private Gtk.DropDown proxy_dropdown;
+
+    private string[] proxy_options = { "Off", "Manual", "Auto" };
 
     public NetworkFuse () {
         Object (
             category: Category.NETWORK,
             code_name: "network-fuse",
             display_name: _("Network"),
-            description: _("Manage network connections and settings"),
+            description: _("Ethernet, VPN, Proxy"),
             icon: "preferences-desktop-network-symbolic",
             supported_settings: new GLib.HashTable<string, string?> (null, null)
         );
@@ -106,6 +108,8 @@ public class Network.NetworkFuse : Fusebox.Fuse {
         vpn_box.append(settings_button);
 
         vpn_block.widget = vpn_box;
+
+        settings_button.clicked.connect(open_vpn_settings);
     }
 
     private void create_proxy_section() {
@@ -116,24 +120,17 @@ public class Network.NetworkFuse : Fusebox.Fuse {
             hexpand = true,
             halign = Gtk.Align.END
         };
-        proxy_switch = new He.Switch() {
-            hexpand = true,
-            halign = Gtk.Align.END,
+
+        var proxy_model = new Gtk.StringList(proxy_options);
+        proxy_dropdown = new Gtk.DropDown(proxy_model, null) {
             valign = Gtk.Align.CENTER
         };
 
-        var proxy_settings_button = new Gtk.Button.with_label(_("Off")) {
-            valign = Gtk.Align.CENTER
-        };
-        proxy_settings_button.add_css_class("flat");
-
-        proxy_box.append(proxy_switch);
-        proxy_box.append(proxy_settings_button);
+        proxy_box.append(proxy_dropdown);
 
         proxy_block.widget = proxy_box;
 
-        proxy_switch.notify["active"].connect(update_proxy_status);
-        proxy_settings_button.clicked.connect(open_proxy_settings);
+        proxy_dropdown.notify["selected"].connect(update_proxy_status);
     }
 
     private void update_wired_status() {
@@ -163,11 +160,129 @@ public class Network.NetworkFuse : Fusebox.Fuse {
     }
 
     private void update_proxy_status() {
-        if (proxy_switch.iswitch.active) {
-            ((Gtk.Label)((Gtk.Button)proxy_switch.get_next_sibling()).get_child()).label = _("On");
-        } else {
-            ((Gtk.Label)((Gtk.Button)proxy_switch.get_next_sibling()).get_child()).label = _("Off");
+        var selected_option = proxy_options[proxy_dropdown.selected];
+        print("Proxy status changed to: %s\n", selected_option);
+
+        switch (selected_option) {
+            case "Off":
+                // Disable proxy
+                break;
+            case "Manual":
+                open_manual_proxy_settings();
+                break;
+            case "Auto":
+                open_auto_proxy_settings();
+                break;
         }
+    }
+
+    private void open_manual_proxy_settings() {
+        var dialog = new Gtk.Dialog.with_buttons(
+            _("Manual Proxy Settings"),
+            null,
+            Gtk.DialogFlags.MODAL | Gtk.DialogFlags.USE_HEADER_BAR,
+            _("Close"),
+            Gtk.ResponseType.CLOSE
+        );
+
+        var content_area = dialog.get_content_area();
+
+        // Add your custom manual proxy settings widgets here
+        var http_label = new Gtk.Label(_("HTTP Proxy:"));
+        var http_entry = new Gtk.Entry();
+
+        var https_label = new Gtk.Label(_("HTTPS Proxy:"));
+        var https_entry = new Gtk.Entry();
+
+        var grid = new Gtk.Grid() {
+            row_spacing = 6,
+            column_spacing = 12,
+            margin_start = 12,
+            margin_end = 12,
+            margin_top = 12,
+            margin_bottom = 12
+        };
+
+        grid.attach(http_label, 0, 0);
+        grid.attach(http_entry, 1, 0);
+        grid.attach(https_label, 0, 1);
+        grid.attach(https_entry, 1, 1);
+
+        content_area.append(grid);
+
+        dialog.present();
+    }
+
+    private void open_auto_proxy_settings() {
+        var dialog = new Gtk.Dialog.with_buttons(
+            _("Automatic Proxy Settings"),
+            null,
+            Gtk.DialogFlags.MODAL | Gtk.DialogFlags.USE_HEADER_BAR,
+            _("Close"),
+            Gtk.ResponseType.CLOSE
+        );
+
+        var content_area = dialog.get_content_area();
+
+        // Add your custom automatic proxy settings widgets here
+        var pac_label = new Gtk.Label(_("PAC URL:"));
+        var pac_entry = new Gtk.Entry();
+
+        var grid = new Gtk.Grid() {
+            row_spacing = 6,
+            column_spacing = 12,
+            margin_start = 12,
+            margin_end = 12,
+            margin_top = 12,
+            margin_bottom = 12
+        };
+
+        grid.attach(pac_label, 0, 0);
+        grid.attach(pac_entry, 1, 0);
+
+        content_area.append(grid);
+
+        dialog.present();
+    }
+
+    private void open_vpn_settings() {
+        var dialog = new Gtk.Dialog.with_buttons(
+            _("VPN Settings"),
+            null,
+            Gtk.DialogFlags.MODAL | Gtk.DialogFlags.USE_HEADER_BAR,
+            _("Close"),
+            Gtk.ResponseType.CLOSE
+        );
+
+        var content_area = dialog.get_content_area();
+
+        // Add your custom VPN settings widgets here
+        var server_label = new Gtk.Label(_("VPN Server:"));
+        var server_entry = new Gtk.Entry();
+
+        var protocol_label = new Gtk.Label(_("Protocol:"));
+        var protocol_combo = new Gtk.ComboBoxText();
+        protocol_combo.append_text("OpenVPN");
+        protocol_combo.append_text("L2TP");
+        protocol_combo.active = 0;
+
+        var grid = new Gtk.Grid() {
+            row_spacing = 6,
+            column_spacing = 12,
+            margin_start = 12,
+            margin_end = 12,
+            margin_top = 12,
+            margin_bottom = 12
+        };
+
+        grid.attach(server_label, 0, 0);
+        grid.attach(server_entry, 1, 0);
+        grid.attach(protocol_label, 0, 1);
+        grid.attach(protocol_combo, 1, 1);
+
+        content_area.append(grid);
+
+        dialog.present();
     }
 
     private void open_wired_settings() {
