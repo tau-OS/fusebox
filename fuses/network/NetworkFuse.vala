@@ -9,6 +9,9 @@ public class Network.NetworkFuse : Fusebox.Fuse {
     private He.Switch wired_switch;
     private Gtk.DropDown proxy_dropdown;
 
+    private NM.Device? device = null;
+    protected string uuid = "";
+
     private string[] proxy_options = { "Off", "Manual", "Auto" };
 
     public NetworkFuse () {
@@ -29,6 +32,18 @@ public class Network.NetworkFuse : Fusebox.Fuse {
         } catch (Error e) {
             warning("Failed to create NM.Client: %s", e.message);
         }
+
+        foreach (var d in nm_client.get_devices()) {
+            if (d.get_device_type() == NM.DeviceType.ETHERNET) {
+                device = d;
+                break;
+            }
+        }
+
+        get_uuid ();
+        device.state_changed.connect_after (() => {
+            get_uuid ();
+        });
     }
 
     public override Gtk.Widget get_widget () {
@@ -87,7 +102,23 @@ public class Network.NetworkFuse : Fusebox.Fuse {
         wired_block.widget = wired_box;
 
         wired_switch.notify["active"].connect(update_wired_status);
-        settings_button.clicked.connect(open_wired_settings);
+        settings_button.clicked.connect(() => {
+            open_wired_settings (uuid);
+        });
+    }
+
+    private void get_uuid () {
+        var active_connection = device.get_active_connection ();
+        if (active_connection != null) {
+            uuid = active_connection.get_uuid ();
+        } else {
+            var available_connections = device.get_available_connections ();
+            if (available_connections.length > 0) {
+                uuid = available_connections[0].get_uuid ();
+            } else {
+                uuid = "";
+            }
+        }
     }
 
     private void create_vpn_section() {
@@ -136,18 +167,10 @@ public class Network.NetworkFuse : Fusebox.Fuse {
     private void update_wired_status() {
         if (nm_client == null) return;
 
-        NM.Device? wired_device = null;
-        foreach (var device in nm_client.get_devices()) {
-            if (device.get_device_type() == NM.DeviceType.ETHERNET) {
-                wired_device = device;
-                break;
-            }
-        }
-
-        if (wired_device != null) {
-            var active_connection = wired_device.get_active_connection();
+        if (device != null) {
+            var active_connection = device.get_active_connection();
             if (active_connection != null) {
-                wired_block.subtitle = _("Connected - %u Mb/s").printf(((NM.DeviceEthernet)wired_device).get_speed());
+                wired_block.subtitle = _("Connected - %u Mb/s").printf(((NM.DeviceEthernet)device).get_speed());
                 wired_switch.iswitch.active = true;
             } else {
                 wired_block.subtitle = _("Disconnected");
@@ -179,7 +202,7 @@ public class Network.NetworkFuse : Fusebox.Fuse {
     private void open_manual_proxy_settings() {
         var dialog = new Gtk.Dialog.with_buttons(
             _("Manual Proxy Settings"),
-            null,
+            He.Misc.find_ancestor_of_type<He.ApplicationWindow> (main_box),
             Gtk.DialogFlags.MODAL | Gtk.DialogFlags.USE_HEADER_BAR,
             _("Close"),
             Gtk.ResponseType.CLOSE
@@ -216,7 +239,7 @@ public class Network.NetworkFuse : Fusebox.Fuse {
     private void open_auto_proxy_settings() {
         var dialog = new Gtk.Dialog.with_buttons(
             _("Automatic Proxy Settings"),
-            null,
+            He.Misc.find_ancestor_of_type<He.ApplicationWindow> (main_box),
             Gtk.DialogFlags.MODAL | Gtk.DialogFlags.USE_HEADER_BAR,
             _("Close"),
             Gtk.ResponseType.CLOSE
@@ -248,7 +271,7 @@ public class Network.NetworkFuse : Fusebox.Fuse {
     private void open_vpn_settings() {
         var dialog = new Gtk.Dialog.with_buttons(
             _("VPN Settings"),
-            null,
+            He.Misc.find_ancestor_of_type<He.ApplicationWindow> (main_box),
             Gtk.DialogFlags.MODAL | Gtk.DialogFlags.USE_HEADER_BAR,
             _("Close"),
             Gtk.ResponseType.CLOSE
@@ -285,9 +308,12 @@ public class Network.NetworkFuse : Fusebox.Fuse {
         dialog.present();
     }
 
-    private void open_wired_settings() {
+    private void open_wired_settings(string uuid) {
         try {
-            Process.spawn_command_line_async("nm-connection-editor --type=ethernet");
+            var appinfo = AppInfo.create_from_commandline (
+                "nm-connection-editor --edit=%s".printf (uuid), null, AppInfoCreateFlags.NONE
+            );
+            appinfo.launch (null, null);
         } catch (Error e) {
             warning("Failed to open wired settings: %s", e.message);
         }
