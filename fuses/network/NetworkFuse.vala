@@ -67,13 +67,16 @@ public class Network.NetworkFuse : Fusebox.Fuse {
         wired_block.title = (_("Wired"));
 
         var wired_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
+            hexpand = true,
             halign = Gtk.Align.END
         };
         wired_switch = new He.Switch() {
             valign = Gtk.Align.CENTER
         };
 
-        var settings_button = new Gtk.Button.from_icon_name("emblem-system-symbolic");
+        var settings_button = new He.Button ("emblem-system-symbolic", "") {
+            is_disclosure = true
+        };
         settings_button.add_css_class("circular");
 
         wired_box.append(wired_switch);
@@ -88,13 +91,21 @@ public class Network.NetworkFuse : Fusebox.Fuse {
     private void create_vpn_section() {
         vpn_block = new He.MiniContentBlock();
         vpn_block.title = (_("VPN"));
+        vpn_block.subtitle =  (_("Not set up"));
 
-        var vpn_label = new Gtk.Label(_("Not set up")) {
+        var settings_button = new He.Button ("emblem-system-symbolic", "") {
+            is_disclosure = true
+        };
+        settings_button.add_css_class("circular");
+
+        var vpn_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
             hexpand = true,
             halign = Gtk.Align.END
         };
 
-        vpn_block.widget = vpn_label;
+        vpn_box.append(settings_button);
+
+        vpn_block.widget = vpn_box;
     }
 
     private void create_proxy_section() {
@@ -102,6 +113,7 @@ public class Network.NetworkFuse : Fusebox.Fuse {
         proxy_block.title = (_("Proxy"));
 
         var proxy_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
+            hexpand = true,
             halign = Gtk.Align.END
         };
         proxy_switch = new He.Switch() {
