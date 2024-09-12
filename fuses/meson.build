@@ -1,6 +1,7 @@
 # Add each fuse subdir here, order matters!
 
 # Network
+subdir('network')
 subdir('bluetooth')
 
 # Personal
