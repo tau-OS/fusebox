@@ -67,10 +67,12 @@ public class Network.NetworkFuse : Fusebox.Fuse {
         wired_block = new He.MiniContentBlock();
         wired_block.title = (_("Wired"));
 
-        var wired_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
+        var wired_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
+            halign = Gtk.Align.END
+        };
         wired_status_label = new Gtk.Label("") {
             hexpand = true,
-            halign = Gtk.Align.START
+            halign = Gtk.Align.END
         };
         wired_switch = new Gtk.Switch() {
             valign = Gtk.Align.CENTER
@@ -95,7 +97,7 @@ public class Network.NetworkFuse : Fusebox.Fuse {
 
         var vpn_label = new Gtk.Label(_("Not set up")) {
             hexpand = true,
-            halign = Gtk.Align.START
+            halign = Gtk.Align.END
         };
 
         vpn_block.widget = vpn_label;
@@ -105,8 +107,12 @@ public class Network.NetworkFuse : Fusebox.Fuse {
         proxy_block = new He.MiniContentBlock();
         proxy_block.title = (_("Proxy"));
 
-        var proxy_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
+        var proxy_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
+            halign = Gtk.Align.END
+        };
         proxy_switch = new Gtk.Switch() {
+            hexpand = true,
+            halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER
         };
 
