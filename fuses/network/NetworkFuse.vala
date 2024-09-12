@@ -6,9 +6,8 @@ public class Network.NetworkFuse : Fusebox.Fuse {
     private He.MiniContentBlock vpn_block;
     private He.MiniContentBlock proxy_block;
 
-    private Gtk.Switch wired_switch;
-    private Gtk.Label wired_status_label;
-    private Gtk.Switch proxy_switch;
+    private He.Switch wired_switch;
+    private He.Switch proxy_switch;
 
     public NetworkFuse () {
         Object (
@@ -70,18 +69,13 @@ public class Network.NetworkFuse : Fusebox.Fuse {
         var wired_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
             halign = Gtk.Align.END
         };
-        wired_status_label = new Gtk.Label("") {
-            hexpand = true,
-            halign = Gtk.Align.END
-        };
-        wired_switch = new Gtk.Switch() {
+        wired_switch = new He.Switch() {
             valign = Gtk.Align.CENTER
         };
 
         var settings_button = new Gtk.Button.from_icon_name("emblem-system-symbolic");
         settings_button.add_css_class("circular");
 
-        wired_box.append(wired_status_label);
         wired_box.append(wired_switch);
         wired_box.append(settings_button);
 
@@ -110,7 +104,7 @@ public class Network.NetworkFuse : Fusebox.Fuse {
         var proxy_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12) {
             halign = Gtk.Align.END
         };
-        proxy_switch = new Gtk.Switch() {
+        proxy_switch = new He.Switch() {
             hexpand = true,
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER
@@ -144,20 +138,20 @@ public class Network.NetworkFuse : Fusebox.Fuse {
         if (wired_device != null) {
             var active_connection = wired_device.get_active_connection();
             if (active_connection != null) {
-                wired_status_label.label = _("Connected - %u Mb/s").printf(((NM.DeviceEthernet)wired_device).get_speed());
-                wired_switch.active = true;
+                wired_block.subtitle = _("Connected - %u Mb/s").printf(((NM.DeviceEthernet)wired_device).get_speed());
+                wired_switch.iswitch.active = true;
             } else {
-                wired_status_label.label = _("Disconnected");
-                wired_switch.active = false;
+                wired_block.subtitle = _("Disconnected");
+                wired_switch.iswitch.active = false;
             }
         } else {
-            wired_status_label.label = _("Not available");
+            wired_block.subtitle = _("Not available");
             wired_switch.sensitive = false;
         }
     }
 
     private void update_proxy_status() {
-        if (proxy_switch.active) {
+        if (proxy_switch.iswitch.active) {
             ((Gtk.Label)((Gtk.Button)proxy_switch.get_next_sibling()).get_child()).label = _("On");
         } else {
             ((Gtk.Label)((Gtk.Button)proxy_switch.get_next_sibling()).get_child()).label = _("Off");
