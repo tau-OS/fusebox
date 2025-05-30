@@ -166,7 +166,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         settings.set_string ("picture-uri", furi);
         settings.set_string ("picture-uri-dark", furi);
         if (appearance_view.wallpaper_type_button.active) {
-            appearance_view.accent_setup.begin ();
+            appearance_view.accent_setup_async.begin ();
             appearance_view.ensor_flowbox.flowbox.select_child (appearance_view.ensor_flowbox.flowbox.get_child_at_index (0));
         }
 
@@ -312,10 +312,10 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
                 }
 
                 var file = directory.resolve_relative_path (file_info.get_name ());
-                if (file.get_path ().contains (".png") || 
-                    file.get_path ().contains (".jpg") || 
-                    file.get_path ().contains (".jpeg") || 
-                    file.get_path ().contains (".gif") || 
+                if (file.get_path ().contains (".png") ||
+                    file.get_path ().contains (".jpg") ||
+                    file.get_path ().contains (".jpeg") ||
+                    file.get_path ().contains (".gif") ||
                     file.get_path ().contains (".webp")) {
                     add_wallpaper_from_file.begin (file);
                 }
