@@ -224,7 +224,7 @@ public class Appearance.ContrastView : Gtk.Box {
         } else if (contrast_button == contrast_button_2) {
             set_contrast (0.0);
         } else if (contrast_button == contrast_button_3) {
-            set_contrast (0.50);
+            set_contrast (0.5);
         } else if (contrast_button == contrast_button_4) {
             set_contrast (1.0);
         } else {
