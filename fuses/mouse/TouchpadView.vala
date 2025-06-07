@@ -30,7 +30,7 @@ public class Mouse.TouchpadView : Gtk.Box {
             title = (_("Pointer Speed")),
             subtitle = (_("Cursor movement rate"))
         };
-        pointer_speed_box.primary_button = (He.Button)pointer_speed_scale;
+        pointer_speed_box.add (pointer_speed_scale);
 
         var pointer_acceleration_switch = new He.Switch () {
             valign = Gtk.Align.CENTER
@@ -41,7 +41,7 @@ public class Mouse.TouchpadView : Gtk.Box {
             subtitle = (_("Makes touchpad use more comfortable")),
             activatable_widget = pointer_acceleration_switch
         };
-        pointer_acceleration_box.primary_button = (He.Button)pointer_acceleration_switch;
+        pointer_acceleration_box.add (pointer_acceleration_switch);
 
         var default_scroll_image = new Gtk.Image.from_icon_name ("default-touch-scroll-symbolic") {
             pixel_size = 128,
@@ -62,11 +62,11 @@ public class Mouse.TouchpadView : Gtk.Box {
         };
         default_scroll_grid.attach (default_scroll_card, 0, 0, 2);
         default_scroll_grid.attach (default_check, 0, 1);
-        default_scroll_grid.attach (new Gtk.Label (_("Standard")){
+        default_scroll_grid.attach (new Gtk.Label (_("Standard")) {
             halign = Gtk.Align.START,
-            css_classes = {"cb-title"}
+            css_classes = { "cb-title" }
         }, 1, 1);
-        default_scroll_grid.attach (new Gtk.Label (_("Scrolling moves view")){
+        default_scroll_grid.attach (new Gtk.Label (_("Scrolling moves view")) {
             halign = Gtk.Align.START
         }, 1, 2);
 
@@ -96,9 +96,9 @@ public class Mouse.TouchpadView : Gtk.Box {
         natural_scroll_grid.attach (natural_check, 0, 1);
         natural_scroll_grid.attach (new Gtk.Label (_("Natural")) {
             halign = Gtk.Align.START,
-            css_classes = {"cb-title"}
+            css_classes = { "cb-title" }
         }, 1, 1);
-        natural_scroll_grid.attach (new Gtk.Label (_("Scrolling moves content")){
+        natural_scroll_grid.attach (new Gtk.Label (_("Scrolling moves content")) {
             halign = Gtk.Align.START
         }, 1, 2);
 
@@ -131,7 +131,7 @@ public class Mouse.TouchpadView : Gtk.Box {
             subtitle = (_("Quick tap to do clicks")),
             activatable_widget = tap_click_switch
         };
-        tap_click_box.primary_button = (He.Button)tap_click_switch;
+        tap_click_box.primary_button = (He.Button) tap_click_switch;
 
         main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6) {
             sensitive = touchpad_enable_box.main_switch.iswitch.active
@@ -166,14 +166,14 @@ public class Mouse.TouchpadView : Gtk.Box {
         touchpad_settings.bind ("tap-to-click", tap_click_switch.iswitch, "active", GLib.SettingsBindFlags.DEFAULT);
 
         switch (touchpad_settings.get_enum ("accel-profile")) {
-            case 1:
-                pointer_acceleration_switch.iswitch.active = false;
-                break;
-            case 2:
-            case 0:
-            default:
-                pointer_acceleration_switch.iswitch.active = true;
-                break;
+        case 1:
+            pointer_acceleration_switch.iswitch.active = false;
+            break;
+        case 2:
+        case 0:
+        default:
+            pointer_acceleration_switch.iswitch.active = true;
+            break;
         }
 
         pointer_acceleration_switch.iswitch.notify["state-set"].connect (() => {

@@ -46,7 +46,7 @@ public class Mouse.MouseView : Gtk.Box {
         var primary_button_box = new He.SettingsRow () {
             title = (_("Primary Button"))
         };
-        primary_button_box.primary_button = (He.Button)primary_button_choice;
+        primary_button_box.primary_button = (He.Button) primary_button_choice;
 
         var pointer_speed_adjustment = new Gtk.Adjustment (0, -1, 1, 0.1, 0, 0);
 
@@ -66,7 +66,7 @@ public class Mouse.MouseView : Gtk.Box {
             title = (_("Pointer Speed")),
             subtitle = (_("Cursor movement rate"))
         };
-        pointer_speed_box.primary_button = (He.Button)pointer_speed_scale;
+        pointer_speed_box.add (pointer_speed_scale);
 
         var pointer_acceleration_switch = new He.Switch () {
             valign = Gtk.Align.CENTER
@@ -77,7 +77,7 @@ public class Mouse.MouseView : Gtk.Box {
             subtitle = (_("Makes mouse use more comfortable")),
             activatable_widget = pointer_acceleration_switch
         };
-        pointer_acceleration_box.primary_button = (He.Button)pointer_acceleration_switch;
+        pointer_acceleration_box.add (pointer_acceleration_switch);
 
         var default_scroll_image = new Gtk.Image.from_icon_name ("default-scroll-symbolic") {
             pixel_size = 128,
@@ -98,11 +98,11 @@ public class Mouse.MouseView : Gtk.Box {
         };
         default_scroll_grid.attach (default_scroll_card, 0, 0, 2);
         default_scroll_grid.attach (default_check, 0, 1);
-        default_scroll_grid.attach (new Gtk.Label (_("Standard")){
+        default_scroll_grid.attach (new Gtk.Label (_("Standard")) {
             halign = Gtk.Align.START,
-            css_classes = {"cb-title"}
+            css_classes = { "cb-title" }
         }, 1, 1);
-        default_scroll_grid.attach (new Gtk.Label (_("Scrolling moves view")){
+        default_scroll_grid.attach (new Gtk.Label (_("Scrolling moves view")) {
             halign = Gtk.Align.START
         }, 1, 2);
 
@@ -132,9 +132,9 @@ public class Mouse.MouseView : Gtk.Box {
         natural_scroll_grid.attach (natural_check, 0, 1);
         natural_scroll_grid.attach (new Gtk.Label (_("Natural")) {
             halign = Gtk.Align.START,
-            css_classes = {"cb-title"}
+            css_classes = { "cb-title" }
         }, 1, 1);
-        natural_scroll_grid.attach (new Gtk.Label (_("Scrolling moves content")){
+        natural_scroll_grid.attach (new Gtk.Label (_("Scrolling moves content")) {
             halign = Gtk.Align.START
         }, 1, 2);
 
@@ -191,14 +191,14 @@ public class Mouse.MouseView : Gtk.Box {
         mouse_settings.bind ("speed", pointer_speed_scale, "value", GLib.SettingsBindFlags.DEFAULT);
 
         switch (mouse_settings.get_enum ("accel-profile")) {
-            case 1:
-                pointer_acceleration_switch.iswitch.active = false;
-                break;
-            case 2:
-            case 0:
-            default:
-                pointer_acceleration_switch.iswitch.active = true;
-                break;
+        case 1:
+            pointer_acceleration_switch.iswitch.active = false;
+            break;
+        case 2:
+        case 0:
+        default:
+            pointer_acceleration_switch.iswitch.active = true;
+            break;
         }
 
         pointer_acceleration_switch.iswitch.notify["state-set"].connect (() => {
