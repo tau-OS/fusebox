@@ -200,7 +200,7 @@ public class Appearance.ContrastView : Gtk.Box {
             contrast_button_1.active = false;
             contrast_button_3.active = false;
             contrast_button_4.active = false;
-        } else if (value == 0.5) {
+        } else if (value >= 0.49 && value <= 0.51) { // More reliable comparison for 0.50
             contrast_button_3.active = true;
             contrast_button_2.active = false;
             contrast_button_1.active = false;
@@ -224,13 +224,14 @@ public class Appearance.ContrastView : Gtk.Box {
         } else if (contrast_button == contrast_button_2) {
             set_contrast (0.0);
         } else if (contrast_button == contrast_button_3) {
-            set_contrast (0.5);
+            set_contrast (0.50);
         } else if (contrast_button == contrast_button_4) {
             set_contrast (1.0);
         } else {
             set_contrast (0.0);
         }
     }
+
     private void set_contrast (double contrast) {
         tau_appearance_settings.set_double ("contrast", contrast);
     }

@@ -253,7 +253,6 @@ public class AppearanceView : Gtk.Box {
         color_stack.add_titled (accent_box, "basic", "Basic Colors");
         color_stack.add_titled (color_sw, "wallpaper", "Wallpaper Colors");
 
-        accent_setup.begin ();
         if (wallpaper_type_button.active) {
             color_stack.set_visible_child_name ("wallpaper");
             accent_box.sensitive = false;
