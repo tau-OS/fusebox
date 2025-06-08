@@ -490,28 +490,33 @@ public class AppearanceView : Gtk.Box {
 
             var loop = new MainLoop ();
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
+
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
-
                 int[] argb_ints = {};
-
-                for (int i = 0; i < result.length; i++) {
-                    var value = result.index (i);
-                    if (value != null) {
+                foreach (var i in result) {
+                    var value = i;
+                    if (value != null)
                         argb_ints += value;
-                    }
-
-                    ensor_flowbox = new EnsorFlowBox (argb_ints);
-                    color_sw.set_child (ensor_flowbox);
                 }
 
-                var sel = ((int) Math.floor (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") / 4));
-                tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (argb_ints[sel]));
+                if (color_sw == null) {
+                    warning ("color_sw is null. Cannot set child.");
+                } else {
+                    ensor_flowbox = new EnsorFlowBox (argb_ints);
+                    color_sw.set_child (ensor_flowbox);
 
+                    var sel = ((int) Math.floor (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") / 4));
+                    if (sel >= 0 && sel < argb_ints.length) {
+                        tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (argb_ints[sel]));
+                    } else {
+                        warning ("Selected index %d is out of bounds for generated colors.", sel);
+                    }
+                }
                 loop.quit ();
             });
             loop.run ();
         } catch (Error e) {
-            print (e.message);
+            warning ("Error in accent setup: %s", e.message);
         }
     }
 }
