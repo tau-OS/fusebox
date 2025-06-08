@@ -493,10 +493,9 @@ public class AppearanceView : Gtk.Box {
 
                 GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
                 int[] argb_ints = {};
-                foreach (var i in result) {
+                for (int i = 0; i < result.length; i++) {
                     var value = i;
-                    if (value != null)
-                        argb_ints += value;
+                    argb_ints += value;
                 }
 
                 if (color_sw == null) {
