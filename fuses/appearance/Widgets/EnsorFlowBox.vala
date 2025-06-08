@@ -34,29 +34,43 @@ public class EnsorFlowBox : He.Bin {
 
     construct {
         var sel = fusebox_appearance_settings.get_int ("wallpaper-accent-choice");
-        flowbox.select_child (flowbox.get_child_at_index (sel));
+        if (sel >= 0 && sel < flowbox.get_max_children_per_line ()) {
+            flowbox.select_child (flowbox.get_child_at_index (sel));
+        } else {
+            warning ("Saved selection index %d is out of bounds", sel);
+        }
     }
 
     private void child_activated_cb (Gtk.FlowBoxChild child) {
-        var ensor_mode = ((EnsorModeButton) child.get_first_child ()).mode;
-        var ensor_color = ((EnsorModeButton) child.get_first_child ()).colors[0];
-        tau_appearance_settings.set_string ("ensor-scheme", ensor_mode);
-        tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (ensor_color));
+        var first_child = child.get_first_child ();
+        if (first_child is EnsorModeButton) {
+            var ensor_mode = ((EnsorModeButton) first_child).mode;
+            var ensor_color = ((EnsorModeButton) first_child).colors[0];
+            tau_appearance_settings.set_string ("ensor-scheme", ensor_mode);
+            tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (ensor_color));
 
-        current_selection = flowbox.get_selected_children ().nth_data (0).get_index ();
-        fusebox_appearance_settings.set_int ("wallpaper-accent-choice", current_selection);
+            var selected_children = flowbox.get_selected_children ();
+            if (selected_children.length () > 0) {
+                current_selection = selected_children.nth_data (0).get_index ();
+                fusebox_appearance_settings.set_int ("wallpaper-accent-choice", current_selection);
+            } else {
+                warning ("No child is selected in the flowbox");
+            }
+        } else {
+            warning ("Activated child does not contain an EnsorModeButton");
+        }
     }
 
     private void make_ensor_set (int color) {
         var defavlt = new Gtk.FlowBoxChild ();
         defavlt.child = new EnsorModeButton (color, "default");
         defavlt.tooltip_text = _("Default Scheme");
-        var vibrant = new Gtk.FlowBoxChild ();
-        vibrant.child = new EnsorModeButton (color, "vibrant");
-        vibrant.tooltip_text = _("Vibrant Scheme");
         var muted = new Gtk.FlowBoxChild ();
         muted.child = new EnsorModeButton (color, "muted");
         muted.tooltip_text = _("Muted Scheme");
+        var vibrant = new Gtk.FlowBoxChild ();
+        vibrant.child = new EnsorModeButton (color, "vibrant");
+        vibrant.tooltip_text = _("Vibrant Scheme");
         var salad = new Gtk.FlowBoxChild ();
         salad.child = new EnsorModeButton (color, "salad");
         salad.tooltip_text = _("Fruit Salad Scheme");
