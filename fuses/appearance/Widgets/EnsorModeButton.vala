@@ -1,6 +1,4 @@
 public class EnsorModeButton : Gtk.Box {
-    private const int DEFAULT_COLOR = 0x8C56BF; // Tau Purple as fallback
-
     public Gee.ArrayList<int> colors;
     ColorGenerator generator;
 
@@ -17,24 +15,9 @@ public class EnsorModeButton : Gtk.Box {
     }
 
     public EnsorModeButton(int color, string initial_mode) {
-        string validated_mode = is_valid_mode(initial_mode) ? initial_mode : "default";
-        if (validated_mode != initial_mode) {
-            warning("Invalid initial mode '%s'. Using default mode.", initial_mode);
-        }
-
-        this.mode = validated_mode;
+        this.mode = initial_mode;
         generator = new ColorGenerator({ color });
-
-        var generated_colors = generator.get_generated_colors(get_scheme_variant(mode));
-        if (generated_colors.size < 4) {
-            warning("Generated colors are insufficient. Using default colors.");
-            generated_colors = new Gee.ArrayList<int> ();
-            for (int i = 0; i < 4; i++) {
-                generated_colors.add(DEFAULT_COLOR);
-            }
-        }
-
-        this.colors = generated_colors;
+        set_colors(generator.get_generated_colors(get_scheme_variant(mode)));
 
         overflow = HIDDEN;
         add_css_class("circle-radius");
@@ -46,22 +29,13 @@ public class EnsorModeButton : Gtk.Box {
             mode = "default";
         }
 
-        var updated_colors = generator.get_generated_colors(get_scheme_variant(mode));
-        if (updated_colors.size < 4) {
-            warning("Updated colors are insufficient. Using default colors.");
-            updated_colors = new Gee.ArrayList<int> ();
-            for (int i = 0; i < 4; i++) {
-                updated_colors.add(DEFAULT_COLOR);
-            }
-        }
-
-        this.colors = updated_colors;
+        set_colors(generator.get_generated_colors(get_scheme_variant(mode)));
         queue_draw();
     }
 
     public void set_colors(Gee.ArrayList<int> colors) {
-        if (colors.size < 4) {
-            warning("EnsorModeButton requires at least 4 colors. Ignoring update.");
+        if (colors.size == 0) {
+            warning("EnsorModeButton requires # of colors");
             return;
         }
 
@@ -107,11 +81,6 @@ public class EnsorModeButton : Gtk.Box {
     }
 
     private Gdk.RGBA color_to_rgba(int index) {
-        if (index < 0 || index >= colors.size) {
-            warning("Color index %d is out of bounds. Using default color.", index);
-            return { 0.5f, 0.5f, 0.5f, 1.0f }; // Default gray color
-        }
-
         int rgb = colors.get(index);
         float r = ((rgb >> 16) & 0xFF) / 255.0f;
         float g = ((rgb >> 8) & 0xFF) / 255.0f;

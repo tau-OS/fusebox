@@ -34,31 +34,17 @@ public class EnsorFlowBox : He.Bin {
 
     construct {
         var sel = fusebox_appearance_settings.get_int ("wallpaper-accent-choice");
-        if (sel >= 0 && sel < flowbox.get_max_children_per_line ()) {
-            flowbox.select_child (flowbox.get_child_at_index (sel));
-        } else {
-            warning ("Saved selection index %d is out of bounds", sel);
-        }
+        flowbox.select_child (flowbox.get_child_at_index (sel));
     }
 
     private void child_activated_cb (Gtk.FlowBoxChild child) {
-        var first_child = child.get_first_child ();
-        if (first_child is EnsorModeButton) {
-            var ensor_mode = ((EnsorModeButton) first_child).mode;
-            var ensor_color = ((EnsorModeButton) first_child).colors[0];
-            tau_appearance_settings.set_string ("ensor-scheme", ensor_mode);
-            tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (ensor_color));
+        var ensor_mode = ((EnsorModeButton) child.get_first_child ()).mode;
+        var ensor_color = ((EnsorModeButton) child.get_first_child ()).colors[0];
+        tau_appearance_settings.set_string ("ensor-scheme", ensor_mode);
+        tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (ensor_color));
 
-            var selected_children = flowbox.get_selected_children ();
-            if (selected_children.length () > 0) {
-                current_selection = selected_children.nth_data (0).get_index ();
-                fusebox_appearance_settings.set_int ("wallpaper-accent-choice", current_selection);
-            } else {
-                warning ("No child is selected in the flowbox");
-            }
-        } else {
-            warning ("Activated child does not contain an EnsorModeButton");
-        }
+        current_selection = flowbox.get_selected_children ().nth_data (0).get_index ();
+        fusebox_appearance_settings.set_int ("wallpaper-accent-choice", current_selection);
     }
 
     private void make_ensor_set (int color) {
