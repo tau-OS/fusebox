@@ -36,7 +36,7 @@ public class ColorGenerator : Object {
     private void add_scheme_colors(He.HCTColor hct, He.SchemeVariant variant) {
         He.DynamicScheme? dyn_scheme = create_scheme(hct, variant);
         if (dyn_scheme == null) {
-            for (int i = 0; i <= COLORS_PER_SCHEME; i++) {
+            for (int i = 0; i < COLORS_PER_SCHEME; i++) {
                 generated_colors.add(DEFAULT_COLOR);
             }
             return;
@@ -95,53 +95,28 @@ public class ColorGenerator : Object {
             return new Gee.ArrayList<int> ();
         }
 
-        return collect_colors_for_scheme(scheme_index);
-    }
-
-    // Helper method to collect colors for a specific scheme index
-    private Gee.ArrayList<int> collect_colors_for_scheme(int scheme_index) {
         var colors = new Gee.ArrayList<int> ();
+        int base_index = scheme_index * COLORS_PER_SCHEME;
 
         for (int i = 0; i < argb_ints.length; i++) {
-            for (int scheme = 0; scheme < SCHEME_COUNT; scheme++) {
-                int base_index = scheme * COLORS_PER_SCHEME;
-                int offset = calculate_offset(i, base_index);
+            int offset = i * SCHEME_COUNT * COLORS_PER_SCHEME + base_index;
 
-                if (is_offset_within_bounds(offset)) {
-                    add_colors_from_offset(colors, offset);
-                } else {
-                    warning("Color index out of bounds");
-                    add_fallback_colors(colors);
+            // Bounds checking
+            if (offset + 3 < generated_colors.size) {
+                colors.add(generated_colors.get(offset));
+                colors.add(generated_colors.get(offset + 1));
+                colors.add(generated_colors.get(offset + 2));
+                colors.add(generated_colors.get(offset + 3));
+            } else {
+                warning("Color index out of bounds");
+                // Add fallback colors
+                for (int j = 0; j < COLORS_PER_SCHEME; j++) {
+                    colors.add(DEFAULT_COLOR);
                 }
             }
         }
 
         return colors;
-    }
-
-    // Helper method to calculate the offset for a given index
-    private int calculate_offset(int index, int base_index) {
-        return index * SCHEME_COUNT * COLORS_PER_SCHEME + base_index;
-    }
-
-    // Helper method to check if the offset is within bounds
-    private bool is_offset_within_bounds(int offset) {
-        return offset + 3 <= generated_colors.size;
-    }
-
-    // Helper method to add colors from a valid offset
-    private void add_colors_from_offset(Gee.ArrayList<int> colors, int offset) {
-        colors.add(generated_colors.get(offset));
-        colors.add(generated_colors.get(offset + 1));
-        colors.add(generated_colors.get(offset + 2));
-        colors.add(generated_colors.get(offset + 3));
-    }
-
-    // Helper method to add fallback colors
-    private void add_fallback_colors(Gee.ArrayList<int> colors) {
-        for (int j = 0; j < COLORS_PER_SCHEME; j++) {
-            colors.add(DEFAULT_COLOR);
-        }
     }
 
     // Helper method to check if colors are ready
