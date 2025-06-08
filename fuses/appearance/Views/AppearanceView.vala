@@ -491,15 +491,13 @@ public class AppearanceView : Gtk.Box {
 
             var loop = new MainLoop ();
             He.Ensor.accent_from_pixels_async.begin (pixbuf.get_pixels_with_length (), pixbuf.get_has_alpha (), (obj, res) => {
-                GLib.Array<int?> result = He.Ensor.accent_from_pixels_async.end (res);
+                GLib.Array<int> result = He.Ensor.accent_from_pixels_async.end (res);
 
                 int[] argb_ints = {};
 
                 for (int i = 0; i < result.length; i++) {
                     var value = result.index (i);
-                    if (value != null) {
-                        argb_ints += value;
-                    }
+                    argb_ints += value;
 
                     ensor_flowbox = new EnsorFlowBox (argb_ints);
                     color_sw.set_child (ensor_flowbox);
