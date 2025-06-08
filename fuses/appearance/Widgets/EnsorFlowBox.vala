@@ -51,12 +51,12 @@ public class EnsorFlowBox : He.Bin {
         var defavlt = new Gtk.FlowBoxChild ();
         defavlt.child = new EnsorModeButton (color, "default");
         defavlt.tooltip_text = _("Default Scheme");
-        var muted = new Gtk.FlowBoxChild ();
-        muted.child = new EnsorModeButton (color, "muted");
-        muted.tooltip_text = _("Muted Scheme");
         var vibrant = new Gtk.FlowBoxChild ();
         vibrant.child = new EnsorModeButton (color, "vibrant");
         vibrant.tooltip_text = _("Vibrant Scheme");
+        var muted = new Gtk.FlowBoxChild ();
+        muted.child = new EnsorModeButton (color, "muted");
+        muted.tooltip_text = _("Muted Scheme");
         var salad = new Gtk.FlowBoxChild ();
         salad.child = new EnsorModeButton (color, "salad");
         salad.tooltip_text = _("Fruit Salad Scheme");

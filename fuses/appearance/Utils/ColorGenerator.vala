@@ -55,10 +55,10 @@ public class ColorGenerator : Object {
             var scheme = new He.DefaultScheme();
             return scheme.generate(hct, false, 0.0);
         case He.SchemeVariant.MUTED:
-            var scheme = new He.MutedScheme();
+            var scheme = new He.VibrantScheme();
             return scheme.generate(hct, false, 0.0);
         case He.SchemeVariant.VIBRANT:
-            var scheme = new He.VibrantScheme();
+            var scheme = new He.MutedScheme();
             return scheme.generate(hct, false, 0.0);
         case He.SchemeVariant.SALAD:
             var scheme = new He.SaladScheme();
@@ -102,7 +102,7 @@ public class ColorGenerator : Object {
             int offset = i * SCHEME_COUNT * COLORS_PER_SCHEME + base_index;
 
             // Bounds checking
-            if (offset + 3 < generated_colors.size) {
+            if (offset < generated_colors.size) {
                 colors.add(generated_colors.get(offset));
                 colors.add(generated_colors.get(offset + 1));
                 colors.add(generated_colors.get(offset + 2));
