@@ -253,6 +253,7 @@ public class AppearanceView : Gtk.Box {
         color_stack.add_titled (accent_box, "basic", "Basic Colors");
         color_stack.add_titled (color_sw, "wallpaper", "Wallpaper Colors");
 
+        accent_setup.begin ();
         if (wallpaper_type_button.active) {
             color_stack.set_visible_child_name ("wallpaper");
             accent_box.sensitive = false;
@@ -483,7 +484,7 @@ public class AppearanceView : Gtk.Box {
         }
     }
 
-        public async void accent_setup () {
+    public async void accent_setup () {
         try {
             GLib.File file = File.new_for_uri (bg_settings.get_string ("picture-uri"));
             Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file (file.get_path ());
@@ -504,7 +505,7 @@ public class AppearanceView : Gtk.Box {
                     color_sw.set_child (ensor_flowbox);
                 }
 
-                var sel = ((int)Math.floor (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") / 4));
+                var sel = ((int) Math.floor (fusebox_appearance_settings.get_int ("wallpaper-accent-choice") / 4));
                 tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (argb_ints[sel]));
 
                 loop.quit ();
