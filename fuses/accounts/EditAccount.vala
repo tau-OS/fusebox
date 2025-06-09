@@ -95,7 +95,7 @@ class Accounts.EditAccount : He.Window {
     var administrator_switch = new He.Switch () {
       valign = Gtk.Align.CENTER,
     };
-    administrator_switch.add_css_class ("bg-meson-red");
+    administrator_switch.add_css_class ("switch-meson-red");
     administrator_switch.set_parent (administrator_block);
     administrator_switch.iswitch.active = user.get_account_type () == Act.UserAccountType.ADMINISTRATOR;
 
