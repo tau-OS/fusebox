@@ -35,21 +35,21 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
 
         public string to_string () {
             switch (this) {
-                case UNPAIRED:
-                    return _("Available");
-                case PAIRING:
-                    return _("Pairing…");
-                case CONNECTED:
-                    return _("Connected");
-                case CONNECTING:
-                    return _("Connecting…");
-                case DISCONNECTING:
-                    return _("Disconnecting…");
-                case UNABLE_TO_CONNECT:
-                case UNABLE_TO_CONNECT_PAIRED:
-                    return _("Unable to Connect");
-                default:
-                    return _("Not Connected");
+            case UNPAIRED:
+                return _("Available");
+            case PAIRING:
+                return _("Pairing…");
+            case CONNECTED:
+                return _("Connected");
+            case CONNECTING:
+                return _("Connecting…");
+            case DISCONNECTING:
+                return _("Disconnecting…");
+            case UNABLE_TO_CONNECT:
+            case UNABLE_TO_CONNECT_PAIRED:
+                return _("Unable to Connect");
+            default:
+                return _("Not Connected");
             }
         }
     }
@@ -93,29 +93,29 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
         if (device_name == null) {
             if (device.icon != null) {
                 switch (device.icon) {
-                    case "audio-card":
-                        device_name = _("Speaker");
-                        break;
-                    case "input-gaming":
-                        device_name = _("Controller");
-                        break;
-                    case "input-keyboard":
-                        device_name = _("Keyboard");
-                        break;
-                    case "input-mouse":
-                        device_name = _("Mouse");
-                        break;
-                    case "input-tablet":
-                        device_name = _("Tablet");
-                        break;
-                    case "input-touchpad":
-                        device_name = _("Touchpad");
-                        break;
-                    case "phone":
-                        device_name = _("Phone");
-                        break;
-                    default:
-                        device_name = device.address;
+                case "audio-card":
+                    device_name = _("Speaker");
+                    break;
+                case "input-gaming":
+                    device_name = _("Controller");
+                    break;
+                case "input-keyboard":
+                    device_name = _("Keyboard");
+                    break;
+                case "input-mouse":
+                    device_name = _("Mouse");
+                    break;
+                case "input-tablet":
+                    device_name = _("Tablet");
+                    break;
+                case "input-touchpad":
+                    device_name = _("Touchpad");
+                    break;
+                case "phone":
+                    device_name = _("Phone");
+                    break;
+                default:
+                    device_name = device.address;
                 }
             } else {
                 device_name = device.address;
@@ -142,7 +142,7 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
             label = _("Forget"),
             visible = false,
             valign = Gtk.Align.CENTER,
-            color = He.Colors.RED,
+            color = He.ButtonColor.TERTIARY,
             tooltip_text = _("Forget this device")
         };
 
@@ -167,34 +167,34 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
         child = grid;
 
         switch (device.icon) {
-            case "audio-card":
-            case "audio-headset":
-                settings_button.uri = "settings://sound";
-                settings_button.tooltip_text = _("Sound");
-                break;
-            case "input-gaming":
-            case "input-keyboard":
-                settings_button.uri = "settings://keyboard";
-                settings_button.tooltip_text = _("Mouse & Keyboard");
-                break;
-            case "input-mouse":
-                settings_button.uri = "settings://keyboard";
-                settings_button.tooltip_text = _("Mouse & Keyboard");
-                break;
-            case "printer":
-                settings_button.uri = "settings://printer";
-                settings_button.tooltip_text = _("Printers");
-                break;
-            default:
-                settings_button.uri = "";
-                settings_button.tooltip_text = null;
-                break;
+        case "audio-card":
+        case "audio-headset":
+            settings_button.uri = "settings://sound";
+            settings_button.tooltip_text = _("Sound");
+            break;
+        case "input-gaming":
+        case "input-keyboard":
+            settings_button.uri = "settings://keyboard";
+            settings_button.tooltip_text = _("Mouse & Keyboard");
+            break;
+        case "input-mouse":
+            settings_button.uri = "settings://keyboard";
+            settings_button.tooltip_text = _("Mouse & Keyboard");
+            break;
+        case "printer":
+            settings_button.uri = "settings://printer";
+            settings_button.tooltip_text = _("Printers");
+            break;
+        default:
+            settings_button.uri = "";
+            settings_button.tooltip_text = null;
+            break;
         }
 
         compute_status ();
         set_sensitive (adapter.powered);
 
-        ((DBusProxy)adapter).g_properties_changed.connect ((changed, invalid) => {
+        ((DBusProxy) adapter).g_properties_changed.connect ((changed, invalid) => {
             var powered = changed.lookup_value ("Powered", new VariantType ("b"));
             if (powered != null) {
                 set_sensitive (adapter.powered);
@@ -202,7 +202,7 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
             }
         });
 
-        ((DBusProxy)device).g_properties_changed.connect ((changed, invalid) => {
+        ((DBusProxy) device).g_properties_changed.connect ((changed, invalid) => {
             var paired = changed.lookup_value ("Paired", new VariantType ("b"));
             if (paired != null) {
                 compute_status ();
@@ -240,7 +240,6 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
                 debug ("Forget bluetooth device failed: %s", e.message);
             }
         });
-
     }
 
     private async void button_clicked () {
@@ -288,61 +287,61 @@ public class Bluetooth.DeviceRow : Gtk.ListBoxRow {
     private void set_status (Status status) {
         state_label.label = GLib.Markup.printf_escaped ("%s", status.to_string ());
         switch (status) {
-            case Status.UNPAIRED:
-                connect_button.label = _("Pair");
-                connect_button.sensitive = true;
-                settings_button.visible = false;
-                state.visible = false;
-                forget_button.visible = false;
-                break;
-            case Status.PAIRING:
-                connect_button.sensitive = false;
-                settings_button.visible = false;
-                forget_button.visible = false;
-                break;
-            case Status.CONNECTED:
-                connect_button.label = _("Disconnect");
-                connect_button.sensitive = true;
-                if (settings_button.uri != "") {
-                    settings_button.visible = true;
-                }
-                forget_button.sensitive = true;
-                forget_button.visible = true;
-                state.visible = false;
-                break;
-            case Status.CONNECTING:
-                connect_button.sensitive = false;
-                settings_button.visible = false;
-                forget_button.sensitive = false;
-                forget_button.visible = true;
-                break;
-            case Status.DISCONNECTING:
-                connect_button.sensitive = false;
-                settings_button.visible = false;
-                forget_button.sensitive = false;
-                forget_button.visible = true;
-                break;
-            case Status.NOT_CONNECTED:
-                connect_button.label = _("Connect");
-                connect_button.sensitive = true;
-                settings_button.visible = false;
-                forget_button.sensitive = true;
-                forget_button.visible = true;
-                state.visible = false;
-                break;
-            case Status.UNABLE_TO_CONNECT:
-                connect_button.sensitive = true;
-                settings_button.visible = false;
-                forget_button.visible = false;
-                state.visible = false;
-                break;
-            case Status.UNABLE_TO_CONNECT_PAIRED:
-                connect_button.sensitive = true;
-                settings_button.visible = false;
-                forget_button.sensitive = true;
-                forget_button.visible = true;
-                state.visible = false;
-                break;
+        case Status.UNPAIRED:
+            connect_button.label = _("Pair");
+            connect_button.sensitive = true;
+            settings_button.visible = false;
+            state.visible = false;
+            forget_button.visible = false;
+            break;
+        case Status.PAIRING:
+            connect_button.sensitive = false;
+            settings_button.visible = false;
+            forget_button.visible = false;
+            break;
+        case Status.CONNECTED:
+            connect_button.label = _("Disconnect");
+            connect_button.sensitive = true;
+            if (settings_button.uri != "") {
+                settings_button.visible = true;
+            }
+            forget_button.sensitive = true;
+            forget_button.visible = true;
+            state.visible = false;
+            break;
+        case Status.CONNECTING:
+            connect_button.sensitive = false;
+            settings_button.visible = false;
+            forget_button.sensitive = false;
+            forget_button.visible = true;
+            break;
+        case Status.DISCONNECTING:
+            connect_button.sensitive = false;
+            settings_button.visible = false;
+            forget_button.sensitive = false;
+            forget_button.visible = true;
+            break;
+        case Status.NOT_CONNECTED:
+            connect_button.label = _("Connect");
+            connect_button.sensitive = true;
+            settings_button.visible = false;
+            forget_button.sensitive = true;
+            forget_button.visible = true;
+            state.visible = false;
+            break;
+        case Status.UNABLE_TO_CONNECT:
+            connect_button.sensitive = true;
+            settings_button.visible = false;
+            forget_button.visible = false;
+            state.visible = false;
+            break;
+        case Status.UNABLE_TO_CONNECT_PAIRED:
+            connect_button.sensitive = true;
+            settings_button.visible = false;
+            forget_button.sensitive = true;
+            forget_button.visible = true;
+            state.visible = false;
+            break;
         }
         status_changed ();
     }
