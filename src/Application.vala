@@ -24,6 +24,7 @@ namespace Fusebox {
         private Bis.Album album;
         private Bis.Album halbum;
         private He.AppBar headerbar;
+        private Gtk.Overlay about_overlay;
         private He.ApplicationWindow main_window;
         private Fusebox.CategoryView category_view;
 
@@ -245,9 +246,12 @@ namespace Fusebox {
             main_box.append (sbox);
             main_box.append (box);
 
+            about_overlay = new Gtk.Overlay ();
+            about_overlay.set_child (main_box);
+
             main_window = new He.ApplicationWindow (this) {
                 application = this,
-                child = main_box,
+                child = about_overlay,
                 icon_name = application_id,
                 title = _("Fusebox")
             };
@@ -337,6 +341,7 @@ namespace Fusebox {
                                             He.AboutWindow.Licenses.GPLV3,
                                             He.Colors.DARK
             );
+            about_overlay.add_overlay (about);
             about.present ();
         }
 
