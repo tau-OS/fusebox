@@ -1,19 +1,24 @@
- public class Appearance.WindowView : Gtk.Box {
-     private static GLib.Settings wm_settings;
-     private Gtk.ComboBoxText wm_layout_cb;
-     private Gtk.ComboBoxText wm_dc_cb;
-     private Gtk.ComboBoxText wm_sc_cb;
-     private Gtk.ComboBoxText wm_focus_cb;
-     private Gtk.Box wm_layout_preview;
+public class Appearance.WindowView : Gtk.Box {
+    private static GLib.Settings wm_settings;
+    private Gtk.ComboBoxText wm_layout_cb;
+    private Gtk.ComboBoxText wm_dc_cb;
+    private Gtk.ComboBoxText wm_sc_cb;
+    private Gtk.ComboBoxText wm_focus_cb;
+    private Gtk.Box wm_layout_preview;
 
-     public WindowView () {
-     }
+    private ulong wm_layout_handler = 0;
+    private ulong wm_dc_handler = 0;
+    private ulong wm_sc_handler = 0;
+    private ulong wm_focus_handler = 0;
 
-     static construct {
-         wm_settings = new GLib.Settings ("org.gnome.desktop.wm.preferences");
-     }
+    public WindowView () {
+    }
 
-     construct {
+    static construct {
+        wm_settings = new GLib.Settings ("org.gnome.desktop.wm.preferences");
+    }
+
+    construct {
         var wm_layout_preview_label = new He.ViewTitle () {
             label = (_("View"))
         };
@@ -48,22 +53,20 @@
 
         var wm_layout_box_cb = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         wm_layout_box_cb.append (
-            new Gtk.Label (_("Window Controls Layout")) {
-                css_classes = { "cb-title" },
-                xalign = 0
-            }
-        );
+                                 new Gtk.Label (_("Window Controls Layout")) {
+            css_classes = { "cb-title" },
+            xalign = 0
+        });
         wm_layout_box_cb.append (
-            new Gtk.Label (_("This changes the button placement of close, maximize and minimize")) {
-                css_classes = { "cb-subtitle", "dim-label" },
-                xalign = 0,
-                lines = 2,
-                max_width_chars = 40,
-                ellipsize = Pango.EllipsizeMode.END,
-                hexpand = true,
-                halign = Gtk.Align.START
-            }
-        );
+                                 new Gtk.Label (_("This changes the button placement of close, maximize and minimize")) {
+            css_classes = { "cb-subtitle", "dim-label" },
+            xalign = 0,
+            lines = 2,
+            max_width_chars = 40,
+            ellipsize = Pango.EllipsizeMode.END,
+            hexpand = true,
+            halign = Gtk.Align.START
+        });
 
         var wm_layout_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wm_layout_box.append (wm_layout_box_cb);
@@ -73,19 +76,17 @@
 
         var wm_title_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         wm_title_box.append (
-            new Gtk.Label (_("Titlebar Actions")) {
-                css_classes = { "cb-title" },
-                xalign = 0
-            }
-        );
+                             new Gtk.Label (_("Titlebar Actions")) {
+            css_classes = { "cb-title" },
+            xalign = 0
+        });
         wm_title_box.append (
-            new Gtk.Label (_("Change what the mouse does when interacting with the titlebar")) {
-                css_classes = { "cb-subtitle", "dim-label" },
-                xalign = 0,
-                hexpand = true,
-                halign = Gtk.Align.START
-            }
-        );
+                             new Gtk.Label (_("Change what the mouse does when interacting with the titlebar")) {
+            css_classes = { "cb-subtitle", "dim-label" },
+            xalign = 0,
+            hexpand = true,
+            halign = Gtk.Align.START
+        });
 
         wm_dc_cb = new Gtk.ComboBoxText () {
             valign = Gtk.Align.CENTER
@@ -98,14 +99,13 @@
 
         var wm_dc_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wm_dc_box.append (
-            new Gtk.Label (_("Double Click")) {
-                css_classes = { "cb-title" },
-                xalign = 0,
-                hexpand = true,
-                valign = Gtk.Align.CENTER,
-                halign = Gtk.Align.START
-            }
-        );
+                          new Gtk.Label (_("Double Click")) {
+            css_classes = { "cb-title" },
+            xalign = 0,
+            hexpand = true,
+            valign = Gtk.Align.CENTER,
+            halign = Gtk.Align.START
+        });
         wm_dc_box.append (wm_dc_cb);
         wm_dc_box.hexpand = true;
         wm_dc_box.add_css_class ("mini-content-block");
@@ -123,14 +123,13 @@
 
         var wm_sc_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wm_sc_box.append (
-            new Gtk.Label (_("Secondary Click")) {
-                css_classes = { "cb-title" },
-                xalign = 0,
-                hexpand = true,
-                valign = Gtk.Align.CENTER,
-                halign = Gtk.Align.START
-            }
-        );
+                          new Gtk.Label (_("Secondary Click")) {
+            css_classes = { "cb-title" },
+            xalign = 0,
+            hexpand = true,
+            valign = Gtk.Align.CENTER,
+            halign = Gtk.Align.START
+        });
         wm_sc_box.append (wm_sc_cb);
         wm_sc_box.hexpand = true;
         wm_sc_box.add_css_class ("mini-content-block");
@@ -146,22 +145,20 @@
 
         var wm_focus_box_cb = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
         wm_focus_box_cb.append (
-            new Gtk.Label (_("Focusing")) {
-                css_classes = { "cb-title" },
-                xalign = 0
-            }
-        );
+                                new Gtk.Label (_("Focusing")) {
+            css_classes = { "cb-title" },
+            xalign = 0
+        });
         wm_focus_box_cb.append (
-            new Gtk.Label (_("This changes the way to focus windows to make them the active window")) {
-                css_classes = { "cb-subtitle", "dim-label" },
-                xalign = 0,
-                lines = 2,
-                max_width_chars = 40,
-                ellipsize = Pango.EllipsizeMode.END,
-                hexpand = true,
-                halign = Gtk.Align.START
-            }
-        );
+                                new Gtk.Label (_("This changes the way to focus windows to make them the active window")) {
+            css_classes = { "cb-subtitle", "dim-label" },
+            xalign = 0,
+            lines = 2,
+            max_width_chars = 40,
+            ellipsize = Pango.EllipsizeMode.END,
+            hexpand = true,
+            halign = Gtk.Align.START
+        });
 
         var wm_focus_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wm_focus_box.append (wm_focus_box_cb);
@@ -170,11 +167,11 @@
         wm_focus_box.add_css_class ("mini-content-block");
 
         var grid = new Gtk.Grid () {
-         row_spacing = 6,
-         margin_start = 18,
-         margin_end = 18,
-         margin_bottom = 18,
-         hexpand = true
+            row_spacing = 6,
+            margin_start = 18,
+            margin_end = 18,
+            margin_bottom = 18,
+            hexpand = true
         };
         grid.attach (wm_layout_preview, 0, 0);
         grid.attach (wm_layout_box, 0, 1);
@@ -188,47 +185,61 @@
         hexpand = true;
 
         wm_layout_refresh ();
-        wm_settings.notify["changed:button-layout"].connect (() => {
-            wm_layout_refresh ();
+        wm_settings.changed.connect ((key) => {
+            if (key == "button-layout") {
+                wm_layout_refresh ();
+            }
         });
 
         wm_dc_refresh ();
-        wm_settings.notify["changed:action-double-click-titlebar"].connect (() => {
-            wm_dc_refresh ();
+        wm_settings.changed.connect ((key) => {
+            if (key == "action-double-click-titlebar") {
+                wm_dc_refresh ();
+            }
         });
 
         wm_sc_refresh ();
-        wm_settings.notify["changed:action-right-click-titlebar"].connect (() => {
-            wm_sc_refresh ();
+        wm_settings.changed.connect ((key) => {
+            if (key == "action-right-click-titlebar") {
+                wm_sc_refresh ();
+            }
         });
 
         wm_focus_refresh ();
-        wm_settings.notify["changed:focus-mode"].connect (() => {
-            wm_focus_refresh ();
+        wm_settings.changed.connect ((key) => {
+            if (key == "focus-mode") {
+                wm_focus_refresh ();
+            }
         });
     }
 
     private void wm_layout_refresh () {
-        string title = wm_settings.get_string ("button-layout");
-        switch (title) {
-            case "close,minimize,maximize:":
-                wm_layout_cb.set_active (0);
-                break;
-            case ":minimize,maximize,close":
-                wm_layout_cb.set_active (2);
-                break;
-            case "close:maximize":
-                wm_layout_cb.set_active (3);
-                break;
-            case ":close":
-                wm_layout_cb.set_active (4);
-                break;
-            case "appmenu:minimize,maximize,close":
-                wm_layout_cb.set_active (5);
-                break;
+        // Disconnect existing handlers to prevent duplicates
+        if (wm_layout_handler != 0) {
+            wm_layout_cb.disconnect (wm_layout_handler);
+            wm_layout_handler = 0;
         }
 
-        wm_layout_cb.changed.connect (() => {
+        string title = wm_settings.get_string ("button-layout");
+        switch (title) {
+        case "close,minimize,maximize:":
+            wm_layout_cb.set_active (0);
+            break;
+        case ":minimize,maximize,close":
+            wm_layout_cb.set_active (2);
+            break;
+        case "close:maximize":
+            wm_layout_cb.set_active (3);
+            break;
+        case ":close":
+            wm_layout_cb.set_active (4);
+            break;
+        case "appmenu:minimize,maximize,close":
+            wm_layout_cb.set_active (5);
+            break;
+        }
+
+        wm_layout_handler = wm_layout_cb.changed.connect (() => {
             int choice = wm_layout_cb.get_active ();
             switch (choice) {
                 case 0:
@@ -252,23 +263,29 @@
     }
 
     private void wm_dc_refresh () {
-        int title = wm_settings.get_enum ("action-double-click-titlebar");
-        switch (title) {
-            case 1:
-                wm_dc_cb.set_active (0);
-                break;
-            case 4:
-                wm_dc_cb.set_active (1);
-                break;
-            case 7:
-                wm_dc_cb.set_active (2);
-                break;
-            case 5:
-                wm_dc_cb.set_active (3);
-                break;
+        // Disconnect existing handlers to prevent duplicates
+        if (wm_dc_handler != 0) {
+            wm_dc_cb.disconnect (wm_dc_handler);
+            wm_dc_handler = 0;
         }
 
-        wm_dc_cb.changed.connect (() => {
+        int title = wm_settings.get_enum ("action-double-click-titlebar");
+        switch (title) {
+        case 1:
+            wm_dc_cb.set_active (0);
+            break;
+        case 4:
+            wm_dc_cb.set_active (1);
+            break;
+        case 7:
+            wm_dc_cb.set_active (2);
+            break;
+        case 5:
+            wm_dc_cb.set_active (3);
+            break;
+        }
+
+        wm_dc_handler = wm_dc_cb.changed.connect (() => {
             int choice = wm_dc_cb.get_active ();
             switch (choice) {
                 case 0:
@@ -288,23 +305,29 @@
     }
 
     private void wm_sc_refresh () {
-        int title = wm_settings.get_enum ("action-right-click-titlebar");
-        switch (title) {
-            case 1:
-                wm_sc_cb.set_active (0);
-                break;
-            case 4:
-                wm_sc_cb.set_active (1);
-                break;
-            case 7:
-                wm_sc_cb.set_active (2);
-                break;
-            case 5:
-                wm_sc_cb.set_active (3);
-                break;
+        // Disconnect existing handlers to prevent duplicates
+        if (wm_sc_handler != 0) {
+            wm_sc_cb.disconnect (wm_sc_handler);
+            wm_sc_handler = 0;
         }
 
-        wm_sc_cb.changed.connect (() => {
+        int title = wm_settings.get_enum ("action-right-click-titlebar");
+        switch (title) {
+        case 1:
+            wm_sc_cb.set_active (0);
+            break;
+        case 4:
+            wm_sc_cb.set_active (1);
+            break;
+        case 7:
+            wm_sc_cb.set_active (2);
+            break;
+        case 5:
+            wm_sc_cb.set_active (3);
+            break;
+        }
+
+        wm_sc_handler = wm_sc_cb.changed.connect (() => {
             int choice = wm_sc_cb.get_active ();
             switch (choice) {
                 case 0:
@@ -324,17 +347,23 @@
     }
 
     private void wm_focus_refresh () {
-        int title = wm_settings.get_enum ("focus-mode");
-        switch (title) {
-            case 0:
-                wm_focus_cb.set_active (0);
-                break;
-            case 1:
-                wm_focus_cb.set_active (1);
-                break;
+        // Disconnect existing handlers to prevent duplicates
+        if (wm_focus_handler != 0) {
+            wm_focus_cb.disconnect (wm_focus_handler);
+            wm_focus_handler = 0;
         }
 
-        wm_focus_cb.changed.connect (() => {
+        int title = wm_settings.get_enum ("focus-mode");
+        switch (title) {
+        case 0:
+            wm_focus_cb.set_active (0);
+            break;
+        case 1:
+            wm_focus_cb.set_active (1);
+            break;
+        }
+
+        wm_focus_handler = wm_focus_cb.changed.connect (() => {
             int choice = wm_focus_cb.get_active ();
             switch (choice) {
                 case 0:
@@ -346,4 +375,4 @@
             }
         });
     }
- }
+}

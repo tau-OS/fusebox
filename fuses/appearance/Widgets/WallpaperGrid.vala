@@ -57,6 +57,13 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     public string wallpaper_title;
     public string wallpaper_subtitle;
 
+    ~WallpaperGrid () {
+        if (last_cancellable != null) {
+            last_cancellable.cancel ();
+            last_cancellable = null;
+        }
+    }
+
     public WallpaperGrid (Fusebox.Fuse _fuse, AppearanceView _appearance_view) {
         Object (fuse: _fuse, appearance_view: _appearance_view);
     }
@@ -163,11 +170,20 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         var file = File.new_for_uri (uri);
         string furi = file.get_uri ();
 
+        // Validate file exists before setting
+        if (!file.query_exists ()) {
+            warning ("Wallpaper file does not exist: %s", uri);
+            return;
+        }
+
         settings.set_string ("picture-uri", furi);
         settings.set_string ("picture-uri-dark", furi);
         if (appearance_view.wallpaper_type_button.active) {
             appearance_view.accent_setup.begin ();
-            appearance_view.ensor_flowbox.flowbox.select_child (appearance_view.ensor_flowbox.flowbox.get_child_at_index (0));
+            var flowbox = appearance_view.ensor_flowbox ? .flowbox;
+            if (flowbox != null && flowbox.get_child_at_index (0) != null) {
+                flowbox.select_child (flowbox.get_child_at_index (0));
+            }
         }
 
         appearance_view.wallpaper_preview.file = furi;
@@ -214,6 +230,11 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     private File ? copy_for_library (File source) {
         File? dest = null;
 
+        if (source == null || !source.query_exists ()) {
+            warning ("Source file is null or does not exist");
+            return null;
+        }
+
         string local_bg_directory = Path.build_filename (Environment.get_user_data_dir (), "backgrounds") + "/";
         try {
             File folder = File.new_for_path (local_bg_directory);
@@ -222,25 +243,42 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
             if (e is GLib.IOError.EXISTS) {
                 debug ("Local background directory already exists");
             } else {
-                warning (e.message);
+                warning ("Error creating background directory: %s", e.message);
+                return null;
             }
         }
 
         try {
             var timestamp = new DateTime.now_local ().format ("%Y-%m-%d-%H-%M-%S");
-            var filename = "%s-%s".printf (timestamp, source.get_basename ().replace (" ", "_").replace ("%20", "_"));
+            string basename = source.get_basename ();
+            if (basename == null || basename.length == 0) {
+                warning ("Invalid source filename");
+                return null;
+            }
+            var filename = "%s-%s".printf (timestamp, basename.replace (" ", "_").replace ("%20", "_"));
             string path = Path.build_filename (local_bg_directory, filename);
             dest = File.new_for_path (path);
             source.copy (dest, FileCopyFlags.OVERWRITE | FileCopyFlags.ALL_METADATA);
         } catch (Error e) {
-            warning (e.message);
+            warning ("Error copying file to library: %s", e.message);
+            return null;
         }
 
         return dest;
     }
 
     private async void update_checked_wallpaper (Gtk.FlowBox box, Gtk.FlowBoxChild child) {
-        var children = (Appearance.WallpaperContainer) wallpaper_view.get_selected_children ().data;
+        var selected_children = wallpaper_view.get_selected_children ();
+        if (selected_children.length () == 0) {
+            warning ("No wallpaper selected");
+            return;
+        }
+
+        var children = (Appearance.WallpaperContainer) selected_children.data;
+        if (children == null) {
+            warning ("Selected wallpaper is null");
+            return;
+        }
 
         if (active_wallpaper != null && active_wallpaper != children) {
             active_wallpaper.checked = false;
@@ -249,7 +287,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         active_wallpaper = children;
         active_wallpaper.checked = true;
         var local_bg = Path.build_filename (Environment.get_user_data_dir (), "backgrounds") + "/";
-        if (!active_wallpaper.uri.contains (local_bg)) {
+        if (active_wallpaper.uri == null || !active_wallpaper.uri.contains (local_bg)) {
             wallpaper_removal_button.visible = false;
         } else {
             wallpaper_removal_button.visible = true;
@@ -261,7 +299,6 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     public async void update_wallpaper_folder () {
         if (last_cancellable != null) {
             last_cancellable.cancel ();
-            return;
         }
 
         var cancellable = new Cancellable ();
@@ -272,7 +309,10 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
         }
 
         foreach (unowned string directory in get_bg_directories ()) {
-            load_wallpapers.begin (directory, cancellable);
+            if (cancellable.is_cancelled ()) {
+                break;
+            }
+            yield load_wallpapers (directory, cancellable);
         }
     }
 
@@ -352,14 +392,24 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
     }
 
     private async void add_wallpaper_from_file (GLib.File file) {
+        if (file == null) {
+            warning ("Cannot add null file as wallpaper");
+            return;
+        }
+
         try {
             var info = file.query_info (string.joinv (",", REQUIRED_FILE_ATTRS), 0);
+            if (info == null) {
+                warning ("Could not query file info for: %s", file.get_uri ());
+                return;
+            }
+
             var thumb_path = info.get_attribute_as_string (FileAttribute.THUMBNAIL_PATH);
             var thumb_valid = info.get_attribute_boolean (FileAttribute.THUMBNAIL_IS_VALID);
             var wallpaper = new WallpaperContainer (file.get_uri (), thumb_path, thumb_valid);
             wallpaper_view.append (wallpaper);
 
-            if (current_wallpaper_path.has_suffix (file.get_uri ())) {
+            if (current_wallpaper_path != null && current_wallpaper_path.has_suffix (file.get_uri ())) {
                 this.wallpaper_view.select_child (wallpaper);
                 wallpaper.checked = true;
                 active_wallpaper = wallpaper;
@@ -367,6 +417,7 @@ public class Appearance.WallpaperGrid : Gtk.Grid {
 
             wallpaper_view.invalidate_sort ();
         } catch (Error e) {
+            warning ("Error adding wallpaper from file %s: %s", file.get_uri (), e.message);
         }
     }
 
@@ -458,7 +509,7 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
     }
 
     public WallpaperContainer (string uri, string? thumb_path, bool thumb_valid) {
-        Object (uri : uri, thumb_path: thumb_path, thumb_valid: thumb_valid);
+        Object (uri : uri, thumb_path : thumb_path, thumb_valid: thumb_valid);
     }
 
     ~WallpaperContainer () {
@@ -497,10 +548,13 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
         if (uri != null) {
             var file = File.new_for_uri (uri);
             try {
-                var info = file.query_info ("*", FileQueryInfoFlags.NONE);
-                creation_date = info.get_attribute_uint64 (GLib.FileAttribute.TIME_CREATED);
+                var info = file.query_info ("time::*", FileQueryInfoFlags.NONE);
+                if (info != null) {
+                    creation_date = info.get_attribute_uint64 (GLib.FileAttribute.TIME_CREATED);
+                }
             } catch (Error e) {
-                critical (e.message);
+                debug ("Could not get creation date for %s: %s", uri, e.message);
+                creation_date = 0;
             }
         }
 
@@ -517,6 +571,11 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
     }
 
     private void generate_and_load_thumb () {
+        if (uri == null || uri.length == 0) {
+            warning ("Cannot generate thumbnail for null or empty URI");
+            return;
+        }
+
         var scale = 1;
         ThumbnailGenerator.get_default ().get_thumbnail (uri, THUMB_WIDTH * scale, () => {
             update_thumb.begin ();
@@ -524,7 +583,11 @@ public class Appearance.WallpaperContainer : Gtk.FlowBoxChild {
     }
 
     private async void update_thumb () {
-        image.file = "file://" + thumb_path;
+        if (thumb_path != null && thumb_path.length > 0) {
+            image.file = "file://" + thumb_path;
+        } else {
+            debug ("No thumbnail path available for wallpaper");
+        }
     }
 }
 
@@ -593,6 +656,16 @@ public class Appearance.ThumbnailGenerator {
     }
 
     public void get_thumbnail (string uri, uint size, ThumbnailReady callback) {
+        if (uri == null || uri.length == 0) {
+            warning ("Cannot generate thumbnail for null or empty URI");
+            return;
+        }
+
+        if (callback == null) {
+            warning ("Callback is null for thumbnail generation");
+            return;
+        }
+
         string thumb_size = "normal";
 
         if (size > 128) {
@@ -604,21 +677,36 @@ public class Appearance.ThumbnailGenerator {
             wrapper.cb = callback;
 
             try {
-                var handle = thumbnailer.queue ({ uri }, { get_mime_type (uri) }, thumb_size, "default", 0);
+                string mime_type = get_mime_type (uri);
+                if (mime_type.length == 0) {
+                    warning ("Could not determine MIME type for %s", uri);
+                    return;
+                }
+
+                var handle = thumbnailer.queue ({ uri }, { mime_type }, thumb_size, "default", 0);
                 handles.add (handle);
                 queued_delegates.@set (handle, wrapper);
             } catch (GLib.Error e) {
                 warning ("Unable to queue thumbnail generation for '%s': %s", uri, e.message);
             }
+        } else {
+            warning ("Thumbnailer service not available");
         }
     }
 
     private string get_mime_type (string uri) {
-        try {
-            return ContentType.guess (Filename.from_uri (uri), null, null);
-        } catch (ConvertError e) {
-            warning ("Error converting filename '%s' while guessing mime type: %s", uri, e.message);
+        if (uri == null || uri.length == 0) {
             return "";
         }
+
+        try {
+            string filename = Filename.from_uri (uri);
+            if (filename != null) {
+                return ContentType.guess (filename, null, null);
+            }
+        } catch (ConvertError e) {
+            warning ("Error converting filename '%s' while guessing mime type: %s", uri, e.message);
+        }
+        return "";
     }
 }

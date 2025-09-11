@@ -39,12 +39,23 @@ public class EnsorFlowBox : He.Bin {
 
     private void child_activated_cb (Gtk.FlowBoxChild child) {
         var ensor_mode = ((EnsorModeButton) child.get_first_child ()).mode;
-        var ensor_color = ((EnsorModeButton) child.get_first_child ()).colors[0];
+        var ensor_button = ((EnsorModeButton) child.get_first_child ());
+
+        // Bounds check for colors array
+        if (ensor_button.colors.size == 0) {
+            warning ("EnsorModeButton has no colors available");
+            return;
+        }
+
+        var ensor_color = ensor_button.colors[0];
         tau_appearance_settings.set_string ("ensor-scheme", ensor_mode);
         tau_appearance_settings.set_string ("accent-color", He.hexcode_argb (ensor_color));
 
-        current_selection = flowbox.get_selected_children ().nth_data (0).get_index ();
-        fusebox_appearance_settings.set_int ("wallpaper-accent-choice", current_selection);
+        var selected_children = flowbox.get_selected_children ();
+        if (selected_children.length () > 0) {
+            current_selection = selected_children.nth_data (0).get_index ();
+            fusebox_appearance_settings.set_int ("wallpaper-accent-choice", current_selection);
+        }
     }
 
     private void make_ensor_set (int color) {

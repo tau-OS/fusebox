@@ -48,7 +48,18 @@ public class Appearance.Fuse : Fusebox.Fuse {
 
     public override void search_callback (string location) {
         switch (location) {
-        //
+        case ACCENTS:
+            main_stack.set_visible_child_name ("desktop");
+            break;
+        case WALLPAPER:
+            appearance_view.wallpaper_stack.set_visible_child_name ("wallpaper");
+            break;
+        case DOCK:
+            // TODO: Implement dock view when ready
+            break;
+        default:
+            main_stack.set_visible_child_name ("desktop");
+            break;
         }
     }
 

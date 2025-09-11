@@ -10,6 +10,17 @@ public class Appearance.TextView : Gtk.Box {
     private uint scale_timeout;
     private uint fwscale_timeout;
 
+    ~TextView () {
+        if (scale_timeout != 0) {
+            GLib.Source.remove (scale_timeout);
+            scale_timeout = 0;
+        }
+        if (fwscale_timeout != 0) {
+            GLib.Source.remove (fwscale_timeout);
+            fwscale_timeout = 0;
+        }
+    }
+
     static construct {
         tau_appearance_settings = new GLib.Settings ("com.fyralabs.desktop.appearance");
     }
@@ -22,7 +33,7 @@ public class Appearance.TextView : Gtk.Box {
         preview_text_block.add_css_class ("surface-container-lowest-bg-color");
         preview_text_block.add_css_class ("large-radius");
         preview_text_block.label = (_(
-"""Whereas disregard and contempt for human rights have resulted in
+                                      """Whereas disregard and contempt for human rights have resulted in
 barbarous acts which have outraged the conscience of mankind, and
 the advent of a world in which human beings shall enjoy freedom of
 speech and belief and freedom from fear and want has been
@@ -90,7 +101,7 @@ proclaimed as the highest aspiration of the common people…"""));
         };
 
         var dyslexia_font_description_label = new Gtk.Label (
-                _("Bottom-heavy letters and improved spacing can help with legibility and readability.")
+                                                             _("Bottom-heavy letters and improved spacing can help with legibility and readability.")
             ) {
             wrap = true,
             xalign = 0
@@ -151,18 +162,19 @@ proclaimed as the highest aspiration of the common people…"""));
         var interface_font = interface_settings.get_string (FONT_KEY);
         var document_font = interface_settings.get_string (DOCUMENT_FONT_KEY);
 
-        if (interface_font == OD_REG_FONT) {
-            dyslexia_font_switch.iswitch.active = true;
-        } else {
-            dyslexia_font_switch.iswitch.active = false;
-        }
+        // Set dyslexia switch state based on current font
+        dyslexia_font_switch.iswitch.active = (interface_font == OD_REG_FONT);
         dyslexia_font_switch.iswitch.notify["active"].connect (() => {
-            if (dyslexia_font_switch.iswitch.active) {
-                interface_settings.set_string (FONT_KEY, OD_REG_FONT);
-                interface_settings.set_string (DOCUMENT_FONT_KEY, OD_DOC_FONT);
-            } else {
-                interface_settings.set_string (FONT_KEY, REG_FONT);
-                interface_settings.set_string (DOCUMENT_FONT_KEY, DOC_FONT);
+            try {
+                if (dyslexia_font_switch.iswitch.active) {
+                    interface_settings.set_string (FONT_KEY, OD_REG_FONT);
+                    interface_settings.set_string (DOCUMENT_FONT_KEY, OD_DOC_FONT);
+                } else {
+                    interface_settings.set_string (FONT_KEY, REG_FONT);
+                    interface_settings.set_string (DOCUMENT_FONT_KEY, DOC_FONT);
+                }
+            } catch (Error e) {
+                warning ("Error setting font: %s", e.message);
             }
         });
     }
