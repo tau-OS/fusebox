@@ -88,11 +88,14 @@ public class Display.DisplaysOverlay : He.Bin {
     public void rescan_displays () {
         scanning = true;
 
-        Gtk.Widget child;
-        for (child = overlay.get_first_child (); child != null; child = child.get_next_sibling ()) {
+        // Properly remove all DisplayWidget children
+        Gtk.Widget? child = overlay.get_first_child ();
+        while (child != null) {
+            Gtk.Widget? next_child = child.get_next_sibling ();
             if (child is DisplayWidget) {
-                child.dispose ();
+                overlay.remove (child);
             }
+            child = next_child;
         }
 
         active_displays = 0;
@@ -110,7 +113,7 @@ public class Display.DisplaysOverlay : He.Bin {
         var first_child = overlay.get_first_child ();
         if (first_child != null && first_child is DisplayWidget) {
             var display_widget = (DisplayWidget) first_child;
-            if (display_widget.virtual_monitor.is_active) {
+            if (display_widget.virtual_monitor != null && display_widget.virtual_monitor.is_active) {
                 display_widget.only_display = (active_displays == 1);
             }
         }
@@ -127,16 +130,19 @@ public class Display.DisplaysOverlay : He.Bin {
         int max_width = int.MIN;
         int max_height = int.MIN;
 
-        Gtk.Widget child;
-        for (child = overlay.get_first_child (); child != null; child = child.get_next_sibling ()) {
-            var display_widget = (DisplayWidget) child;
-            int x, y, width, height;
-            display_widget.get_geometry (out x, out y, out width, out height);
+        Gtk.Widget? child = overlay.get_first_child ();
+        while (child != null) {
+            if (child is DisplayWidget) {
+                var display_widget = (DisplayWidget) child;
+                int x, y, width, height;
+                display_widget.get_geometry (out x, out y, out width, out height);
 
-            added_width += width;
-            added_height += height;
-            max_width = int.max (max_width, x + width);
-            max_height = int.max (max_height, y + height);
+                added_width += width;
+                added_height += height;
+                max_width = int.max (max_width, x + width);
+                max_height = int.max (max_height, y + height);
+            }
+            child = child.get_next_sibling ();
         }
 
         current_allocated_width = get_allocated_width ();
@@ -242,9 +248,10 @@ public class Display.DisplaysOverlay : He.Bin {
         widget_points[4] = y + height / 2 - 1; // y_center
         widget_points[5] = y + height - 1; // y_end
 
-        Gtk.Widget child;
-        for (child = overlay.get_first_child (); child != null; child = child.get_next_sibling ()) {
+        Gtk.Widget? child = overlay.get_first_child ();
+        while (child != null) {
             if (!(child is DisplayWidget) || (DisplayWidget) child == display_widget) {
+                child = child.get_next_sibling ();
                 continue;
             }
 
@@ -272,6 +279,7 @@ public class Display.DisplaysOverlay : He.Bin {
                                 }
                             }
                         }
+                        child = child.get_next_sibling ();
                     }
                 }
             }
@@ -327,8 +335,8 @@ public class Display.DisplaysOverlay : He.Bin {
     private void verify_global_positions () {
         int min_x = int.MAX;
         int min_y = int.MAX;
-        Gtk.Widget child;
-        for (child = overlay.get_first_child (); child != null; child = child.get_next_sibling ()) {
+        Gtk.Widget? child = overlay.get_first_child ();
+        while (child != null) {
             if (child is DisplayWidget) {
                 var display_widget = (DisplayWidget) child;
                 int x, y, width, height;
@@ -336,22 +344,23 @@ public class Display.DisplaysOverlay : He.Bin {
                 min_x = int.min (min_x, x);
                 min_y = int.min (min_y, y);
             }
+            child = child.get_next_sibling ();
         }
-        ;
 
         if (min_x == 0 && min_y == 0) {
             return;
         }
 
-        for (child = overlay.get_first_child (); child != null; child = child.get_next_sibling ()) {
+        child = overlay.get_first_child ();
+        while (child != null) {
             if (child is DisplayWidget) {
                 var display_widget = (DisplayWidget) child;
                 int x, y, width, height;
                 display_widget.get_geometry (out x, out y, out width, out height);
                 display_widget.set_geometry (x - min_x, y - min_y, width, height);
             }
+            child = child.get_next_sibling ();
         }
-        ;
     }
 
     // If widget is intersects with any other widgets -> move other widgets to fix intersection
@@ -365,9 +374,10 @@ public class Display.DisplaysOverlay : He.Bin {
         source_display_widget.get_geometry (out source_x, out source_y, out source_width, out source_height);
         Gdk.Rectangle src_rect = { source_x, source_y, source_width, source_height };
 
-        Gtk.Widget child;
-        for (child = overlay.get_first_child (); child != null; child = child.get_next_sibling ()) {
+        Gtk.Widget? child = overlay.get_first_child ();
+        while (child != null) {
             if (!(child is DisplayWidget) || (DisplayWidget) child == source_display_widget) {
+                child = child.get_next_sibling ();
                 continue;
             }
 
@@ -396,6 +406,7 @@ public class Display.DisplaysOverlay : He.Bin {
                 other_display_widget.queue_resize ();
                 check_intersects (other_display_widget, level + 1, distance_x, distance_y);
             }
+            child = child.get_next_sibling ();
         }
     }
 
@@ -404,12 +415,13 @@ public class Display.DisplaysOverlay : He.Bin {
         // Snap last_moved
         debug ("Snapping displays");
         var anchors = new List<DisplayWidget> ();
-        Gtk.Widget child;
-        for (child = overlay.get_first_child (); child != null; child = child.get_next_sibling ()) {
-            if (!(child is DisplayWidget) || last_moved.equals ((DisplayWidget) child))return;
-            anchors.append ((DisplayWidget) child);
+        Gtk.Widget? child = overlay.get_first_child ();
+        while (child != null) {
+            if (child is DisplayWidget && !last_moved.equals ((DisplayWidget) child)) {
+                anchors.append ((DisplayWidget) child);
+            }
+            child = child.get_next_sibling ();
         }
-        ;
 
         snap_widget (last_moved, anchors);
     }

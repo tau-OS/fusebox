@@ -66,14 +66,16 @@ public class Accounts.AccountsView : Gtk.Box {
 
         autologin_dropdown.notify["selected-item"].connect (() => {
             var user = (Act.User) autologin_dropdown.selected_item;
-            if (autologin_switch.iswitch.active) {
+            if (user != null && autologin_switch.iswitch.active) {
                 user.set_automatic_login (true);
             }
         });
 
         autologin_switch.iswitch.notify["active"].connect (() => {
             var user = (Act.User) autologin_dropdown.selected_item;
-            user.set_automatic_login (autologin_switch.iswitch.active);
+            if (user != null) {
+                user.set_automatic_login (autologin_switch.iswitch.active);
+            }
         });
 
         var clamp = new Bis.Latch ();

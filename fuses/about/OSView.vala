@@ -23,11 +23,11 @@ public class About.OSView : Gtk.Box {
     private static Regex pc_name_regex;
 
     static construct {
-      try {
-        pc_name_regex = new Regex ("^[A-Za-z0-9' ]*$");
-      } catch (Error e) {
-        critical ("Failed to compile regex: %s", e.message);
-      }
+        try {
+            pc_name_regex = new Regex ("^[A-Za-z0-9' ]*$");
+        } catch (Error e) {
+            critical ("Failed to compile regex: %s", e.message);
+        }
     }
 
     construct {
@@ -44,11 +44,16 @@ public class About.OSView : Gtk.Box {
         var os_pretty_name = "%s".printf (
                                           Environment.get_os_info (GLib.OsInfoKey.NAME)
         );
+        string version_codename = Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME) ?? "";
+        string formatted_codename = "";
+        if (version_codename != null && version_codename.length > 0) {
+            formatted_codename = "(" + version_codename[0].toupper ().to_string ()
+                + version_codename.substring (1).replace ("_", " ") + ")";
+        }
+
         var os_sub_name = "<b>%s %s</b>".printf (
                                                  Environment.get_os_info (GLib.OsInfoKey.VERSION_ID) ?? "",
-                                                 "(" + Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME)[0].toupper ().to_string () +
-                                                       Environment.get_os_info (GLib.OsInfoKey.VERSION_CODENAME).substring(1,-1).replace("_"," ") + ")" ??
-                                                 ""
+                                                 formatted_codename
         );
         var os_title = new Gtk.Label (os_pretty_name) {
             ellipsize = Pango.EllipsizeMode.END,
@@ -223,7 +228,7 @@ public class About.OSView : Gtk.Box {
         };
         scroller.set_child (info_box);
 
-        var bug_button = new He.OverlayButton ("emblem-important-symbolic",_("Report Problem…"), null);
+        var bug_button = new He.OverlayButton ("emblem-important-symbolic", _("Report Problem…"), null);
         bug_button.child = (scroller);
         bug_button.typeb = He.OverlayButton.TypeButton.PRIMARY;
 
