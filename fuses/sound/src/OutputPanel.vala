@@ -220,17 +220,17 @@ public class Sound.OutputPanel : Gtk.Grid {
     private void device_notify (ParamSpec pspec) {
         disconnect_signals ();
         switch (pspec.get_name ()) {
-            case "is-muted":
-                if (volume_switch.iswitch.active == default_device.is_muted) {
-                    volume_switch.iswitch.activate ();
-                }
-                break;
-            case "volume":
-                volume_scale.scale.set_value (default_device.volume);
-                break;
-            case "balance":
-                balance_scale.scale.set_value (default_device.balance);
-                break;
+        case "is-muted":
+            if (volume_switch.iswitch.active == default_device.is_muted) {
+                volume_switch.iswitch.activate ();
+            }
+            break;
+        case "volume":
+            volume_scale.scale.set_value (default_device.volume);
+            break;
+        case "balance":
+            balance_scale.scale.set_value (default_device.balance);
+            break;
         }
 
         connect_signals ();
@@ -261,10 +261,8 @@ public class Sound.OutputPanel : Gtk.Grid {
             };
 
             var volume_alert_dialog = new He.Dialog (
-                                                     true,
                                                      ((He.ApplicationWindow) He.Misc.find_ancestor_of_type<He.ApplicationWindow> (this)),
                                                      (_("Audio Volume Too High!")),
-                                                     "",
                                                      (_("Volume above 70% can progressively damage your eardrums as you listen to audio.")),
                                                      "audio-volume-overamplified-symbolic",
                                                      ok_button,

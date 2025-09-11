@@ -31,15 +31,14 @@ public class PairDialog : He.Dialog {
 
     // Un-used default constructor
     private PairDialog (Gtk.Window? main_window) {
-        base (true, main_window, "", "", "", "", null, null);
+        base (main_window, "", "", "", null, null);
     }
 
     public PairDialog.request_authorization (ObjectPath object_path, Gtk.Window ? main_window) {
         Object (
-                auth_type: AuthType.REQUEST_AUTHORIZATION,
-                object_path: object_path,
-                title: _("Confirm Bluetooth Pairing"),
-                transient_for: main_window
+                auth_type : AuthType.REQUEST_AUTHORIZATION,
+                object_path : object_path,
+                title: _("Confirm Bluetooth Pairing")
         );
     }
 
@@ -48,11 +47,10 @@ public class PairDialog : He.Dialog {
                                        uint16 entered,
                                        Gtk.Window ? main_window) {
         Object (
-                auth_type: AuthType.DISPLAY_PASSKEY,
+                auth_type : AuthType.DISPLAY_PASSKEY,
                 object_path: object_path,
                 passkey: "%u".printf (passkey),
-                title: _("Confirm Bluetooth Passkey"),
-                transient_for: main_window
+                title: _("Confirm Bluetooth Passkey")
         );
     }
 
@@ -60,21 +58,19 @@ public class PairDialog : He.Dialog {
                                             uint32 passkey,
                                             Gtk.Window ? main_window) {
         Object (
-                auth_type: AuthType.REQUEST_CONFIRMATION,
+                auth_type : AuthType.REQUEST_CONFIRMATION,
                 object_path: object_path,
                 passkey: "%u".printf (passkey),
-                title: _("Confirm Bluetooth Passkey"),
-                transient_for: main_window
+                title: _("Confirm Bluetooth Passkey")
         );
     }
 
     public PairDialog.display_pin_code (ObjectPath object_path, string pincode, Gtk.Window ? main_window) {
         Object (
-                auth_type: AuthType.DISPLAY_PIN_CODE,
+                auth_type : AuthType.DISPLAY_PIN_CODE,
                 object_path: object_path,
                 passkey: pincode,
-                title: _("Enter Bluetooth PIN"),
-                transient_for: main_window
+                title: _("Enter Bluetooth PIN")
         );
     }
 
@@ -131,7 +127,5 @@ public class PairDialog : He.Dialog {
             passkey_label.add_css_class ("display");
             add (passkey_label);
         }
-
-        modal = true;
     }
 }
