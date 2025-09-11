@@ -15,6 +15,10 @@ public class ColorGenerator : Object {
 
     // Generates colors for each ARGB int using the specified schemes
     private void generate_colors() {
+        if (argb_ints.length == 0) {
+            warning("No ARGB integers provided, using default color");
+            argb_ints = new int[] { DEFAULT_COLOR };
+        }
         foreach (var argb_int in argb_ints) {
             var hct = He.hct_from_int(argb_int);
 

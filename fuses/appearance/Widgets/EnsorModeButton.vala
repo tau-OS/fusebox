@@ -34,17 +34,27 @@ public class EnsorModeButton : Gtk.Box {
     }
 
     public void set_colors(Gee.ArrayList<int> colors) {
-        if (colors.size == 0) {
+        if (colors != null) {
+            if (colors.size == 0) {
+                debug("EnsorModeButton requires colors, using default");
+                this.colors = new Gee.ArrayList<int> ();
+                this.colors.add(0x8C56BF); // Default color
+                this.colors.add(0x8C56BF);
+                this.colors.add(0x8C56BF);
+                this.colors.add(0x8C56BF);
+            } else {
+                this.colors = colors;
+            }
+            queue_draw();
+        } else {
             debug("EnsorModeButton requires colors, using default");
             this.colors = new Gee.ArrayList<int> ();
             this.colors.add(0x8C56BF); // Default color
             this.colors.add(0x8C56BF);
             this.colors.add(0x8C56BF);
             this.colors.add(0x8C56BF);
-        } else {
-            this.colors = colors;
+            queue_draw();
         }
-        queue_draw();
     }
 
     private He.SchemeVariant get_scheme_variant(string mode) {
