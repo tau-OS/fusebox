@@ -83,7 +83,7 @@ public class Display.MonitorManager : GLib.Object {
             critical (e.message);
         }
 
-        //TODO: make use of the "global-scale-required" property to differenciate between X and Wayland
+        // TODO: make use of the "global-scale-required" property to differenciate between X and Wayland
         var supports_mirroring_variant = properties.lookup ("supports-mirroring");
         if (supports_mirroring_variant != null) {
             mirroring_supported = supports_mirroring_variant.get_boolean ();
@@ -221,7 +221,11 @@ public class Display.MonitorManager : GLib.Object {
                 add_virtual_monitor (virtual_monitor);
                 virtual_monitor.is_active = false;
                 virtual_monitor.primary = false;
-                virtual_monitor.scale = virtual_monitors[0].scale;
+                if (virtual_monitors.size > 0) {
+                    virtual_monitor.scale = virtual_monitors[0].scale;
+                } else {
+                    virtual_monitor.scale = 1.0;
+                }
                 virtual_monitor.monitors.add (monitor);
             }
         }
@@ -273,9 +277,14 @@ public class Display.MonitorManager : GLib.Object {
         MutterWriteMonitor[] mutter_monitors = {};
         foreach (var monitor in virtual_monitor.monitors) {
             var properties = new GLib.HashTable<string, GLib.Variant> (str_hash, str_equal);
+            var current_mode = monitor.current_mode;
+            if (current_mode == null) {
+                critical ("Monitor %s has no current mode", monitor.display_name);
+                continue;
+            }
             var mutter_monitor = MutterWriteMonitor () {
                 connector = monitor.connector,
-                monitor_mode = monitor.current_mode.id,
+                monitor_mode = current_mode.id,
                 properties = properties
             };
 
@@ -286,7 +295,7 @@ public class Display.MonitorManager : GLib.Object {
         return logical_monitor;
     }
 
-    //TODO: check for compatibility of displays in the same virtualmonitor.
+    // TODO: check for compatibility of displays in the same virtualmonitor.
     public void enable_clone_mode () {
         var clone_virtual_monitor = new Display.VirtualMonitor ();
         clone_virtual_monitor.primary = true;
@@ -300,7 +309,10 @@ public class Display.MonitorManager : GLib.Object {
          */
 
         Display.MonitorMode? largest_mode_in_use = null;
-        Display.MonitorMode largest_mode = modes.get (0);
+        Display.MonitorMode? largest_mode = null;
+        if (modes.size > 0) {
+            largest_mode = modes.get (0);
+        }
         foreach (var mode in modes) {
             if (mode.is_current) {
                 if (largest_mode_in_use == null) {
@@ -322,8 +334,11 @@ public class Display.MonitorManager : GLib.Object {
 
         if (largest_mode_in_use != null) {
             clone_virtual_monitor.set_current_mode (largest_mode_in_use);
-        } else {
+        } else if (largest_mode != null) {
             clone_virtual_monitor.set_current_mode (largest_mode);
+        } else {
+            critical ("No modes available for clone configuration");
+            return;
         }
 
         virtual_monitors.clear ();
@@ -357,6 +372,10 @@ public class Display.MonitorManager : GLib.Object {
             var single_virtual_monitor = new Display.VirtualMonitor ();
             var preferred_mode = monitor.preferred_mode;
             var current_mode = monitor.current_mode;
+            if (preferred_mode == null || current_mode == null) {
+                critical ("Monitor %s has no preferred or current mode", monitor.display_name);
+                continue;
+            }
             if (global_scale_required) {
                 single_virtual_monitor.scale = max_scale;
                 if (max_scale in preferred_mode.supported_scales) {
@@ -385,7 +404,9 @@ public class Display.MonitorManager : GLib.Object {
             new_virtual_monitors.add (single_virtual_monitor);
         }
 
-        new_virtual_monitors.get (0).primary = true;
+        if (new_virtual_monitors.size > 0) {
+            new_virtual_monitors.get (0).primary = true;
+        }
         virtual_monitors.clear ();
         virtual_monitors.add_all (new_virtual_monitors);
 
@@ -398,7 +419,7 @@ public class Display.MonitorManager : GLib.Object {
         notify_property ("virtual-monitor-number");
     }
 
-    private VirtualMonitor? get_virtual_monitor_by_id (string id) {
+    private VirtualMonitor ? get_virtual_monitor_by_id (string id) {
         foreach (var vm in virtual_monitors) {
             if (vm.id == id) {
                 return vm;

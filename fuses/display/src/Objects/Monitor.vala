@@ -35,7 +35,7 @@ public class Display.Monitor : GLib.Object {
     public bool is_builtin { get; set; }
     public Gee.LinkedList<Display.MonitorMode> modes { get; construct; }
 
-    public Display.MonitorMode current_mode {
+    public Display.MonitorMode? current_mode {
         owned get {
             foreach (var mode in modes) {
                 if (mode.is_current) {
@@ -43,11 +43,15 @@ public class Display.Monitor : GLib.Object {
                 }
             }
 
+            if (modes.size == 0) {
+                critical ("No modes available for monitor %s", display_name);
+                return null;
+            }
             return modes[0];
         }
     }
 
-    public Display.MonitorMode preferred_mode {
+    public Display.MonitorMode? preferred_mode {
         owned get {
             foreach (var mode in modes) {
                 if (mode.is_preferred) {
@@ -55,6 +59,10 @@ public class Display.Monitor : GLib.Object {
                 }
             }
 
+            if (modes.size == 0) {
+                critical ("No modes available for monitor %s", display_name);
+                return null;
+            }
             return modes[0];
         }
     }

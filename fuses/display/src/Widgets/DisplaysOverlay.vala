@@ -107,8 +107,12 @@ public class Display.DisplaysOverlay : He.Bin {
     }
 
     private void change_active_displays_sensitivity () {
-        if (((DisplayWidget) overlay.get_first_child ()).virtual_monitor.is_active) {
-            ((DisplayWidget) overlay.get_first_child ()).only_display = (active_displays == 1);
+        var first_child = overlay.get_first_child ();
+        if (first_child != null && first_child is DisplayWidget) {
+            var display_widget = (DisplayWidget) first_child;
+            if (display_widget.virtual_monitor.is_active) {
+                display_widget.only_display = (active_displays == 1);
+            }
         }
     }
 
@@ -128,7 +132,7 @@ public class Display.DisplaysOverlay : He.Bin {
             var display_widget = (DisplayWidget) child;
             int x, y, width, height;
             display_widget.get_geometry (out x, out y, out width, out height);
-            
+
             added_width += width;
             added_height += height;
             max_width = int.max (max_width, x + width);
@@ -138,8 +142,8 @@ public class Display.DisplaysOverlay : He.Bin {
         current_allocated_width = get_allocated_width ();
         current_allocated_height = get_allocated_height ();
         current_ratio = double.min (
-            (double) (get_allocated_width () - 24) / (double) added_width,
-            (double) (get_allocated_height () - 24) / (double) added_height
+                                    (double) (get_allocated_width () - 24) / (double) added_width,
+                                    (double) (get_allocated_height () - 24) / (double) added_height
         );
         default_x_margin = (int) ((get_allocated_width () - max_width * current_ratio) / 2);
         default_y_margin = (int) ((get_allocated_height () - max_height * current_ratio) / 2);
@@ -197,14 +201,19 @@ public class Display.DisplaysOverlay : He.Bin {
     }
 
     private void set_as_primary (Display.VirtualMonitor new_primary) {
-        var display_widget = overlay.get_first_child () as DisplayWidget;
+        var first_child = overlay.get_first_child ();
+        if (first_child == null || !(first_child is DisplayWidget)) {
+            return;
+        }
+
+        var display_widget = (DisplayWidget) first_child;
         var virtual_monitor = display_widget.virtual_monitor;
         var is_primary = virtual_monitor == new_primary;
         display_widget.set_primary (is_primary);
         virtual_monitor.primary = is_primary;
 
         foreach (var vm in monitor_manager.virtual_monitors) {
-            virtual_monitor.primary = vm == new_primary;
+            vm.primary = vm == new_primary;
         }
 
         check_configuration_changed ();
@@ -226,12 +235,12 @@ public class Display.DisplaysOverlay : He.Bin {
         display_widget.get_geometry (out x, out y, out width, out height);
 
         int widget_points[6], anchor_points[6];
-        widget_points [0] = x;                       // x_start
-        widget_points [1] = x + width / 2 - 1;       // x_center
-        widget_points [2] = x + width - 1;           // x_end
-        widget_points [3] = y;                       // y_start
-        widget_points [4] = y + height / 2 - 1;      // y_center
-        widget_points [5] = y + height - 1;          // y_end
+        widget_points[0] = x; // x_start
+        widget_points[1] = x + width / 2 - 1; // x_center
+        widget_points[2] = x + width - 1; // x_end
+        widget_points[3] = y; // y_start
+        widget_points[4] = y + height / 2 - 1; // y_center
+        widget_points[5] = y + height - 1; // y_end
 
         Gtk.Widget child;
         for (child = overlay.get_first_child (); child != null; child = child.get_next_sibling ()) {
@@ -241,25 +250,25 @@ public class Display.DisplaysOverlay : He.Bin {
 
             var anchor = (DisplayWidget) child;
             anchor.get_geometry (out x, out y, out width, out height);
-            anchor_points [0] = x;                   // x_start
-            anchor_points [1] = x + width / 2 - 1;   // x_center
-            anchor_points [2] = x + width - 1;       // x_end
-            anchor_points [3] = y;                   // y_start
-            anchor_points [4] = y + height / 2 - 1;  // y_center
-            anchor_points [5] = y + height - 1;      // y_end
+            anchor_points[0] = x; // x_start
+            anchor_points[1] = x + width / 2 - 1; // x_center
+            anchor_points[2] = x + width - 1; // x_end
+            anchor_points[3] = y; // y_start
+            anchor_points[4] = y + height / 2 - 1; // y_center
+            anchor_points[5] = y + height - 1; // y_end
 
             int threshold = int.min (width, height) / 10;
             for (var u = 0; u < 2; u++) { // 0: X, 1: Y
                 for (var i = 0; i < 3; i++) {
                     for (var j = 0; j < 3; j++) {
-                        int test_delta = anchor_points [i + 3 * u] - widget_points [j + 3 * u];
-                        if (threshold > (test_delta - current_delta [u]).abs ()) {
-                            if (test_delta.abs () < aligned_delta [u].abs ()) {
-                                aligned_delta [u] = test_delta;
+                        int test_delta = anchor_points[i + 3 * u] - widget_points[j + 3 * u];
+                        if (threshold > (test_delta - current_delta[u]).abs ()) {
+                            if (test_delta.abs () < aligned_delta[u].abs ()) {
+                                aligned_delta[u] = test_delta;
                                 if (i == 0 && j != i) {
-                                    aligned_delta [u] -= 1;
+                                    aligned_delta[u] -= 1;
                                 } else if (j == 0 && i != j) {
-                                    aligned_delta [u] += 1;
+                                    aligned_delta[u] += 1;
                                 }
                             }
                         }
@@ -268,17 +277,20 @@ public class Display.DisplaysOverlay : He.Bin {
             }
         }
 
-        if (aligned_delta [0] != int.MAX) {
-            display_widget.delta_x = aligned_delta [0];
+        if (aligned_delta[0] != int.MAX) {
+            display_widget.delta_x = aligned_delta[0];
         }
-        if (aligned_delta [1] != int.MAX) {
-            display_widget.delta_y = aligned_delta [1];
+        if (aligned_delta[1] != int.MAX) {
+            display_widget.delta_y = aligned_delta[1];
         }
     }
 
     private void close_gaps () {
         var display_widgets = new List<DisplayWidget> ();
-        display_widgets.append ((DisplayWidget) overlay.get_first_child ());
+        var first_child = overlay.get_first_child ();
+        if (first_child != null && first_child is DisplayWidget) {
+            display_widgets.append ((DisplayWidget) first_child);
+        }
 
         foreach (var display_widget in display_widgets) {
             if (!is_connected (display_widget, display_widgets)) {
@@ -290,7 +302,7 @@ public class Display.DisplaysOverlay : He.Bin {
     private bool is_connected (DisplayWidget display_widget, List<DisplayWidget> other_display_widgets) {
         int x, y, width, height;
         display_widget.get_geometry (out x, out y, out width, out height);
-        Gdk.Rectangle rect = {x - 1, y - 1, width + 2, height + 2};
+        Gdk.Rectangle rect = { x - 1, y - 1, width + 2, height + 2 };
 
         foreach (var other_display_widget in other_display_widgets) {
             if (other_display_widget == display_widget) {
@@ -324,7 +336,8 @@ public class Display.DisplaysOverlay : He.Bin {
                 min_x = int.min (min_x, x);
                 min_y = int.min (min_y, y);
             }
-        };
+        }
+        ;
 
         if (min_x == 0 && min_y == 0) {
             return;
@@ -337,7 +350,8 @@ public class Display.DisplaysOverlay : He.Bin {
                 display_widget.get_geometry (out x, out y, out width, out height);
                 display_widget.set_geometry (x - min_x, y - min_y, width, height);
             }
-        };
+        }
+        ;
     }
 
     // If widget is intersects with any other widgets -> move other widgets to fix intersection
@@ -386,15 +400,16 @@ public class Display.DisplaysOverlay : He.Bin {
     }
 
     public void snap_edges (DisplayWidget last_moved) {
-        if (scanning) return;
+        if (scanning)return;
         // Snap last_moved
         debug ("Snapping displays");
         var anchors = new List<DisplayWidget> ();
         Gtk.Widget child;
         for (child = overlay.get_first_child (); child != null; child = child.get_next_sibling ()) {
-            if (!(child is DisplayWidget) || last_moved.equals ((DisplayWidget)child)) return;
+            if (!(child is DisplayWidget) || last_moved.equals ((DisplayWidget) child))return;
             anchors.append ((DisplayWidget) child);
-        };
+        }
+        ;
 
         snap_widget (last_moved, anchors);
     }
@@ -426,10 +441,10 @@ public class Display.DisplaysOverlay : He.Bin {
             // widget is between left and right edges of anchor, no horizontal movement needed
             if (distance_left > 0 && distance_right < 0) {
                 distance_widget_anchor_x = 0;
-            // widget is between top and bottom edges of anchor, no vertical movement needed
+                // widget is between top and bottom edges of anchor, no vertical movement needed
             } else if (distance_top > 0 && distance_bottom < 0) {
                 distance_widget_anchor_y = 0;
-            // widget is diagonal to anchor, as diagonal monitors are not allowed, offset by 50px (MINIMUM_WIDGET_OFFSET)
+                // widget is diagonal to anchor, as diagonal monitors are not allowed, offset by 50px (MINIMUM_WIDGET_OFFSET)
             } else {
                 if (distance_widget_anchor_x.abs () >= distance_widget_anchor_y.abs ()) {
                     distance_widget_anchor_x += (distance_origin_x > 0 ? 1 : -1) * MINIMUM_WIDGET_OFFSET;
@@ -439,7 +454,7 @@ public class Display.DisplaysOverlay : He.Bin {
             }
 
             var shortest_distance_candidate = distance_widget_anchor_x * distance_widget_anchor_x
-                                            + distance_widget_anchor_y * distance_widget_anchor_y;
+                + distance_widget_anchor_y * distance_widget_anchor_y;
             if (shortest_distance_candidate < shortest_distance) {
                 shortest_distance = shortest_distance_candidate;
                 shortest_distance_x = distance_widget_anchor_x;

@@ -59,12 +59,16 @@ public class Display.VirtualMonitor : GLib.Object {
     /*
      * Get the first monitor of the list, handy in non-mirror context.
      */
-    public Display.Monitor monitor {
+    public Display.Monitor? monitor {
         owned get {
             if (is_mirror) {
                 critical ("Do not use Display.VirtualMonitor.monitor in a mirror context!");
             }
 
+            if (monitors.size == 0) {
+                critical ("No monitors available in VirtualMonitor");
+                return null;
+            }
             return monitors[0];
         }
     }
@@ -97,11 +101,36 @@ public class Display.VirtualMonitor : GLib.Object {
             width = 1280;
             height = 720;
         } else if (is_mirror) {
+            if (monitors.size == 0) {
+                critical ("No monitors available in mirrored VirtualMonitor");
+                width = 1280;
+                height = 720;
+                return;
+            }
             var current_mode = monitors[0].current_mode;
+            if (current_mode == null) {
+                critical ("Monitor has no current mode in mirrored VirtualMonitor");
+                width = 1280;
+                height = 720;
+                return;
+            }
             width = current_mode.width;
             height = current_mode.height;
         } else {
-            var current_mode = monitor.current_mode;
+            var mon = monitor;
+            if (mon == null) {
+                critical ("No monitor available in VirtualMonitor");
+                width = 1280;
+                height = 720;
+                return;
+            }
+            var current_mode = mon.current_mode;
+            if (current_mode == null) {
+                critical ("Monitor has no current mode");
+                width = 1280;
+                height = 720;
+                return;
+            }
             width = current_mode.width;
             height = current_mode.height;
         }
