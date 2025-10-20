@@ -41,11 +41,12 @@ public class Appearance.WindowView : Gtk.Box {
         wm_layout_preview.append (wm_layout_preview_mbox);
 
         wm_layout_cb = new He.Dropdown ();
-        wm_layout_cb.append (_("Traditional"));
-        wm_layout_cb.append (_("macOS"));
-        wm_layout_cb.append (_("Elementary"));
-        wm_layout_cb.append (_("GNOME"));
-        wm_layout_cb.append (_("Custom"));
+        wm_layout_cb.append ("Kiri");
+        wm_layout_cb.append ("Aqua");
+        wm_layout_cb.append ("Fluent");
+        wm_layout_cb.append ("Granite");
+        wm_layout_cb.append ("Adwaita");
+        wm_layout_cb.append ("Breeze");
         wm_layout_cb.valign = Gtk.Align.CENTER;
 
         var wm_layout_box_cb = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
@@ -229,6 +230,9 @@ public class Appearance.WindowView : Gtk.Box {
         case ":close":
             wm_layout_cb.dropdown.selected = 4;
             break;
+        case "appmenu:minimize,maximize,close":
+            wm_layout_cb.dropdown.selected = 5;
+            break;
         }
 
         wm_layout_handler = wm_layout_cb.changed.connect (() => {
@@ -248,6 +252,9 @@ public class Appearance.WindowView : Gtk.Box {
                     break;
                 case 4:
                     wm_settings.set_string ("button-layout", ":close");
+                    break;
+                case 5:
+                    wm_settings.set_string ("button-layout", "appmenu:minimize,maximize,close");
                     break;
             }
         });
