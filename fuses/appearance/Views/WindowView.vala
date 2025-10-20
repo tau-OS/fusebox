@@ -222,8 +222,11 @@ public class Appearance.WindowView : Gtk.Box {
 
         string title = wm_settings.get_string ("button-layout");
         switch (title) {
-        case "close,minimize,maximize:":
+        case "close:minimize,maximize":
             wm_layout_cb.set_active (0);
+            break;
+        case "close,minimize,maximize:":
+            wm_layout_cb.set_active (1);
             break;
         case ":minimize,maximize,close":
             wm_layout_cb.set_active (2);
@@ -243,6 +246,8 @@ public class Appearance.WindowView : Gtk.Box {
             int choice = wm_layout_cb.get_active ();
             switch (choice) {
                 case 0:
+                    wm_settings.set_string ("button-layout", "close:minimize,maximize");
+                    break;
                 case 1:
                     wm_settings.set_string ("button-layout", "close,minimize,maximize:");
                     break;
