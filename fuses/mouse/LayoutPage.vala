@@ -121,25 +121,42 @@ namespace Mouse {
         }
 
         private class XkbComboBox : Gtk.Box {
+            private Gee.HashMap<uint, string> index_to_command;
+            
             public XkbComboBox (XkbModifier modifier, Gtk.SizeGroup size_group) {
-                var cb = new Gtk.ComboBoxText ();
+                var cb = new He.Dropdown ();
+                index_to_command = new Gee.HashMap<uint, string> ();
 
                 cb.halign = Gtk.Align.START;
                 cb.valign = Gtk.Align.CENTER;
                 size_group.add_widget (cb);
 
                 for (int i = 0; i < modifier.xkb_option_commands.length; i++) {
-                    cb.append (modifier.xkb_option_commands[i], modifier.option_descriptions[i]);
+                    cb.append (modifier.option_descriptions[i]);
+                    index_to_command.set ((uint) i, modifier.xkb_option_commands[i]);
                 }
 
-                cb.set_active_id (modifier.get_active_command ());
+                // Set initial selection
+                string active_cmd = modifier.get_active_command ();
+                for (uint i = 0; i < modifier.xkb_option_commands.length; i++) {
+                    if (index_to_command.get (i) == active_cmd) {
+                        cb.dropdown.selected = i;
+                        break;
+                    }
+                }
 
-                cb.changed.connect (() => {
-                    modifier.update_active_command (cb.active_id);
+                cb.notify["active-id"].connect (() => {
+                    modifier.update_active_command (index_to_command.get (cb.dropdown.selected));
                 });
 
                 modifier.active_command_updated.connect (() => {
-                    cb.set_active_id (modifier.get_active_command ());
+                    string cmd = modifier.get_active_command ();
+                    for (uint i = 0; i < modifier.xkb_option_commands.length; i++) {
+                        if (index_to_command.get (i) == cmd) {
+                            cb.dropdown.selected = i;
+                            break;
+                        }
+                    }
                 });
 
                 append (cb);

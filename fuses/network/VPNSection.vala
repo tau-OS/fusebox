@@ -86,10 +86,11 @@ public class Network.VpnSection {
         var server_entry = new Gtk.Entry();
 
         var protocol_label = new Gtk.Label(_("Protocol:"));
-        var protocol_combo = new Gtk.ComboBoxText();
-        protocol_combo.append_text("OpenVPN");
-        protocol_combo.append_text("L2TP");
-        protocol_combo.active = 0;
+        var protocol_cb = new He.Dropdown();
+        protocol_cb.append("OpenVPN");
+        protocol_cb.append("L2TP");
+        protocol_cb.dropdown.selected = 0;
+        protocol_cb.valign = Gtk.Align.CENTER;
 
         var grid = new Gtk.Grid() {
             row_spacing = 6,
@@ -103,7 +104,7 @@ public class Network.VpnSection {
         grid.attach(server_label, 0, 0);
         grid.attach(server_entry, 1, 0);
         grid.attach(protocol_label, 0, 1);
-        grid.attach(protocol_combo, 1, 1);
+        grid.attach(protocol_cb, 1, 1);
 
         content_area.append(grid);
 
@@ -112,7 +113,7 @@ public class Network.VpnSection {
         dialog.response.connect((response_id) => {
             if (response_id == Gtk.ResponseType.APPLY) {
                 var server = server_entry.text;
-                var protocol = protocol_combo.active.to_string();
+                var protocol = protocol_cb.dropdown.selected.to_string();
 
                 if (server != "" && protocol != null) {
                     apply_vpn_settings(server, protocol);

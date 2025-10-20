@@ -20,7 +20,7 @@
 public class Display.DisplaysView : Gtk.Grid {
     public DisplaysOverlay displays_overlay;
 
-    private Gtk.ComboBoxText dpi_combo;
+    private He.Dropdown dpi_combo;
     private Gtk.ListBox action_bar;
 
 
@@ -32,10 +32,10 @@ public class Display.DisplaysView : Gtk.Grid {
         var mirror_switch = new He.Switch ();
         var mirror_row = new He.SettingsRow.with_details (_("Mirror Display"), null, (He.Button) mirror_switch);
 
-        dpi_combo = new Gtk.ComboBoxText ();
-        dpi_combo.append_text (_("LoDPI") + " (1×)");
-        dpi_combo.append_text (_("HiDPI") + " (2×)");
-        dpi_combo.append_text (_("HiDPI") + " (3×)");
+        dpi_combo = new He.Dropdown ();
+        dpi_combo.append (_("LoDPI") + " (1×)");
+        dpi_combo.append (_("HiDPI") + " (2×)");
+        dpi_combo.append (_("HiDPI") + " (3×)");
 
         var dpi_row = new He.SettingsRow.with_details (_("Scaling"), null, (He.Button) dpi_combo);
 
@@ -76,14 +76,13 @@ public class Display.DisplaysView : Gtk.Grid {
         detect_button.clicked.connect (() => displays_overlay.rescan_displays ());
 
         if (monitor_manager.virtual_monitors.size > 0) {
-            dpi_combo.active = (int) monitor_manager.virtual_monitors[0].scale - 1;
+            dpi_combo.dropdown.selected = (uint) ((int) monitor_manager.virtual_monitors[0].scale - 1);
         } else {
-            dpi_combo.active = 0;     // Default to 1x scaling
+            dpi_combo.dropdown.selected = 0; // Default to 1x scaling
         }
 
-        dpi_combo.changed.connect (() => {
-            monitor_manager.set_scale_on_all_monitors ((double) (dpi_combo.active + 1));
-            monitor_manager.set_monitor_config ();
+        dpi_combo.notify["active-id"].connect (() => {
+            monitor_manager.set_scale_on_all_monitors ((double) (dpi_combo.dropdown.selected + 1));
         });
 
         mirror_switch.iswitch.active = monitor_manager.is_mirrored;

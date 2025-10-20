@@ -1,9 +1,9 @@
 public class Appearance.WindowView : Gtk.Box {
     private static GLib.Settings wm_settings;
-    private Gtk.ComboBoxText wm_layout_cb;
-    private Gtk.ComboBoxText wm_dc_cb;
-    private Gtk.ComboBoxText wm_sc_cb;
-    private Gtk.ComboBoxText wm_focus_cb;
+    private He.Dropdown wm_layout_cb;
+    private He.Dropdown wm_dc_cb;
+    private He.Dropdown wm_sc_cb;
+    private He.Dropdown wm_focus_cb;
     private Gtk.Box wm_layout_preview;
 
     private ulong wm_layout_handler = 0;
@@ -40,16 +40,13 @@ public class Appearance.WindowView : Gtk.Box {
         wm_layout_preview.add_css_class ("surface-container-bg-color");
         wm_layout_preview.append (wm_layout_preview_mbox);
 
-        wm_layout_cb = new Gtk.ComboBoxText () {
-            valign = Gtk.Align.CENTER
-        };
-        wm_layout_cb.append_text ("Kiri");
-        wm_layout_cb.append_text ("Aqua");
-        wm_layout_cb.append_text ("Fluent");
-        wm_layout_cb.append_text ("Granite");
-        wm_layout_cb.append_text ("Adwaita");
-        wm_layout_cb.append_text ("Breeze");
-        wm_layout_cb.active = 0;
+        wm_layout_cb = new He.Dropdown ();
+        wm_layout_cb.append (_("Traditional"));
+        wm_layout_cb.append (_("macOS"));
+        wm_layout_cb.append (_("Elementary"));
+        wm_layout_cb.append (_("GNOME"));
+        wm_layout_cb.append (_("Custom"));
+        wm_layout_cb.valign = Gtk.Align.CENTER;
 
         var wm_layout_box_cb = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         wm_layout_box_cb.append (
@@ -88,14 +85,12 @@ public class Appearance.WindowView : Gtk.Box {
             halign = Gtk.Align.START
         });
 
-        wm_dc_cb = new Gtk.ComboBoxText () {
-            valign = Gtk.Align.CENTER
-        };
-        wm_dc_cb.append_text (_("Toggle Maximize"));
-        wm_dc_cb.append_text (_("Minimize"));
-        wm_dc_cb.append_text (_("Menu"));
-        wm_dc_cb.append_text (_("None"));
-        wm_dc_cb.active = 0;
+        wm_dc_cb = new He.Dropdown ();
+        wm_dc_cb.append (_("Toggle Maximize"));
+        wm_dc_cb.append (_("Minimize"));
+        wm_dc_cb.append (_("Menu"));
+        wm_dc_cb.append (_("None"));
+        wm_dc_cb.valign = Gtk.Align.CENTER;
 
         var wm_dc_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wm_dc_box.append (
@@ -112,14 +107,13 @@ public class Appearance.WindowView : Gtk.Box {
 
         wm_title_box.append (wm_dc_box);
 
-        wm_sc_cb = new Gtk.ComboBoxText () {
-            valign = Gtk.Align.CENTER
-        };
-        wm_sc_cb.append_text (_("Toggle Maximize"));
-        wm_sc_cb.append_text (_("Minimize"));
-        wm_sc_cb.append_text (_("Menu"));
-        wm_sc_cb.append_text (_("None"));
-        wm_sc_cb.active = 2;
+        wm_sc_cb = new He.Dropdown ();
+        wm_sc_cb.append (_("Toggle Maximize"));
+        wm_sc_cb.append (_("Minimize"));
+        wm_sc_cb.append (_("Menu"));
+        wm_sc_cb.append (_("None"));
+        wm_sc_cb.dropdown.selected = 2;
+        wm_sc_cb.valign = Gtk.Align.CENTER;
 
         var wm_sc_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
         wm_sc_box.append (
@@ -136,12 +130,10 @@ public class Appearance.WindowView : Gtk.Box {
 
         wm_title_box.append (wm_sc_box);
 
-        wm_focus_cb = new Gtk.ComboBoxText () {
-            valign = Gtk.Align.CENTER
-        };
-        wm_focus_cb.append_text ("Click to Focus");
-        wm_focus_cb.append_text ("Focus on Hover");
-        wm_focus_cb.active = 0;
+        wm_focus_cb = new He.Dropdown ();
+        wm_focus_cb.append (_("Click"));
+        wm_focus_cb.append (_("Sloppy"));
+        wm_focus_cb.valign = Gtk.Align.CENTER;
 
         var wm_focus_box_cb = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
         wm_focus_box_cb.append (
@@ -223,27 +215,24 @@ public class Appearance.WindowView : Gtk.Box {
         string title = wm_settings.get_string ("button-layout");
         switch (title) {
         case "close:minimize,maximize":
-            wm_layout_cb.set_active (0);
+            wm_layout_cb.dropdown.selected = 0;
             break;
         case "close,minimize,maximize:":
-            wm_layout_cb.set_active (1);
+            wm_layout_cb.dropdown.selected = 1;
             break;
         case ":minimize,maximize,close":
-            wm_layout_cb.set_active (2);
+            wm_layout_cb.dropdown.selected = 2;
             break;
         case "close:maximize":
-            wm_layout_cb.set_active (3);
+            wm_layout_cb.dropdown.selected = 3;
             break;
         case ":close":
-            wm_layout_cb.set_active (4);
-            break;
-        case "appmenu:minimize,maximize,close":
-            wm_layout_cb.set_active (5);
+            wm_layout_cb.dropdown.selected = 4;
             break;
         }
 
         wm_layout_handler = wm_layout_cb.changed.connect (() => {
-            int choice = wm_layout_cb.get_active ();
+            uint choice = wm_layout_cb.dropdown.selected;
             switch (choice) {
                 case 0:
                     wm_settings.set_string ("button-layout", "close:minimize,maximize");
@@ -260,9 +249,6 @@ public class Appearance.WindowView : Gtk.Box {
                 case 4:
                     wm_settings.set_string ("button-layout", ":close");
                     break;
-                case 5:
-                    wm_settings.set_string ("button-layout", "appmenu:minimize,maximize,close");
-                    break;
             }
         });
     }
@@ -277,21 +263,21 @@ public class Appearance.WindowView : Gtk.Box {
         int title = wm_settings.get_enum ("action-double-click-titlebar");
         switch (title) {
         case 1:
-            wm_dc_cb.set_active (0);
+            wm_dc_cb.dropdown.selected = 0;
             break;
         case 4:
-            wm_dc_cb.set_active (1);
+            wm_dc_cb.dropdown.selected = 1;
             break;
         case 7:
-            wm_dc_cb.set_active (2);
+            wm_dc_cb.dropdown.selected = 2;
             break;
         case 5:
-            wm_dc_cb.set_active (3);
+            wm_dc_cb.dropdown.selected = 3;
             break;
         }
 
         wm_dc_handler = wm_dc_cb.changed.connect (() => {
-            int choice = wm_dc_cb.get_active ();
+            uint choice = wm_dc_cb.dropdown.selected;
             switch (choice) {
                 case 0:
                     wm_settings.set_enum ("action-double-click-titlebar", 1);
@@ -319,21 +305,21 @@ public class Appearance.WindowView : Gtk.Box {
         int title = wm_settings.get_enum ("action-right-click-titlebar");
         switch (title) {
         case 1:
-            wm_sc_cb.set_active (0);
+            wm_sc_cb.dropdown.selected = 0;
             break;
         case 4:
-            wm_sc_cb.set_active (1);
+            wm_sc_cb.dropdown.selected = 1;
             break;
         case 7:
-            wm_sc_cb.set_active (2);
+            wm_sc_cb.dropdown.selected = 2;
             break;
         case 5:
-            wm_sc_cb.set_active (3);
+            wm_sc_cb.dropdown.selected = 3;
             break;
         }
 
         wm_sc_handler = wm_sc_cb.changed.connect (() => {
-            int choice = wm_sc_cb.get_active ();
+            uint choice = wm_sc_cb.dropdown.selected;
             switch (choice) {
                 case 0:
                     wm_settings.set_enum ("action-right-click-titlebar", 1);
@@ -361,15 +347,15 @@ public class Appearance.WindowView : Gtk.Box {
         int title = wm_settings.get_enum ("focus-mode");
         switch (title) {
         case 0:
-            wm_focus_cb.set_active (0);
+            wm_focus_cb.dropdown.selected = 0;
             break;
         case 1:
-            wm_focus_cb.set_active (1);
+            wm_focus_cb.dropdown.selected = 1;
             break;
         }
 
         wm_focus_handler = wm_focus_cb.changed.connect (() => {
-            int choice = wm_focus_cb.get_active ();
+            uint choice = wm_focus_cb.dropdown.selected;
             switch (choice) {
                 case 0:
                     wm_settings.set_enum ("focus-mode", 0);
