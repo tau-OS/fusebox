@@ -75,7 +75,7 @@ public class DateTime.DateTimeView : Gtk.Box {
             margin_end = 18,
             margin_start = 18
         };
-        date_time_box.add_css_class ("content-block");
+        date_time_box.add_css_class ("mini-content-block");
         date_time_box.append (date_time_auto_box);
         date_time_box.append (date_time_sep);
         date_time_box.append (date_time_manual_box);
@@ -156,7 +156,7 @@ public class DateTime.DateTimeView : Gtk.Box {
             margin_end = 18,
             margin_start = 18
         };
-        timezone_box.add_css_class ("content-block");
+        timezone_box.add_css_class ("mini-content-block");
         timezone_box.append (timezone_auto_box);
         timezone_box.append (timezone_sep);
         timezone_box.append (timezone_manual_box);
@@ -186,7 +186,7 @@ public class DateTime.DateTimeView : Gtk.Box {
             margin_start = 18,
             margin_top = 6
         };
-        timeformat_box.add_css_class ("content-block");
+        timeformat_box.add_css_class ("mini-content-block");
         timeformat_box.append (timeformat_label);
         timeformat_box.append (timeformat_toggle_box);
 
