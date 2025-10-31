@@ -15,6 +15,10 @@ public class AppearanceView : Gtk.Box {
     private Gtk.ToggleButton basic_type_button;
     private He.SegmentedButton color_type_button;
 
+    private Gtk.ToggleButton density_button_normal;
+    private Gtk.ToggleButton density_button_softened;
+    private Gtk.ToggleButton density_button_cozy;
+
     private AccentColorButton blue;
     private AccentColorButton green;
     private AccentColorButton multi;
@@ -382,6 +386,82 @@ public class AppearanceView : Gtk.Box {
             });
         });
 
+
+        var density_label = new Gtk.Label (_("UI Density")) {
+            halign = Gtk.Align.START
+        };
+        density_label.add_css_class ("cb-title");
+
+        var density_info = new Gtk.Image () {
+            icon_name = "dialog-information-symbolic",
+            tooltip_text = _("Adjust the density of your user interface.")
+        };
+
+        density_button_normal = new Gtk.ToggleButton () {
+            halign = Gtk.Align.END,
+            valign = Gtk.Align.CENTER,
+            child = new He.ButtonContent () {
+                label = _("Normal")
+            }
+        };
+
+        density_button_softened = new Gtk.ToggleButton () {
+            halign = Gtk.Align.END,
+            valign = Gtk.Align.CENTER,
+            group = density_button_normal,
+            child = new He.ButtonContent () {
+                label = _("Softened")
+            }
+        };
+
+        density_button_cozy = new Gtk.ToggleButton () {
+            halign = Gtk.Align.END,
+            valign = Gtk.Align.CENTER,
+            group = density_button_normal,
+            child = new He.ButtonContent () {
+                label = _("Cozy")
+            }
+        };
+
+        var density_seg_button = new He.SegmentedButton () {
+            halign = Gtk.Align.END,
+            valign = Gtk.Align.CENTER,
+            hexpand = true
+        };
+        density_seg_button.append (density_button_normal);
+        density_seg_button.append (density_button_softened);
+        density_seg_button.append (density_button_cozy);
+
+        var density_title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        density_title_box.append (density_label);
+        density_title_box.append (density_info);
+
+        var density_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+        density_box.append (density_title_box);
+        density_box.append (density_seg_button);
+        density_box.add_css_class ("mini-content-block");
+
+        density_button_normal.toggled.connect (() => {
+            if (density_button_normal.active) {
+                set_density (0);
+            }
+        });
+        density_button_softened.toggled.connect (() => {
+            if (density_button_softened.active) {
+                set_density (1);
+            }
+        });
+        density_button_cozy.toggled.connect (() => {
+            if (density_button_cozy.active) {
+                set_density (2);
+            }
+        });
+
+        density_refresh ();
+        tau_appearance_settings.changed["density"].connect (() => {
+            density_refresh ();
+        });
+
         /*
          * _  _ _ ____ _ _ _    _ _  _ ___ ____ ____ ____ ____ ____ ____
          * |  | | |___ | | |    | |\ |  |  |___ |__/ |___ |__| |    |___
@@ -399,6 +479,7 @@ public class AppearanceView : Gtk.Box {
         var sub_box = new Gtk.ListBox ();
         sub_box.append (prefer_box);
         sub_box.append (roundness_box);
+        sub_box.append (density_box);
         sub_box.append (contrast_box);
         sub_box.add_css_class ("content-list");
 
@@ -481,6 +562,37 @@ public class AppearanceView : Gtk.Box {
             prefer_default_radio.set_active (false);
             prefer_light_radio.set_active (false);
             prefer_dark_radio.set_active (true);
+        }
+    }
+
+    private void set_density (uint density) {
+        tau_appearance_settings.set_uint ("density", density);
+    }
+
+    private void density_refresh () {
+        uint value = tau_appearance_settings.get_uint ("density");
+
+        switch (value) {
+        case 0:
+            density_button_normal.set_active (true);
+            density_button_softened.set_active (false);
+            density_button_cozy.set_active (false);
+            break;
+        case 1:
+            density_button_normal.set_active (false);
+            density_button_softened.set_active (true);
+            density_button_cozy.set_active (false);
+            break;
+        case 2:
+            density_button_normal.set_active (false);
+            density_button_softened.set_active (false);
+            density_button_cozy.set_active (true);
+            break;
+        default:
+            density_button_normal.set_active (true);
+            density_button_softened.set_active (false);
+            density_button_cozy.set_active (false);
+            break;
         }
     }
 
