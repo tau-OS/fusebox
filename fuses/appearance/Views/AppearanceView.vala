@@ -400,27 +400,21 @@ public class AppearanceView : Gtk.Box {
         density_button_normal = new Gtk.ToggleButton () {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
-            child = new He.ButtonContent () {
-                label = _("Normal")
-            }
+            label = _("Normal")
         };
 
         density_button_softened = new Gtk.ToggleButton () {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
             group = density_button_normal,
-            child = new He.ButtonContent () {
-                label = _("Softened")
-            }
+            label = _("Softened")
         };
 
         density_button_cozy = new Gtk.ToggleButton () {
             halign = Gtk.Align.END,
             valign = Gtk.Align.CENTER,
             group = density_button_normal,
-            child = new He.ButtonContent () {
-                label = _("Cozy")
-            }
+            label = _("Cozy")
         };
 
         var density_seg_button = new He.SegmentedButton () {

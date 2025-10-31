@@ -54,7 +54,6 @@ public class Fusebox.CategoryIcon : Gtk.ListBoxRow {
         var layout = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 16);
         layout.append (icon);
         layout.append (text_layout);
-        layout.add_css_class ("mini-content-block");
 
         child = layout;
 
