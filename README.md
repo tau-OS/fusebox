@@ -1,3 +1,5 @@
+# Fusebox is Deprecated
+
 # Fusebox
 
 ## Fuses
